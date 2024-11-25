@@ -1,0 +1,52 @@
+/* 헤더 좌측 */
+.left {
+  width: 50%;
+  height: 100%;
+
+  display: flex;
+  font-size: 23px;
+}
+
+.left li {
+  width: 140px;
+  height: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+  cursor: pointer;
+  position: relative;
+  line-height: 28px;
+}
+
+.left .clicked {
+  color: #4caff8;
+}
+
+.categoryBox::after {
+  content: '';
+  width: 1px;
+  height: 30%;
+  position: absolute;
+  right: 0;
+  background-color: #e7e8eb;
+}
+
+.addCategoryBox {
+  font-size: 1rem;
+  color: #222;
+}
+
+/* 선 */
+.line {
+  width: 100%;
+  height: 3px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  padding: 0 10px;
+  background-color: #4caff8;
+  border-radius: 5px;
+}

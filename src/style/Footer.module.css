@@ -1,0 +1,10 @@
+.footer {
+  width: 100%;
+  min-height: 85px; /* 임시 고정 */
+  color: #b4b4b4;
+  background-color: white;
+  font-size: 23px;
+
+  display: flex;
+  padding: 0 40px;
+}

@@ -1,0 +1,11 @@
+.header {
+  width: 100%;
+  min-height: 85px; /* 임시 고정 */
+  background-color: white;
+  color: #b4b4b4;
+
+  display: flex;
+  justify-content: space-between;
+  padding: 0 40px;
+  position: relative;
+}
