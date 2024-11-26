@@ -15,29 +15,99 @@ const menuCategotyList = [
   },
 ];
 
+const orderCategotyList = [
+  {
+    title: '접수',
+    listAmount: 5,
+  },
+  {
+    title: '완료',
+  },
+];
+
+const tableCategotyList = [
+  {
+    title: '기본 구역',
+  },
+  {
+    title: '구역 1',
+  },
+];
+
 export default function HeaderLeft() {
   const [clicked, setClicked] = useState(0);
+  const type = 'table';
 
-  return (
-    <ul className={styles.left}>
-      {menuCategotyList.map((list, idx) => {
-        return (
-          <li key={idx} className={styles.categoryBox}>
-            <div
-              key={idx}
-              className={`${clicked === idx ? styles.clicked : ''}`}
-              onClick={() => setClicked((prev) => (prev = idx))}
-            >
-              <div className={styles.title}>{list.title}</div>
-            </div>
-            {clicked === idx && <motion.div className={styles.line} layoutId="headerline"></motion.div>}
+  switch (type) {
+    case 'menu': {
+      return (
+        <ul className={styles.left}>
+          {menuCategotyList.map((list, idx) => {
+            return (
+              <li key={idx} className={styles.categoryBox}>
+                <div
+                  key={idx}
+                  className={`${clicked === idx ? styles.clicked : ''}`}
+                  onClick={() => setClicked((prev) => (prev = idx))}
+                >
+                  <div className={styles.title}>{list.title}</div>
+                </div>
+                {clicked === idx && <motion.div className={styles.line} layoutId="headerline"></motion.div>}
+              </li>
+            );
+          })}
+          <li className={styles.addCategoryBox}>
+            <Image src={'/img/add-icon.png'} alt="메뉴 추가" width={15} height={15} />
+            <div className={styles.title}>분류</div>
           </li>
-        );
-      })}
-      <li className={styles.addCategoryBox}>
-        <Image src={'/img/add-icon.png'} alt="메뉴 추가하기" width={15} height={15} />
-        <div className={styles.title}>추가</div>
-      </li>
-    </ul>
-  );
+        </ul>
+      );
+    }
+    case 'table': {
+      return (
+        <ul className={styles.left}>
+          {tableCategotyList.map((list, idx) => {
+            return (
+              <li key={idx} className={styles.categoryBox}>
+                <div
+                  key={idx}
+                  className={`${clicked === idx ? styles.clicked : ''}`}
+                  onClick={() => setClicked((prev) => (prev = idx))}
+                >
+                  <div className={styles.title}>{list.title}</div>
+                </div>
+                {clicked === idx && <motion.div className={styles.line} layoutId="headerline"></motion.div>}
+              </li>
+            );
+          })}
+          <li className={styles.addCategoryBox}>
+            <Image src={'/img/add-icon.png'} alt="구역 추가" width={15} height={15} />
+            <div className={styles.title}>구역</div>
+          </li>
+        </ul>
+      );
+    }
+    case 'order': {
+      return (
+        <ul className={styles.left}>
+          {orderCategotyList.map((list, idx) => {
+            return (
+              <li key={idx} className={styles.categoryBox}>
+                <div
+                  key={idx}
+                  className={`${clicked === idx ? styles.clicked : ''}`}
+                  onClick={() => setClicked((prev) => (prev = idx))}
+                >
+                  <div className={styles.title}>
+                    {list.title} {list.title === '접수' ? list.listAmount : ''}
+                  </div>
+                </div>
+                {clicked === idx && <motion.div className={styles.line} layoutId="headerline"></motion.div>}
+              </li>
+            );
+          })}
+        </ul>
+      );
+    }
+  }
 }

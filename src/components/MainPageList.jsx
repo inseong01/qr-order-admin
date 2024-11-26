@@ -9,62 +9,77 @@ import Swiper from 'swiper';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import MiddleBox from './MiddleBox';
 
-const mainlist = [
-  { title: '음식 1', price: '10,000' },
-  { title: '음식 1', price: '10,000' },
-  { title: '음식 1', price: '10,000' },
-  { title: '음식 1', price: '10,000' },
-  { title: '음식 1', price: '10,000' },
-  { title: '음식 1', price: '10,000' },
-  { title: '음식 1', price: '10,000' },
-  { title: '음식 1', price: '10,000' },
-  { title: '음식 1', price: '10,000' },
-  { title: '음식 1', price: '10,000' },
+const menuList = [
+  { title: '음식 1', price: 1000 },
+  { title: '음식 1', price: 1000 },
+  { title: '음식 1', price: 1000 },
+  { title: '음식 1', price: 1000 },
+  { title: '음식 1', price: 1000 },
+  { title: '음식 1', price: 1000 },
+  { title: '음식 1', price: 1000 },
+  { title: '음식 1', price: 1000 },
+  { title: '음식 1', price: 1000 },
+  { title: '음식 1', price: 1000 },
+  { title: '음식 1', price: 1000 },
+  { title: '음식 1', price: 1000 },
 ];
 
-const orderListArr = [
-  [{ num: 1 }, { num: 2 }, { num: 3 }, { num: 4 }, { num: 5 }],
-  [{ num: 1 }, { num: 2 }, { num: 3 }, { num: 4 }, { num: 5 }],
-  [{ num: 1 }, { num: 2 }, { num: 3 }, { num: 4 }, { num: 5 }],
-  [{ num: 1 }, { num: 2 }, { num: 3 }, { num: 4 }, { num: 5 }],
-  [{ num: 1 }, { num: 2 }, { num: 3 }, { num: 4 }, { num: 5 }],
-  [{ num: 1 }, { num: 2 }, { num: 3 }, { num: 4 }, { num: 5 }],
+const menuPage = [
+  [{ num: 0 }, { num: 1 }, { num: 2 }, { num: 3 }, { num: 4 }, { num: 5 }],
+  [{ num: 5 }, { num: 6 }, { num: 7 }, { num: 8 }, { num: 9 }, { num: 10 }],
 ];
 
-const orderList = [...orderListArr, ...orderListArr, ...orderListArr, ...orderListArr];
+const orderList = [
+  { title: '주문 1', totalPrice: '10,000', menuPage },
+  { title: '주문 2', totalPrice: '10,000', menuPage },
+  { title: '주문 3', totalPrice: '10,000', menuPage },
+  { title: '주문 4', totalPrice: '10,000', menuPage },
+  { title: '주문 5', totalPrice: '10,000', menuPage },
+  { title: '주문 6', totalPrice: '10,000', menuPage },
+  { title: '주문 7', totalPrice: '10,000', menuPage },
+  { title: '주문 8', totalPrice: '10,000', menuPage },
+  { title: '주문 9', totalPrice: '10,000', menuPage },
+  { title: '주문 10', totalPrice: '10,000', menuPage },
+];
 
-export default function MainPageList() {
-  const [mainListArr, setMainListArr] = useState(mainlist);
-  const middleBoxRef = useRef(null);
+const orderPagelist = [orderList, orderList];
+
+export default function MainPageList({ type }) {
+  const [mainListArr, setMainListArr] = useState(menuList);
+  const [clickedNum, setclickedNum] = useState(null);
   const orderListRef = useRef(null);
-  const type = 'order';
 
   useEffect(() => {
-    // if (!orderListRef.current && !middleBoxRef.current) return;
+    if (!orderListRef.current) return;
 
-    // const orderListSwiper = new Swiper(orderListRef.current, {
-    //   modules: [Pagination],
-    //   pagination: {
-    //     el: '.swiper-pagination',
-    //     type: 'bullets',
-    //   },
-    //   // slidesPerView: 1,
-    // });
-
-    const middleBoxSwiper = new Swiper(middleBoxRef.current, {
+    const orderListSwiper = new Swiper(orderListRef.current, {
       modules: [Pagination],
       pagination: {
         el: '.swiper-pagination',
         type: 'bullets',
+        clickable: true,
       },
+      spaceBetween: 10,
     });
 
     return () => {
       orderListSwiper.distory();
-      middleBoxSwiper.distory();
     };
-  }, [middleBoxRef, orderListRef]);
+  }, []);
+
+  function onClickOpenListOption(idx) {
+    // idx 추후에 주문목록 고유키로 변경
+    return () => {
+      setclickedNum(idx);
+    };
+  }
+
+  function onClickCloseOptionBox(e) {
+    e.stopPropagation();
+    setclickedNum(() => null);
+  }
 
   switch (type) {
     case 'table': {
@@ -96,55 +111,92 @@ export default function MainPageList() {
     case 'order': {
       return (
         <div className={`orderList ${styles.orderList}`} ref={orderListRef}>
-          <ul className={`${styles.listBox} ${styles.order}`}>
-            {orderList.map((pageArr, idx) => {
+          <ul className={`swiper-wrapper ${styles.listBox}`}>
+            {orderPagelist.map((page, idx) => {
               return (
-                <div key={idx}>
-                  {pageArr.map((page, i) => {
+                <li key={idx} className={`swiper-slide ${styles.page}`}>
+                  {page.map((orderList, i) => {
                     return (
-                      <li key={i} className={`${styles.list}`}>
+                      <div key={i} className={styles.list} onClick={onClickOpenListOption(i)}>
                         <div className={styles.topBox}>
                           <div className={styles.top}>
-                            <div className={styles.left}>
-                              <div className={styles.title}>#{i + 1}</div>
-                            </div>
+                            <div className={styles.title}>#{i + 1}</div>
                             <div className={styles.right}>
-                              <div className={styles.table}>테이블 {i + 1}</div>
+                              <div className={styles.table}>테이블 1</div>
                               <div className={styles.time}>00:00</div>
                             </div>
                           </div>
                         </div>
-                        {/* <div className={`middleBoxWrap ${styles.middleBoxWrap}`} ref={middleBoxRef}>
-                        <div className={`middleBox ${styles.middleBox}`} ref={middleBoxRef}>
-                          <ul className={`swiper-wrapper ${styles.middle}`}>
-                          {list.map((menu, j) => {
-                            return (
-                              <li className={`swiper-slide ${styles.slide}`} key={j}>
-                              {list.map((li, k) => {
-                                return <div key={k}>{menu.num}</div>;
-                                })}
-                                </li>
-                                );
-                                })}
-                                </ul>
-                                <div className="swiper-pagination"></div>
-                                </div>
-                      </div> */}
+                        <MiddleBox menuList={orderList.menuPage} />
                         <div className={styles.bottomBox}>
                           <div className={styles.bottom}>
-                            <div className={styles.total}>
-                              <span>00</span>개
+                            <div className={styles.totalMenuAmount}>
+                              <span>{1}</span> 개
                             </div>
-                            <div className={styles.completeBtn}>완료</div>
+                            <div className={`${styles.completeBtn} ${clickedNum === i ? styles.delete : ''}`}>
+                              {clickedNum === i ? '삭제' : '완료'}
+                            </div>
                           </div>
                         </div>
-                      </li>
+                        <AnimatePresence>
+                          {clickedNum === i && (
+                            <motion.ul
+                              className={styles.listOptionBox}
+                              initial={{ y: -30 }}
+                              animate={{ y: 5 }}
+                              exit={{ y: -30 }}
+                            >
+                              <li className={styles.option} onClick={onClickCloseOptionBox}>
+                                <Image src={'/img/close-icon.png'} alt="옵션 닫기" width={30} height={30} />
+                              </li>
+                            </motion.ul>
+                          )}
+                        </AnimatePresence>
+                      </div>
                     );
                   })}
-                </div>
+                </li>
               );
             })}
           </ul>
+          <div className="swiper-pagination"></div>
+        </div>
+      );
+    }
+    case 'completed order': {
+      return (
+        <div className={`orderList ${styles.orderList} ${styles.completed}`} ref={orderListRef}>
+          <ul className={`swiper-wrapper ${styles.listBox}`}>
+            {orderPagelist.map((page, idx) => {
+              return (
+                <li key={idx} className={`swiper-slide ${styles.page}`}>
+                  {page.map((orderList, i) => {
+                    return (
+                      <div key={i} className={styles.list}>
+                        <div className={styles.topBox}>
+                          <div className={styles.top}>
+                            <div className={styles.title}>#{i + 1}</div>
+                            <div className={styles.right}>
+                              <div className={styles.table}>테이블 1</div>
+                            </div>
+                          </div>
+                        </div>
+                        <MiddleBox menuList={orderList.menuPage} />
+                        <div className={styles.bottomBox}>
+                          <div className={styles.bottom}>
+                            <div className={styles.totalMenuAmount}>
+                              <span>{1}</span> 개
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </li>
+              );
+            })}
+          </ul>
+          <div className="swiper-pagination"></div>
         </div>
       );
     }

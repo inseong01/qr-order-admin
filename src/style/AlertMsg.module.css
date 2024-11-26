@@ -1,0 +1,22 @@
+.alertMsg {
+  width: 440px; /* 임의 */
+  color: white;
+  border: 1px solid #4caff8;
+  border-radius: 10px;
+  background-color: #4caff8;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: absolute;
+  left: 50%;
+  bottom: 5%;
+
+  cursor: default;
+}
+
+.title {
+  line-height: 19px;
+  padding: 4px 0;
+}

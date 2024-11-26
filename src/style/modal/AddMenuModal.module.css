@@ -1,0 +1,100 @@
+.dialog {
+  outline: none;
+  border: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: transparent;
+  position: relative;
+  padding: 20px;
+}
+
+.submitForm {
+  width: 465px;
+  height: 205px;
+  padding: 16px;
+  border: 1px solid #8d8d8d;
+  border-radius: 5px;
+  background-color: white;
+  overflow: hidden;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 닫는 버튼 */
+.closeBtn {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+}
+
+.left {
+  width: 140px;
+  height: 100%;
+  border: 1px solid #d8d8d8;
+  border-radius: 7px;
+  color: #8d8d8d;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  position: relative;
+
+  cursor: pointer;
+}
+
+.right {
+  height: 100%;
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.right > div {
+  font-size: 1.1rem;
+  font-weight: 600;
+  /* color: #4caff8; */
+  text-align: center;
+}
+
+.submitInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  font-size: 13px;
+}
+/* 항목 입력 input */
+.submitInfo input {
+  width: 75%;
+  border: none;
+  border-bottom: 1px solid #d8d8d8;
+  padding: 4px;
+}
+.submitInfo input:focus {
+  outline: none;
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* 제출 input */
+.right > input {
+  border: none;
+  padding: 4px;
+  border-radius: 5px;
+  line-height: 19px;
+
+  cursor: pointer;
+}
