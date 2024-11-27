@@ -5,15 +5,23 @@
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: transparent;
-  position: relative;
   padding: 20px;
+  z-index: 9;
+}
+.backdrop {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .submitForm {
-  width: 465px;
-  height: 205px;
+  width: 495px;
+  height: 215px;
   padding: 16px;
-  border: 1px solid #8d8d8d;
+  border: 1px solid #d8d8d8;
   border-radius: 5px;
   background-color: white;
   overflow: hidden;

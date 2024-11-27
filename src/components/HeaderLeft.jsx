@@ -4,7 +4,8 @@ import styles from '@/style/HeaderLeft.module.css';
 
 import Image from 'next/image';
 import { motion } from 'motion/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 const menuCategotyList = [
   {
@@ -35,8 +36,22 @@ const tableCategotyList = [
 ];
 
 export default function HeaderLeft() {
+  // useState
   const [clicked, setClicked] = useState(0);
-  const type = 'table';
+  // useSelector
+  const type = useSelector((state) => state.tabState.state);
+  // useDispatch
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    setClicked(0);
+  }, [type]);
+
+  function onClickChangeTabCategory(idx) {
+    return () => {
+      setClicked((prev) => (prev = idx));
+    };
+  }
 
   switch (type) {
     case 'menu': {
@@ -47,8 +62,8 @@ export default function HeaderLeft() {
               <li key={idx} className={styles.categoryBox}>
                 <div
                   key={idx}
-                  className={`${clicked === idx ? styles.clicked : ''}`}
-                  onClick={() => setClicked((prev) => (prev = idx))}
+                  className={`${clicked === idx ? styles.clicked : ''} ${styles.category}`}
+                  onClick={onClickChangeTabCategory(idx)}
                 >
                   <div className={styles.title}>{list.title}</div>
                 </div>
@@ -57,8 +72,10 @@ export default function HeaderLeft() {
             );
           })}
           <li className={styles.addCategoryBox}>
-            <Image src={'/img/add-icon.png'} alt="메뉴 추가" width={15} height={15} />
-            <div className={styles.title}>분류</div>
+            <div className={styles.category}>
+              <Image src={'/img/add-icon.png'} alt="메뉴 추가" width={15} height={15} />
+              <div className={styles.title}>분류</div>
+            </div>
           </li>
         </ul>
       );
@@ -71,8 +88,8 @@ export default function HeaderLeft() {
               <li key={idx} className={styles.categoryBox}>
                 <div
                   key={idx}
-                  className={`${clicked === idx ? styles.clicked : ''}`}
-                  onClick={() => setClicked((prev) => (prev = idx))}
+                  className={`${clicked === idx ? styles.clicked : ''} ${styles.category}`}
+                  onClick={onClickChangeTabCategory(idx)}
                 >
                   <div className={styles.title}>{list.title}</div>
                 </div>
@@ -81,8 +98,10 @@ export default function HeaderLeft() {
             );
           })}
           <li className={styles.addCategoryBox}>
-            <Image src={'/img/add-icon.png'} alt="구역 추가" width={15} height={15} />
-            <div className={styles.title}>구역</div>
+            <div className={`${styles.category}`}>
+              <Image src={'/img/add-icon.png'} alt="구역 추가" width={15} height={15} />
+              <div className={styles.title}>구역</div>
+            </div>
           </li>
         </ul>
       );
@@ -95,8 +114,8 @@ export default function HeaderLeft() {
               <li key={idx} className={styles.categoryBox}>
                 <div
                   key={idx}
-                  className={`${clicked === idx ? styles.clicked : ''}`}
-                  onClick={() => setClicked((prev) => (prev = idx))}
+                  className={`${clicked === idx ? styles.clicked : ''} ${styles.category}`}
+                  onClick={onClickChangeTabCategory(idx)}
                 >
                   <div className={styles.title}>
                     {list.title} {list.title === '접수' ? list.listAmount : ''}

@@ -16,7 +16,65 @@
   cursor: default;
 }
 
-.title {
+.title,
+.index {
   line-height: 19px;
   padding: 4px 0;
+}
+
+/* 요청 메시지 */
+.reqeustMsgWrap {
+  height: calc(100vh - 170px);
+
+  left: 20px;
+  bottom: 0;
+  position: absolute;
+  padding: 24px;
+
+  overflow-y: auto;
+}
+.reqeustMsgWrap::-webkit-scrollbar {
+  display: none;
+}
+.reqeustMsgWrap {
+  -ms-overflow-style: none; /* 인터넷 익스플로러 */
+  scrollbar-width: none; /* 파이어폭스 */
+}
+
+.reqeustMsg {
+  width: 260px;
+  min-height: calc(100vh - 220px);
+
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-start;
+  gap: 10px;
+
+  cursor: default;
+}
+
+.msg {
+  font-size: 0.95rem;
+  border-radius: 5px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  overflow: hidden;
+}
+
+.top {
+  width: 100%;
+  color: white;
+  background-color: #4caff8;
+  padding: 2px 16px;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.bottom {
+  width: 100%;
+  padding: 8px 16px;
+  background-color: white;
+
+  line-break: anywhere;
+  line-height: 23px;
 }

@@ -1,6 +1,8 @@
 'use client';
 
 import styles from '@/style/MainPageList.module.css';
+import MiddleBox from './MiddleBox';
+// import TableDraw from './TableDraw';
 
 import Image from 'next/image';
 import { AnimatePresence, motion } from 'motion/react';
@@ -9,21 +11,24 @@ import Swiper from 'swiper';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import MiddleBox from './MiddleBox';
+import dynamic from 'next/dynamic';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeModalState, getItemInfo, resetItemInfo } from '@/lib/features/modalState/modalSlice';
+import { changeSubmitType, resetSubmitState } from '@/lib/features/submitState/submitSlice';
+
+// konva ssr 방지
+// const KonvaCanvas = dynamic(() => import('./TableDraw'), {
+//   ssr: false,
+// });
 
 const menuList = [
-  { title: '음식 1', price: 1000 },
-  { title: '음식 1', price: 1000 },
-  { title: '음식 1', price: 1000 },
-  { title: '음식 1', price: 1000 },
-  { title: '음식 1', price: 1000 },
-  { title: '음식 1', price: 1000 },
-  { title: '음식 1', price: 1000 },
-  { title: '음식 1', price: 1000 },
-  { title: '음식 1', price: 1000 },
-  { title: '음식 1', price: 1000 },
-  { title: '음식 1', price: 1000 },
-  { title: '음식 1', price: 1000 },
+  { name: '음식 1', price: 1000, description: '' },
+  { name: '음식 1', price: 1000, description: '' },
+  { name: '음식 1', price: 1000, description: '' },
+  { name: '음식 1', price: 1000, description: '' },
+  { name: '음식 1', price: 1000, description: '' },
+  { name: '음식 1', price: 1000, description: '' },
+  { name: '음식 1', price: 1000, description: '' },
 ];
 
 const menuPage = [
@@ -46,15 +51,21 @@ const orderList = [
 
 const orderPagelist = [orderList, orderList];
 
-export default function MainPageList({ type }) {
+export default function MainPageList() {
+  // useState
   const [mainListArr, setMainListArr] = useState(menuList);
   const [clickedNum, setclickedNum] = useState(null);
+  // useRef
   const orderListRef = useRef(null);
+  // useSelector
+  const type = useSelector((state) => state.tabState.state);
+  // useDispatch
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!orderListRef.current) return;
 
-    const orderListSwiper = new Swiper(orderListRef.current, {
+    new Swiper(orderListRef.current, {
       modules: [Pagination],
       pagination: {
         el: '.swiper-pagination',
@@ -63,11 +74,19 @@ export default function MainPageList({ type }) {
       },
       spaceBetween: 10,
     });
-
-    return () => {
-      orderListSwiper.distory();
-    };
   }, []);
+
+  function onClickOpenModal(type, list) {
+    return () => {
+      dispatch(resetSubmitState());
+      dispatch(changeModalState({ isOpen: true, type }));
+      if (type !== 'edit') {
+        dispatch(resetItemInfo());
+        return;
+      }
+      dispatch(getItemInfo({ list }));
+    };
+  }
 
   function onClickOpenListOption(idx) {
     // idx 추후에 주문목록 고유키로 변경
@@ -82,15 +101,15 @@ export default function MainPageList({ type }) {
   }
 
   switch (type) {
-    case 'table': {
+    case 'menu': {
       return (
         <ul className={styles.listBox}>
           {mainListArr.map((list, idx) => {
             return (
-              <li key={idx} className={styles.list}>
+              <li key={idx} className={styles.list} onClick={onClickOpenModal('edit', list)}>
                 <div className={styles.topBox}>
                   <div className={styles.top}>
-                    <div className={styles.title}>{list.title}</div>
+                    <div className={styles.title}>{list.name}</div>
                   </div>
                 </div>
                 <div className={styles.bottomBox}>
@@ -101,12 +120,15 @@ export default function MainPageList({ type }) {
               </li>
             );
           })}
-          <li className={`${styles.list} ${styles.addBtn}`}>
+          <li className={`${styles.list} ${styles.addBtn}`} onClick={onClickOpenModal('add')}>
             <Image src={'/img/add-icon.png'} alt="상품 추가" width={30} height={30} />
             <div className="title">상품 추가</div>
           </li>
         </ul>
       );
+    }
+    case 'table': {
+      return <div className={styles.listBox}>{/* <KonvaCanvas /> */}</div>;
     }
     case 'order': {
       return (

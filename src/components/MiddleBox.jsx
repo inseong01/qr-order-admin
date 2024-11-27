@@ -10,7 +10,7 @@ export default function MiddleBox({ menuList }) {
   useEffect(() => {
     if (!middleBoxRef.current) return;
 
-    const middleBoxSwiper = new Swiper(middleBoxRef.current, {
+    new Swiper(middleBoxRef.current, {
       modules: [Pagination],
       pagination: {
         el: '.middleBox-pagination',
@@ -18,10 +18,6 @@ export default function MiddleBox({ menuList }) {
       },
       spaceBetween: 10,
     });
-
-    return () => {
-      middleBoxSwiper.distory();
-    };
   }, []);
 
   return (
