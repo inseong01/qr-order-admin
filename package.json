@@ -11,6 +11,9 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.3.0",
+    "@supabase/supabase-js": "^2.46.2",
+    "@tanstack/react-query": "^5.61.5",
+    "dotenv": "^16.4.5",
     "konva": "^9.3.16",
     "motion": "^11.11.17",
     "next": "15.0.3",
@@ -21,6 +24,7 @@
     "swiper": "^11.1.15"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^5.61.4",
     "eslint": "^8",
     "eslint-config-next": "15.0.3"
   }

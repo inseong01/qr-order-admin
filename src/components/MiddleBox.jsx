@@ -1,20 +1,24 @@
 import styles from '@/style/MiddleBox.module.css';
 
 import { useEffect, useRef } from 'react';
-import { Pagination } from 'swiper/modules';
+import { Grid, Pagination } from 'swiper/modules';
 import Swiper from 'swiper';
+import 'swiper/css/grid';
 
-export default function MiddleBox({ menuList }) {
+export default function MiddleBox({ orderList }) {
   const middleBoxRef = useRef(null);
 
   useEffect(() => {
     if (!middleBoxRef.current) return;
 
     new Swiper(middleBoxRef.current, {
-      modules: [Pagination],
+      modules: [Pagination, Grid],
       pagination: {
         el: '.middleBox-pagination',
         type: 'bullets',
+      },
+      grid: {
+        rows: 5,
       },
       spaceBetween: 10,
     });
@@ -24,17 +28,13 @@ export default function MiddleBox({ menuList }) {
     <div className={styles.middleBox}>
       <div className={styles.middleWrap} ref={middleBoxRef}>
         <ul className={`swiper-wrapper ${styles.middle}`}>
-          {menuList.map((menu, idx) => {
+          {orderList.map((menu, idx) => {
             return (
               <li key={idx} className={`swiper-slide ${styles.menuBox}`}>
-                {menu.map((menu, i) => {
-                  return (
-                    <div key={i} className={styles.menu}>
-                      <div className={styles.title}>음식 {menu.num}</div>
-                      <div className={styles.amount}>1</div>
-                    </div>
-                  );
-                })}
+                <div className={styles.menu}>
+                  <div className={styles.title}>{menu.name}</div>
+                  <div className={styles.amount}>{menu.amount}</div>
+                </div>
               </li>
             );
           })}

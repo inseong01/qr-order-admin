@@ -13,5 +13,10 @@
   - 좌석 탭: Konva, 도형 추가 추후 적용, ssr Error
   https://konvajs.org/docs/overview.html
 
-<--- redux 부분 기능 구현, db 연동 --->
+24.11.28.
+  - db 구조 설계
+  - db 연결
+  - 상단, 하단 탭: supabase db/react query 연동, 'select' 구현
+  - 하단 메뉴, 주문내역 탭: swiper grid 조정
 
+<--- react query data motion 다듬기, 'insert' 구현 --->

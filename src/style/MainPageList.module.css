@@ -1,6 +1,6 @@
 .listBox {
   width: 100%;
-  height: 100%;
+  max-height: 100%;
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
@@ -10,8 +10,9 @@
 }
 
 .list {
-  min-width: 214px; /* 임의 설정 */
+  min-width: 200px; /* 임의 설정 */
   min-height: 130px; /* 임의 설정 */
+  max-height: 200px;
   background-color: white;
   border-radius: 8px;
   overflow: hidden;
@@ -19,7 +20,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
+  flex: 1;
   cursor: pointer;
 }
 
@@ -61,107 +62,13 @@
   gap: 10px;
 }
 
-/* type order */
-.orderList {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  overflow: hidden;
-
-  color: #222;
-}
-
-.orderList .page {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.orderList .listBox {
-  height: calc(100% - 30px);
-  flex-wrap: nowrap;
-  gap: 0;
-}
-
-.orderList .list {
-  min-width: 253px; /* 임시 */
-  max-width: 253px; /* 임시 */
-
-  position: relative;
-  cursor: default;
-}
-
-.orderList .topBox {
-  background-color: #2bbada;
-  color: white;
-}
-.orderList .right {
-  text-align: right;
-  font-size: 13px;
-}
-
-.orderList .bottomBox {
-  padding-top: 0;
-}
-
-.orderList .bottom {
-  padding-top: 12px;
-  border-top: 1px solid #b4b4b4;
-}
-
-.orderList > div {
-  --swiper-pagination-progressbar-size: 4px;
-  --swiper-pagination-color: #2bbada;
-  --swiper-pagination-bottom: 0px;
-}
-
-.orderList .bottom {
-  justify-content: space-between;
-}
-
-.orderList .bottom span {
-  color: #2bbada;
-}
-
-.completeBtn {
-  background-color: #e6e6e6;
-  border-radius: 5px;
-  padding: 2px 8px;
-  line-height: 19px;
-  font-size: 13px;
-
-  cursor: pointer;
-}
-.completeBtn.delete {
-  background-color: #ff3535;
-  color: white;
-}
-
-/* 리스트 옵션 */
-.listOptionBox {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  position: absolute;
-  top: 0;
-}
-.option {
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-}
-
 /* completed OrderList */
 .completed .topBox {
   background-color: #8d8d8d;
   color: white;
 }
 
-.orderList .bottom {
+.completed .bottom {
   justify-content: center;
 }
 

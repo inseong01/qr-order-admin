@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeModalState } from '@/lib/features/modalState/modalSlice';
-import { changeSubmitType, fetchFormData, resetSubmitState } from '@/lib/features/submitState/submitSlice';
+import { changeSubmitType, fetchFormData } from '@/lib/features/submitState/submitSlice';
 
 const valueObj = {
   name: '',
@@ -19,12 +19,13 @@ export default function AddMenuModal() {
   // useSelector
   const type = useSelector((state) => state.modalState.type); // 기본: ''
   const isOpen = useSelector((state) => state.modalState.isOpen);
-  const item = useSelector((state) => state.modalState.item);
+  const item = useSelector((state) => state.itemState.item);
   const submitStatus = useSelector((state) => state.submitState.status);
+  const isSubmit = useSelector((state) => state.submitState.isSubmit);
   // dispatch
   const dispatch = useDispatch();
   // useState
-  const [value, setValue] = useState(valueObj);
+  const [value, setValue] = useState({});
   // useRef
   const modalRef = useRef(null);
 
@@ -37,7 +38,6 @@ export default function AddMenuModal() {
   useEffect(() => {
     if (submitStatus === 'fulfilled') {
       dispatch(changeModalState({ isOpen: false }));
-      // dispatch(resetSubmitState());
     }
   }, [submitStatus]);
 
@@ -59,6 +59,7 @@ export default function AddMenuModal() {
 
   function onSubmitData(e) {
     e.preventDefault();
+    if (isSubmit) return;
     dispatch(changeSubmitType({ type: 'product' }));
     dispatch(fetchFormData(value));
   }
@@ -125,7 +126,6 @@ export default function AddMenuModal() {
                       설명
                     </label>
                     <input
-                      required
                       type="text"
                       id="descInput"
                       className={styles.input}

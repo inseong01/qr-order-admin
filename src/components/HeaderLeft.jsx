@@ -1,55 +1,36 @@
 'use client';
 
 import styles from '@/style/HeaderLeft.module.css';
+import { changeCategoryKey, resetCategoryState } from '@/lib/features/categoryState/categorySlice';
+import getTabCategory from '@/lib/supabase/func/getTabCategory';
 
 import Image from 'next/image';
 import { motion } from 'motion/react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
-const menuCategotyList = [
-  {
-    title: '메인메뉴',
-  },
-  {
-    title: '사이드',
-  },
-];
-
-const orderCategotyList = [
-  {
-    title: '접수',
-    listAmount: 5,
-  },
-  {
-    title: '완료',
-  },
-];
-
-const tableCategotyList = [
-  {
-    title: '기본 구역',
-  },
-  {
-    title: '구역 1',
-  },
-];
+import { useQuery } from '@tanstack/react-query';
+import getAllOrderList from '@/lib/supabase/func/getAllOrderList';
 
 export default function HeaderLeft() {
-  // useState
-  const [clicked, setClicked] = useState(0);
   // useSelector
   const type = useSelector((state) => state.tabState.state);
+  const categoryKey = useSelector((state) => state.categoryState.key);
+  // useQuery
+  const { data } = useQuery({ queryKey: ['tabCategory', type], queryFn: () => getTabCategory(type) });
+  const allOrderList = useQuery({
+    queryKey: ['allOrderList', type],
+    queryFn: () => getAllOrderList(type, { key: 1 }),
+  });
   // useDispatch
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setClicked(0);
+    dispatch(resetCategoryState());
   }, [type]);
 
-  function onClickChangeTabCategory(idx) {
+  function onClickChangeTabCategory({ key, title }) {
     return () => {
-      setClicked((prev) => (prev = idx));
+      dispatch(changeCategoryKey({ key, title }));
     };
   }
 
@@ -57,20 +38,23 @@ export default function HeaderLeft() {
     case 'menu': {
       return (
         <ul className={styles.left}>
-          {menuCategotyList.map((list, idx) => {
-            return (
-              <li key={idx} className={styles.categoryBox}>
-                <div
-                  key={idx}
-                  className={`${clicked === idx ? styles.clicked : ''} ${styles.category}`}
-                  onClick={onClickChangeTabCategory(idx)}
-                >
-                  <div className={styles.title}>{list.title}</div>
-                </div>
-                {clicked === idx && <motion.div className={styles.line} layoutId="headerline"></motion.div>}
-              </li>
-            );
-          })}
+          {data &&
+            data.map((list, idx) => {
+              return (
+                <li key={idx} className={styles.categoryBox}>
+                  <div
+                    key={idx}
+                    className={`${categoryKey === list.key ? styles.clicked : ''} ${styles.category}`}
+                    onClick={onClickChangeTabCategory(list)}
+                  >
+                    <div className={styles.title}>{list.title}</div>
+                  </div>
+                  {categoryKey === list.key && (
+                    <motion.div className={styles.line} layoutId="headerline"></motion.div>
+                  )}
+                </li>
+              );
+            })}
           <li className={styles.addCategoryBox}>
             <div className={styles.category}>
               <Image src={'/img/add-icon.png'} alt="메뉴 추가" width={15} height={15} />
@@ -83,20 +67,23 @@ export default function HeaderLeft() {
     case 'table': {
       return (
         <ul className={styles.left}>
-          {tableCategotyList.map((list, idx) => {
-            return (
-              <li key={idx} className={styles.categoryBox}>
-                <div
-                  key={idx}
-                  className={`${clicked === idx ? styles.clicked : ''} ${styles.category}`}
-                  onClick={onClickChangeTabCategory(idx)}
-                >
-                  <div className={styles.title}>{list.title}</div>
-                </div>
-                {clicked === idx && <motion.div className={styles.line} layoutId="headerline"></motion.div>}
-              </li>
-            );
-          })}
+          {data &&
+            data.map((list, idx) => {
+              return (
+                <li key={idx} className={styles.categoryBox}>
+                  <div
+                    key={idx}
+                    className={`${categoryKey === list.key ? styles.clicked : ''} ${styles.category}`}
+                    onClick={onClickChangeTabCategory(list)}
+                  >
+                    <div className={styles.title}>{list.title}</div>
+                  </div>
+                  {categoryKey === list.key && (
+                    <motion.div className={styles.line} layoutId="headerline"></motion.div>
+                  )}
+                </li>
+              );
+            })}
           <li className={styles.addCategoryBox}>
             <div className={`${styles.category}`}>
               <Image src={'/img/add-icon.png'} alt="구역 추가" width={15} height={15} />
@@ -109,22 +96,27 @@ export default function HeaderLeft() {
     case 'order': {
       return (
         <ul className={styles.left}>
-          {orderCategotyList.map((list, idx) => {
-            return (
-              <li key={idx} className={styles.categoryBox}>
-                <div
-                  key={idx}
-                  className={`${clicked === idx ? styles.clicked : ''} ${styles.category}`}
-                  onClick={onClickChangeTabCategory(idx)}
-                >
-                  <div className={styles.title}>
-                    {list.title} {list.title === '접수' ? list.listAmount : ''}
+          {data &&
+            data.map((list, idx) => {
+              console.log(list);
+              return (
+                <li key={idx} className={styles.categoryBox}>
+                  <div
+                    key={idx}
+                    className={`${categoryKey === list.key ? styles.clicked : ''} ${styles.category}`}
+                    onClick={onClickChangeTabCategory(list)}
+                  >
+                    <div className={styles.title}>
+                      {list.title}{' '}
+                      {list.title === '접수' ? (allOrderList.data ? allOrderList.data.length : 0) : ''}
+                    </div>
                   </div>
-                </div>
-                {clicked === idx && <motion.div className={styles.line} layoutId="headerline"></motion.div>}
-              </li>
-            );
-          })}
+                  {categoryKey === list.key && (
+                    <motion.div className={styles.line} layoutId="headerline"></motion.div>
+                  )}
+                </li>
+              );
+            })}
         </ul>
       );
     }
