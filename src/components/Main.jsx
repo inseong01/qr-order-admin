@@ -1,5 +1,5 @@
 import styles from '@/style/Main.module.css';
-import MainPageList from './MainPageList';
+import MainPageList from './middle/MainPageList';
 import AddMenuModal from './modal/AddMenuModal';
 import AlertMsg from './AlertMsg';
 import ConfirmModal from './modal/ConfirmModal';

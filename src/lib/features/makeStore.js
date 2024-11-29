@@ -12,7 +12,7 @@ export default function makeStore() {
       modalState: modalSliceReducer,
       submitState: submitSliceReducer,
       itemState: itemSliceReducer,
-      categoryState: categorySliceReducer
+      categoryState: categorySliceReducer,
     }
   })
 }

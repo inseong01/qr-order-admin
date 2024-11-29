@@ -97,12 +97,35 @@
   justify-content: space-between;
 }
 
-/* 제출 input */
-.right > input {
+/* 제출 버튼 */
+.submitBtn {
+  width: 100%;
+  height: auto;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.submitBtn input {
   border: none;
-  padding: 4px;
+}
+
+.btn {
+  font-size: 13px;
+  font-weight: 500;
   border-radius: 5px;
   line-height: 19px;
 
+  flex: 1;
+  padding: 4px;
+
   cursor: pointer;
+
+  color: #222;
+  font-weight: 600;
+  background-color: #f0f0f0;
+}
+.btn.delete {
+  color: #f30000;
 }

@@ -1,16 +1,17 @@
 'use client';
 
 import styles from '@/style/swiper/CompletedOrderListSwiper.module.css';
-import MiddleBox from '../MiddleBox';
+import MiddleBox from '../middle/MiddleBox';
 
+import { motion, AnimatePresence } from 'motion/react';
 import Swiper from 'swiper';
 import { Pagination, Grid } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/grid';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-export default function CompletedOrderListSwiper({ allOrderList }) {
+export default function CompletedOrderListSwiper({ allOrderList, swiper_motion }) {
   const orderListRef = useRef(null);
 
   useEffect(() => {
@@ -31,7 +32,13 @@ export default function CompletedOrderListSwiper({ allOrderList }) {
   }, []);
 
   return (
-    <div className={`orderList ${styles.completed}`} ref={orderListRef}>
+    <motion.div
+      className={`orderList ${styles.completed}`}
+      ref={orderListRef}
+      variants={swiper_motion}
+      initial={'notActive'}
+      animate={'active'}
+    >
       <ul className={`swiper-wrapper ${styles.listBox}`}>
         {allOrderList.map((list, idx) => {
           const amount = list.orderList.reduce((prev, curr) => prev + curr.amount, 0);
@@ -60,6 +67,6 @@ export default function CompletedOrderListSwiper({ allOrderList }) {
         })}
       </ul>
       <div className={`swiper-pagination ${styles.pagination}`}></div>
-    </div>
+    </motion.div>
   );
 }

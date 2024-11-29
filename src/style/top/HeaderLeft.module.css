@@ -4,7 +4,7 @@
   height: 100%;
 
   display: flex;
-  font-size: 23px;
+  font-size: 1.3rem;
 }
 
 .left li {
@@ -59,4 +59,12 @@
   padding: 0 10px;
   background-color: #4caff8;
   border-radius: 5px;
+}
+
+/* 스켈레톤 */
+.skeleton {
+  width: 70%;
+}
+.skeleton span {
+  height: 28px;
 }

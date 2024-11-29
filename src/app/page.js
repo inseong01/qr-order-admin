@@ -7,14 +7,22 @@ import Main from "@/components/Main";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+function PageWrap() {
+  return (
+    <>
+      <Header />
+      <Main />
+      <Footer />
+    </>
+  )
+}
+
 export default function Home() {
   const queryClient = new QueryClient();
   return (
     <div className={styles.page}>
       <QueryClientProvider client={queryClient}>
-        <Header />
-        <Main />
-        <Footer />
+        <PageWrap />
       </QueryClientProvider>
     </div>
   );

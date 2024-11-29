@@ -1,22 +1,7 @@
-/* 헤더 우측 */
-.right {
-  height: 100%;
-  display: flex;
-}
-
-.right li {
-  width: auto;
-  height: 100%;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0 10px;
-
-  cursor: default;
-}
-
 .serverStatus {
+  width: 100%;
+  height: auto;
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -28,9 +13,11 @@
   overflow: hidden;
   padding: 6px 12px;
 }
+
 .serverStatus > div {
   line-height: 19px;
 }
+
 .status {
   width: 10px;
   height: 10px;

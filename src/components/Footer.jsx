@@ -1,5 +1,5 @@
 import styles from '@/style/Footer.module.css';
-import FooterList from './FooterList';
+import FooterList from './bottom/FooterList';
 
 export default function Footer() {
   return (

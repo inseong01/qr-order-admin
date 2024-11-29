@@ -1,4 +1,4 @@
-import styles from '@/style/MiddleBox.module.css';
+import styles from '@/style/middle/MiddleBox.module.css';
 
 import { useEffect, useRef } from 'react';
 import { Grid, Pagination } from 'swiper/modules';

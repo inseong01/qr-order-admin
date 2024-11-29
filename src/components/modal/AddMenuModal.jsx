@@ -99,7 +99,6 @@ export default function AddMenuModal() {
                       id="nameInput"
                       className={styles.input}
                       value={value.name}
-                      // value={type === 'edit' ? value.name : undefined}
                       name="name"
                       onChange={onChangeInputValue}
                     />
@@ -116,7 +115,6 @@ export default function AddMenuModal() {
                       min={10}
                       className={styles.input}
                       value={value.price === 0 ? '' : value.price}
-                      // value={type === 'edit' ? value.price : undefined}
                       name="price"
                       onChange={onChangeInputValue}
                     />
@@ -130,17 +128,19 @@ export default function AddMenuModal() {
                       id="descInput"
                       className={styles.input}
                       value={value.description}
-                      // value={type === 'edit' ? value.description : undefined}
                       name="description"
                       onChange={onChangeInputValue}
                     />
                   </li>
                 </ul>
-                <input
-                  type="submit"
-                  className={styles.submit}
-                  value={type === 'add' ? '추가하기' : '수정하기'}
-                />
+                <div className={styles.submitBtn}>
+                  {type !== 'add' && <div className={`${styles.btn} ${styles.delete}`}>삭제하기</div>}
+                  <input
+                    type="submit"
+                    className={styles.btn}
+                    value={type === 'add' ? '추가하기' : '수정하기'}
+                  />
+                </div>
               </div>
             </form>
             <div className={styles.closeBtn} onClick={onClickCloseModal}>

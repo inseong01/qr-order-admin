@@ -10,9 +10,29 @@ const tabSlice = createSlice({
   reducers: {
     changeTabState: ((state, action) => {
       const currentState = action.payload.state;
+      let type = ''
+
+      switch (currentState) {
+        case '메뉴': {
+          type = 'menu';
+          break;
+        }
+        case '좌석': {
+          type = 'table'
+          break;
+        }
+        case '주문': {
+          type = 'order';
+          break;
+        }
+        default: {
+          type = 'menu';
+        }
+      }
+
       return {
         ...state,
-        state: currentState
+        state: type
       }
     })
   }
