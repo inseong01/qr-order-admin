@@ -6,7 +6,7 @@ import { changeTabState } from '@/lib/features/tabState/tabSlice';
 
 import { motion } from 'motion/react';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useQuery } from '@tanstack/react-query';
 
 // DB, footerList 추가 시 tabSlice.js switch case 영문 명 반환 추가
@@ -14,6 +14,8 @@ export default function FooterList() {
   const isAlert = true;
   // useState
   const [clicked, setClicked] = useState(0);
+  // useSelector
+  const isModalOpen = useSelector((state) => state.modalState.isOpen);
   // useDispatch
   const dispatch = useDispatch();
   // useQuery
@@ -26,6 +28,7 @@ export default function FooterList() {
 
   function onClickChangeTab({ title }, idx) {
     return () => {
+      if (isModalOpen) return;
       dispatch(changeTabState({ state: title }));
       setClicked((prev) => (prev = idx));
     };

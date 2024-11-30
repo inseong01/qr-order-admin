@@ -1,5 +1,6 @@
 'use client';
 
+import { changeModalState } from '@/lib/features/modalState/modalSlice';
 import styles from '@/style/AlertMsg.module.css';
 
 import { AnimatePresence, motion } from 'motion/react';
@@ -13,6 +14,7 @@ export default function AlertMsg() {
   const alertType = useSelector((state) => state.submitState.type);
   const submitStatus = useSelector((state) => state.submitState.status);
   const msgType = useSelector((state) => state.modalState.type);
+  const callCount = useSelector((state) => state.submitState.callCount);
   // useState
   const [requestAlertList, setRequestAlertList] = useState(requestAlertListArr);
   const [isAlert, setIsAlert] = useState(false);
@@ -21,8 +23,9 @@ export default function AlertMsg() {
 
   useEffect(() => {
     let timer;
-    if (submitStatus === 'fulfilled') {
-      setIsAlert(true);
+    setIsAlert(true);
+    if (callCount < 5) {
+      // 클릭 4번 제한
       timer = setTimeout(() => {
         setIsAlert(false);
       }, 1000);
@@ -73,15 +76,16 @@ export default function AlertMsg() {
       );
     }
     case 'product': {
-      let str = '';
+      if (submitStatus === 'pending') return;
 
+      let str = '';
       switch (msgType) {
         case 'edit': {
-          str = '수정되었습니다.';
+          str = submitStatus !== 'rejected' ? '수정되었습니다.' : '요청에 실패했습니다';
           break;
         }
         case 'add': {
-          str = '추가되었습니다.';
+          str = submitStatus !== 'rejected' ? '추가되었습니다.' : '요청에 실패했습니다';
           break;
         }
       }
@@ -90,13 +94,14 @@ export default function AlertMsg() {
         <AnimatePresence>
           {isAlert && (
             <motion.div
-              className={styles.alertMsg}
+              key={'alert'}
+              className={`${styles.alertMsg} ${submitStatus !== 'rejected' ? '' : styles.error}`}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 10 }}
+              exit={callCount <= 5 ? { opacity: 0, y: 10 } : false}
               style={{ translateX: '-50%' }}
             >
-              <div className={styles.title}>{str}</div>
+              <div className={styles.title}>{callCount < 5 ? str : '페이지를 새로고침 해주세요!'}</div>
             </motion.div>
           )}
         </AnimatePresence>

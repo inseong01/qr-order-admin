@@ -5,12 +5,12 @@ import getMenuList from '@/lib/supabase/func/getMenuList';
 import { resetSubmitState } from '@/lib/features/submitState/submitSlice';
 import { changeModalState } from '@/lib/features/modalState/modalSlice';
 import { getItemInfo, resetItemState } from '@/lib/features/itemState/itemSlice';
+import Loader from '../Loader';
 
 import Image from 'next/image';
 import { AnimatePresence, motion } from 'motion/react';
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useDispatch, useSelector } from 'react-redux';
-import Loader from '../Loader';
 import { useEffect, useState } from 'react';
 
 export default function MenuList() {
@@ -21,18 +21,19 @@ export default function MenuList() {
   // useSelector
   const type = useSelector((state) => state.tabState.state);
   const selectedCategory = useSelector((state) => state.categoryState);
+  const submitStatus = useSelector((state) => state.submitState.status);
   // useQuery
   const menuList = useQuery({
-    queryKey: ['menuList', type, selectedCategory],
+    queryKey: ['menuList', type, selectedCategory, submitStatus],
     queryFn: () => getMenuList(type, selectedCategory),
-    staleTime: 1000 * 60 * 5,
-    cacheTime: 1000 * 60 * 5,
+    enabled: submitStatus === '' || submitStatus === 'fulfilled',
   });
 
   useEffect(() => {
     setIsFirstLoad(false);
   }, []);
 
+  // 입력한 정보 전달, 분류 input도 삽입
   function onClickOpenModal(type, list) {
     return () => {
       dispatch(resetSubmitState());

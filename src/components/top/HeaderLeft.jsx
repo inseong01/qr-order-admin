@@ -10,6 +10,7 @@ export default function HeaderLeft({ tabCategory, allOrderList, tab }) {
   let title = '';
   // useSelector
   const categoryKey = useSelector((state) => state.categoryState.key);
+  const isModalOpen = useSelector((state) => state.modalState.isOpen);
   // useDispatch
   const dispatch = useDispatch();
 
@@ -22,6 +23,7 @@ export default function HeaderLeft({ tabCategory, allOrderList, tab }) {
 
   function onClickChangeTabCategory({ key, title }) {
     return () => {
+      if (isModalOpen) return;
       dispatch(changeCategoryKey({ key, title }));
     };
   }

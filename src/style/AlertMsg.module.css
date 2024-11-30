@@ -15,6 +15,10 @@
 
   cursor: default;
 }
+.alertMsg.error {
+  background-color: #f30000;
+  border-color: #f30000;
+}
 
 .title,
 .index {

@@ -82,13 +82,15 @@
   font-size: 13px;
 }
 /* 항목 입력 input */
-.submitInfo input {
+.submitInfo input,
+.submitInfo select {
   width: 75%;
   border: none;
   border-bottom: 1px solid #d8d8d8;
   padding: 4px;
 }
-.submitInfo input:focus {
+.submitInfo input:focus,
+.submitInfo select {
   outline: none;
 }
 

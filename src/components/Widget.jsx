@@ -5,11 +5,15 @@ import styles from '@/style/Widget.module.css';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
+import { useSelector } from 'react-redux';
 
 export default function Widget() {
+  // useState
   const [clicked, setClicked] = useState(false);
   const [isEdited, setIsEdited] = useState(false);
   const [isClickEditor, setIsClickEditor] = useState(false);
+  // useSelector
+  const isModalOpen = useSelector((state) => state.modalState.isOpen);
 
   // useEffect(() => {
   //   setTimeout(() => {
@@ -18,6 +22,7 @@ export default function Widget() {
   // }, []);
 
   function onClickOpenWidgetList() {
+    if (isModalOpen) return;
     setClicked((prev) => !prev);
     setIsClickEditor(false);
   }
