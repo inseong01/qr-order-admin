@@ -43,6 +43,13 @@ const submitSlice = createSlice({
         ...state,
         type
       }
+    },
+    changeSubmitState: (state, action) => {
+      const isSubmit = action.payload.isSubmit;
+      return {
+        ...state,
+        isSubmit
+      }
     }
   },
   extraReducers: ((builder) => {
@@ -74,5 +81,5 @@ const submitSlice = createSlice({
   })
 })
 
-export const { resetSubmitState, changeSubmitType } = submitSlice.actions;
+export const { resetSubmitState, changeSubmitType, changeSubmitState } = submitSlice.actions;
 export default submitSlice.reducer;

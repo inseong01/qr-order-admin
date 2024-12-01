@@ -3,10 +3,10 @@ import { changeCategoryKey, resetCategoryState } from '@/lib/features/categorySt
 
 import Image from 'next/image';
 import { AnimatePresence, motion } from 'motion/react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-export default function HeaderLeft({ tabCategory, allOrderList, tab }) {
+export default function HeaderLeft({ tabCategory, orderList, tab }) {
   let title = '';
   // useSelector
   const categoryKey = useSelector((state) => state.categoryState.key);
@@ -57,8 +57,7 @@ export default function HeaderLeft({ tabCategory, allOrderList, tab }) {
                     animate={{ opacity: 1, y: 0 }}
                   >
                     <div className={styles.title}>
-                      {list.title}{' '}
-                      {list.title === '접수' ? (allOrderList.data ? allOrderList.data.length : 0) : ''}
+                      {list.title} {list.title === '접수' ? (orderList ? orderList.length : 0) : ''}
                     </div>
                   </motion.div>
                   {categoryKey === list.key && (

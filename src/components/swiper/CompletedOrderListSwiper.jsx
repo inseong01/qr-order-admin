@@ -11,7 +11,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/grid';
 import { useEffect, useRef, useState } from 'react';
 
-export default function CompletedOrderListSwiper({ allOrderList, swiper_motion }) {
+export default function CompletedOrderListSwiper({ orderList, swiper_motion }) {
   const orderListRef = useRef(null);
 
   useEffect(() => {
@@ -40,14 +40,14 @@ export default function CompletedOrderListSwiper({ allOrderList, swiper_motion }
       animate={'active'}
     >
       <ul className={`swiper-wrapper ${styles.listBox}`}>
-        {allOrderList.map((list, idx) => {
+        {orderList.map((list, idx) => {
           const amount = list.orderList.reduce((prev, curr) => prev + curr.amount, 0);
           return (
             <li key={idx} className={`swiper-slide ${styles.slide}`}>
               <div className={styles.list}>
                 <div className={styles.topBox}>
                   <div className={styles.top}>
-                    <div className={styles.title}>#{idx + 1}</div>
+                    <div className={styles.title}>#{list.orderNum}</div>
                     <div className={styles.right}>
                       <div className={styles.table}>테이블 1</div>
                     </div>

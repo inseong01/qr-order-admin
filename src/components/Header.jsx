@@ -12,27 +12,26 @@ import { useQueries } from '@tanstack/react-query';
 export default function Header() {
   // useSelector
   const tab = useSelector((state) => state.tabState.state);
+  const isSubmit = useSelector((state) => state.submitState.isSubmit);
   // useQueries
-  const [tabCategory, allOrderList] = useQueries({
+  const [tabCategory, orderList] = useQueries({
     queries: [
       {
         queryKey: ['tabCategory', tab],
         queryFn: () => getTabCategory(tab),
         staleTime: 1000 * 60 * 5,
-        cacheTime: 1000 * 60 * 5,
       },
       {
-        queryKey: ['allOrderList', tab],
-        queryFn: () => getAllOrderList(tab, { key: 1 }),
-        staleTime: 1000 * 60 * 5,
-        cacheTime: 1000 * 60 * 5,
+        queryKey: ['orderList', isSubmit],
+        queryFn: () => getAllOrderList(tab, false),
+        enabled: tab === 'order',
       },
     ],
   });
 
   return (
     <header className={styles.header}>
-      <HeaderLeft tab={tab} tabCategory={tabCategory} allOrderList={allOrderList} />
+      <HeaderLeft tab={tab} tabCategory={tabCategory} orderList={orderList.data} />
       <HeaderRight tabCategory={tabCategory} />
     </header>
   );

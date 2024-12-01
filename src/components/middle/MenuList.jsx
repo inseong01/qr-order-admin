@@ -19,6 +19,7 @@ export default function MenuList() {
   // useDispatch
   const dispatch = useDispatch();
   // useSelector
+  const tab = useSelector((state) => state.tabState.state);
   const type = useSelector((state) => state.tabState.state);
   const selectedCategory = useSelector((state) => state.categoryState);
   const submitStatus = useSelector((state) => state.submitState.status);
@@ -26,7 +27,8 @@ export default function MenuList() {
   const menuList = useQuery({
     queryKey: ['menuList', type, selectedCategory, submitStatus],
     queryFn: () => getMenuList(type, selectedCategory),
-    enabled: submitStatus === '' || submitStatus === 'fulfilled',
+    enabled: submitStatus === '' || submitStatus === 'fulfilled' || tab === 'menu',
+    staleTime: 1000 * 60 * 5,
   });
 
   useEffect(() => {
@@ -58,7 +60,7 @@ export default function MenuList() {
     },
   };
 
-  if (isFirstLoad && !menuList.isFetched) return <Loader />;
+  if (isFirstLoad || !menuList.isFetched) return <Loader />;
 
   return (
     <>

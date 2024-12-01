@@ -1,7 +1,7 @@
-'use client';
-
 import styles from '@/style/swiper/OrderListSwiper.module.css';
 import MiddleBox from '../middle/MiddleBox';
+import updateOrderListStatus from '@/lib/supabase/func/updateOrderListStatus';
+import { changeSubmitState } from '@/lib/features/submitState/submitSlice';
 
 import { motion, AnimatePresence } from 'motion/react';
 import Image from 'next/image';
@@ -11,12 +11,15 @@ import { Pagination, Grid } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/grid';
+import { useDispatch } from 'react-redux';
 
-export default function OrderListSwiper({ allOrderList, swiper_motion }) {
+export default function OrderListSwiper({ orderList, swiper_motion, setUpdateState }) {
   // useState
-  const [clickedNum, setclickedNum] = useState(null);
+  const [clickedItemId, setClickedItemId] = useState('');
   // useRef
   const orderListRef = useRef(null);
+  // useDispatch
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!orderListRef.current) return;
@@ -37,16 +40,27 @@ export default function OrderListSwiper({ allOrderList, swiper_motion }) {
     });
   }, []);
 
-  function onClickOpenListOption(idx) {
+  function onClickOpenListOption(list) {
     // idx 추후에 주문목록 고유키로 변경
     return () => {
-      setclickedNum(idx);
+      setClickedItemId(list.id);
     };
   }
 
-  function onClickCloseOptionBox(e) {
+  function onClickCloseListOption(e) {
     e.stopPropagation();
-    setclickedNum(() => null);
+    setClickedItemId('');
+  }
+
+  function onClickUpdateListStatus(list, selectedItemId) {
+    return async () => {
+      // id, 변경할 상태 조건 전달
+      const data = await updateOrderListStatus(list, selectedItemId);
+      console.log(data);
+      if (data.error) return;
+      dispatch(changeSubmitState({ isSubmit: true }));
+      // setUpdateState((prev) => !prev);
+    };
   }
 
   return (
@@ -58,14 +72,14 @@ export default function OrderListSwiper({ allOrderList, swiper_motion }) {
       animate={'active'}
     >
       <ul className={`swiper-wrapper ${styles.listBox}`}>
-        {allOrderList.map((list, idx) => {
+        {orderList.map((list, idx) => {
           const amount = list.orderList.reduce((prev, curr) => prev + curr.amount, 0);
           return (
             <li key={idx} className={`swiper-slide ${styles.slide}`}>
               <div className={styles.list}>
-                <div className={styles.topBox} onClick={onClickOpenListOption(idx)}>
+                <div className={styles.topBox} onClick={onClickOpenListOption(list)}>
                   <div className={styles.top}>
-                    <div className={styles.title}>#{idx + 1}</div>
+                    <div className={styles.title}>#{list.orderNum}</div>
                     <div className={styles.right}>
                       <div className={styles.table}>테이블 1</div>
                       <div className={styles.time}>00:00</div>
@@ -78,13 +92,16 @@ export default function OrderListSwiper({ allOrderList, swiper_motion }) {
                     <div className={styles.totalMenuAmount}>
                       <span>{amount}</span> 개
                     </div>
-                    <div className={`${styles.completeBtn} ${clickedNum === idx ? styles.delete : ''}`}>
-                      {clickedNum === idx ? '삭제' : '완료'}
+                    <div
+                      className={`${styles.completeBtn} ${clickedItemId === list.id ? styles.delete : ''}`}
+                      onClick={onClickUpdateListStatus(list, clickedItemId)}
+                    >
+                      {clickedItemId === list.id ? '삭제' : '완료'}
                     </div>
                   </div>
                 </div>
                 <AnimatePresence>
-                  {clickedNum === idx && (
+                  {clickedItemId === list.id && (
                     <motion.ul
                       className={styles.listOptionBox}
                       initial={{ scale: 0 }}
@@ -92,7 +109,7 @@ export default function OrderListSwiper({ allOrderList, swiper_motion }) {
                       exit={{ scale: 0 }}
                       style={{ y: 10 }}
                     >
-                      <li className={styles.option} onClick={onClickCloseOptionBox}>
+                      <li className={styles.option} onClick={onClickCloseListOption}>
                         <Image src={'/img/close-icon.png'} alt="옵션 닫기" width={30} height={30} />
                       </li>
                     </motion.ul>
