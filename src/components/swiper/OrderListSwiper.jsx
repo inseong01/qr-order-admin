@@ -1,7 +1,11 @@
 import styles from '@/style/swiper/OrderListSwiper.module.css';
 import MiddleBox from '../middle/MiddleBox';
 import updateOrderListStatus from '@/lib/supabase/func/updateOrderListStatus';
-import { changeSubmitState } from '@/lib/features/submitState/submitSlice';
+import {
+  changeSubmitState,
+  changeSubmitType,
+  fetchOrderListStatus,
+} from '@/lib/features/submitState/submitSlice';
 
 import { motion, AnimatePresence } from 'motion/react';
 import Image from 'next/image';
@@ -11,15 +15,18 @@ import { Pagination, Grid } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/grid';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-export default function OrderListSwiper({ orderList, swiper_motion, setUpdateState }) {
+export default function OrderListSwiper({ orderList, swiper_motion }) {
   // useState
   const [clickedItemId, setClickedItemId] = useState('');
   // useRef
   const orderListRef = useRef(null);
   // useDispatch
   const dispatch = useDispatch();
+  // useSelector
+  const submitStatus = useSelector((state) => state.submitState.status);
+  const tab = useSelector((state) => state.tabState.state);
 
   useEffect(() => {
     if (!orderListRef.current) return;
@@ -41,7 +48,6 @@ export default function OrderListSwiper({ orderList, swiper_motion, setUpdateSta
   }, []);
 
   function onClickOpenListOption(list) {
-    // idx 추후에 주문목록 고유키로 변경
     return () => {
       setClickedItemId(list.id);
     };
@@ -54,12 +60,7 @@ export default function OrderListSwiper({ orderList, swiper_motion, setUpdateSta
 
   function onClickUpdateListStatus(list, selectedItemId) {
     return async () => {
-      // id, 변경할 상태 조건 전달
-      const data = await updateOrderListStatus(list, selectedItemId);
-      console.log(data);
-      if (data.error) return;
-      dispatch(changeSubmitState({ isSubmit: true }));
-      // setUpdateState((prev) => !prev);
+      dispatch(fetchOrderListStatus({ list, selectedItemId }));
     };
   }
 

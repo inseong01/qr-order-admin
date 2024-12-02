@@ -2,7 +2,6 @@ import supabase from "../supabaseConfig";
 
 export default async function updateOrderListStatus(list, selectedItemId) {
   let response;
-  let result;
   let status = '';
   if (selectedItemId !== list.id) {
     status = 'complete';

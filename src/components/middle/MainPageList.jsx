@@ -59,19 +59,24 @@ export default function MainPageList() {
   const isSubmit = useSelector((state) => state.submitState.isSubmit);
   // useQuery
   const [notCompletedOrderList, completedOrderList] = useQueries({
-    // db 행 추가되면 자동으로 배열 업데이트, swiper slide 추가되지만 스타일링 무너짐, 화면 조정하면 정상 배치됨
     queries: [
       {
         // 배열 업데이트 적용하기
-        queryKey: ['allOrderList', 'false', isSubmit],
+        queryKey: ['allOrderList', 'false', selectedCategory, isSubmit],
         queryFn: () => getAllOrderList('order', false),
-        enabled: tab === 'order',
+        enabled: tab === 'order' && selectedCategory.key === 1,
+        select: (data) => {
+          return data.sort((a, b) => a.orderNum - b.orderNum);
+        },
       },
       {
         // 배열 업데이트 적용하기
         queryKey: ['allOrderList', 'true', selectedCategory],
         queryFn: () => getAllOrderList('order', true),
-        enabled: tab === 'order',
+        enabled: tab === 'order' && selectedCategory.key === 2,
+        select: (data) => {
+          return data.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+        },
       },
     ],
   });
@@ -79,8 +84,10 @@ export default function MainPageList() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    // 주문 탭이고 제출했을 때 동작
+    if (tab !== 'order' || !isSubmit) return;
     dispatch(changeSubmitState({ isSubmit: false }));
-  }, [notCompletedOrderList]);
+  }, [tab, notCompletedOrderList]);
 
   // motion
   const ul_motion = {
@@ -115,19 +122,15 @@ export default function MainPageList() {
         <>
           {selectedCategory.key === 1 ? (
             <>
-              {notCompletedOrderList.data ? (
-                <OrderListSwiper
-                  orderList={notCompletedOrderList.data}
-                  swiper_motion={swiper_motion}
-                  // // setUpdateState={setUpdateState}
-                />
+              {notCompletedOrderList.data && !notCompletedOrderList.isFetching ? (
+                <OrderListSwiper orderList={notCompletedOrderList.data} swiper_motion={swiper_motion} />
               ) : (
                 <Loader />
               )}
             </>
           ) : (
             <>
-              {completedOrderList.data ? (
+              {completedOrderList.data && !completedOrderList.isFetching ? (
                 <CompletedOrderListSwiper orderList={completedOrderList.data} swiper_motion={swiper_motion} />
               ) : (
                 <Loader />

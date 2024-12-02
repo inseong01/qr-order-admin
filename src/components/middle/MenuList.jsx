@@ -20,15 +20,13 @@ export default function MenuList() {
   const dispatch = useDispatch();
   // useSelector
   const tab = useSelector((state) => state.tabState.state);
-  const type = useSelector((state) => state.tabState.state);
   const selectedCategory = useSelector((state) => state.categoryState);
   const submitStatus = useSelector((state) => state.submitState.status);
   // useQuery
   const menuList = useQuery({
-    queryKey: ['menuList', type, selectedCategory, submitStatus],
-    queryFn: () => getMenuList(type, selectedCategory),
-    enabled: submitStatus === '' || submitStatus === 'fulfilled' || tab === 'menu',
-    staleTime: 1000 * 60 * 5,
+    queryKey: ['menuList', tab, selectedCategory, submitStatus],
+    queryFn: () => getMenuList('menu', selectedCategory),
+    enabled: tab === 'menu' && (submitStatus === '' || submitStatus === 'fulfilled'),
   });
 
   useEffect(() => {

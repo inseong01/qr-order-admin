@@ -1,7 +1,7 @@
 'use client';
 
-import { changeModalState } from '@/lib/features/modalState/modalSlice';
 import styles from '@/style/AlertMsg.module.css';
+import { changeModalState } from '@/lib/features/modalState/modalSlice';
 
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
@@ -11,7 +11,7 @@ const requestAlertListArr = new Array(1).fill(0).map((value, idx) => idx + 1);
 
 export default function AlertMsg() {
   // useSelector
-  const alertType = useSelector((state) => state.submitState.type);
+  const alertType = useSelector((state) => state.submitState.alertType);
   const submitStatus = useSelector((state) => state.submitState.status);
   const msgType = useSelector((state) => state.modalState.type);
   const callCount = useSelector((state) => state.submitState.callCount);
@@ -75,6 +75,7 @@ export default function AlertMsg() {
         </div>
       );
     }
+    case 'list':
     case 'product': {
       if (submitStatus === 'pending') return;
 
@@ -87,6 +88,13 @@ export default function AlertMsg() {
         case 'add': {
           str = submitStatus !== 'rejected' ? '추가되었습니다.' : '요청에 실패했습니다';
           break;
+        }
+        default: {
+          if (submitStatus === 'rejected') {
+            str = '요청에 실패했습니다.';
+          } else {
+            return;
+          }
         }
       }
 

@@ -1,0 +1,115 @@
+.submitForm {
+  width: 495px;
+  height: 215px;
+  padding: 16px;
+  border: 1px solid #d8d8d8;
+  border-radius: 5px;
+  background-color: white;
+  overflow: hidden;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.submitForm.category {
+  width: 315px;
+}
+
+.left {
+  width: 140px;
+  height: 100%;
+  border: 1px solid #d8d8d8;
+  border-radius: 7px;
+  color: #8d8d8d;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  position: relative;
+
+  cursor: pointer;
+}
+
+.right {
+  height: 100%;
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.right > div {
+  font-size: 1.1rem;
+  font-weight: 600;
+  /* color: #4caff8; */
+  text-align: center;
+}
+
+.submitInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  font-size: 13px;
+}
+/* 항목 입력 input */
+.submitInfo input,
+.submitInfo select {
+  width: 75%;
+  border: none;
+  border-bottom: 1px solid #d8d8d8;
+  padding: 4px;
+}
+.submitInfo input:focus,
+.submitInfo select {
+  outline: none;
+}
+.category input[placeholder] {
+  text-align: center;
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* 제출 버튼 */
+.submitBtn {
+  width: 100%;
+  height: auto;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.submitBtn input {
+  border: none;
+}
+
+.btn {
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 5px;
+  line-height: 19px;
+
+  flex: 1;
+  padding: 4px;
+
+  cursor: pointer;
+
+  color: #222;
+  font-weight: 600;
+  background-color: #f0f0f0;
+}
+.btn.delete {
+  color: #f30000;
+}
+
+/* 분류명 추가 모달 */
+.sortModal .info {
+  justify-content: center;
+}

@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   item: {
-    id: null,
+    // id: null,
     name: '',
     price: 0,
     sort: '',

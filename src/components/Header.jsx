@@ -17,9 +17,9 @@ export default function Header() {
   const [tabCategory, orderList] = useQueries({
     queries: [
       {
-        queryKey: ['tabCategory', tab],
+        queryKey: ['tabCategory', tab, isSubmit],
         queryFn: () => getTabCategory(tab),
-        staleTime: 1000 * 60 * 5,
+        enabled: !!tab || isSubmit,
       },
       {
         queryKey: ['orderList', isSubmit],

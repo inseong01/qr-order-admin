@@ -1,32 +1,30 @@
-import supabase from "@/lib/supabase/supabaseConfig";
+import fetchMenuItem from "@/lib/supabase/func/fetchMenuItem";
+import updateOrderListStatus from "@/lib/supabase/func/updateOrderListStatus";
+
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isSubmit: false,
   status: '',
-  type: '',
+  alertType: '',
   callCount: 0,
 }
 
 export const fetchFormData = createAsyncThunk(
   'submitState/fetchFormData',
-  async ({ method, itemInfo }) => {
-    // method 분류
-    switch (method) {
-      case 'post': {
-        let response = await supabase.from('qr-order-menu').update(itemInfo).eq('id', Number(itemInfo.id)).select();
-        if (response.status !== 200) throw new Error(response.error.message)
-        return response;
-      }
-      case 'delete': {
-        let response = await supabase.from('qr-order-menu').delete().eq('id', Number(itemInfo.id));
-        if (response.status !== 204) throw new Error(response.error.message)
-        return response;
-      }
-    }
-    return new Promise((res) => {
-      setTimeout(() => res('OK'), 1000);
-    })
+  async ({ method, itemInfo, table }) => {
+    const result = await fetchMenuItem({ method, itemInfo, table })
+    if (result.error?.code) throw new Error(response.error.message)
+    return result;
+  }
+)
+
+export const fetchOrderListStatus = createAsyncThunk(
+  'submitState/fetchOrderListState',
+  async ({ list, selectedItemId }) => {
+    let result = await updateOrderListStatus(list, selectedItemId)
+    if (result.error?.code) throw new Error(result.error.message);
+    return result;
   }
 )
 
@@ -38,10 +36,22 @@ const submitSlice = createSlice({
       return initialState;
     },
     changeSubmitType: (state, action) => {
-      const type = action.payload.type;
+      const table = action.payload.table;
+      let alertType = '';
+
+      switch (table) {
+        case 'menu': {
+          alertType = 'product';
+          break;
+        }
+        default: {
+          alertType = 'list';
+          break;
+        }
+      }
       return {
         ...state,
-        type
+        alertType
       }
     },
     changeSubmitState: (state, action) => {
@@ -53,11 +63,12 @@ const submitSlice = createSlice({
     }
   },
   extraReducers: ((builder) => {
+    // fetchFormData
     builder.addCase(fetchFormData.pending, (state, action) => {
       return {
         ...state,
         isSubmit: true,
-        status: 'pending'
+        status: 'pending',
       }
     })
     builder.addCase(fetchFormData.fulfilled, (state, action) => {
@@ -69,6 +80,33 @@ const submitSlice = createSlice({
       }
     })
     builder.addCase(fetchFormData.rejected, (state, action) => {
+      const callCount = state.callCount + 1;
+      const preventSubmit = callCount >= 5 ? true : false;
+      return {
+        ...state,
+        isSubmit: preventSubmit,
+        status: 'rejected',
+        callCount
+      }
+    })
+    // fetchOrderListStatus
+    builder.addCase(fetchOrderListStatus.pending, (state, action) => {
+      return {
+        ...state,
+        isSubmit: true,
+        status: 'pending',
+        alertType: 'list'
+      }
+    })
+    builder.addCase(fetchOrderListStatus.fulfilled, (state, action) => {
+      return {
+        ...state,
+        isSubmit: true,
+        status: 'fulfilled',
+        callCount: 0
+      }
+    })
+    builder.addCase(fetchOrderListStatus.rejected, (state, action) => {
       const callCount = state.callCount + 1;
       const preventSubmit = callCount >= 5 ? true : false;
       return {

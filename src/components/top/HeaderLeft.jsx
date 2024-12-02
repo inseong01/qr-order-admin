@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { changeModalState } from '@/lib/features/modalState/modalSlice';
 
 export default function HeaderLeft({ tabCategory, orderList, tab }) {
   let title = '';
@@ -14,18 +15,20 @@ export default function HeaderLeft({ tabCategory, orderList, tab }) {
   // useDispatch
   const dispatch = useDispatch();
 
-  useEffect(
-    function changeTab() {
-      dispatch(resetCategoryState());
-    },
-    [tab]
-  );
+  useEffect(() => {
+    // 탭 변경 시 동작
+    dispatch(resetCategoryState());
+  }, [tab]);
 
   function onClickChangeTabCategory({ key, title }) {
     return () => {
       if (isModalOpen) return;
       dispatch(changeCategoryKey({ key, title }));
     };
+  }
+
+  function onClickOpenModal() {
+    dispatch(changeModalState({ type: 'category', isOpen: true }));
   }
 
   switch (tab) {
@@ -45,7 +48,7 @@ export default function HeaderLeft({ tabCategory, orderList, tab }) {
   return (
     <AnimatePresence>
       <ul className={styles.left}>
-        {!tabCategory.isLoading ? (
+        {!tabCategory.isFetching ? (
           <>
             {tabCategory.data.map((list, idx) => {
               return (
@@ -67,7 +70,7 @@ export default function HeaderLeft({ tabCategory, orderList, tab }) {
               );
             })}
             {tab !== 'order' && (
-              <li className={styles.addCategoryBox}>
+              <li className={styles.addCategoryBox} onClick={onClickOpenModal}>
                 <motion.div
                   className={styles.category}
                   initial={{ opacity: 0, y: -10 }}
@@ -75,7 +78,7 @@ export default function HeaderLeft({ tabCategory, orderList, tab }) {
                   exit={{ opacity: 0, y: -10 }}
                   key={'addBtn'}
                 >
-                  <Image src={'/img/add-icon.png'} alt="메뉴 추가" width={15} height={15} />
+                  <Image src={'/img/add-icon.png'} alt="분류 추가" width={15} height={15} />
                   <div className={styles.title}>{title}</div>
                 </motion.div>
               </li>
