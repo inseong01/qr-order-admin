@@ -64,7 +64,7 @@ export default function MainPageList() {
         // 배열 업데이트 적용하기
         queryKey: ['allOrderList', 'false', selectedCategory, isSubmit],
         queryFn: () => getAllOrderList('order', false),
-        enabled: tab === 'order' && selectedCategory.key === 1,
+        enabled: tab === 'order' && selectedCategory.id === 1,
         select: (data) => {
           return data.sort((a, b) => a.orderNum - b.orderNum);
         },
@@ -73,7 +73,7 @@ export default function MainPageList() {
         // 배열 업데이트 적용하기
         queryKey: ['allOrderList', 'true', selectedCategory],
         queryFn: () => getAllOrderList('order', true),
-        enabled: tab === 'order' && selectedCategory.key === 2,
+        enabled: tab === 'order' && selectedCategory.id === 2,
         select: (data) => {
           return data.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
         },
@@ -85,7 +85,7 @@ export default function MainPageList() {
 
   useEffect(() => {
     // 주문 탭이고 제출했을 때 동작
-    if (tab !== 'order' || !isSubmit) return;
+    if (tab !== 'order' && !isSubmit) return;
     dispatch(changeSubmitState({ isSubmit: false }));
   }, [tab, notCompletedOrderList]);
 
@@ -120,7 +120,7 @@ export default function MainPageList() {
 
       return (
         <>
-          {selectedCategory.key === 1 ? (
+          {selectedCategory.id === 1 ? (
             <>
               {notCompletedOrderList.data && !notCompletedOrderList.isFetching ? (
                 <OrderListSwiper orderList={notCompletedOrderList.data} swiper_motion={swiper_motion} />

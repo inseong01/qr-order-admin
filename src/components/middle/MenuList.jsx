@@ -34,11 +34,11 @@ export default function MenuList() {
   }, []);
 
   // 입력한 정보 전달, 분류 input도 삽입
-  function onClickOpenModal(type, list) {
+  function onClickOpenModal(modalType, list) {
     return () => {
       dispatch(resetSubmitState());
-      dispatch(changeModalState({ isOpen: true, type }));
-      if (type !== 'edit') {
+      dispatch(changeModalState({ type: modalType, isOpen: true }));
+      if (modalType !== 'edit') {
         dispatch(resetItemState());
         return;
       }

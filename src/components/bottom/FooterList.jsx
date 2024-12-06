@@ -23,7 +23,6 @@ export default function FooterList() {
     queryKey: ['tabMenu'],
     queryFn: getTabMenu,
     staleTime: 1000 * 60 * 5,
-    cacheTime: 1000 * 60 * 5,
   });
 
   function onClickChangeTab({ title }, idx) {

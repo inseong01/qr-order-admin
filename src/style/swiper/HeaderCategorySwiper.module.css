@@ -1,0 +1,44 @@
+.swiper {
+  width: 100%;
+  max-width: calc(70%) !important;
+  overflow: hidden;
+  cursor: default;
+}
+
+.categoryBox::after {
+  content: '';
+  width: 1px;
+  height: 30%;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  background-color: #e7e8eb;
+}
+
+.category {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+
+  cursor: pointer;
+}
+
+.clicked {
+  color: #4caff8;
+}
+
+/* 선 */
+.line {
+  width: 100%;
+  height: 3px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  padding: 0 10px;
+  background-color: #4caff8;
+  border-radius: 5px;
+}

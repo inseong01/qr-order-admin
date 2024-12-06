@@ -1,0 +1,30 @@
+/* 에디터 */
+.editorOption {
+  position: absolute;
+  left: -110%;
+
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  z-index: -1;
+}
+
+.editorOption .option {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border: 1px solid #99d2fd;
+  background-color: white;
+  color: #209fff;
+}
+
+.textBox {
+  line-height: 19px;
+  font-size: 13px;
+  font-weight: 600;
+}

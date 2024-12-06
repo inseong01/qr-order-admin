@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useSelector } from 'react-redux';
+import WidgetCategoryList from './WidgetCategoryList';
 
 export default function Widget() {
   // useState
@@ -14,12 +15,17 @@ export default function Widget() {
   const [isClickEditor, setIsClickEditor] = useState(false);
   // useSelector
   const isModalOpen = useSelector((state) => state.modalState.isOpen);
+  const tab = useSelector((state) => state.tabState.state);
 
   // useEffect(() => {
   //   setTimeout(() => {
   //     setIsEdited((prev) => !prev);
   //   }, 2000);
   // }, []);
+
+  useEffect(() => {
+    setClicked(false);
+  }, [tab]);
 
   function onClickOpenWidgetList() {
     if (isModalOpen) return;
@@ -84,31 +90,6 @@ export default function Widget() {
     notClicked: { y: 10, opacity: 0 },
   };
 
-  const optionList = {
-    clicked: {
-      transition: {
-        staggerChildren: 0.1,
-        staggerDirection: -1,
-      },
-    },
-    notClicked: {
-      transition: {
-        staggerChildren: 0.1,
-        staggerDirection: 1,
-      },
-    },
-  };
-  const option = {
-    clicked: {
-      x: 0,
-      opacity: 1,
-    },
-    notClicked: {
-      x: 10,
-      opacity: 0,
-    },
-  };
-
   return (
     <div className={styles.widgetWrap}>
       <div className={styles.widget} onClick={onClickOpenWidgetList}>
@@ -147,27 +128,7 @@ export default function Widget() {
                   )}
                 </AnimatePresence>
               </div>
-              <AnimatePresence>
-                {isClickEditor && (
-                  <motion.ul
-                    key={'optionList'}
-                    className={styles.editorOption}
-                    variants={optionList}
-                    initial={'notClicked'}
-                    animate={'clicked'}
-                    exit={'notClicked'}
-                  >
-                    <motion.li className={styles.option} variants={option}>
-                      <span className={styles.iconBox}>
-                        <Image src={'/img/shapes-icon.png'} alt="모형 추가" width={20} height={20} />
-                      </span>
-                    </motion.li>
-                    <motion.li className={styles.option} variants={option}>
-                      <span className={styles.iconBox}></span>
-                    </motion.li>
-                  </motion.ul>
-                )}
-              </AnimatePresence>
+              <WidgetCategoryList isClickEditor={isClickEditor} />
             </motion.li>
           </motion.ul>
         )}

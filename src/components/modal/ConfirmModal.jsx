@@ -1,39 +1,53 @@
-'use client';
-
 import styles from '@/style/modal/ConfirmModal.module.css';
-import { useEffect, useRef } from 'react';
+import { fetchOrderListStatus, resetSubmitState } from '@/lib/features/submitState/submitSlice';
 
-export default function ConfirmModal() {
+import { useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+export default function ConfirmModal({ selectedList, clickedItemId }) {
+  const context = selectedList.id === clickedItemId ? '삭제' : '완료';
+  const list = selectedList;
+  const selectedItemId = clickedItemId;
+  // useRef
   const modalRef = useRef(null);
-
-  useEffect(() => {
-    modalRef.current.showModal();
-  }, []);
+  // useSelector
+  const alertType = useSelector((state) => state.submitState.alertType);
+  // useDispatch
+  const dispatch = useDispatch();
 
   function onClickChangeModalStatus(status) {
     return () => {
       switch (status) {
         case 'no': {
-          return modalRef.current.close();
+          dispatch(resetSubmitState());
+          return;
         }
         case 'yes': {
-          return modalRef.current.close();
+          dispatch(fetchOrderListStatus({ list, selectedItemId }));
+          return;
         }
       }
     };
   }
 
   return (
-    <dialog className={styles.dialog} ref={modalRef}>
-      <div className={styles.title}>수정하시겠습니까?</div>
-      <ul className={styles.btnBox}>
-        <li className={styles.btn} onClick={onClickChangeModalStatus('no')}>
-          아니요
-        </li>
-        <li className={styles.btn} onClick={onClickChangeModalStatus('yes')}>
-          예
-        </li>
-      </ul>
-    </dialog>
+    <>
+      {alertType === 'confirm' && (
+        <>
+          <dialog open={alertType === 'confirm'} className={styles.dialog} ref={modalRef}>
+            <div className={styles.title}>주문을 {context}하시겠습니까?</div>
+            <ul className={styles.btnBox}>
+              <li className={styles.btn} onClick={onClickChangeModalStatus('no')}>
+                아니요
+              </li>
+              <li className={styles.btn} onClick={onClickChangeModalStatus('yes')}>
+                예
+              </li>
+            </ul>
+          </dialog>
+          <div className={styles.backdrop}></div>
+        </>
+      )}
+    </>
   );
 }

@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  key: 1,
-  title: '',
+  id: 1,
+  title: '전체메뉴',
 }
 
 const categorySlice = createSlice({
@@ -12,17 +12,17 @@ const categorySlice = createSlice({
     resetCategoryState: () => {
       return initialState
     },
-    changeCategoryKey: (state, action) => {
-      const key = action.payload.key;
+    changeCategoryId: (state, action) => {
+      const id = action.payload.id;
       const title = !action.payload.title ? '' : action.payload.title;
       return {
         ...state,
-        key,
+        id,
         title,
       }
     }
   }
 })
 
-export const { resetCategoryState, changeCategoryKey } = categorySlice.actions;
+export const { resetCategoryState, changeCategoryId } = categorySlice.actions;
 export default categorySlice.reducer;

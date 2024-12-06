@@ -16,17 +16,19 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/grid';
 import { useDispatch, useSelector } from 'react-redux';
+import ConfirmModal from '../modal/ConfirmModal';
 
 export default function OrderListSwiper({ orderList, swiper_motion }) {
   // useState
   const [clickedItemId, setClickedItemId] = useState('');
+  const [selectedList, setSelectedList] = useState({});
   // useRef
   const orderListRef = useRef(null);
   // useDispatch
   const dispatch = useDispatch();
   // useSelector
-  const submitStatus = useSelector((state) => state.submitState.status);
-  const tab = useSelector((state) => state.tabState.state);
+  const callCount = useSelector((state) => state.submitState.callCount);
+  const preventSubmit = useSelector((state) => state.submitState.isSubmit);
 
   useEffect(() => {
     if (!orderListRef.current) return;
@@ -59,69 +61,76 @@ export default function OrderListSwiper({ orderList, swiper_motion }) {
   }
 
   function onClickUpdateListStatus(list, selectedItemId) {
-    return async () => {
-      dispatch(fetchOrderListStatus({ list, selectedItemId }));
+    return () => {
+      console.log(1, callCount, preventSubmit);
+      if (preventSubmit) return;
+      console.log(2, callCount, preventSubmit);
+      dispatch(changeSubmitType({ table: 'order' }));
+      setSelectedList(list);
     };
   }
 
   return (
-    <motion.div
-      className={`orderList ${styles.orderList}`}
-      ref={orderListRef}
-      variants={swiper_motion}
-      initial={'notActive'}
-      animate={'active'}
-    >
-      <ul className={`swiper-wrapper ${styles.listBox}`}>
-        {orderList.map((list, idx) => {
-          const amount = list.orderList.reduce((prev, curr) => prev + curr.amount, 0);
-          return (
-            <li key={idx} className={`swiper-slide ${styles.slide}`}>
-              <div className={styles.list}>
-                <div className={styles.topBox} onClick={onClickOpenListOption(list)}>
-                  <div className={styles.top}>
-                    <div className={styles.title}>#{list.orderNum}</div>
-                    <div className={styles.right}>
-                      <div className={styles.table}>테이블 1</div>
-                      <div className={styles.time}>00:00</div>
+    <>
+      <motion.div
+        className={`orderList ${styles.orderList}`}
+        ref={orderListRef}
+        variants={swiper_motion}
+        initial={'notActive'}
+        animate={'active'}
+      >
+        <ul className={`swiper-wrapper ${styles.listBox}`}>
+          {orderList.map((list, idx) => {
+            const amount = list.orderList.reduce((prev, curr) => prev + curr.amount, 0);
+            return (
+              <li key={idx} className={`swiper-slide ${styles.slide}`}>
+                <div className={styles.list}>
+                  <div className={styles.topBox} onClick={onClickOpenListOption(list)}>
+                    <div className={styles.top}>
+                      <div className={styles.title}>#{list.orderNum}</div>
+                      <div className={styles.right}>
+                        <div className={styles.table}>테이블 1</div>
+                        <div className={styles.time}>00:00</div>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <MiddleBox orderList={list.orderList} />
-                <div className={styles.bottomBox}>
-                  <div className={styles.bottom}>
-                    <div className={styles.totalMenuAmount}>
-                      <span>{amount}</span> 개
-                    </div>
-                    <div
-                      className={`${styles.completeBtn} ${clickedItemId === list.id ? styles.delete : ''}`}
-                      onClick={onClickUpdateListStatus(list, clickedItemId)}
-                    >
-                      {clickedItemId === list.id ? '삭제' : '완료'}
+                  <MiddleBox orderList={list.orderList} />
+                  <div className={styles.bottomBox}>
+                    <div className={styles.bottom}>
+                      <div className={styles.totalMenuAmount}>
+                        <span>{amount}</span> 개
+                      </div>
+                      <div
+                        className={`${styles.completeBtn} ${clickedItemId === list.id ? styles.delete : ''}`}
+                        onClick={onClickUpdateListStatus(list, clickedItemId)}
+                      >
+                        {clickedItemId === list.id ? '삭제' : '완료'}
+                      </div>
                     </div>
                   </div>
+                  <AnimatePresence>
+                    {clickedItemId === list.id && (
+                      <motion.ul
+                        className={styles.listOptionBox}
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        exit={{ scale: 0 }}
+                        style={{ y: 10 }}
+                      >
+                        <li className={styles.option} onClick={onClickCloseListOption}>
+                          <Image src={'/img/close-icon.png'} alt="옵션 닫기" width={30} height={30} />
+                        </li>
+                      </motion.ul>
+                    )}
+                  </AnimatePresence>
                 </div>
-                <AnimatePresence>
-                  {clickedItemId === list.id && (
-                    <motion.ul
-                      className={styles.listOptionBox}
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      exit={{ scale: 0 }}
-                      style={{ y: 10 }}
-                    >
-                      <li className={styles.option} onClick={onClickCloseListOption}>
-                        <Image src={'/img/close-icon.png'} alt="옵션 닫기" width={30} height={30} />
-                      </li>
-                    </motion.ul>
-                  )}
-                </AnimatePresence>
-              </div>
-            </li>
-          );
-        })}
-      </ul>
-      <div className={`swiper-pagination ${styles.pagination}`}></div>
-    </motion.div>
+              </li>
+            );
+          })}
+        </ul>
+        <div className={`swiper-pagination ${styles.pagination}`}></div>
+        <ConfirmModal selectedList={selectedList} clickedItemId={clickedItemId} />
+      </motion.div>
+    </>
   );
 }

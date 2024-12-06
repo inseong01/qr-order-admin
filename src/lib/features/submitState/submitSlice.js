@@ -28,6 +28,11 @@ export const fetchOrderListStatus = createAsyncThunk(
   }
 )
 
+export const fetchDeleteList = createAsyncThunk(
+  'submitState/fetchDeleteList',
+  async () => { }
+)
+
 const submitSlice = createSlice({
   name: 'submitState',
   initialState,
@@ -44,9 +49,12 @@ const submitSlice = createSlice({
           alertType = 'product';
           break;
         }
+        case 'order': {
+          alertType = 'confirm';
+          break;
+        }
         default: {
           alertType = 'list';
-          break;
         }
       }
       return {
@@ -95,7 +103,6 @@ const submitSlice = createSlice({
         ...state,
         isSubmit: true,
         status: 'pending',
-        alertType: 'list'
       }
     })
     builder.addCase(fetchOrderListStatus.fulfilled, (state, action) => {
@@ -103,7 +110,8 @@ const submitSlice = createSlice({
         ...state,
         isSubmit: true,
         status: 'fulfilled',
-        callCount: 0
+        callCount: 0,
+        alertType: '',
       }
     })
     builder.addCase(fetchOrderListStatus.rejected, (state, action) => {
@@ -113,7 +121,8 @@ const submitSlice = createSlice({
         ...state,
         isSubmit: preventSubmit,
         status: 'rejected',
-        callCount
+        callCount,
+        alertType: 'list',
       }
     })
   })

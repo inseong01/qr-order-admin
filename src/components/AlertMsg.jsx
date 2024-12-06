@@ -1,7 +1,6 @@
 'use client';
 
 import styles from '@/style/AlertMsg.module.css';
-import { changeModalState } from '@/lib/features/modalState/modalSlice';
 
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';

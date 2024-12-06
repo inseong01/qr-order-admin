@@ -18,7 +18,6 @@ export default function Main() {
       <MainPageList />
       <AddMenuModal />
       <AlertMsg />
-      {/* <ConfirmModal /> */}
       <Widget />
     </main>
   );

@@ -2,7 +2,7 @@ import supabase from "../supabaseConfig";
 
 export default async function fetchMenuItem({ method, itemInfo, table }) {
   let response;
-
+  console.log('itemInfo: ', itemInfo)
   // method 분류
   switch (method) {
     case 'insert': {
@@ -14,7 +14,8 @@ export default async function fetchMenuItem({ method, itemInfo, table }) {
       return response;
     }
     case 'delete': {
-      response = await supabase.from(`qr-order-${table}`).delete().eq('id', Number(itemInfo.id));
+      const idArr = itemInfo
+      response = await supabase.from(`qr-order-${table}`).delete().in('id', idArr);
       return response;
     }
     default: {

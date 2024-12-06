@@ -24,6 +24,7 @@ export default function AddMenuModal() {
   const categoryList = useQuery({
     queryKey: ['tabCategory', tab, isSubmit],
     queryFn: () => getTabCategory(tab),
+    initialData: [{ sort: '전체메뉴', id: 1 }],
   });
 
   function onClickCloseModal() {
