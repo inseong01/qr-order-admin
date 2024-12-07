@@ -1,10 +1,10 @@
 import supabase from "../supabaseConfig";
 
-export default async function updateOrderListStatus(list, selectedItemId) {
+export default async function updateOrderListStatus(list, selectedListId) {
   let response;
   let status = '';
-  console.log(selectedItemId, list.id)
-  if (selectedItemId !== list.id) {
+
+  if (selectedListId !== list.id) {
     status = 'complete';
   } else {
     status = 'delete';
@@ -12,11 +12,11 @@ export default async function updateOrderListStatus(list, selectedItemId) {
 
   switch (status) {
     case 'delete': {
-      response = await supabase.from('qr-order-allOrderList').delete().eq('id', list.d)
+      response = await supabase.from('qr-order-allOrderList').delete().eq('id', list.id)
       return response;
     }
     case 'complete': {
-      response = await supabase.from('qr-order-allOrderList').update({ isDone: true, updated_at: new Date() }).eq('id', list.i).select();
+      response = await supabase.from('qr-order-allOrderList').update({ isDone: true, updated_at: new Date() }).eq('id', list.id).select();
       return response;
     }
     default: {

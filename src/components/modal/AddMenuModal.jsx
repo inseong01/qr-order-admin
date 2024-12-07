@@ -30,7 +30,6 @@ export default function AddMenuModal() {
   function onClickCloseModal() {
     dispatch(changeModalState({ isOpen: false }));
     dispatch(resetItemState());
-    modalRef.current.close();
   }
 
   return (

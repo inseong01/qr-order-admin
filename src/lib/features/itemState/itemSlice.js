@@ -7,7 +7,11 @@ const initialState = {
     price: 0,
     sort: '',
     description: '',
-  }
+  },
+  list: {
+    id: ''
+  },
+  selectedListId: ''
 }
 
 const itemSlice = createSlice({
@@ -23,9 +27,23 @@ const itemSlice = createSlice({
         ...state,
         item
       }
+    },
+    getOrderListInfo: (state, action) => {
+      const list = action.payload.list;
+      return {
+        ...state,
+        list
+      }
+    },
+    getSelectedListId: (state, action) => {
+      const selectedListId = action.payload.selectedListId
+      return {
+        ...state,
+        selectedListId
+      }
     }
   }
 })
 
-export const { resetItemState, getItemInfo } = itemSlice.actions;
+export const { resetItemState, getItemInfo, getOrderListInfo, getSelectedListId } = itemSlice.actions;
 export default itemSlice.reducer;

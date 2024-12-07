@@ -6,7 +6,8 @@ import CompletedOrderListSwiper from '../swiper/CompletedOrderListSwiper';
 import getAllOrderList from '@/lib/supabase/func/getAllOrderList';
 import Loader from '../Loader';
 import MenuList from './MenuList';
-// import TableDraw from './TableDraw';
+import AddMenuModal from '../modal/AddMenuModal';
+import ConfirmModal from '../modal/ConfirmModal';
 
 import dynamic from 'next/dynamic';
 import { motion } from 'motion/react';
@@ -14,9 +15,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useQueries, useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { changeSubmitState } from '@/lib/features/submitState/submitSlice';
+// import TableDraw from '../TableDraw';
 
 // konva ssr 방지
-// const KonvaCanvas = dynamic(() => import('./TableDraw'), {
+// const KonvaCanvas = dynamic(() => Promise.resolve('../TableDraw'), {
 //   ssr: false,
 // });
 
@@ -98,13 +100,21 @@ export default function MainPageList() {
   switch (type) {
     case 'menu': {
       return (
-        <motion.ul className={styles.listBox} variants={ul_motion} initial={'notLoad'} animate={'load'}>
-          <MenuList />
-        </motion.ul>
+        <>
+          <motion.ul className={styles.listBox} variants={ul_motion} initial={'notLoad'} animate={'load'}>
+            <MenuList />
+          </motion.ul>
+          <AddMenuModal />
+        </>
       );
     }
     case 'table': {
-      return <div className={styles.listBox}>{/* <KonvaCanvas /> */}</div>;
+      return (
+        <div className={styles.listBox}>
+          {/* <TableDraw /> */}
+          {/* <KonvaCanvas /> */}
+        </div>
+      );
     }
     case 'order': {
       const swiper_motion = {
@@ -137,6 +147,7 @@ export default function MainPageList() {
               )}
             </>
           )}
+          <ConfirmModal />
         </>
       );
     }

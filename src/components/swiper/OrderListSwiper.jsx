@@ -17,22 +17,22 @@ import 'swiper/css/pagination';
 import 'swiper/css/grid';
 import { useDispatch, useSelector } from 'react-redux';
 import ConfirmModal from '../modal/ConfirmModal';
+import { changeModalState } from '@/lib/features/modalState/modalSlice';
+import { getOrderListInfo, getSelectedListId } from '@/lib/features/itemState/itemSlice';
 
 export default function OrderListSwiper({ orderList, swiper_motion }) {
   // useState
-  const [clickedItemId, setClickedItemId] = useState('');
-  const [selectedList, setSelectedList] = useState({});
+  // const [clickedItemId, setClickedItemId] = useState('');
+  const selectedListId = useSelector((state) => state.itemState.selectedListId);
   // useRef
   const orderListRef = useRef(null);
   // useDispatch
   const dispatch = useDispatch();
   // useSelector
-  const callCount = useSelector((state) => state.submitState.callCount);
-  const preventSubmit = useSelector((state) => state.submitState.isSubmit);
+  const preventSubmit = useSelector((state) => state.submitState.isError);
 
   useEffect(() => {
     if (!orderListRef.current) return;
-
     new Swiper(orderListRef.current, {
       modules: [Pagination, Grid],
       pagination: {
@@ -51,22 +51,20 @@ export default function OrderListSwiper({ orderList, swiper_motion }) {
 
   function onClickOpenListOption(list) {
     return () => {
-      setClickedItemId(list.id);
+      dispatch(getSelectedListId({ selectedListId: list.id }));
     };
   }
 
   function onClickCloseListOption(e) {
     e.stopPropagation();
-    setClickedItemId('');
+    dispatch(getSelectedListId({ selectedListId: '' }));
   }
 
-  function onClickUpdateListStatus(list, selectedItemId) {
+  function onClickUpdateListStatus(list) {
     return () => {
-      console.log(1, callCount, preventSubmit);
       if (preventSubmit) return;
-      console.log(2, callCount, preventSubmit);
-      dispatch(changeSubmitType({ table: 'order' }));
-      setSelectedList(list);
+      dispatch(changeModalState({ isOpen: true, type: 'update' }));
+      dispatch(getOrderListInfo({ list }));
     };
   }
 
@@ -101,15 +99,15 @@ export default function OrderListSwiper({ orderList, swiper_motion }) {
                         <span>{amount}</span> 개
                       </div>
                       <div
-                        className={`${styles.completeBtn} ${clickedItemId === list.id ? styles.delete : ''}`}
-                        onClick={onClickUpdateListStatus(list, clickedItemId)}
+                        className={`${styles.completeBtn} ${selectedListId === list.id ? styles.delete : ''}`}
+                        onClick={onClickUpdateListStatus(list)}
                       >
-                        {clickedItemId === list.id ? '삭제' : '완료'}
+                        {selectedListId === list.id ? '삭제' : '완료'}
                       </div>
                     </div>
                   </div>
                   <AnimatePresence>
-                    {clickedItemId === list.id && (
+                    {selectedListId === list.id && (
                       <motion.ul
                         className={styles.listOptionBox}
                         initial={{ scale: 0 }}
@@ -129,7 +127,6 @@ export default function OrderListSwiper({ orderList, swiper_motion }) {
           })}
         </ul>
         <div className={`swiper-pagination ${styles.pagination}`}></div>
-        <ConfirmModal selectedList={selectedList} clickedItemId={clickedItemId} />
       </motion.div>
     </>
   );

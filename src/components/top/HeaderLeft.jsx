@@ -5,13 +5,16 @@ import { changeModalState } from '@/lib/features/modalState/modalSlice';
 import Image from 'next/image';
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import HeaderCategorySwiper from '../swiper/HeaderCategorySwiper';
 
 export default function HeaderLeft({ tabCategory, tab, orderList }) {
   let title = '';
   // useDispatch
   const dispatch = useDispatch();
+  // useSelector
+  const isModalOpen = useSelector((state) => state.modalState.isOpen);
+  const submitError = useSelector((state) => state.submitState.isError);
 
   useEffect(() => {
     // 탭 변경 시 동작
@@ -19,6 +22,7 @@ export default function HeaderLeft({ tabCategory, tab, orderList }) {
   }, [tab]);
 
   function onClickOpenModal() {
+    if (isModalOpen || submitError) return;
     dispatch(changeModalState({ type: 'category-add', isOpen: true }));
   }
 

@@ -1,6 +1,5 @@
 import styles from '@/style/Main.module.css';
 import MainPageList from './middle/MainPageList';
-import AddMenuModal from './modal/AddMenuModal';
 import ConfirmModal from './modal/ConfirmModal';
 import Widget from './Widget';
 import AlertMsg from './AlertMsg';
@@ -16,7 +15,6 @@ export default function Main() {
     <main className={styles.main}>
       {/* <NoSSRMainpageList type={'table'} /> */}
       <MainPageList />
-      <AddMenuModal />
       <AlertMsg />
       <Widget />
     </main>

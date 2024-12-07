@@ -2,8 +2,8 @@ import styles from '@/style/WidgetCategoryList.module.css';
 import { changeModalState } from '@/lib/features/modalState/modalSlice';
 import { resetSubmitState } from '@/lib/features/submitState/submitSlice';
 
-import { motion, AnimatePresence } from 'motion/react';
 import Image from 'next/image';
+import { motion, AnimatePresence } from 'motion/react';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function WidgetCategoryList({ isClickEditor }) {
@@ -106,7 +106,7 @@ export default function WidgetCategoryList({ isClickEditor }) {
               exit={'notClicked'}
             >
               <motion.li className={styles.option} variants={option}>
-                <span className={styles.iconBox}></span>
+                <span className={styles.textBox}>준비중</span>
               </motion.li>
             </motion.ul>
           )}

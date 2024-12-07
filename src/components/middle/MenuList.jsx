@@ -1,14 +1,11 @@
-'use client';
-
 import styles from '@/style/middle/MenuList.module.css';
 import getMenuList from '@/lib/supabase/func/getMenuList';
-import { resetSubmitState } from '@/lib/features/submitState/submitSlice';
 import { changeModalState } from '@/lib/features/modalState/modalSlice';
 import { getItemInfo, resetItemState } from '@/lib/features/itemState/itemSlice';
 import Loader from '../Loader';
 
 import Image from 'next/image';
-import { AnimatePresence, motion } from 'motion/react';
+import { motion } from 'motion/react';
 import { useQuery } from '@tanstack/react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
@@ -22,11 +19,12 @@ export default function MenuList() {
   const tab = useSelector((state) => state.tabState.state);
   const selectedCategory = useSelector((state) => state.categoryState);
   const submitStatus = useSelector((state) => state.submitState.status);
+  const submitError = useSelector((state) => state.submitState.isError);
   // useQuery
   const menuList = useQuery({
     queryKey: ['menuList', tab, selectedCategory, submitStatus],
     queryFn: () => getMenuList('menu', selectedCategory),
-    enabled: tab === 'menu' && (submitStatus === '' || submitStatus === 'fulfilled'),
+    enabled: tab === 'menu',
   });
 
   useEffect(() => {
@@ -36,7 +34,7 @@ export default function MenuList() {
   // 입력한 정보 전달, 분류 input도 삽입
   function onClickOpenModal(modalType, list) {
     return () => {
-      dispatch(resetSubmitState());
+      if (submitError) return;
       dispatch(changeModalState({ type: modalType, isOpen: true }));
       if (modalType !== 'edit') {
         dispatch(resetItemState());

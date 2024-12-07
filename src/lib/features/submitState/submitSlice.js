@@ -8,6 +8,7 @@ const initialState = {
   status: '',
   alertType: '',
   callCount: 0,
+  isError: false
 }
 
 export const fetchFormData = createAsyncThunk(
@@ -21,8 +22,8 @@ export const fetchFormData = createAsyncThunk(
 
 export const fetchOrderListStatus = createAsyncThunk(
   'submitState/fetchOrderListState',
-  async ({ list, selectedItemId }) => {
-    let result = await updateOrderListStatus(list, selectedItemId)
+  async ({ list, selectedListId }) => {
+    let result = await updateOrderListStatus(list, selectedListId)
     if (result.error?.code) throw new Error(result.error.message);
     return result;
   }
@@ -40,7 +41,7 @@ const submitSlice = createSlice({
     resetSubmitState: () => {
       return initialState;
     },
-    changeSubmitType: (state, action) => {
+    changeSubmitMsgType: (state, action) => {
       const table = action.payload.table;
       let alertType = '';
 
@@ -92,9 +93,10 @@ const submitSlice = createSlice({
       const preventSubmit = callCount >= 5 ? true : false;
       return {
         ...state,
-        isSubmit: preventSubmit,
+        isSubmit: false,
         status: 'rejected',
-        callCount
+        callCount,
+        isError: preventSubmit
       }
     })
     // fetchOrderListStatus
@@ -119,14 +121,15 @@ const submitSlice = createSlice({
       const preventSubmit = callCount >= 5 ? true : false;
       return {
         ...state,
-        isSubmit: preventSubmit,
+        isSubmit: false,
         status: 'rejected',
         callCount,
         alertType: 'list',
+        isError: preventSubmit
       }
     })
   })
 })
 
-export const { resetSubmitState, changeSubmitType, changeSubmitState } = submitSlice.actions;
+export const { resetSubmitState, changeSubmitMsgType, changeSubmitState } = submitSlice.actions;
 export default submitSlice.reducer;

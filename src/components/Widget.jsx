@@ -14,8 +14,9 @@ export default function Widget() {
   const [isEdited, setIsEdited] = useState(false);
   const [isClickEditor, setIsClickEditor] = useState(false);
   // useSelector
-  const isModalOpen = useSelector((state) => state.modalState.isOpen);
   const tab = useSelector((state) => state.tabState.state);
+  const isModalOpen = useSelector((state) => state.modalState.isOpen);
+  const submitError = useSelector((state) => state.submitState.isError);
 
   // useEffect(() => {
   //   setTimeout(() => {
@@ -34,6 +35,7 @@ export default function Widget() {
   }
 
   function onClickEditor() {
+    if (submitError || submitError) return;
     setIsClickEditor((prev) => !prev);
   }
 
