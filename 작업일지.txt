@@ -70,6 +70,20 @@
       좌석 탭: 도형 적용해야 함, 실시간 데이터 연동
       위젯: 좌석 탭, 좌석 수정 적용
       상태관리: redux, useQuery 최적화 해야 함
-      next -> react 전환
+  - next -> react 전환
 
-<---  --->
+<--- css 조정, 좌석 konva 구현  --->
+24.12.8.
+  - 개선 사항: 위젯 한 번에 닫을 시 카테고리 리스트 애니메이션 미적용
+  - css 스타일링 무너짐 교정
+
+  konva 
+    - 하나의 좌석 하나의 레이어 
+    - 테이블 레이어 정보: id, 이름, 위치, 너비, 높이   
+    - 테이블 레이어 생성/수정/삭제
+    - qr-order-allOrderList 데이터 패치 적용
+  https://konvajs.org/docs/shapes/Rect.html
+
+  - konva canvas: 너비 높이 동적 부여
+  - 기본 좌석 모형 스타일링
+  - 데이터 동적 변환 확인

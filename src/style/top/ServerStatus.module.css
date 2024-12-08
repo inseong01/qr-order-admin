@@ -14,8 +14,8 @@
   padding: 6px 12px;
 }
 
-.serverStatus > div {
-  line-height: 19px;
+.textBox {
+  line-height: 20px;
 }
 
 .status {

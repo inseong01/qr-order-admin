@@ -2,7 +2,6 @@ import styles from '@/style/top/HeaderLeft.module.css';
 import { resetCategoryState } from '@/lib/features/categoryState/categorySlice';
 import { changeModalState } from '@/lib/features/modalState/modalSlice';
 
-import Image from 'next/image';
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -53,7 +52,7 @@ export default function HeaderLeft({ tabCategory, tab, orderList }) {
                 exit={{ opacity: 0, y: -10 }}
                 key={'addBtn'}
               >
-                <Image src={'/img/add-icon.png'} alt="분류 추가" width={15} height={15} />
+                <img src={'/img/add-icon.png'} alt="분류 추가" style={{ width: 15, height: 15 }} />
                 <div className={styles.title}>{title}</div>
               </motion.div>
             </div>

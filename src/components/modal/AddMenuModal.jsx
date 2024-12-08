@@ -5,7 +5,6 @@ import { resetItemState } from '@/lib/features/itemState/itemSlice';
 import { changeModalState } from '@/lib/features/modalState/modalSlice';
 import ModalFormState from './modalFormState';
 
-import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -48,7 +47,7 @@ export default function AddMenuModal() {
           >
             {<ModalFormState categoryList={categoryList} />}
             <div className={styles.closeBtn} onClick={onClickCloseModal}>
-              <Image src={'/img/close.png'} alt="닫기" width={20} height={20} />
+              <img src={'/img/close.png'} alt="닫기" style={{ width: 20, height: 20 }} />
             </div>
           </motion.dialog>
           <motion.div

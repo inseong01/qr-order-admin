@@ -2,7 +2,6 @@ import styles from '@/style/WidgetCategoryList.module.css';
 import { changeModalState } from '@/lib/features/modalState/modalSlice';
 import { resetSubmitState } from '@/lib/features/submitState/submitSlice';
 
-import Image from 'next/image';
 import { motion, AnimatePresence } from 'motion/react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -49,68 +48,87 @@ export default function WidgetCategoryList({ isClickEditor }) {
   switch (tab) {
     case 'menu': {
       return (
-        <AnimatePresence>
-          {isClickEditor && (
-            <motion.ul
-              key={'optionList'}
-              className={styles.editorOption}
-              variants={optionList}
-              initial={'notClicked'}
-              animate={'clicked'}
-              exit={'notClicked'}
-            >
-              <motion.li
-                className={styles.option}
-                variants={option}
-                onClick={onClickOpenEditor('category-delete')}
+        <motion.div className={styles.optionListBox}>
+          <AnimatePresence>
+            {isClickEditor && (
+              <motion.ul
+                key={'optionList'}
+                className={styles.editorOption}
+                variants={optionList}
+                initial={'notClicked'}
+                animate={'clicked'}
+                exit={'notClicked'}
               >
-                <span className={styles.textBox}>분류</span>
-              </motion.li>
-            </motion.ul>
-          )}
-        </AnimatePresence>
+                <motion.li
+                  className={styles.option}
+                  variants={option}
+                  onClick={onClickOpenEditor('category-delete')}
+                >
+                  <span className={styles.textBox}>분류</span>
+                </motion.li>
+              </motion.ul>
+            )}
+          </AnimatePresence>
+        </motion.div>
       );
     }
     case 'table': {
       return (
-        <AnimatePresence>
-          {isClickEditor && (
-            <motion.ul
-              key={'optionList'}
-              className={styles.editorOption}
-              variants={optionList}
-              initial={'notClicked'}
-              animate={'clicked'}
-              exit={'notClicked'}
-            >
-              <motion.li className={styles.option} variants={option}>
-                <span className={styles.iconBox}>
-                  <Image src={'/img/shapes-icon.png'} alt="모형 추가" width={20} height={20} />
-                </span>
-              </motion.li>
-            </motion.ul>
-          )}
-        </AnimatePresence>
+        <motion.div className={styles.optionListBox}>
+          <AnimatePresence>
+            {isClickEditor && (
+              <motion.ul
+                key={'optionList'}
+                className={styles.editorOption}
+                variants={optionList}
+                initial={'notClicked'}
+                animate={'clicked'}
+                exit={'notClicked'}
+              >
+                <motion.li className={styles.option} variants={option}>
+                  <span className={styles.iconBox}>
+                    <span className={styles.textBox}>테이블 추가</span>
+                    {/* <img src={'/img/shapes-icon.png'} alt="모형 추가" style={{ width: 20, height: 20 }} /> */}
+                  </span>
+                </motion.li>
+                <motion.li className={styles.option} variants={option}>
+                  <span className={styles.iconBox}>
+                    <span className={styles.textBox}>테이블 추가</span>
+                    {/* <img src={'/img/shapes-icon.png'} alt="모형 추가" style={{ width: 20, height: 20 }} /> */}
+                  </span>
+                </motion.li>
+                <motion.li className={styles.option} variants={option}>
+                  <span className={styles.iconBox}>
+                    <span className={styles.textBox}>테이블 추가</span>
+                    {/* <img src={'/img/shapes-icon.png'} alt="모형 추가" style={{ width: 20, height: 20 }} /> */}
+                  </span>
+                </motion.li>
+              </motion.ul>
+            )}
+          </AnimatePresence>
+        </motion.div>
       );
     }
     case 'order': {
       return (
-        <AnimatePresence>
-          {isClickEditor && (
-            <motion.ul
-              key={'optionList'}
-              className={styles.editorOption}
-              variants={optionList}
-              initial={'notClicked'}
-              animate={'clicked'}
-              exit={'notClicked'}
-            >
-              <motion.li className={styles.option} variants={option}>
-                <span className={styles.textBox}>준비중</span>
-              </motion.li>
-            </motion.ul>
-          )}
-        </AnimatePresence>
+        <motion.div className={styles.optionListBox}>
+          <AnimatePresence>
+            {isClickEditor && (
+              <motion.ul
+                key={'optionList'}
+                className={styles.editorOption}
+                variants={optionList}
+                initial={'notClicked'}
+                animate={'clicked'}
+                exit={'notClicked'}
+              >
+                <motion.li className={styles.option} variants={option}>
+                  <span className={styles.textBox}>준비중</span>
+                </motion.li>
+              </motion.ul>
+            )}
+          </AnimatePresence>
+        </motion.div>
       );
     }
   }

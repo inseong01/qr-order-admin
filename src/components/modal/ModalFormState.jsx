@@ -3,7 +3,6 @@
 import styles from '@/style/modal/ModalFormState.module.css';
 import { changeModalState, resetModalState } from '@/lib/features/modalState/modalSlice';
 
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeSubmitMsgType, fetchFormData, resetSubmitState } from '@/lib/features/submitState/submitSlice';
@@ -84,7 +83,7 @@ export default function ModalFormState({ categoryList }) {
             <input type="file" id="fileInput" className={styles.fileInput} hidden />
             <label htmlFor="fileInput" className={styles.left}>
               <div className={styles.iconBox}>
-                <Image src={'/img/add-icon.png'} alt="사진 추가" width={25} height={25} />
+                <img src={'/img/add-icon.png'} alt="사진 추가" style={{ width: 25, height: 25 }} />
               </div>
               <div className={styles.title}>{modalType === 'add' ? '사진 추가' : '사진 변경'}</div>
             </label>

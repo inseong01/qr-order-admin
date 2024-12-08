@@ -8,19 +8,13 @@ import Loader from '../Loader';
 import MenuList from './MenuList';
 import AddMenuModal from '../modal/AddMenuModal';
 import ConfirmModal from '../modal/ConfirmModal';
+import TableDraw from '../middle/konva/TableDraw';
 
-import dynamic from 'next/dynamic';
 import { motion } from 'motion/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQueries, useQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { changeSubmitState } from '@/lib/features/submitState/submitSlice';
-// import TableDraw from '../TableDraw';
-
-// konva ssr 방지
-// const KonvaCanvas = dynamic(() => Promise.resolve('../TableDraw'), {
-//   ssr: false,
-// });
 
 // customer
 // 고객이 서버로 속성 항목에 맞춰 보냄
@@ -54,6 +48,13 @@ import { changeSubmitState } from '@/lib/features/submitState/submitSlice';
 // ]; // id = 주문 고유 식별자
 
 export default function MainPageList() {
+  // useRef
+  const tableBoxRef = useRef(null);
+  // useState
+  const [stageSize, setStageSize] = useState({
+    stageWidth: 0,
+    stageHeight: 0,
+  });
   // useSelector
   const tab = useSelector((state) => state.tabState.state);
   const type = useSelector((state) => state.tabState.state);
@@ -91,6 +92,29 @@ export default function MainPageList() {
     dispatch(changeSubmitState({ isSubmit: false }));
   }, [tab, notCompletedOrderList]);
 
+  useEffect(() => {
+    if (tab !== 'table' || !tableBoxRef.current) return;
+
+    // konva 너비 높이 할당
+    setStageSize(() => ({
+      stageWidth: tableBoxRef.current.clientWidth,
+      stageHeight: tableBoxRef.current.clientHeight,
+    }));
+
+    // konva 너비 높이 리사이즈
+    function onResizeStageSize() {
+      setStageSize(() => ({
+        stageWidth: tableBoxRef.current.clientWidth,
+        stageHeight: tableBoxRef.current.clientHeight,
+      }));
+    }
+    window.addEventListener('resize', onResizeStageSize);
+
+    return () => {
+      window.removeEventListener('resize', onResizeStageSize);
+    };
+  }, [tab, tableBoxRef]);
+
   // motion
   const ul_motion = {
     load: {},
@@ -110,9 +134,8 @@ export default function MainPageList() {
     }
     case 'table': {
       return (
-        <div className={styles.listBox}>
-          {/* <TableDraw /> */}
-          {/* <KonvaCanvas /> */}
+        <div className={styles.listBox} ref={tableBoxRef}>
+          {tableBoxRef.current && <TableDraw stageSize={stageSize} />}
         </div>
       );
     }

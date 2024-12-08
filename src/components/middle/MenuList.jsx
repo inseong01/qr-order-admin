@@ -4,7 +4,6 @@ import { changeModalState } from '@/lib/features/modalState/modalSlice';
 import { getItemInfo, resetItemState } from '@/lib/features/itemState/itemSlice';
 import Loader from '../Loader';
 
-import Image from 'next/image';
 import { motion } from 'motion/react';
 import { useQuery } from '@tanstack/react-query';
 import { useDispatch, useSelector } from 'react-redux';
@@ -89,7 +88,7 @@ export default function MenuList() {
             onClick={onClickOpenModal('add')}
             variants={list_motion}
           >
-            <Image src={'/img/add-icon.png'} alt="상품 추가" width={30} height={30} />
+            <img src={'/img/add-icon.png'} alt="상품 추가" style={{ width: 30, height: 30 }} />
             <div className="title">상품 추가</div>
           </motion.li>
         </>

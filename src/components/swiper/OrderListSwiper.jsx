@@ -1,14 +1,7 @@
 import styles from '@/style/swiper/OrderListSwiper.module.css';
 import MiddleBox from '../middle/MiddleBox';
-import updateOrderListStatus from '@/lib/supabase/func/updateOrderListStatus';
-import {
-  changeSubmitState,
-  changeSubmitType,
-  fetchOrderListStatus,
-} from '@/lib/features/submitState/submitSlice';
 
 import { motion, AnimatePresence } from 'motion/react';
-import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import Swiper from 'swiper';
 import { Pagination, Grid } from 'swiper/modules';
@@ -116,7 +109,11 @@ export default function OrderListSwiper({ orderList, swiper_motion }) {
                         style={{ y: 10 }}
                       >
                         <li className={styles.option} onClick={onClickCloseListOption}>
-                          <Image src={'/img/close-icon.png'} alt="옵션 닫기" width={30} height={30} />
+                          <img
+                            src={'/img/close-icon.png'}
+                            alt="옵션 닫기"
+                            style={{ width: 30, height: 30 }}
+                          />
                         </li>
                       </motion.ul>
                     )}

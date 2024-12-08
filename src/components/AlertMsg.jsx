@@ -1,5 +1,3 @@
-'use client';
-
 import styles from '@/style/AlertMsg.module.css';
 
 import { AnimatePresence, motion } from 'motion/react';

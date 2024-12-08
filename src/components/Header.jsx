@@ -1,5 +1,3 @@
-'use client';
-
 import styles from '@/style/Header.module.css';
 import HeaderLeft from './top/HeaderLeft';
 import HeaderRight from './top/HeaderRight';

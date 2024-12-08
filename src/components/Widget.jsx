@@ -1,8 +1,5 @@
-'use client';
-
 import styles from '@/style/Widget.module.css';
 
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useSelector } from 'react-redux';
@@ -121,11 +118,11 @@ export default function Widget() {
                 <AnimatePresence mode="wait">
                   {!isEdited ? (
                     <motion.div key={'box1'} className={styles.box} initial={{ x: 0 }} exit={{ x: -20 }}>
-                      <Image src={'/img/edit-icon.png'} alt="편집" width={20} height={20} />
+                      <img src={'/img/edit-icon.png'} alt="편집" style={{ width: 20, height: 20 }} />
                     </motion.div>
                   ) : (
                     <motion.div key={'box2'} className={styles.box} initial={{ x: 20 }} animate={{ x: 0 }}>
-                      <Image src={'/img/checkmark.png'} alt="편집 저장" width={20} height={20} />
+                      <img src={'/img/checkmark.png'} alt="편집 저장" style={{ width: 20, height: 20 }} />
                     </motion.div>
                   )}
                 </AnimatePresence>
