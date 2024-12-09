@@ -1,35 +1,202 @@
 import styles from '@/style/middle/konva/TableDraw.module.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
-import { Circle, Group, Layer, Line, Rect, Stage, Text } from 'react-konva';
+import { Group, Layer, Line, Rect, Stage, Text } from 'react-konva';
+import { useSelector } from 'react-redux';
+import TableLayer from './TableLayer';
 
-// stage -> layer -> shape(group), layer 여러 개로 배치
-export default function TableDraw({ stageSize }) {
-  const [totalPrice, setTotalPrice] = useState(0);
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setTotalPrice(1000);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, []);
+// 상하 간격: clientHeight / (테이블 세로 항목 수 - 1)
+const tableList = [
+  {
+    id: 'uuid',
+    init: {
+      x: 0,
+      y: 0,
+      rec: { width: 170, height: 130 },
+      tableText: {
+        width: 100,
+      },
+      line: { points: [0, 0, 130, 0] },
+      priceText: {
+        width: 130,
+      },
+    },
+    tableName: '테이블 1',
+    orderList: [{}, {}],
+  },
+  {
+    id: 'uuid',
+    init: {
+      x: 0,
+      y: 178,
+      rec: { width: 170, height: 130 },
+      tableText: {
+        width: 100,
+      },
+      line: { points: [0, 0, 130, 0] },
+      priceText: {
+        width: 130,
+      },
+    },
+    tableName: '테이블 2',
+    orderList: [{}, {}],
+  },
+  {
+    id: 'uuid',
+    init: {
+      x: 0,
+      y: 356,
+      rec: { width: 170, height: 130 },
+      tableText: {
+        width: 100,
+      },
+      line: { points: [0, 0, 130, 0] },
+      priceText: {
+        width: 130,
+      },
+    },
+    tableName: '테이블 3',
+    orderList: [{}, {}],
+  },
+  {
+    id: 'uuid',
+    init: {
+      x: 0,
+      y: 534,
+      rec: { width: 170, height: 130 },
+      tableText: {
+        width: 100,
+      },
+      line: { points: [0, 0, 130, 0] },
+      priceText: {
+        width: 130,
+      },
+    },
+    tableName: '테이블 4',
+    orderList: [{}, {}],
+  },
+  {
+    id: 'uuid',
+    init: {
+      x: 240,
+      y: 534,
+      rec: { width: 340, height: 130 },
+      tableText: {
+        width: 300,
+      },
+      line: { points: [0, 0, 300, 0] },
+      priceText: {
+        width: 300,
+      },
+    },
+    tableName: '테이블 5',
+    orderList: [{}, {}],
+  },
+  {
+    id: 'uuid',
+    init: {
+      x: 650,
+      y: 534,
+      rec: { width: 340, height: 130 },
+      tableText: {
+        width: 300,
+      },
+      line: { points: [0, 0, 300, 0] },
+      priceText: {
+        width: 300,
+      },
+    },
+    tableName: '테이블 6',
+    orderList: [{}, {}],
+  },
+  {
+    id: 'uuid',
+    init: {
+      x: 1104,
+      y: 534,
+      rec: { width: 170, height: 130 },
+      tableText: {
+        width: 100,
+      },
+      line: { points: [0, 0, 130, 0] },
+      priceText: {
+        width: 130,
+      },
+    },
+    tableName: '테이블 7',
+    orderList: [{}, {}],
+  },
+  {
+    id: 'uuid',
+    init: {
+      x: 1104,
+      y: 356,
+      rec: { width: 170, height: 130 },
+      tableText: {
+        width: 100,
+      },
+      line: { points: [0, 0, 130, 0] },
+      priceText: {
+        width: 130,
+      },
+    },
+    tableName: '테이블 8',
+    orderList: [{}, {}],
+  },
+  {
+    id: 'uuid',
+    init: {
+      x: 1104,
+      y: 178,
+      rec: { width: 170, height: 130 },
+      tableText: {
+        width: 100,
+      },
+      line: { points: [0, 0, 130, 0] },
+      priceText: {
+        width: 130,
+      },
+    },
+    tableName: '테이블 9',
+    orderList: [{}, {}],
+  },
+  {
+    id: 'uuid',
+    init: {
+      x: 1104,
+      y: 0,
+      rec: { width: 170, height: 130 },
+      tableText: {
+        width: 100,
+      },
+      line: { points: [0, 0, 130, 0] },
+      priceText: {
+        width: 130,
+      },
+    },
+    tableName: '테이블 10',
+    orderList: [{}, {}],
+  },
+];
+
+// stage -> layer -> shape(group), 테이블 당 layer 하나로 배치 구현
+// 테이블 생성하면 가운데서 등장, 위치 옮기고 저장하면 해당 테이블 메타데이터 db로 전송
+export default function TableDraw({ stageSize, tableList, setClientTableList }) {
+  // useSelector
+  const konvaEditTableId = useSelector((state) => state.konvaState.target.id);
 
   return (
     <Stage width={stageSize.stageWidth} height={stageSize.stageHeight} className={styles.stage}>
-      <Layer>
-        <Group>
-          <Rect width={170} height={130} fill={'white'} cornerRadius={10} />
-          <Group x={20} y={20}>
-            <Text text="테이블 1" width={100} fill={'#8D8D8D'} fontSize={18} align="left" />
-          </Group>
-          <Group x={20} y={90}>
-            <Line points={[0, 0, 130, 0]} strokeWidth={1} stroke={'#8D8D8D'} />
-            <Group x={0} y={10}>
-              <Text text="합계" width={130} fill={'#8D8D8D'} fontSize={15} align="left" />
-              <Text text={`${totalPrice}원`} width={130} fill={'#8D8D8D'} fontSize={15} align="right" />
-            </Group>
-          </Group>
-        </Group>
-      </Layer>
+      {tableList.map((table) => {
+        return (
+          <TableLayer
+            key={table.id}
+            table={table}
+            setClientTableList={setClientTableList}
+            konvaEditTableId={konvaEditTableId}
+          />
+        );
+      })}
     </Stage>
   );
 }

@@ -72,7 +72,6 @@
       상태관리: redux, useQuery 최적화 해야 함
   - next -> react 전환
 
-<--- css 조정, 좌석 konva 구현  --->
 24.12.8.
   - 개선 사항: 위젯 한 번에 닫을 시 카테고리 리스트 애니메이션 미적용
   - css 스타일링 무너짐 교정
@@ -87,3 +86,34 @@
   - konva canvas: 너비 높이 동적 부여
   - 기본 좌석 모형 스타일링
   - 데이터 동적 변환 확인
+
+24.12.9.
+  - konva 테이블 db 연동 생성 구현, 
+    : 테이블 메타데이터 설계, db table 생성
+      {
+        id: 'uuid',
+        init: {
+          x: 0,
+          y: 0,
+          rec: { width: 170, height: 130 },
+          tableText: {
+            width: 100,
+          },
+          line: { points: [0, 0, 130, 0] },
+          priceText: {
+            width: 130,
+          },
+        },
+        tableName: '테이블 1',
+        orderList: [{}, {}],
+      },
+  - allOrderList useQueries 코드 수정
+    : isDone false, true 병합
+  - konva 테이블 위치/크기 조절 구현
+
+  - konvajs
+    snap 기능
+    : 데모 - https://codepen.io/pierrebleroux/pen/gGpvxJ
+    : 설명 - https://konvajs.org/docs/sandbox/Objects_Snapping.html
+
+<--- konva 테이블 snap 구현, db 연동  --->

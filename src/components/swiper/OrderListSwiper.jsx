@@ -1,5 +1,7 @@
 import styles from '@/style/swiper/OrderListSwiper.module.css';
 import MiddleBox from '../middle/MiddleBox';
+import { changeModalState } from '@/lib/features/modalState/modalSlice';
+import { getOrderListInfo, getSelectedListId } from '@/lib/features/itemState/itemSlice';
 
 import { motion, AnimatePresence } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
@@ -9,13 +11,9 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/grid';
 import { useDispatch, useSelector } from 'react-redux';
-import ConfirmModal from '../modal/ConfirmModal';
-import { changeModalState } from '@/lib/features/modalState/modalSlice';
-import { getOrderListInfo, getSelectedListId } from '@/lib/features/itemState/itemSlice';
 
 export default function OrderListSwiper({ orderList, swiper_motion }) {
   // useState
-  // const [clickedItemId, setClickedItemId] = useState('');
   const selectedListId = useSelector((state) => state.itemState.selectedListId);
   // useRef
   const orderListRef = useRef(null);
@@ -80,7 +78,7 @@ export default function OrderListSwiper({ orderList, swiper_motion }) {
                     <div className={styles.top}>
                       <div className={styles.title}>#{list.orderNum}</div>
                       <div className={styles.right}>
-                        <div className={styles.table}>테이블 1</div>
+                        <div className={styles.table}>{list.tableName}</div>
                         <div className={styles.time}>00:00</div>
                       </div>
                     </div>

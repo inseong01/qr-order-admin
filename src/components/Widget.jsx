@@ -14,12 +14,20 @@ export default function Widget() {
   const tab = useSelector((state) => state.tabState.state);
   const isModalOpen = useSelector((state) => state.modalState.isOpen);
   const submitError = useSelector((state) => state.submitState.isError);
+  const editTableIsAble = useSelector((state) => state.konvaState.isAble);
+  const editTableType = useSelector((state) => state.konvaState.type);
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setIsEdited((prev) => !prev);
-  //   }, 2000);
-  // }, []);
+  useEffect(() => {
+    // 좌석 편집 시 저장 이미지로 전환
+    switch (editTableType) {
+      case 'create': {
+        if (editTableIsAble) {
+          setIsEdited((prev) => !prev);
+        }
+      }
+      // 이미지 전환 editTableType 경우 추가
+    }
+  }, [editTableType, editTableType]);
 
   useEffect(() => {
     setClicked(false);
@@ -113,15 +121,27 @@ export default function Widget() {
             animate={'clicked'}
             exit={'notClicked'}
           >
-            <motion.li className={styles.list} variants={menu}>
-              <div className={styles.iconBox} onClick={onClickEditor}>
+            <motion.li className={styles.list} variants={menu} onClick={onClickEditor}>
+              <div className={styles.iconBox}>
                 <AnimatePresence mode="wait">
                   {!isEdited ? (
-                    <motion.div key={'box1'} className={styles.box} initial={{ x: 0 }} exit={{ x: -20 }}>
+                    <motion.div
+                      key={'box1'}
+                      className={styles.box}
+                      initial={{ x: 0 }}
+                      exit={{ x: -20 }}
+                      transition={{ duration: 0.3, ease: 'easeOut' }}
+                    >
                       <img src={'/img/edit-icon.png'} alt="편집" style={{ width: 20, height: 20 }} />
                     </motion.div>
                   ) : (
-                    <motion.div key={'box2'} className={styles.box} initial={{ x: 20 }} animate={{ x: 0 }}>
+                    <motion.div
+                      key={'box2'}
+                      className={styles.box}
+                      initial={{ x: 20 }}
+                      animate={{ x: 0 }}
+                      transition={{ duration: 0.3, ease: 'easeOut' }}
+                    >
                       <img src={'/img/checkmark.png'} alt="편집 저장" style={{ width: 20, height: 20 }} />
                     </motion.div>
                   )}

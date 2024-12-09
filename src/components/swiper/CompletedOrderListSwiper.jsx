@@ -1,5 +1,3 @@
-'use client';
-
 import styles from '@/style/swiper/CompletedOrderListSwiper.module.css';
 import MiddleBox from '../middle/MiddleBox';
 
@@ -49,7 +47,7 @@ export default function CompletedOrderListSwiper({ orderList, swiper_motion }) {
                   <div className={styles.top}>
                     <div className={styles.title}>#{list.orderNum}</div>
                     <div className={styles.right}>
-                      <div className={styles.table}>테이블 1</div>
+                      <div className={styles.table}>{list.tableName}</div>
                     </div>
                   </div>
                 </div>

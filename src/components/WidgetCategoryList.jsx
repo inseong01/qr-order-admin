@@ -1,6 +1,7 @@
 import styles from '@/style/WidgetCategoryList.module.css';
 import { changeModalState } from '@/lib/features/modalState/modalSlice';
 import { resetSubmitState } from '@/lib/features/submitState/submitSlice';
+import { changeKonvaEditState } from '../lib/features/konvaState/konvaSlice';
 
 import { motion, AnimatePresence } from 'motion/react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,9 +14,14 @@ export default function WidgetCategoryList({ isClickEditor }) {
 
   function onClickOpenEditor(modalType) {
     return () => {
-      console.log('WidgetCategoryList');
       dispatch(resetSubmitState());
       dispatch(changeModalState({ type: modalType, isOpen: true }));
+    };
+  }
+
+  function onClickEnableEditTable(editType) {
+    return () => {
+      dispatch(changeKonvaEditState({ editType, isAble: true }));
     };
   }
 
@@ -73,6 +79,9 @@ export default function WidgetCategoryList({ isClickEditor }) {
       );
     }
     case 'table': {
+      // li onClick 함수 할당
+      // 해당 li 클릭 시 dispatch 실행, 변경 사항 있을 시 위젯 저장 버튼 활성화, 저장하면 db 전달
+      // 테이블 생성부터 구현 (수정, 삭제)
       return (
         <motion.div className={styles.optionListBox}>
           <AnimatePresence>
@@ -85,21 +94,33 @@ export default function WidgetCategoryList({ isClickEditor }) {
                 animate={'clicked'}
                 exit={'notClicked'}
               >
-                <motion.li className={styles.option} variants={option}>
+                <motion.li
+                  className={styles.option}
+                  variants={option}
+                  onClick={onClickEnableEditTable('create')}
+                >
                   <span className={styles.iconBox}>
                     <span className={styles.textBox}>테이블 추가</span>
                     {/* <img src={'/img/shapes-icon.png'} alt="모형 추가" style={{ width: 20, height: 20 }} /> */}
                   </span>
                 </motion.li>
-                <motion.li className={styles.option} variants={option}>
+                <motion.li
+                  className={styles.option}
+                  variants={option}
+                  onClick={onClickEnableEditTable('update')}
+                >
                   <span className={styles.iconBox}>
-                    <span className={styles.textBox}>테이블 추가</span>
+                    <span className={styles.textBox}>테이블 수정</span>
                     {/* <img src={'/img/shapes-icon.png'} alt="모형 추가" style={{ width: 20, height: 20 }} /> */}
                   </span>
                 </motion.li>
-                <motion.li className={styles.option} variants={option}>
+                <motion.li
+                  className={styles.option}
+                  variants={option}
+                  onClick={onClickEnableEditTable('delete')}
+                >
                   <span className={styles.iconBox}>
-                    <span className={styles.textBox}>테이블 추가</span>
+                    <span className={styles.textBox}>테이블 삭제</span>
                     {/* <img src={'/img/shapes-icon.png'} alt="모형 추가" style={{ width: 20, height: 20 }} /> */}
                   </span>
                 </motion.li>
