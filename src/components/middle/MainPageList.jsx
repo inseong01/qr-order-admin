@@ -16,6 +16,7 @@ import { useQueries, useQuery } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { getEditKonvaTableId } from '../../lib/features/konvaState/konvaSlice';
+import { getClientTableList } from '../../lib/features/itemState/itemSlice';
 
 // customer
 // 고객이 서버로 속성 항목에 맞춰 보냄
@@ -56,6 +57,7 @@ export default function MainPageList() {
   const isSubmit = useSelector((state) => state.submitState.isSubmit);
   const konvaEditType = useSelector((state) => state.konvaState.type);
   const konvaEditisAble = useSelector((state) => state.konvaState.isAble);
+  const konvaEditisEditing = useSelector((state) => state.konvaState.isEditing);
   // useQueries
   const [allOrderList, tableList] = useQueries({
     queries: [
@@ -69,10 +71,9 @@ export default function MainPageList() {
         },
       },
       {
-        queryKey: ['tableList'],
+        queryKey: ['tableList', isSubmit],
         queryFn: () => fetchTableList('select'),
         enabled: tab === 'table',
-        staleTime: 1000 * 60 * 10,
       },
     ],
   });
@@ -120,17 +121,12 @@ export default function MainPageList() {
   }, [tab, tableBoxRef]);
 
   useEffect(() => {
-    // konva 데이터 패치 완료 여부
-    if (tab !== 'table' || !tableBoxRef.current || !tableList.isFetched) return;
+    // konva 데이터 패치 완료 여부, 편집 중이면 반환
+    if (tab !== 'table' || !tableBoxRef.current || !tableList.isFetched || konvaEditisEditing) return;
     const isValideToOpen = tableBoxRef.current && tableList.data;
     setOpenKonva(isValideToOpen);
-    setClientTableList((prev) => {
-      if (!prev.length) {
-        return tableList.data;
-      }
-      return prev;
-    });
-  }, [tab, tableBoxRef, tableList]);
+    setClientTableList(tableList.data);
+  }, [tab, tableBoxRef, tableList, konvaEditisEditing]);
 
   useEffect(() => {
     // konva edit 실행
@@ -138,42 +134,47 @@ export default function MainPageList() {
     switch (konvaEditType) {
       case 'create': {
         // 좌석 생성
-        if (konvaEditisAble) {
-          const newTable = {
-            id: uuidv4(),
-            init: {
-              x: stageSize.stageWidth / 2,
-              y: stageSize.stageHeight / 2,
-              rec: { width: 170, height: 130 },
-              tableText: {
-                width: 100,
-              },
+        const newTable = {
+          id: uuidv4(),
+          init: {
+            x: stageSize.stageWidth / 2,
+            y: stageSize.stageHeight / 2,
+            rec: { width: 170, height: 130 },
+            tableText: {
+              width: 100,
+            },
+            bottom: {
+              y: 90,
               line: { points: [0, 0, 130, 0] },
               priceText: {
                 width: 130,
               },
             },
-            tableName: `테이블 ${tableList.data.length + 1}`,
-            orderList: [],
-          };
-          setClientTableList((prev) => [...prev, newTable]);
-          dispatch(getEditKonvaTableId({ id: newTable.id }));
-        }
+          },
+          tableName: `테이블 ${clientTableList.length + 1}`,
+          orderList: [],
+        };
+        setClientTableList((prev) => [...prev, newTable]);
+        dispatch(getEditKonvaTableId({ id: newTable.id }));
         return;
       }
       default: {
         return;
       }
     }
-  }, [tab, konvaEditType]);
+  }, [tab, konvaEditType, konvaEditisAble]);
+
+  useEffect(() => {
+    // clientTableList 배열 업데이트 되면 추가된 테이블 전달
+    if (!clientTableList.length) return;
+    dispatch(getClientTableList({ clientTableList }));
+  }, [clientTableList]);
 
   // motion
   const ul_motion = {
     load: {},
     notLoad: {},
   };
-
-  console.log('clientTableList: ', clientTableList);
 
   switch (type) {
     case 'menu': {

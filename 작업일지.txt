@@ -116,4 +116,10 @@
     : 데모 - https://codepen.io/pierrebleroux/pen/gGpvxJ
     : 설명 - https://konvajs.org/docs/sandbox/Objects_Snapping.html
 
-<--- konva 테이블 snap 구현, db 연동  --->
+24.12.10.
+  - konva 위치/크기 snap 구현
+    : 화면 초과 크기/위치 제한
+  - konva 테이블 생성, db/위젯 연동
+  - 개선할 점: 제한된 위치일 때 범위 밖 위치 옮길 시 제한 풀림
+
+<--- konva 테이블 크기 위치 수정/삭제 구현  --->

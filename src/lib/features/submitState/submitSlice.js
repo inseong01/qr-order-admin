@@ -2,6 +2,7 @@ import fetchMenuItem from "@/lib/supabase/func/fetchMenuItem";
 import updateOrderListStatus from "@/lib/supabase/func/updateOrderListStatus";
 
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import fetchTableList from "../../supabase/func/fetchTableList";
 
 const initialState = {
   isSubmit: false,
@@ -24,6 +25,15 @@ export const fetchOrderListStatus = createAsyncThunk(
   'submitState/fetchOrderListState',
   async ({ list, selectedListId }) => {
     let result = await updateOrderListStatus(list, selectedListId)
+    if (result.error?.code) throw new Error(result.error.message);
+    return result;
+  }
+)
+
+export const fetchTableListData = createAsyncThunk(
+  'submitState/fetchTableListData',
+  async ({ method, dataArr }) => {
+    let result = await fetchTableList(method, dataArr)
     if (result.error?.code) throw new Error(result.error.message);
     return result;
   }
@@ -117,6 +127,35 @@ const submitSlice = createSlice({
       }
     })
     builder.addCase(fetchOrderListStatus.rejected, (state, action) => {
+      const callCount = state.callCount + 1;
+      const preventSubmit = callCount >= 5 ? true : false;
+      return {
+        ...state,
+        isSubmit: false,
+        status: 'rejected',
+        callCount,
+        alertType: 'list',
+        isError: preventSubmit
+      }
+    })
+    // fetchTableListData
+    builder.addCase(fetchTableListData.pending, (state, action) => {
+      return {
+        ...state,
+        isSubmit: true,
+        status: 'pending',
+      }
+    })
+    builder.addCase(fetchTableListData.fulfilled, (state, action) => {
+      return {
+        ...state,
+        isSubmit: true,
+        status: 'fulfilled',
+        callCount: 0,
+        alertType: '',
+      }
+    })
+    builder.addCase(fetchTableListData.rejected, (state, action) => {
       const callCount = state.callCount + 1;
       const preventSubmit = callCount >= 5 ? true : false;
       return {

@@ -1,9 +1,8 @@
 import styles from '@/style/middle/konva/TableDraw.module.css';
-import { useEffect, useRef } from 'react';
-
-import { Group, Layer, Line, Rect, Stage, Text } from 'react-konva';
-import { useSelector } from 'react-redux';
 import TableLayer from './TableLayer';
+
+import { Layer, Stage } from 'react-konva';
+import { useSelector } from 'react-redux';
 
 // 상하 간격: clientHeight / (테이블 세로 항목 수 - 1)
 const tableList = [
@@ -16,9 +15,12 @@ const tableList = [
       tableText: {
         width: 100,
       },
-      line: { points: [0, 0, 130, 0] },
-      priceText: {
-        width: 130,
+      bottom: {
+        y: 90,
+        line: { points: [0, 0, 130, 0] },
+        priceText: {
+          width: 130,
+        },
       },
     },
     tableName: '테이블 1',
@@ -179,7 +181,7 @@ const tableList = [
   },
 ];
 
-// stage -> layer -> shape(group), 테이블 당 layer 하나로 배치 구현
+// stage -> layer -> shape(group), 테이블 당 Group 하나로 배치 구현
 // 테이블 생성하면 가운데서 등장, 위치 옮기고 저장하면 해당 테이블 메타데이터 db로 전송
 export default function TableDraw({ stageSize, tableList, setClientTableList }) {
   // useSelector
@@ -187,16 +189,18 @@ export default function TableDraw({ stageSize, tableList, setClientTableList }) 
 
   return (
     <Stage width={stageSize.stageWidth} height={stageSize.stageHeight} className={styles.stage}>
-      {tableList.map((table) => {
-        return (
-          <TableLayer
-            key={table.id}
-            table={table}
-            setClientTableList={setClientTableList}
-            konvaEditTableId={konvaEditTableId}
-          />
-        );
-      })}
+      <Layer>
+        {tableList.map((table) => {
+          return (
+            <TableLayer
+              key={table.id}
+              table={table}
+              setClientTableList={setClientTableList}
+              konvaEditTableId={konvaEditTableId}
+            />
+          );
+        })}
+      </Layer>
     </Stage>
   );
 }

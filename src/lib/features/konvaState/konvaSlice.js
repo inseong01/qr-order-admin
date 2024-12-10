@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   type: '',
   isAble: false,
+  isEditing: false,
   target: {
     id: ''
   }
@@ -17,11 +18,12 @@ const konvaSlice = createSlice({
     },
     changeKonvaEditState: (state, action) => {
       const editType = action.payload.editType;
-      const isAble = action.payload.isAble;
+      const isAble = editType === 'create' ? !state.isAble : action.payload.isAble;
       return {
         ...initialState,
         type: editType,
-        isAble
+        isAble,
+        isEditing: true,
       }
     },
     getEditKonvaTableId: (state, action) => {

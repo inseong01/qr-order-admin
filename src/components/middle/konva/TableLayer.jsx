@@ -1,9 +1,10 @@
 import { useEffect, useRef } from 'react';
-import { Group, Layer, Line, Rect, Text, Transformer } from 'react-konva';
+import { Group, Line, Rect, Text, Transformer } from 'react-konva';
 
 export default function TableLayer({ table, setClientTableList, konvaEditTableId }) {
   const { init, orderList, tableName, id } = table;
   const totalPrice = orderList.reduce((prev, list) => prev + Number(list.price), 0).toLocaleString();
+  const blockSize = 10;
   // useRef
   const shapeRef = useRef(null);
   const trRef = useRef(null);
@@ -16,15 +17,25 @@ export default function TableLayer({ table, setClientTableList, konvaEditTableId
 
   function changeTablePosition(e) {
     const lastPs = e.target.position();
+
+    if (lastPs.x < 0 && init.x === 0) {
+      return setClientTableList((prev) => [...prev]);
+    }
+
     setClientTableList((prev) =>
       prev.map((table) => {
         if (table.id === konvaEditTableId) {
+          let newPosX = Math.round(lastPs.x / blockSize) * blockSize;
+          let newPosY = Math.round(lastPs.y / blockSize) * blockSize;
+          newPosX = Math.max(10, Math.min(newPosX, 1323 - init.rec.width - 10)); // stageWidth 임의 설정
+          newPosY = Math.max(10, Math.min(newPosY, 664 - init.rec.height - 10)); // stageHeight 임의 설정
+          console.log(newPosX, newPosY);
           return {
             ...table,
             init: {
               ...table.init,
-              x: lastPs.x,
-              y: lastPs.y,
+              x: newPosX,
+              y: newPosY,
             },
           };
         }
@@ -46,8 +57,8 @@ export default function TableLayer({ table, setClientTableList, konvaEditTableId
     setClientTableList((prev) => {
       return prev.map((table) => {
         if (table.id === konvaEditTableId) {
-          const newWidth = Math.max(170, parseInt(node.width() * scaleX));
-          const newHeight = Math.max(130, parseInt(node.height() * scaleY));
+          const newWidth = Math.max(170, Math.round((node.width() * scaleX) / blockSize) * blockSize);
+          const newHeight = Math.max(130, Math.round((node.height() * scaleY) / blockSize) * blockSize);
 
           return {
             ...table,
@@ -56,6 +67,17 @@ export default function TableLayer({ table, setClientTableList, konvaEditTableId
               rec: {
                 width: newWidth,
                 height: newHeight,
+              },
+              tableText: {
+                width: newWidth - 40,
+              },
+              bottom: {
+                ...table.init.bottom,
+                y: newHeight - 40,
+                line: { points: [0, 0, newWidth - 40, 0] },
+                priceText: {
+                  width: newWidth - 40,
+                },
               },
             },
           };
@@ -66,18 +88,26 @@ export default function TableLayer({ table, setClientTableList, konvaEditTableId
   }
 
   function limitBoundBox(oldBox, newBox) {
-    // 도형 사이즈 반전 이동 조절 가능
-    if (newBox.width < 169) {
+    const newBoxPosX = Math.round(newBox.x);
+    const newBoxWidth = Math.round(newBox.width);
+    const oldBoxPosX = Math.round(oldBox.x);
+    if (newBox.width < 169 || newBoxPosX !== oldBoxPosX || newBoxWidth + newBoxPosX > 1323 - 9) {
+      // stageWidth 임의 설정
       return oldBox;
     }
-    if (newBox.height < 129) {
+
+    const newBoxPosY = Math.round(newBox.y);
+    const newBoxHeight = Math.round(newBox.height);
+    const oldBoxPosY = Math.round(oldBox.y);
+    if (newBox.height < 129 || newBoxPosY !== oldBoxPosY || newBoxHeight + newBoxPosY > 664 - 9) {
+      // stageHeight 임의 설정
       return oldBox;
     }
     return newBox;
   }
 
   return (
-    <Layer
+    <Group
       key={id}
       x={init.x}
       y={init.y}
@@ -91,21 +121,36 @@ export default function TableLayer({ table, setClientTableList, konvaEditTableId
           height={init.rec.height}
           fill={'#fff'}
           cornerRadius={10}
-          onTransformEnd={onDragTransform}
+          onTransform={onDragTransform}
         />
         {table.id === konvaEditTableId && (
-          <Transformer ref={trRef} flipEnabled={false} keepRatio={false} boundBoxFunc={limitBoundBox} />
+          <Transformer
+            ref={trRef}
+            flipEnabled={false}
+            keepRatio={false}
+            boundBoxFunc={limitBoundBox}
+            rotateEnabled={false}
+            rotateLineVisible={false}
+            enabledAnchors={['middle-right', 'bottom-center']}
+            borderEnabled={false}
+          />
         )}
         <Group x={20} y={20}>
           <Text text={tableName} width={init.tableText.width} fill={'#222'} fontSize={18} align="left" />
         </Group>
-        <Group x={20} y={90}>
-          <Line points={init.line.points} strokeWidth={1} stroke={'#8D8D8D'} />
+        <Group x={20} y={init.bottom.y}>
+          <Line points={init.bottom.line.points} strokeWidth={1} stroke={'#8D8D8D'} />
           <Group x={0} y={10}>
-            <Text text="합계" width={init.priceText.width} fill={'#8D8D8D'} fontSize={15} align="left" />
+            <Text
+              text="합계"
+              width={init.bottom.priceText.width}
+              fill={'#8D8D8D'}
+              fontSize={15}
+              align="left"
+            />
             <Text
               text={`${totalPrice}원`}
-              width={init.priceText.width}
+              width={init.bottom.priceText.width}
               fill={'#8D8D8D'}
               fontSize={15}
               align="right"
@@ -113,6 +158,6 @@ export default function TableLayer({ table, setClientTableList, konvaEditTableId
           </Group>
         </Group>
       </Group>
-    </Layer>
+    </Group>
   );
 }

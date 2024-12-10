@@ -11,7 +11,8 @@ const initialState = {
   list: {
     id: ''
   },
-  selectedListId: ''
+  selectedListId: '',
+  clientTableList: []
 }
 
 const itemSlice = createSlice({
@@ -41,9 +42,16 @@ const itemSlice = createSlice({
         ...state,
         selectedListId
       }
+    },
+    getClientTableList: (state, action) => {
+      const clientTableList = action.payload.clientTableList;
+      return {
+        ...state,
+        clientTableList
+      }
     }
   }
 })
 
-export const { resetItemState, getItemInfo, getOrderListInfo, getSelectedListId } = itemSlice.actions;
+export const { resetItemState, getItemInfo, getOrderListInfo, getSelectedListId, getClientTableList } = itemSlice.actions;
 export default itemSlice.reducer;

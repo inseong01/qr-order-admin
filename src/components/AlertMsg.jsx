@@ -86,6 +86,10 @@ export default function AlertMsg() {
           str = submitStatus !== 'rejected' ? '추가되었습니다.' : '요청에 실패했습니다';
           break;
         }
+        case 'save': {
+          str = submitStatus !== 'rejected' ? '저장되었습니다.' : '요청에 실패했습니다';
+          break;
+        }
         default: {
           if (submitStatus === 'rejected') {
             str = '요청에 실패했습니다.';
