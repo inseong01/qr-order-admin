@@ -16,6 +16,7 @@ export default function FooterList() {
   const [clicked, setClicked] = useState(0);
   // useSelector
   const isModalOpen = useSelector((state) => state.modalState.isOpen);
+  const editTableisEditing = useSelector((state) => state.konvaState.isEditing);
   // useDispatch
   const dispatch = useDispatch();
   // useQuery
@@ -28,6 +29,11 @@ export default function FooterList() {
   function onClickChangeTab({ title }, idx) {
     return () => {
       if (isModalOpen) return;
+      // 수정 중 tab 이동 임시 제한
+      if (editTableisEditing) {
+        alert('수정 중입니다.');
+        return;
+      }
       dispatch(changeTabState({ state: title }));
       setClicked((prev) => (prev = idx));
     };

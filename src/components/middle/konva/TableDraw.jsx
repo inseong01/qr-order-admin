@@ -183,9 +183,10 @@ const tableList = [
 
 // stage -> layer -> shape(group), 테이블 당 Group 하나로 배치 구현
 // 테이블 생성하면 가운데서 등장, 위치 옮기고 저장하면 해당 테이블 메타데이터 db로 전송
-export default function TableDraw({ stageSize, tableList, setClientTableList }) {
+export default function TableDraw({ stageSize, tableList, setClientTableList, selectTableId }) {
   // useSelector
-  const konvaEditTableId = useSelector((state) => state.konvaState.target.id);
+  const konvaEditTableIdArr = useSelector((state) => state.konvaState.target.id);
+  const konvaEditType = useSelector((state) => state.konvaState.type);
 
   return (
     <Stage width={stageSize.stageWidth} height={stageSize.stageHeight} className={styles.stage}>
@@ -196,7 +197,9 @@ export default function TableDraw({ stageSize, tableList, setClientTableList }) 
               key={table.id}
               table={table}
               setClientTableList={setClientTableList}
-              konvaEditTableId={konvaEditTableId}
+              konvaEditTableIdArr={konvaEditTableIdArr}
+              selectTableId={selectTableId}
+              konvaEditType={konvaEditType}
             />
           );
         })}

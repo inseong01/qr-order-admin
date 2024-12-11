@@ -22,15 +22,20 @@ export default function Header() {
       },
       {
         queryKey: ['orderList', isSubmit],
-        queryFn: () => getAllOrderList(tab, false),
+        queryFn: () => getAllOrderList(tab),
         enabled: tab === 'order',
+        initialData: [],
       },
     ],
   });
 
   return (
     <header className={styles.header}>
-      <HeaderLeft tab={tab} tabCategory={tabCategory} orderList={orderList.data} />
+      <HeaderLeft
+        tab={tab}
+        tabCategory={tabCategory}
+        orderList={orderList?.data.filter((list) => !list.isDone)}
+      />
       <HeaderRight tabCategory={tabCategory} />
     </header>
   );

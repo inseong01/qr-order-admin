@@ -29,7 +29,7 @@ export default function ModalFormState({ categoryList }) {
   useEffect(() => {
     if (tab === 'menu' && submitStatus === 'fulfilled') {
       dispatch(changeModalState({ isOpen: false }));
-      dispatch(resetSubmitState());
+      // dispatch(resetSubmitState()); // alertMsg 나오지 않았던 원인
     }
   }, [submitStatus]);
 
@@ -54,9 +54,10 @@ export default function ModalFormState({ categoryList }) {
       const method = e.nativeEvent.submitter.name;
       e.preventDefault();
       if (isSubmit) return;
-      dispatch(changeSubmitMsgType({ table }));
+      // dispatch(changeSubmitMsgType({ table }));
+      dispatch(changeSubmitMsgType({ msgType: modalType.split('-')[0] }));
       switch (modalType) {
-        case 'category-delete': {
+        case 'delete-category': {
           const checkedInputArr = Array.from(e.target.elements.check).filter(
             (inputList) => inputList?.checked
           );
@@ -162,7 +163,7 @@ export default function ModalFormState({ categoryList }) {
           </form>
         );
       }
-      case 'category-add': {
+      case 'add-category': {
         return (
           <form
             className={`${styles.submitForm} ${styles.category}`}
@@ -189,7 +190,7 @@ export default function ModalFormState({ categoryList }) {
           </form>
         );
       }
-      case 'category-delete': {
+      case 'delete-category': {
         return (
           <form
             className={`${styles.submitForm} ${styles.categoryDelete}`}

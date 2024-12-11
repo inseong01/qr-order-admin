@@ -8,6 +8,7 @@ const initialState = {
   isSubmit: false,
   status: '',
   alertType: '',
+  msgType: '',
   callCount: 0,
   isError: false
 }
@@ -16,7 +17,7 @@ export const fetchFormData = createAsyncThunk(
   'submitState/fetchFormData',
   async ({ method, itemInfo, table }) => {
     const result = await fetchMenuItem({ method, itemInfo, table })
-    if (result.error?.code) throw new Error(response.error.message)
+    if (result.error?.code) throw new Error(result.error.message)
     return result;
   }
 )
@@ -24,7 +25,7 @@ export const fetchFormData = createAsyncThunk(
 export const fetchOrderListStatus = createAsyncThunk(
   'submitState/fetchOrderListState',
   async ({ list, selectedListId }) => {
-    let result = await updateOrderListStatus(list, selectedListId)
+    const result = await updateOrderListStatus(list, selectedListId)
     if (result.error?.code) throw new Error(result.error.message);
     return result;
   }
@@ -33,7 +34,7 @@ export const fetchOrderListStatus = createAsyncThunk(
 export const fetchTableListData = createAsyncThunk(
   'submitState/fetchTableListData',
   async ({ method, dataArr }) => {
-    let result = await fetchTableList(method, dataArr)
+    const result = await fetchTableList(method, dataArr)
     if (result.error?.code) throw new Error(result.error.message);
     return result;
   }
@@ -52,25 +53,10 @@ const submitSlice = createSlice({
       return initialState;
     },
     changeSubmitMsgType: (state, action) => {
-      const table = action.payload.table;
-      let alertType = '';
-
-      switch (table) {
-        case 'menu': {
-          alertType = 'product';
-          break;
-        }
-        case 'order': {
-          alertType = 'confirm';
-          break;
-        }
-        default: {
-          alertType = 'list';
-        }
-      }
+      const msgType = action.payload.msgType;
       return {
         ...state,
-        alertType
+        msgType
       }
     },
     changeSubmitState: (state, action) => {
@@ -95,18 +81,21 @@ const submitSlice = createSlice({
         ...state,
         isSubmit: true,
         status: 'fulfilled',
-        callCount: 0
+        callCount: 0,
+        alertType: 'list',
       }
     })
     builder.addCase(fetchFormData.rejected, (state, action) => {
       const callCount = state.callCount + 1;
       const preventSubmit = callCount >= 5 ? true : false;
+      console.error(action.error.message)
       return {
         ...state,
         isSubmit: false,
         status: 'rejected',
         callCount,
-        isError: preventSubmit
+        isError: preventSubmit,
+        alertType: 'list',
       }
     })
     // fetchOrderListStatus
@@ -123,12 +112,13 @@ const submitSlice = createSlice({
         isSubmit: true,
         status: 'fulfilled',
         callCount: 0,
-        alertType: '',
+        alertType: 'list',
       }
     })
     builder.addCase(fetchOrderListStatus.rejected, (state, action) => {
       const callCount = state.callCount + 1;
       const preventSubmit = callCount >= 5 ? true : false;
+      console.error(action.error.message)
       return {
         ...state,
         isSubmit: false,
@@ -152,12 +142,13 @@ const submitSlice = createSlice({
         isSubmit: true,
         status: 'fulfilled',
         callCount: 0,
-        alertType: '',
+        alertType: 'list',
       }
     })
     builder.addCase(fetchTableListData.rejected, (state, action) => {
       const callCount = state.callCount + 1;
       const preventSubmit = callCount >= 5 ? true : false;
+      console.error(action.error.message)
       return {
         ...state,
         isSubmit: false,

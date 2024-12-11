@@ -22,7 +22,7 @@ export default function HeaderLeft({ tabCategory, tab, orderList }) {
 
   function onClickOpenModal() {
     if (isModalOpen || submitError) return;
-    dispatch(changeModalState({ type: 'category-add', isOpen: true }));
+    dispatch(changeModalState({ type: 'add-category', isOpen: true }));
   }
 
   switch (tab) {

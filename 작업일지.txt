@@ -123,3 +123,14 @@
   - 개선할 점: 제한된 위치일 때 범위 밖 위치 옮길 시 제한 풀림
 
 <--- konva 테이블 크기 위치 수정/삭제 구현  --->
+24.12.11.
+  - FooterList, WidgetCategoryList: konva 편집 중 전환 방지 임시 alert 구현
+  - 코드 정리 (컴포넌트 당 100 줄 이하 유지)
+  - Konva 테이블 위치/크기 update 구현
+    : 변경 사항 있어야 저장 가능
+  - Konva 테이블 delete 구현
+    : 다중 선택 삭제 
+  - AlertMsg 등장 코드 개선: fulfilled 상황도 반영되도록
+
+  - 의문: useEffect를 커스텀훅으로 사용해도 가능한지 (코드 정리 목적), 아님 함수로 가져오기 
+  - 개선할 점: useQuery 중복 사용으로 props 최소화 

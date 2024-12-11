@@ -1,30 +1,35 @@
 import { useEffect, useRef } from 'react';
 import { Group, Line, Rect, Text, Transformer } from 'react-konva';
 
-export default function TableLayer({ table, setClientTableList, konvaEditTableId }) {
+export default function TableLayer({
+  table,
+  setClientTableList,
+  konvaEditTableIdArr,
+  selectTableId,
+  konvaEditType,
+}) {
   const { init, orderList, tableName, id } = table;
   const totalPrice = orderList.reduce((prev, list) => prev + Number(list.price), 0).toLocaleString();
+  const isTransformerAble = id === konvaEditTableIdArr[0] && konvaEditType !== 'delete';
+  const isSelectedToDelete = konvaEditType === 'delete' && konvaEditTableIdArr.includes(id);
   const blockSize = 10;
   // useRef
   const shapeRef = useRef(null);
   const trRef = useRef(null);
 
   useEffect(() => {
-    if (konvaEditTableId !== id) return;
+    if (konvaEditTableIdArr[0] !== id) return;
+    if (konvaEditType === 'delete') return; // type 제한
     trRef.current.nodes([shapeRef.current]);
     trRef.current.getLayer().batchDraw();
-  }, [konvaEditTableId]);
+  }, [konvaEditTableIdArr]);
 
   function changeTablePosition(e) {
     const lastPs = e.target.position();
 
-    if (lastPs.x < 0 && init.x === 0) {
-      return setClientTableList((prev) => [...prev]);
-    }
-
     setClientTableList((prev) =>
       prev.map((table) => {
-        if (table.id === konvaEditTableId) {
+        if (table.id === konvaEditTableIdArr[0]) {
           let newPosX = Math.round(lastPs.x / blockSize) * blockSize;
           let newPosY = Math.round(lastPs.y / blockSize) * blockSize;
           newPosX = Math.max(10, Math.min(newPosX, 1323 - init.rec.width - 10)); // stageWidth 임의 설정
@@ -56,7 +61,7 @@ export default function TableLayer({ table, setClientTableList, konvaEditTableId
     // 크기 변환 적용
     setClientTableList((prev) => {
       return prev.map((table) => {
-        if (table.id === konvaEditTableId) {
+        if (table.id === konvaEditTableIdArr[0]) {
           const newWidth = Math.max(170, Math.round((node.width() * scaleX) / blockSize) * blockSize);
           const newHeight = Math.max(130, Math.round((node.height() * scaleY) / blockSize) * blockSize);
 
@@ -106,13 +111,28 @@ export default function TableLayer({ table, setClientTableList, konvaEditTableId
     return newBox;
   }
 
+  function onClickSelectTable() {
+    if (konvaEditType === 'update') {
+      selectTableId([id]);
+    } else if (konvaEditType === 'delete') {
+      selectTableId((prev) => {
+        // 다시 누르면 배열 요소 삭제
+        if (prev.includes(id)) return [...prev.filter((prevId) => prevId !== id)];
+        // 클릭하면 배열 요소 추가
+        else return [...prev, id];
+      });
+    }
+  }
+
   return (
     <Group
       key={id}
+      id={id}
       x={init.x}
       y={init.y}
-      draggable={table.id === konvaEditTableId}
+      draggable={isTransformerAble}
       onDragEnd={changeTablePosition}
+      onClick={onClickSelectTable}
     >
       <Group>
         <Rect
@@ -120,10 +140,11 @@ export default function TableLayer({ table, setClientTableList, konvaEditTableId
           width={init.rec.width}
           height={init.rec.height}
           fill={'#fff'}
+          stroke={isSelectedToDelete ? 'red' : 'white'}
           cornerRadius={10}
           onTransform={onDragTransform}
         />
-        {table.id === konvaEditTableId && (
+        {isTransformerAble && (
           <Transformer
             ref={trRef}
             flipEnabled={false}
@@ -132,7 +153,6 @@ export default function TableLayer({ table, setClientTableList, konvaEditTableId
             rotateEnabled={false}
             rotateLineVisible={false}
             enabledAnchors={['middle-right', 'bottom-center']}
-            borderEnabled={false}
           />
         )}
         <Group x={20} y={20}>

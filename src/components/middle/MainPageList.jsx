@@ -1,22 +1,13 @@
-import styles from '@/style/middle/MainPageList.module.css';
-import OrderListSwiper from '../swiper/OrderListSwiper';
-import CompletedOrderListSwiper from '../swiper/CompletedOrderListSwiper';
 import getAllOrderList from '@/lib/supabase/func/getAllOrderList';
-import Loader from '../Loader';
-import MenuList from './MenuList';
-import AddMenuModal from '../modal/AddMenuModal';
-import ConfirmModal from '../modal/ConfirmModal';
-import TableDraw from '../middle/konva/TableDraw';
 import { changeSubmitState } from '@/lib/features/submitState/submitSlice';
 import fetchTableList from '../../lib/supabase/func/fetchTableList';
+import MainPageOrderTab from './MainPageOrderTab';
+import MainPageMenuTab from './MainPageMenuTab';
+import MainPageTableTab from './MainPageTableTab';
 
-import { motion } from 'motion/react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useQueries, useQuery } from '@tanstack/react-query';
-import { useEffect, useRef, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
-import { getEditKonvaTableId } from '../../lib/features/konvaState/konvaSlice';
-import { getClientTableList } from '../../lib/features/itemState/itemSlice';
+import { useQueries } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
 // customer
 // 고객이 서버로 속성 항목에 맞춰 보냄
@@ -52,12 +43,8 @@ import { getClientTableList } from '../../lib/features/itemState/itemSlice';
 export default function MainPageList() {
   // useSelector
   const tab = useSelector((state) => state.tabState.state);
-  const type = useSelector((state) => state.tabState.state);
-  const selectedCategory = useSelector((state) => state.categoryState);
+  // const type = useSelector((state) => state.tabState.state);
   const isSubmit = useSelector((state) => state.submitState.isSubmit);
-  const konvaEditType = useSelector((state) => state.konvaState.type);
-  const konvaEditisAble = useSelector((state) => state.konvaState.isAble);
-  const konvaEditisEditing = useSelector((state) => state.konvaState.isEditing);
   // useQueries
   const [allOrderList, tableList] = useQueries({
     queries: [
@@ -77,16 +64,6 @@ export default function MainPageList() {
       },
     ],
   });
-  // useRef
-  const tableBoxRef = useRef(null);
-  // useState
-  const [stageSize, setStageSize] = useState({
-    stageWidth: 0,
-    stageHeight: 0,
-  });
-  const [clientTableList, setClientTableList] = useState([]);
-  const [openKonva, setOpenKonva] = useState(false);
-
   // useDispatch
   const dispatch = useDispatch();
 
@@ -96,152 +73,15 @@ export default function MainPageList() {
     dispatch(changeSubmitState({ isSubmit: false }));
   }, [tab, allOrderList]);
 
-  useEffect(() => {
-    // konva Stage 크기 설정
-    if (tab !== 'table' || !tableBoxRef.current) return;
-
-    // konva 너비 높이 할당
-    setStageSize(() => ({
-      stageWidth: tableBoxRef.current.clientWidth,
-      stageHeight: tableBoxRef.current.clientHeight,
-    }));
-
-    // konva 너비 높이 리사이즈
-    function onResizeStageSize() {
-      setStageSize(() => ({
-        stageWidth: tableBoxRef.current.clientWidth,
-        stageHeight: tableBoxRef.current.clientHeight,
-      }));
-    }
-    window.addEventListener('resize', onResizeStageSize);
-
-    return () => {
-      window.removeEventListener('resize', onResizeStageSize);
-    };
-  }, [tab, tableBoxRef]);
-
-  useEffect(() => {
-    // konva 데이터 패치 완료 여부, 편집 중이면 반환
-    if (tab !== 'table' || !tableBoxRef.current || !tableList.isFetched || konvaEditisEditing) return;
-    const isValideToOpen = tableBoxRef.current && tableList.data;
-    setOpenKonva(isValideToOpen);
-    setClientTableList(tableList.data);
-  }, [tab, tableBoxRef, tableList, konvaEditisEditing]);
-
-  useEffect(() => {
-    // konva edit 실행
-    if (tab !== 'table') return;
-    switch (konvaEditType) {
-      case 'create': {
-        // 좌석 생성
-        const newTable = {
-          id: uuidv4(),
-          init: {
-            x: stageSize.stageWidth / 2,
-            y: stageSize.stageHeight / 2,
-            rec: { width: 170, height: 130 },
-            tableText: {
-              width: 100,
-            },
-            bottom: {
-              y: 90,
-              line: { points: [0, 0, 130, 0] },
-              priceText: {
-                width: 130,
-              },
-            },
-          },
-          tableName: `테이블 ${clientTableList.length + 1}`,
-          orderList: [],
-        };
-        setClientTableList((prev) => [...prev, newTable]);
-        dispatch(getEditKonvaTableId({ id: newTable.id }));
-        return;
-      }
-      default: {
-        return;
-      }
-    }
-  }, [tab, konvaEditType, konvaEditisAble]);
-
-  useEffect(() => {
-    // clientTableList 배열 업데이트 되면 추가된 테이블 전달
-    if (!clientTableList.length) return;
-    dispatch(getClientTableList({ clientTableList }));
-  }, [clientTableList]);
-
-  // motion
-  const ul_motion = {
-    load: {},
-    notLoad: {},
-  };
-
-  switch (type) {
+  switch (tab) {
     case 'menu': {
-      return (
-        <>
-          <motion.ul className={styles.listBox} variants={ul_motion} initial={'notLoad'} animate={'load'}>
-            <MenuList />
-          </motion.ul>
-          <AddMenuModal />
-        </>
-      );
+      return <MainPageMenuTab />;
     }
     case 'table': {
-      return (
-        <div className={styles.listBox} ref={tableBoxRef}>
-          {openKonva && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-              <TableDraw
-                stageSize={stageSize}
-                tableList={clientTableList}
-                setClientTableList={setClientTableList}
-              />
-            </motion.div>
-          )}
-        </div>
-      );
+      return <MainPageTableTab tableList={tableList} />;
     }
     case 'order': {
-      const swiper_motion = {
-        active: {
-          y: 0,
-          opacity: 1,
-        },
-        notActive: {
-          y: -10,
-          opacity: 0,
-        },
-      };
-
-      return (
-        <>
-          {selectedCategory.id === 1 ? (
-            <>
-              {allOrderList.data && !allOrderList.isFetching ? (
-                <OrderListSwiper
-                  orderList={allOrderList.data.filter((list) => !list.isDone)}
-                  swiper_motion={swiper_motion}
-                />
-              ) : (
-                <Loader />
-              )}
-            </>
-          ) : (
-            <>
-              {allOrderList.data && !allOrderList.isFetching ? (
-                <CompletedOrderListSwiper
-                  orderList={allOrderList.data.filter((list) => list.isDone)}
-                  swiper_motion={swiper_motion}
-                />
-              ) : (
-                <Loader />
-              )}
-            </>
-          )}
-          <ConfirmModal />
-        </>
-      );
+      return <MainPageOrderTab allOrderList={allOrderList} />;
     }
   }
 }

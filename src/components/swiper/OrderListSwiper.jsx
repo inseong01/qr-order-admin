@@ -2,6 +2,7 @@ import styles from '@/style/swiper/OrderListSwiper.module.css';
 import MiddleBox from '../middle/MiddleBox';
 import { changeModalState } from '@/lib/features/modalState/modalSlice';
 import { getOrderListInfo, getSelectedListId } from '@/lib/features/itemState/itemSlice';
+import { changeSubmitMsgType } from '../../lib/features/submitState/submitSlice';
 
 import { motion, AnimatePresence } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
@@ -54,6 +55,7 @@ export default function OrderListSwiper({ orderList, swiper_motion }) {
   function onClickUpdateListStatus(list) {
     return () => {
       if (preventSubmit) return;
+      dispatch(changeSubmitMsgType({ msgType: 'update' }));
       dispatch(changeModalState({ isOpen: true, type: 'update' }));
       dispatch(getOrderListInfo({ list }));
     };

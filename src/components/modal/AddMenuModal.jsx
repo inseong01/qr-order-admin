@@ -1,8 +1,7 @@
-'use client';
-
 import styles from '@/style/modal/AddMenuModal.module.css';
 import { resetItemState } from '@/lib/features/itemState/itemSlice';
 import { changeModalState } from '@/lib/features/modalState/modalSlice';
+import getTabCategory from '@/lib/supabase/func/getTabCategory';
 import ModalFormState from './modalFormState';
 
 import { useEffect, useRef, useState } from 'react';
