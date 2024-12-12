@@ -45,7 +45,7 @@ export default function WidgetMenu({ clicked, isEdited, setIsEdited, isClickEdit
   }
 
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence>
       {clicked && (
         <motion.ul
           key={'widgetMenuList'}
@@ -58,7 +58,7 @@ export default function WidgetMenu({ clicked, isEdited, setIsEdited, isClickEdit
           <motion.li className={styles.list} variants={menu}>
             <div className={styles.iconBox} onClick={onClickEditor}>
               <div className={styles.box}>
-                <AnimatePresence mode="wait">
+                <AnimatePresence>
                   {!isEdited ? (
                     <motion.img
                       src={'/img/edit-icon.png'}

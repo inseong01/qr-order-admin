@@ -36,21 +36,33 @@ export default function WidgetTableCategory({ isClickEditor }) {
             animate={'clicked'}
             exit={'notClicked'}
           >
-            <motion.li className={styles.option} variants={option} onClick={onClickEnableEditTable('create')}>
+            <motion.li
+              className={`${styles.option} ${editTableType === 'create' ? styles.currentOpt : ''}`}
+              variants={option}
+              onClick={onClickEnableEditTable('create')}
+            >
               <span className={styles.iconBox}>
-                <span className={styles.textBox}>테이블 생성</span>
+                <span className={styles.textBox}>생성</span>
                 {/* <img src={'/img/shapes-icon.png'} alt="모형 추가" style={{ width: 20, height: 20 }} /> */}
               </span>
             </motion.li>
-            <motion.li className={styles.option} variants={option} onClick={onClickEnableEditTable('update')}>
+            <motion.li
+              className={`${styles.option} ${editTableType === 'update' ? styles.currentOpt : ''}`}
+              variants={option}
+              onClick={onClickEnableEditTable('update')}
+            >
               <span className={styles.iconBox}>
-                <span className={styles.textBox}>테이블 수정</span>
+                <span className={styles.textBox}>수정</span>
                 {/* <img src={'/img/shapes-icon.png'} alt="모형 추가" style={{ width: 20, height: 20 }} /> */}
               </span>
             </motion.li>
-            <motion.li className={styles.option} variants={option} onClick={onClickEnableEditTable('delete')}>
+            <motion.li
+              className={`${styles.option} ${editTableType === 'delete' ? styles.currentOpt : ''}`}
+              variants={option}
+              onClick={onClickEnableEditTable('delete')}
+            >
               <span className={styles.iconBox}>
-                <span className={styles.textBox}>테이블 삭제</span>
+                <span className={styles.textBox}>삭제</span>
                 {/* <img src={'/img/shapes-icon.png'} alt="모형 추가" style={{ width: 20, height: 20 }} /> */}
               </span>
             </motion.li>

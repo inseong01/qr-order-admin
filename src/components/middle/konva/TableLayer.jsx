@@ -1,7 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Group, Line, Rect, Text, Transformer } from 'react-konva';
 
 export default function TableLayer({
+  stage,
   table,
   setClientTableList,
   konvaEditTableIdArr,
@@ -12,6 +13,7 @@ export default function TableLayer({
   const totalPrice = orderList.reduce((prev, list) => prev + Number(list.price), 0).toLocaleString();
   const isTransformerAble = id === konvaEditTableIdArr[0] && konvaEditType !== 'delete';
   const isSelectedToDelete = konvaEditType === 'delete' && konvaEditTableIdArr.includes(id);
+  const stageAttrs = stage.current.attrs;
   const blockSize = 10;
   // useRef
   const shapeRef = useRef(null);
@@ -32,9 +34,8 @@ export default function TableLayer({
         if (table.id === konvaEditTableIdArr[0]) {
           let newPosX = Math.round(lastPs.x / blockSize) * blockSize;
           let newPosY = Math.round(lastPs.y / blockSize) * blockSize;
-          newPosX = Math.max(10, Math.min(newPosX, 1323 - init.rec.width - 10)); // stageWidth 임의 설정
-          newPosY = Math.max(10, Math.min(newPosY, 664 - init.rec.height - 10)); // stageHeight 임의 설정
-          console.log(newPosX, newPosY);
+          newPosX = Math.max(10, Math.min(newPosX, stageAttrs.width - init.rec.width - 10)); // stageWidth 임의 설정
+          newPosY = Math.max(10, Math.min(newPosY, stageAttrs.height - init.rec.height - 10)); // stageHeight 임의 설정
           return {
             ...table,
             init: {
@@ -96,7 +97,7 @@ export default function TableLayer({
     const newBoxPosX = Math.round(newBox.x);
     const newBoxWidth = Math.round(newBox.width);
     const oldBoxPosX = Math.round(oldBox.x);
-    if (newBox.width < 169 || newBoxPosX !== oldBoxPosX || newBoxWidth + newBoxPosX > 1323 - 9) {
+    if (newBox.width < 169 || newBoxPosX !== oldBoxPosX || newBoxWidth + newBoxPosX > stageAttrs.width - 9) {
       // stageWidth 임의 설정
       return oldBox;
     }
@@ -104,7 +105,11 @@ export default function TableLayer({
     const newBoxPosY = Math.round(newBox.y);
     const newBoxHeight = Math.round(newBox.height);
     const oldBoxPosY = Math.round(oldBox.y);
-    if (newBox.height < 129 || newBoxPosY !== oldBoxPosY || newBoxHeight + newBoxPosY > 664 - 9) {
+    if (
+      newBox.height < 129 ||
+      newBoxPosY !== oldBoxPosY ||
+      newBoxHeight + newBoxPosY > stageAttrs.height - 9
+    ) {
       // stageHeight 임의 설정
       return oldBox;
     }
@@ -113,6 +118,7 @@ export default function TableLayer({
 
   function onClickSelectTable() {
     if (konvaEditType === 'update') {
+      stage.current.container().style.cursor = 'move';
       selectTableId([id]);
     } else if (konvaEditType === 'delete') {
       selectTableId((prev) => {
@@ -124,6 +130,20 @@ export default function TableLayer({
     }
   }
 
+  function onMouseEnterChangePointer() {
+    if (konvaEditType === '') return;
+    if (konvaEditType === 'delete' || konvaEditType === 'update') {
+      stage.current.container().style.cursor = 'pointer';
+      return;
+    } else if (isTransformerAble) {
+      stage.current.container().style.cursor = 'move';
+    }
+  }
+
+  function onMouseLeaveChangePointer() {
+    stage.current.container().style.cursor = 'default';
+  }
+
   return (
     <Group
       key={id}
@@ -133,6 +153,8 @@ export default function TableLayer({
       draggable={isTransformerAble}
       onDragEnd={changeTablePosition}
       onClick={onClickSelectTable}
+      onMouseEnter={onMouseEnterChangePointer}
+      onMouseLeave={onMouseLeaveChangePointer}
     >
       <Group>
         <Rect

@@ -14,7 +14,7 @@
   gap: 10px;
 }
 
-.editorOption .option {
+.option {
   width: 55px;
   height: 55px;
   border-radius: 50%;
@@ -28,8 +28,13 @@
   color: #209fff;
 }
 
+.currentOpt {
+  background-color: #209fff;
+  color: white;
+}
+
 .textBox {
-  line-height: 19px;
+  line-height: 22px;
   font-size: 13px;
   font-weight: 600;
 }

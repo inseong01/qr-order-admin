@@ -27,7 +27,7 @@ export default function ModalFormState({ categoryList }) {
 
   // 제출 완료 되면 모달 닫기
   useEffect(() => {
-    if (tab === 'menu' && submitStatus === 'fulfilled') {
+    if (tab === 'menu' && isSubmit && submitStatus === 'fulfilled') {
       dispatch(changeModalState({ isOpen: false }));
       // dispatch(resetSubmitState()); // alertMsg 나오지 않았던 원인
     }
@@ -54,7 +54,6 @@ export default function ModalFormState({ categoryList }) {
       const method = e.nativeEvent.submitter.name;
       e.preventDefault();
       if (isSubmit) return;
-      // dispatch(changeSubmitMsgType({ table }));
       dispatch(changeSubmitMsgType({ msgType: modalType.split('-')[0] }));
       switch (modalType) {
         case 'delete-category': {

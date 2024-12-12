@@ -37,9 +37,10 @@ export default function Widget() {
       dispatch(resetItemState());
       dispatch(resetKonvaState());
       setIsEdited(false);
+      return;
     }
-    setClicked((prev) => !prev);
     setIsClickEditor(false);
+    setClicked((prev) => !prev);
   }
 
   return (

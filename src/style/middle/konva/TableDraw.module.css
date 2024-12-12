@@ -1,3 +1,18 @@
-.stage {
-  /* background-color: white; 임시 */
+.stage::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  content: '';
+
+  border: 1px solid #74c6f58c;
+  border-radius: 10px;
+
+  opacity: 0;
+  /* transition: 0.3s; */
+}
+
+.stage.editStroke::before {
+  opacity: 1;
 }
