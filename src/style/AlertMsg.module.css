@@ -96,4 +96,23 @@
   line-break: anywhere;
   line-height: 23px;
   text-align: left;
+
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.cate {
+  color: white;
+  font-size: 13px;
+  padding: 0 8px;
+  border: 1px solid #4caff8;
+  color: #4caff8;
+  /* background-color: #67bfff; */
+  border-radius: 5px;
+  font-weight: 600;
+
+  display: block;
+  height: auto;
+  width: max-content;
 }

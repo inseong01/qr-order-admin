@@ -1,8 +1,9 @@
 import fetchMenuItem from "@/lib/supabase/func/fetchMenuItem";
-import updateOrderListStatus from "@/lib/supabase/func/updateOrderListStatus";
+import fetchTableList from "../../supabase/func/fetchTableList";
+import fetchTableRequestList from "../../supabase/func/fetchTableRequestList";
+import fetchOrderList from "../../supabase/func/fetchOrderList";
 
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import fetchTableList from "../../supabase/func/fetchTableList";
 
 const initialState = {
   isSubmit: false,
@@ -24,8 +25,8 @@ export const fetchFormData = createAsyncThunk(
 
 export const fetchOrderListStatus = createAsyncThunk(
   'submitState/fetchOrderListState',
-  async ({ list, selectedListId }) => {
-    const result = await updateOrderListStatus(list, selectedListId)
+  async ({ method, data }) => {
+    const result = await fetchOrderList(method, data)
     if (result.error?.code) throw new Error(result.error.message);
     return result;
   }
@@ -40,9 +41,12 @@ export const fetchTableListData = createAsyncThunk(
   }
 )
 
-export const fetchDeleteList = createAsyncThunk(
-  'submitState/fetchDeleteList',
-  async () => { }
+export const fetchUpdateAlertMsg = createAsyncThunk(
+  'submitState/fetchUpdateAlertMsg',
+  async ({ method, id }) => {
+    const result = await fetchTableRequestList(method, id)
+    return result;
+  }
 )
 
 const submitSlice = createSlice({
@@ -146,6 +150,27 @@ const submitSlice = createSlice({
       }
     })
     builder.addCase(fetchTableListData.rejected, (state, action) => {
+      const callCount = state.callCount + 1;
+      const preventSubmit = callCount >= 5 ? true : false;
+      console.error(action.error.message)
+      return {
+        ...state,
+        isSubmit: false,
+        status: 'rejected',
+        callCount,
+        alertType: 'list',
+        isError: preventSubmit
+      }
+    })
+    // fetchUpdateAlertMsg
+    builder.addCase(fetchUpdateAlertMsg.pending, (state, action) => {
+      return {
+        ...state,
+        isSubmit: true,
+        status: 'pending',
+      }
+    })
+    builder.addCase(fetchUpdateAlertMsg.rejected, (state, action) => {
       const callCount = state.callCount + 1;
       const preventSubmit = callCount >= 5 ? true : false;
       console.error(action.error.message)

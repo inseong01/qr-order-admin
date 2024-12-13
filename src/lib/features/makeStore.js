@@ -5,6 +5,7 @@ import submitSliceReducer from '@/lib/features/submitState/submitSlice.js'
 import itemSliceReducer from '@/lib/features/itemState/itemSlice.js'
 import categorySliceReducer from '@/lib/features/categoryState/categorySlice.js'
 import konvaSliceReducer from '@/lib/features/konvaState/konvaSlice.js'
+import realtimeSliceReducer from '@/lib/features/realtimeState/realtimeSlice.js'
 
 export default function makeStore() {
   return configureStore({
@@ -15,6 +16,7 @@ export default function makeStore() {
       itemState: itemSliceReducer,
       categoryState: categorySliceReducer,
       konvaState: konvaSliceReducer,
+      realtimeState: realtimeSliceReducer,
     }
   })
 }

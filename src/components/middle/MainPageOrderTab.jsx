@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 export default function MainPageOrderTab({ allOrderList }) {
   // useSelector
   const selectedCategory = useSelector((state) => state.categoryState);
+
   // motion
   const swiper_motion = {
     active: {

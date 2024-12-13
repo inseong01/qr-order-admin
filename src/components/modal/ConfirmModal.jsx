@@ -1,5 +1,5 @@
 import styles from '@/style/modal/ConfirmModal.module.css';
-import { fetchOrderListStatus, resetSubmitState } from '@/lib/features/submitState/submitSlice';
+import { fetchOrderListStatus } from '@/lib/features/submitState/submitSlice';
 import { changeModalState } from '@/lib/features/modalState/modalSlice';
 import { resetItemState } from '@/lib/features/itemState/itemSlice';
 
@@ -11,9 +11,9 @@ export default function ConfirmModal() {
   // useSelector
   const tab = useSelector((state) => state.tabState.state);
   const orderList = useSelector((state) => state.itemState.list);
-  const selectedListId = useSelector((state) => state.itemState.selectedListId);
   const submitStatus = useSelector((state) => state.submitState.status);
-  const context = orderList.id === selectedListId ? '삭제' : '완료';
+  const submitMsgType = useSelector((state) => state.submitState.msgType);
+  const context = submitMsgType === 'delete' ? '삭제' : '완료';
   // useRef
   const modalRef = useRef(null);
   // useSelector
@@ -34,7 +34,7 @@ export default function ConfirmModal() {
           return;
         }
         case 'yes': {
-          dispatch(fetchOrderListStatus({ list: orderList, selectedListId }));
+          dispatch(fetchOrderListStatus({ method: submitMsgType, data: orderList }));
           dispatch(changeModalState({ isOpen: false }));
           return;
         }

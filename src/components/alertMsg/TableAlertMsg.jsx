@@ -1,21 +1,28 @@
 import styles from '@/style/AlertMsg.module.css';
+import { fetchUpdateAlertMsg } from '../../lib/features/submitState/submitSlice';
+import fetchTableRequestList from '../../lib/supabase/func/fetchTableRequestList';
 
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useQuery } from '@tanstack/react-query';
-import fetchTableRequestList from '../../lib/supabase/func/fetchTableRequestList';
-import useGetRealtimeData from '../../lib/hook/useGetRealtimeData';
 
 export default function TableAlertMsg() {
   // useState
   const [requestAlertList, setRequestAlertList] = useState([]);
-  const { data } = useGetRealtimeData();
-
+  const [id, selectId] = useState('');
+  // useSelector
+  const tab = useSelector((state) => state.tabState.state);
+  const submitStatus = useSelector((state) => state.submitState.status);
+  const submitIsError = useSelector((state) => state.submitState.isError);
+  const requestTrigger = useSelector((state) => state.realtimeState.tableRequestList.trigger);
   // useRef
   const reqeustMsgRef = useRef(null);
+  // useDispatch
+  const dispatch = useDispatch();
   // useQuery
   const requestList = useQuery({
-    queryKey: ['requestList', data],
+    queryKey: ['requestList', requestTrigger],
     queryFn: () => fetchTableRequestList('select'),
     initialData: [],
   });
@@ -27,54 +34,57 @@ export default function TableAlertMsg() {
     setRequestAlertList(notReadMsg);
   }, [requestList.isFetching, requestList.data]);
 
+  // 알림 치우기
   useEffect(() => {
-    // 삽입 이벤트
-    console.log('insert, data: ', data);
-    // 업데이트 이벤트
-    console.log('update, data: ', data.new);
-    // data가 나오면 useQuery 동작
-  }, [data]);
+    if (id && submitStatus === 'fulfilled') {
+      setRequestAlertList((prev) => prev.filter((msg) => msg.id !== id));
+    }
+  }, [id, submitStatus]);
 
   function onClickReadMsg(list) {
-    // idx -> 추후 key로 변경
-    return async () => {
-      const result = await fetchTableRequestList('update', list.id);
-      // 오류 발생 시 null 반환, 비동기라 redux 사용하여 alertMsg 출력
-      console.log('result: ', result);
+    return () => {
+      // 오류 발생 시 alert on/off 기능 생성
+      if (submitIsError) return;
+      dispatch(fetchUpdateAlertMsg({ method: 'update', id: list.id }));
+      selectId(list.id);
     };
   }
 
   return (
-    <div className={styles.reqeustMsgWrap} ref={reqeustMsgRef}>
-      <motion.ul className={styles.reqeustMsg}>
-        <AnimatePresence mode="popLayout">
-          {requestList.isFetched &&
-            requestAlertList.map((list, idx) => {
-              return (
-                <motion.li
-                  key={list.id}
-                  className={styles.msg}
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0.8, opacity: 0 }}
-                  layout
-                >
-                  <div className={styles.top}>
-                    <div className={styles.title}>{list.tableName}</div>
-                    <div className={styles.closeBtn} onClick={onClickReadMsg(list)}>
-                      <img src="/img/close-icon.png" alt="닫기" />
+    <>
+      {tab === 'table' && requestAlertList.length > 0 && (
+        <div className={styles.reqeustMsgWrap} ref={reqeustMsgRef}>
+          <motion.ul className={styles.reqeustMsg}>
+            <AnimatePresence mode="popLayout">
+              {requestAlertList.map((list, idx) => {
+                return (
+                  <motion.li
+                    key={list.id}
+                    className={styles.msg}
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.8, opacity: 0 }}
+                    layout
+                  >
+                    <div className={styles.top}>
+                      <div className={styles.title}>{list.tableName}</div>
+                      <div className={styles.closeBtn} onClick={onClickReadMsg(list)}>
+                        <img src="/img/close-icon.png" alt="닫기" />
+                      </div>
                     </div>
-                  </div>
-                  <div className={styles.bottom}>
-                    <span>요청사항:</span>
-                    <br />
-                    <span>{list.requestList}</span>
-                  </div>
-                </motion.li>
-              );
-            })}
-        </AnimatePresence>
-      </motion.ul>
-    </div>
+                    <div className={styles.bottom}>
+                      <div>
+                        <span className={styles.cate}>요청</span>
+                      </div>
+                      <span>{list.requestList}</span>
+                    </div>
+                  </motion.li>
+                );
+              })}
+            </AnimatePresence>
+          </motion.ul>
+        </div>
+      )}
+    </>
   );
 }

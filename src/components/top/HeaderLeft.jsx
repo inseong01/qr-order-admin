@@ -1,19 +1,20 @@
 import styles from '@/style/top/HeaderLeft.module.css';
 import { resetCategoryState } from '@/lib/features/categoryState/categorySlice';
 import { changeModalState } from '@/lib/features/modalState/modalSlice';
-
-import { AnimatePresence, motion } from 'motion/react';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import HeaderCategorySwiper from '../swiper/HeaderCategorySwiper';
 
-export default function HeaderLeft({ tabCategory, tab, orderList }) {
+import { useEffect } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
+import { useDispatch, useSelector } from 'react-redux';
+
+export default function HeaderLeft({ tabCategory, tab, allOrderList }) {
   let title = '';
-  // useDispatch
-  const dispatch = useDispatch();
   // useSelector
   const isModalOpen = useSelector((state) => state.modalState.isOpen);
   const submitError = useSelector((state) => state.submitState.isError);
+
+  // useDispatch
+  const dispatch = useDispatch();
 
   useEffect(() => {
     // 탭 변경 시 동작
@@ -42,7 +43,10 @@ export default function HeaderLeft({ tabCategory, tab, orderList }) {
     <AnimatePresence>
       {!tabCategory.isFetching ? (
         <div className={styles.left}>
-          <HeaderCategorySwiper tabCategory={tabCategory.data} orderList={orderList} />
+          <HeaderCategorySwiper
+            tabCategory={tabCategory.data}
+            orderList={allOrderList.filter((list) => !list.isDone)}
+          />
           {tab === 'menu' && (
             <div className={styles.addCategoryBox} onClick={onClickOpenModal}>
               <motion.div

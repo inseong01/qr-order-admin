@@ -44,6 +44,11 @@ export default function WidgetMenu({ clicked, isEdited, setIsEdited, isClickEdit
     }
   }
 
+  function onClickAlertEditor() {
+    // 알림 끄기/켜기 상태관리
+    // Redux 사용?
+  }
+
   return (
     <AnimatePresence>
       {clicked && (
@@ -56,6 +61,35 @@ export default function WidgetMenu({ clicked, isEdited, setIsEdited, isClickEdit
           exit={'notClicked'}
         >
           <motion.li className={styles.list} variants={menu}>
+            <div className={styles.iconBox} onClick={onClickEditor}>
+              <div className={styles.box}>
+                <AnimatePresence>
+                  {!isEdited ? (
+                    <motion.img
+                      src={'/img/edit-icon.png'}
+                      alt="편집"
+                      style={{ width: 20, height: 20 }}
+                      key={'box1'}
+                      initial={{ x: 20 }}
+                      animate={{ x: 0 }}
+                      exit={{ x: -20 }}
+                      transition={{ duration: 0.3, ease: 'easeOut' }}
+                    />
+                  ) : (
+                    <motion.img
+                      src={'/img/checkmark.png'}
+                      alt="편집 저장"
+                      style={{ width: 20, height: 20 }}
+                      key={'box2'}
+                      initial={{ x: 20 }}
+                      animate={{ x: 0 }}
+                      exit={{ x: -20 }}
+                      transition={{ duration: 0.3, ease: 'easeOut' }}
+                    />
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
             <div className={styles.iconBox} onClick={onClickEditor}>
               <div className={styles.box}>
                 <AnimatePresence>

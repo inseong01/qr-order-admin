@@ -1,4 +1,3 @@
-import getAllOrderList from '@/lib/supabase/func/getAllOrderList';
 import { changeSubmitState } from '@/lib/features/submitState/submitSlice';
 import fetchTableList from '../../lib/supabase/func/fetchTableList';
 import MainPageOrderTab from './MainPageOrderTab';
@@ -8,6 +7,7 @@ import MainPageTableTab from './MainPageTableTab';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQueries } from '@tanstack/react-query';
 import { useEffect } from 'react';
+import fetchOrderList from '../../lib/supabase/func/fetchOrderList';
 
 // customer
 // 고객이 서버로 속성 항목에 맞춰 보냄
@@ -43,19 +43,15 @@ import { useEffect } from 'react';
 export default function MainPageList() {
   // useSelector
   const tab = useSelector((state) => state.tabState.state);
-  // const type = useSelector((state) => state.tabState.state);
+  const trigger = useSelector((state) => state.realtimeState.allOrderList.trigger);
   const isSubmit = useSelector((state) => state.submitState.isSubmit);
   // useQueries
   const [allOrderList, tableList] = useQueries({
     queries: [
       {
-        // 배열 업데이트 적용하기
-        queryKey: ['allOrderList', isSubmit],
-        queryFn: () => getAllOrderList('order'),
-        enabled: tab === 'table' || tab === 'order',
-        select: (data) => {
-          return data.sort((a, b) => a.orderNum - b.orderNum);
-        },
+        queryKey: ['allOrderList', trigger],
+        queryFn: () => fetchOrderList('select'),
+        initialData: [],
       },
       {
         queryKey: ['tableList', isSubmit],

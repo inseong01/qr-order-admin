@@ -5,7 +5,7 @@ import { getOrderListInfo, getSelectedListId } from '@/lib/features/itemState/it
 import { changeSubmitMsgType } from '../../lib/features/submitState/submitSlice';
 
 import { motion, AnimatePresence } from 'motion/react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import Swiper from 'swiper';
 import { Pagination, Grid } from 'swiper/modules';
 import 'swiper/css';
@@ -14,13 +14,12 @@ import 'swiper/css/grid';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function OrderListSwiper({ orderList, swiper_motion }) {
-  // useState
-  const selectedListId = useSelector((state) => state.itemState.selectedListId);
   // useRef
   const orderListRef = useRef(null);
   // useDispatch
   const dispatch = useDispatch();
   // useSelector
+  const selectedListId = useSelector((state) => state.itemState.selectedListId);
   const preventSubmit = useSelector((state) => state.submitState.isError);
 
   useEffect(() => {
@@ -55,7 +54,8 @@ export default function OrderListSwiper({ orderList, swiper_motion }) {
   function onClickUpdateListStatus(list) {
     return () => {
       if (preventSubmit) return;
-      dispatch(changeSubmitMsgType({ msgType: 'update' }));
+      const method = selectedListId === list.id ? 'delete' : 'update';
+      dispatch(changeSubmitMsgType({ msgType: method }));
       dispatch(changeModalState({ isOpen: true, type: 'update' }));
       dispatch(getOrderListInfo({ list }));
     };

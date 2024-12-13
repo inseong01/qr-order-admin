@@ -1,20 +1,21 @@
 import supabase from "../supabaseConfig";
 
+// "update"
 // {
-//   "schema": "public",
-//   "table": "qr-order-request-list",
-//   "commit_timestamp": "2024-12-12T09:10:34.427Z",
-//   "eventType": "INSERT",
-//   "new": {
-//     "created_at": "2024-12-12T09:10:18+00:00",
-//     "id": "9fd55caf-1905-4bcc-b111-d978fb9fbe57",
-//     "isRead": false,
-//     "requestList": "물",
-//     "tableId": "20c7dddb-d26e-43a4-8aca-f5f71863dc79",
-//     "tableName": "테이블 1"
-//   },
-//   "old": {},
-//   "errors": null
+//   "error": null,
+//   "data": [
+//     {
+//       "id": "16df3041-63db-4489-8223-0a7e9a9cb95c",
+//       "created_at": "2024-12-13T01:36:39+00:00",
+//       "requestList": "물",
+//       "tableId": "20c7dddb-d26e-43a4-8aca-f5f71863dc79",
+//       "tableName": "테이블 1",
+//       "isRead": true
+//     }
+//   ],
+//   "count": null,
+//   "status": 200,
+//   "statusText": ""
 // }
 
 export default async function fetchTableRequestList(method, id) {
@@ -22,14 +23,21 @@ export default async function fetchTableRequestList(method, id) {
   switch (method) {
     case 'select': {
       const response = await supabase.from('qr-order-request-list').select('*');
-      return response.data
+      if (response.status !== 200) {
+        console.error(response.error.message);
+        return [];
+      }
+      return response.data;
     }
     case 'update': {
-      const response = await supabase.from('qr-order-request-list').update({ 'isRead': true }).eq('id', id).select();
-      return response.data
+      const response = await supabase.from('qr-order-request-list').update({ 'isRead': true }).eq('i', id).select();
+      if (response.status !== 200) {
+        throw new Error(response.error.message);
+      }
+      return response;
     }
     default: {
-      throw new Error(`"${method} : Method is not defined!"`)
+      throw new Error(`"${method} : Method is not defined!"`);
     }
   }
 }
