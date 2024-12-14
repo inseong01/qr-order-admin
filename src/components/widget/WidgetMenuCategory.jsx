@@ -19,7 +19,7 @@ export default function WidgetMenuCategory({ isClickEditor }) {
 
   return (
     <motion.div className={styles.optionListBox}>
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         {isClickEditor && (
           <motion.ul
             key={'optionList'}

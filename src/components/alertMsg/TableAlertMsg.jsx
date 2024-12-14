@@ -11,11 +11,13 @@ export default function TableAlertMsg() {
   // useState
   const [requestAlertList, setRequestAlertList] = useState([]);
   const [id, selectId] = useState('');
+  const [alertOn, setAlertOn] = useState(false);
   // useSelector
   const tab = useSelector((state) => state.tabState.state);
   const submitStatus = useSelector((state) => state.submitState.status);
   const submitIsError = useSelector((state) => state.submitState.isError);
   const requestTrigger = useSelector((state) => state.realtimeState.tableRequestList.trigger);
+  const requestAlertOn = useSelector((state) => state.realtimeState.tableRequestList.isOn);
   // useRef
   const reqeustMsgRef = useRef(null);
   // useDispatch
@@ -41,6 +43,12 @@ export default function TableAlertMsg() {
     }
   }, [id, submitStatus]);
 
+  useEffect(() => {
+    if (tab === 'table' && requestAlertList.length > 0) {
+      setAlertOn(requestAlertOn);
+    }
+  }, [tab, requestAlertList, requestAlertOn]);
+
   function onClickReadMsg(list) {
     return () => {
       // 오류 발생 시 alert on/off 기능 생성
@@ -51,9 +59,15 @@ export default function TableAlertMsg() {
   }
 
   return (
-    <>
-      {tab === 'table' && requestAlertList.length > 0 && (
-        <div className={styles.reqeustMsgWrap} ref={reqeustMsgRef}>
+    <AnimatePresence>
+      {alertOn && (
+        <motion.div
+          className={styles.reqeustMsgWrap}
+          ref={reqeustMsgRef}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
           <motion.ul className={styles.reqeustMsg}>
             <AnimatePresence mode="popLayout">
               {requestAlertList.map((list, idx) => {
@@ -83,8 +97,8 @@ export default function TableAlertMsg() {
               })}
             </AnimatePresence>
           </motion.ul>
-        </div>
+        </motion.div>
       )}
-    </>
+    </AnimatePresence>
   );
 }

@@ -161,4 +161,16 @@
   - DB 실시간 구독 함수 커스텀훅 처리
   - 에러 처리 코드 개선: fetchTableRequestList
 
-<--- 에러 처리 코드 개선, 컴포넌트 코드 개선 --->
+24.12.14.
+  - 에러 처리 코드 개선: fetchTableList, fetchOrderList, fetchMenuItem, getMenuList, getTabCategory, getTabMenu
+    ->> 오류 던짐(useQuery 재요청), select는 js 파일에서 console.error 처리, 그외 이벤트는 submitSlice 파일에서 console.error 처리 
+  - 화면 에러 처리: menuList, MainPageTableTab, MainPageOrderTab
+  - motion variant 파일 export, 변수 import 처리
+  - 위젯 상태관리 redux 적용
+  - 테이블 요청 알림 on/off 토글 구현
+
+  - 위젯 세부항목 애니메이션 미적용 이유 추정
+    : WidgetCategoryList에서 여러 컴포넌트를 switch 문으로 전환하기 때문에 애니메이션 적용 오류?
+    : 컴포넌트 분리되어 있어 animatePresence 연계계 감지 어려움? 
+
+<--- 위젯 컴포넌트 개선, 테이블 요청 알림 토글 위젯 스타일링, 컴포넌트 코드 개선 --->

@@ -3,6 +3,7 @@ import MiddleBox from '../middle/MiddleBox';
 import { changeModalState } from '@/lib/features/modalState/modalSlice';
 import { getOrderListInfo, getSelectedListId } from '@/lib/features/itemState/itemSlice';
 import { changeSubmitMsgType } from '../../lib/features/submitState/submitSlice';
+import { swiper_motion } from '../../lib/motion/motion_mainPageOrderTab';
 
 import { motion, AnimatePresence } from 'motion/react';
 import { useEffect, useRef } from 'react';
@@ -13,7 +14,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/grid';
 import { useDispatch, useSelector } from 'react-redux';
 
-export default function OrderListSwiper({ orderList, swiper_motion }) {
+export default function OrderListSwiper({ orderList }) {
   // useRef
   const orderListRef = useRef(null);
   // useDispatch

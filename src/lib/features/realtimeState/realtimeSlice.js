@@ -6,6 +6,7 @@ const initialState = {
   },
   tableRequestList: {
     trigger: false,
+    isOn: true
   },
 }
 
@@ -30,9 +31,18 @@ const realtimeSlice = createSlice({
           trigger: !state.tableRequestList.trigger
         }
       }
+    },
+    setTableRequestListAlertOn: (state) => {
+      const isOn = !(state.tableRequestList.isOn)
+      return {
+        ...state,
+        tableRequestList: {
+          isOn
+        }
+      }
     }
   }
 })
 
-export const { setAllOrderListTrigger, setTableRequestListTrigger } = realtimeSlice.actions;
+export const { setAllOrderListTrigger, setTableRequestListTrigger, setTableRequestListAlertOn } = realtimeSlice.actions;
 export default realtimeSlice.reducer;

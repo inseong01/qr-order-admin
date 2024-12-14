@@ -17,7 +17,7 @@ export default function HeaderRight({ tabCategory }) {
   return (
     <ul className={styles.right}>
       <li className={styles.time}>{!isFirstRender && <CurrentTimer />}</li>
-      <li className={styles.server}>{!isFirstRender && <ServerStatus />}</li>
+      {/* <li className={styles.server}>{!isFirstRender && <ServerStatus />}</li> */}
     </ul>
   );
 }

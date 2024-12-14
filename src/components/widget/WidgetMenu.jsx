@@ -4,12 +4,14 @@ import { resetItemState } from '../../lib/features/itemState/itemSlice';
 import { resetKonvaState } from '../../lib/features/konvaState/konvaSlice';
 import { menu, widgetMenuList } from '../../lib/motion/motion_widgetMenu';
 import WidgetCategoryList from './WidgetCategoryList';
+import { setWidgeListState, setWidgetEditState } from '../../lib/features/widgetState/widgetSlice';
 
 import { motion, AnimatePresence } from 'motion/react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { setTableRequestListAlertOn } from '../../lib/features/realtimeState/realtimeSlice';
 
-export default function WidgetMenu({ clicked, isEdited, setIsEdited, isClickEditor, setIsClickEditor }) {
+export default function WidgetMenu() {
   // useSelector
   const isModalOpen = useSelector((state) => state.modalState.isOpen);
   const submitError = useSelector((state) => state.submitState.isError);
@@ -17,6 +19,13 @@ export default function WidgetMenu({ clicked, isEdited, setIsEdited, isClickEdit
   const tableIdArr = useSelector((state) => state.konvaState.target.id);
   const editTableType = useSelector((state) => state.konvaState.type);
   const editTableisEditing = useSelector((state) => state.konvaState.isEditing);
+
+  const clicked = useSelector((state) => state.widgetState.isWidgetOpen);
+  const isEdited = useSelector((state) => state.widgetState.isEdit);
+  const firstOption = useSelector((state) => state.widgetState.isWidgetListOpen.firstOption);
+  const secondOption = useSelector((state) => state.widgetState.isWidgetListOpen.secondOption);
+  const thirdOption = useSelector((state) => state.widgetState.isWidgetListOpen.thirdOption);
+
   // dispatch
   const dispatch = useDispatch();
 
@@ -24,33 +33,35 @@ export default function WidgetMenu({ clicked, isEdited, setIsEdited, isClickEdit
   useEffect(() => {
     if (!editTableType) return;
     if (editTableisEditing) {
-      setIsEdited(true);
+      dispatch(setWidgetEditState({ isEdit: true }));
     } else {
-      setIsEdited(false);
+      dispatch(setWidgetEditState({ isEdit: false }));
     }
   }, [editTableType, editTableisEditing]);
 
-  function onClickEditor() {
-    if (isModalOpen || submitError) return;
-    if (editTableisEditing) {
-      // 편집 저장, db 전송
-      const dataArr = editTableType !== 'delete' ? tableListData : tableIdArr;
-      dispatch(fetchTableListData({ method: editTableType, dataArr }));
-      dispatch(resetItemState());
-      dispatch(resetKonvaState());
-      setIsEdited(false);
-    } else {
-      setIsClickEditor((prev) => !prev);
-    }
+  function onClickEditor(optNum) {
+    return () => {
+      if (isEdited) return;
+      if (isModalOpen || submitError) return;
+      if (editTableisEditing) {
+        // 편집 저장, db 전송
+        const dataArr = editTableType !== 'delete' ? tableListData : tableIdArr;
+        dispatch(fetchTableListData({ method: editTableType, dataArr }));
+        dispatch(resetItemState());
+        dispatch(resetKonvaState());
+        dispatch(setWidgetEditState({ isEdit: false }));
+      } else {
+        dispatch(setWidgeListState({ optNum }));
+      }
+    };
   }
 
   function onClickAlertEditor() {
-    // 알림 끄기/켜기 상태관리
-    // Redux 사용?
+    dispatch(setTableRequestListAlertOn());
   }
-
+  // 탭 별 메뉴 항목 컴포넌트 하나로 병합
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       {clicked && (
         <motion.ul
           key={'widgetMenuList'}
@@ -61,10 +72,10 @@ export default function WidgetMenu({ clicked, isEdited, setIsEdited, isClickEdit
           exit={'notClicked'}
         >
           <motion.li className={styles.list} variants={menu}>
-            <div className={styles.iconBox} onClick={onClickEditor}>
+            <div className={styles.iconBox} onClick={onClickEditor(1)}>
               <div className={styles.box}>
-                <AnimatePresence>
-                  {!isEdited ? (
+                <AnimatePresence mode="wait">
+                  {!firstOption || !isEdited ? (
                     <motion.img
                       src={'/img/edit-icon.png'}
                       alt="편집"
@@ -90,36 +101,17 @@ export default function WidgetMenu({ clicked, isEdited, setIsEdited, isClickEdit
                 </AnimatePresence>
               </div>
             </div>
-            <div className={styles.iconBox} onClick={onClickEditor}>
-              <div className={styles.box}>
-                <AnimatePresence>
-                  {!isEdited ? (
-                    <motion.img
-                      src={'/img/edit-icon.png'}
-                      alt="편집"
-                      style={{ width: 20, height: 20 }}
-                      key={'box1'}
-                      initial={{ x: 20 }}
-                      animate={{ x: 0 }}
-                      exit={{ x: -20 }}
-                      transition={{ duration: 0.3, ease: 'easeOut' }}
-                    />
-                  ) : (
-                    <motion.img
-                      src={'/img/checkmark.png'}
-                      alt="편집 저장"
-                      style={{ width: 20, height: 20 }}
-                      key={'box2'}
-                      initial={{ x: 20 }}
-                      animate={{ x: 0 }}
-                      exit={{ x: -20 }}
-                      transition={{ duration: 0.3, ease: 'easeOut' }}
-                    />
-                  )}
-                </AnimatePresence>
-              </div>
+            <WidgetCategoryList isClickEditor={firstOption} />
+          </motion.li>
+          <motion.li className={styles.list} variants={menu}>
+            <div className={styles.iconBox} onClick={onClickEditor(2)}>
+              <div className={styles.box}>🔔</div>
             </div>
-            <WidgetCategoryList isClickEditor={isClickEditor} />
+            <motion.div className={styles.optionListBox}>
+              <AnimatePresence>
+                {secondOption && <div onClick={onClickAlertEditor}>toggle</div>}
+              </AnimatePresence>
+            </motion.div>
           </motion.li>
         </motion.ul>
       )}

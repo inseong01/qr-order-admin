@@ -14,11 +14,11 @@ const initialState = {
   isError: false
 }
 
+/* createAsyncThunk */
 export const fetchFormData = createAsyncThunk(
   'submitState/fetchFormData',
   async ({ method, itemInfo, table }) => {
     const result = await fetchMenuItem({ method, itemInfo, table })
-    if (result.error?.code) throw new Error(result.error.message)
     return result;
   }
 )
@@ -26,8 +26,7 @@ export const fetchFormData = createAsyncThunk(
 export const fetchOrderListStatus = createAsyncThunk(
   'submitState/fetchOrderListState',
   async ({ method, data }) => {
-    const result = await fetchOrderList(method, data)
-    if (result.error?.code) throw new Error(result.error.message);
+    const result = await fetchOrderList(method, data);
     return result;
   }
 )
@@ -35,8 +34,7 @@ export const fetchOrderListStatus = createAsyncThunk(
 export const fetchTableListData = createAsyncThunk(
   'submitState/fetchTableListData',
   async ({ method, dataArr }) => {
-    const result = await fetchTableList(method, dataArr)
-    if (result.error?.code) throw new Error(result.error.message);
+    const result = await fetchTableList(method, dataArr);
     return result;
   }
 )
@@ -49,6 +47,7 @@ export const fetchUpdateAlertMsg = createAsyncThunk(
   }
 )
 
+/* createSlice */
 const submitSlice = createSlice({
   name: 'submitState',
   initialState,

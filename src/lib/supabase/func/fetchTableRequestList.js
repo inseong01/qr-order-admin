@@ -23,7 +23,7 @@ export default async function fetchTableRequestList(method, id) {
   switch (method) {
     case 'select': {
       const response = await supabase.from('qr-order-request-list').select('*');
-      if (response.status !== 200) {
+      if (response.error) {
         console.error(response.error.message);
         return [];
       }
@@ -31,7 +31,7 @@ export default async function fetchTableRequestList(method, id) {
     }
     case 'update': {
       const response = await supabase.from('qr-order-request-list').update({ 'isRead': true }).eq('i', id).select();
-      if (response.status !== 200) {
+      if (response.error) {
         throw new Error(response.error.message);
       }
       return response;

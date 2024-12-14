@@ -2,18 +2,28 @@ import styles from '@/style/middle/MainPageList.module.css';
 import { changeKonvaIsEditingState, getEditKonvaTableId } from '../../lib/features/konvaState/konvaSlice';
 import { getClientTableList } from '../../lib/features/itemState/itemSlice';
 import createKonvaInitTable from '../../lib/function/createKonvaInitTable';
+import fetchTableList from '../../lib/supabase/func/fetchTableList';
 import TableDraw from './konva/TableDraw';
+import ErrorPage from '../ErrorPage';
 
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'motion/react';
+import { useQuery } from '@tanstack/react-query';
 
-export default function MainPageTableTab({ tableList }) {
+export default function MainPageTableTab() {
   // useSelector
   const tab = useSelector((state) => state.tabState.state);
+  const isSubmit = useSelector((state) => state.submitState.isSubmit);
   const konvaEditType = useSelector((state) => state.konvaState.type);
   const konvaEditIsAble = useSelector((state) => state.konvaState.isAble);
   const konvaEditIsEditing = useSelector((state) => state.konvaState.isEditing);
+  // useQueries
+  const tableList = useQuery({
+    queryKey: ['tableList', isSubmit],
+    queryFn: () => fetchTableList('select'),
+    enabled: tab === 'table',
+  });
   // useDispatch
   const dispatch = useDispatch();
   // useRef
@@ -93,7 +103,7 @@ export default function MainPageTableTab({ tableList }) {
 
   // create/update, clientTableList 배열 업데이트
   useEffect(() => {
-    if (!clientTableList.length) return;
+    if (!clientTableList?.length) return;
     // 수정/추가된 테이블 배열 전달
     dispatch(getClientTableList({ clientTableList }));
     // 배열 수정/추가되면 수정 중으로 상태 변경
@@ -111,6 +121,8 @@ export default function MainPageTableTab({ tableList }) {
       dispatch(changeKonvaIsEditingState({ isEditing: true }));
     }
   }, [tableIdArr]);
+
+  if (tableList.isError) return <ErrorPage compName={'MainPageTableTab'} />;
 
   return (
     <div className={styles.listBox} ref={tableBoxRef}>

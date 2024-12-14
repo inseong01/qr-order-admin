@@ -37,7 +37,9 @@ export default function WidgetTableCategory({ isClickEditor }) {
             exit={'notClicked'}
           >
             <motion.li
-              className={`${styles.option} ${editTableType === 'create' ? styles.currentOpt : ''}`}
+              className={`${styles.option} ${
+                isClickEditor && editTableType === 'create' ? styles.currentOpt : ''
+              }`}
               variants={option}
               onClick={onClickEnableEditTable('create')}
             >
@@ -47,7 +49,9 @@ export default function WidgetTableCategory({ isClickEditor }) {
               </span>
             </motion.li>
             <motion.li
-              className={`${styles.option} ${editTableType === 'update' ? styles.currentOpt : ''}`}
+              className={`${styles.option} ${
+                isClickEditor && editTableType === 'update' ? styles.currentOpt : ''
+              }`}
               variants={option}
               onClick={onClickEnableEditTable('update')}
             >
@@ -57,7 +61,9 @@ export default function WidgetTableCategory({ isClickEditor }) {
               </span>
             </motion.li>
             <motion.li
-              className={`${styles.option} ${editTableType === 'delete' ? styles.currentOpt : ''}`}
+              className={`${styles.option} ${
+                isClickEditor && editTableType === 'delete' ? styles.currentOpt : ''
+              }`}
               variants={option}
               onClick={onClickEnableEditTable('delete')}
             >

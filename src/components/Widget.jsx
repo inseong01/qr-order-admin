@@ -7,27 +7,31 @@ import {
   lastSpanVariant,
   middleSpanVariant,
 } from '../lib/motion/motion_widget';
-
-import { useEffect, useState } from 'react';
-import { motion } from 'motion/react';
-import { useDispatch, useSelector } from 'react-redux';
+import {
+  resetWidgetState,
+  setWidgetEditState,
+  setWidgetState,
+} from '../lib/features/widgetState/widgetSlice';
 import WidgetMenu from './widget/WidgetMenu';
 
+import { useEffect } from 'react';
+import { motion } from 'motion/react';
+import { useDispatch, useSelector } from 'react-redux';
+
 export default function Widget() {
-  // useState
-  const [clicked, setClicked] = useState(false);
-  const [isEdited, setIsEdited] = useState(false);
-  const [isClickEditor, setIsClickEditor] = useState(false);
   // useSelector
   const tab = useSelector((state) => state.tabState.state);
   const isModalOpen = useSelector((state) => state.modalState.isOpen);
   const editTableType = useSelector((state) => state.konvaState.type);
+
+  const clicked = useSelector((state) => state.widgetState.isWidgetOpen);
+
   // useDispatch
   const dispatch = useDispatch();
 
   // tab 전환될 때
   useEffect(() => {
-    setClicked(false);
+    dispatch(resetWidgetState());
   }, [tab]);
 
   function onClickOpenWidgetList() {
@@ -36,11 +40,10 @@ export default function Widget() {
     if (editTableType) {
       dispatch(resetItemState());
       dispatch(resetKonvaState());
-      setIsEdited(false);
+      dispatch(setWidgetEditState({ isEdit: false }));
       return;
     }
-    setIsClickEditor(false);
-    setClicked((prev) => !prev);
+    dispatch(setWidgetState({ isOpen: !clicked }));
   }
 
   return (
@@ -57,13 +60,7 @@ export default function Widget() {
           <motion.span variants={lastSpanVariant}></motion.span>
         </motion.div>
       </div>
-      <WidgetMenu
-        clicked={clicked}
-        isEdited={isEdited}
-        setIsEdited={setIsEdited}
-        isClickEditor={isClickEditor}
-        setIsClickEditor={setIsClickEditor}
-      />
+      <WidgetMenu />
     </div>
   );
 }

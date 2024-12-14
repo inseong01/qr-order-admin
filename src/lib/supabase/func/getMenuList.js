@@ -1,12 +1,20 @@
 import supabase from "../supabaseConfig.js";
 
-export default async function getMenuList(type, { id, title }) {
-  if (type !== 'menu') return [];
-  if (title === '전체메뉴' || !title) {
-    let response = await supabase.from('qr-order-menu').select('*');
+export default async function getMenuList({ title }) {
+  let response;
+  if (title === '전체메뉴' || title === '') {
+    response = await supabase.from('qr-order-menu').select('*');
+    if (response.error) {
+      console.error(response.error.message);
+      throw new Error(response.error.message);
+    }
     return response.data;
   } else {
-    let response = await supabase.from('qr-order-menu').select('*').eq('sort', title);
-    return response.data;
+    response = await supabase.from('qr-order-menu').select('*').eq('sort', title);
+    if (response.error) {
+      console.error(response.error.message);
+      throw new Error(response.error.message);
+    }
   }
+  return response.data;
 }

@@ -3,6 +3,8 @@ import getMenuList from '@/lib/supabase/func/getMenuList';
 import { changeModalState } from '@/lib/features/modalState/modalSlice';
 import { getItemInfo, resetItemState } from '@/lib/features/itemState/itemSlice';
 import Loader from '../Loader';
+import ErrorPage from '../ErrorPage';
+import { list_motion } from '../../lib/motion/motion_mainPageMenuTab';
 
 import { motion } from 'motion/react';
 import { useQuery } from '@tanstack/react-query';
@@ -22,8 +24,9 @@ export default function MenuList() {
   // useQuery
   const menuList = useQuery({
     queryKey: ['menuList', tab, selectedCategory, submitStatus],
-    queryFn: () => getMenuList('menu', selectedCategory),
+    queryFn: () => getMenuList(selectedCategory),
     enabled: tab === 'menu',
+    initialData: [],
   });
 
   useEffect(() => {
@@ -43,56 +46,42 @@ export default function MenuList() {
     };
   }
 
-  // motion
-  const list_motion = {
-    load: {
-      opacity: 1,
-      y: 0,
-    },
-    notLoad: {
-      opacity: 0,
-      y: -10,
-    },
-  };
-
-  if (isFirstLoad || !menuList.isFetched) return <Loader />;
-
+  if (isFirstLoad || menuList.isFetching) return <Loader />;
+  if (menuList.isError) return <ErrorPage compName={'MenuList'} />;
   return (
     <>
-      {menuList.isFetched && (
-        <>
-          {menuList.data.map((list, idx) => {
-            const price = list.price.toLocaleString();
-            return (
-              <motion.li
-                key={idx}
-                className={styles.list}
-                onClick={onClickOpenModal('edit', list)}
-                variants={list_motion}
-              >
-                <div className={styles.topBox}>
-                  <div className={styles.top}>
-                    <div className={styles.title}>{list.name}</div>
-                  </div>
+      <>
+        {menuList.data.map((list, idx) => {
+          const price = list.price.toLocaleString();
+          return (
+            <motion.li
+              key={idx}
+              className={styles.list}
+              onClick={onClickOpenModal('edit', list)}
+              variants={list_motion}
+            >
+              <div className={styles.topBox}>
+                <div className={styles.top}>
+                  <div className={styles.title}>{list.name}</div>
                 </div>
-                <div className={styles.bottomBox}>
-                  <div className={styles.bottom}>
-                    <div className={styles.price}>{price}원</div>
-                  </div>
+              </div>
+              <div className={styles.bottomBox}>
+                <div className={styles.bottom}>
+                  <div className={styles.price}>{price}원</div>
                 </div>
-              </motion.li>
-            );
-          })}
-          <motion.li
-            className={`${styles.list} ${styles.addBtn}`}
-            onClick={onClickOpenModal('add')}
-            variants={list_motion}
-          >
-            <img src={'/img/add-icon.png'} alt="상품 추가" style={{ width: 30, height: 30 }} />
-            <div className="title">상품 추가</div>
-          </motion.li>
-        </>
-      )}
+              </div>
+            </motion.li>
+          );
+        })}
+        <motion.li
+          className={`${styles.list} ${styles.addBtn}`}
+          onClick={onClickOpenModal('add')}
+          variants={list_motion}
+        >
+          <img src={'/img/add-icon.png'} alt="상품 추가" style={{ width: 30, height: 30 }} />
+          <div className="title">상품 추가</div>
+        </motion.li>
+      </>
     </>
   );
 }

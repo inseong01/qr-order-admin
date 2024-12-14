@@ -14,3 +14,11 @@
 
   cursor: default;
 }
+
+.time div {
+  color: #b4b4b4;
+  font-weight: 600;
+  border-left: 1px solid #e7e8eb;
+  border-right: 1px solid #e7e8eb;
+  padding: 4px 12px;
+}

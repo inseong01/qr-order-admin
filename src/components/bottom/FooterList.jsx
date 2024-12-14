@@ -28,7 +28,8 @@ export default function FooterList() {
       {
         queryKey: ['tabMenu'],
         queryFn: getTabMenu,
-        staleTime: 1000 * 60 * 5,
+        // staleTime: 1000 * 60 * 5,
+        initialData: [],
       },
       {
         queryKey: ['allOrderList', orderTrigger],
@@ -46,7 +47,7 @@ export default function FooterList() {
   // requestList DB 수신 감지
   useEffect(() => {
     if (requestList.isFetching) return;
-    console.log('requestList: ', requestList);
+    // console.log('requestList: ', requestList);
     const isUndreadAlertList = requestList.data.some((list) => !list.isRead);
     setUndreadAlert(isUndreadAlertList);
   }, [requestList]);

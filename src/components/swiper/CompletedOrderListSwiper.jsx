@@ -1,7 +1,8 @@
 import styles from '@/style/swiper/CompletedOrderListSwiper.module.css';
 import MiddleBox from '../middle/MiddleBox';
+import { swiper_motion } from '../../lib/motion/motion_mainPageOrderTab';
 
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import Swiper from 'swiper';
 import { Pagination, Grid } from 'swiper/modules';
 import 'swiper/css';
@@ -9,7 +10,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/grid';
 import { useEffect, useRef, useState } from 'react';
 
-export default function CompletedOrderListSwiper({ orderList, swiper_motion }) {
+export default function CompletedOrderListSwiper({ orderList }) {
   const orderListRef = useRef(null);
 
   useEffect(() => {
