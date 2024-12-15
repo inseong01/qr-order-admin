@@ -16,6 +16,7 @@ export default function TableAlertMsg() {
   const tab = useSelector((state) => state.tabState.state);
   const submitStatus = useSelector((state) => state.submitState.status);
   const submitIsError = useSelector((state) => state.submitState.isError);
+  const tableEditIsAble = useSelector((state) => state.konvaState.isAble);
   const requestTrigger = useSelector((state) => state.realtimeState.tableRequestList.trigger);
   const requestAlertOn = useSelector((state) => state.realtimeState.tableRequestList.isOn);
   // useRef
@@ -44,10 +45,12 @@ export default function TableAlertMsg() {
   }, [id, submitStatus]);
 
   useEffect(() => {
-    if (tab === 'table' && requestAlertList.length > 0) {
+    if (tab === 'table' && requestAlertList.length > 0 && !tableEditIsAble) {
       setAlertOn(requestAlertOn);
+    } else {
+      setAlertOn(false);
     }
-  }, [tab, requestAlertList, requestAlertOn]);
+  }, [tab, requestAlertList, requestAlertOn, tableEditIsAble]);
 
   function onClickReadMsg(list) {
     return () => {
@@ -70,7 +73,7 @@ export default function TableAlertMsg() {
         >
           <motion.ul className={styles.reqeustMsg}>
             <AnimatePresence mode="popLayout">
-              {requestAlertList.map((list, idx) => {
+              {requestAlertList.map((list) => {
                 return (
                   <motion.li
                     key={list.id}

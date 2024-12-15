@@ -6,6 +6,14 @@
 
   display: flex;
   flex-direction: column-reverse;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.listBox {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
   gap: 10px;
 }
 
@@ -25,13 +33,23 @@
   overflow: hidden;
 }
 
-.iconBox {
+.widget .iconBox {
   width: 20px;
   height: 15px;
+}
+
+.iconBox {
+  width: 55px;
+  height: 55px;
 
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
 }
 
 .iconBox span {
@@ -45,11 +63,11 @@
   display: flex;
   flex-direction: column;
   gap: 5px;
+  z-index: -1;
 }
 
 .widgetMenuList .iconBox {
-  width: 100%;
-  height: 100%;
+  width: 20px;
 
   display: flex;
   justify-content: center;

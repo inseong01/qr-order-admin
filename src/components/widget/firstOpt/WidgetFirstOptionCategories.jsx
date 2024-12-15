@@ -4,7 +4,7 @@ import WidgetOrderCategory from './WidgetOrderCategory';
 
 import { useSelector } from 'react-redux';
 
-export default function WidgetCategoryList({ isClickEditor }) {
+export default function WidgetFirstOptionCategories({ isClickEditor }) {
   // useSelector
   const tab = useSelector((state) => state.tabState.state);
 

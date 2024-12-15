@@ -3,7 +3,7 @@
 export const widgetMenuList = {
   clicked: {
     transition: {
-      staggerChildren: 0.1,
+      staggerChildren: 0.05,
       staggerDirection: -1,
     },
   },
@@ -16,6 +16,12 @@ export const widgetMenuList = {
 };
 
 export const menu = {
-  clicked: { y: 0, opacity: 1 },
-  notClicked: { y: 10, opacity: 0 },
+  clicked: {
+    y: 0,
+    opacity: 1,
+  },
+  notClicked: {
+    y: 10,
+    opacity: 0,
+  },
 };

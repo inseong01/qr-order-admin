@@ -20,6 +20,7 @@ export default function FooterList() {
   const requestTrigger = useSelector((state) => state.realtimeState.tableRequestList.trigger);
   const isModalOpen = useSelector((state) => state.modalState.isOpen);
   const editTableisEditing = useSelector((state) => state.konvaState.isEditing);
+  const widgetClicked = useSelector((state) => state.widgetState.isWidgetOpen);
   // useDispatch
   const dispatch = useDispatch();
   // useQuery
@@ -61,6 +62,7 @@ export default function FooterList() {
 
   function onClickChangeTab({ title }, idx) {
     return () => {
+      // if (widgetClicked) return;
       if (isModalOpen) return;
       // 수정 중 tab 이동 임시 제한
       if (editTableisEditing) {

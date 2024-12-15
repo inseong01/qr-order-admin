@@ -8,11 +8,12 @@ import {
   middleSpanVariant,
 } from '../lib/motion/motion_widget';
 import {
+  resetWidgetListState,
   resetWidgetState,
   setWidgetEditState,
   setWidgetState,
 } from '../lib/features/widgetState/widgetSlice';
-import WidgetMenu from './widget/WidgetMenu';
+import WidgetMenuWrap from './widget/WidgetOptionWrap';
 
 import { useEffect } from 'react';
 import { motion } from 'motion/react';
@@ -60,7 +61,7 @@ export default function Widget() {
           <motion.span variants={lastSpanVariant}></motion.span>
         </motion.div>
       </div>
-      <WidgetMenu />
+      <WidgetMenuWrap />
     </div>
   );
 }

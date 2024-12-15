@@ -18,6 +18,14 @@ const widgetSlice = createSlice({
     resetWidgetState: () => {
       return initialState
     },
+    resetWidgetListState: (state) => {
+      return {
+        ...state,
+        isWidgetListOpen: {
+          ...initialState.isWidgetListOpen
+        }
+      }
+    },
     setWidgetState: (state, action) => {
       const isWidgetOpen = action.payload.isOpen;
       return {
@@ -65,5 +73,5 @@ const widgetSlice = createSlice({
   }
 })
 
-export const { resetWidgetState, setWidgetState, setWidgeListState, setWidgetEditState } = widgetSlice.actions;
+export const { resetWidgetState, resetWidgetListState, setWidgetState, setWidgeListState, setWidgetEditState } = widgetSlice.actions;
 export default widgetSlice.reducer;
