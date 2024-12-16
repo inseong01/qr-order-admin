@@ -30,7 +30,7 @@ export default async function fetchTableRequestList(method, id) {
       return response.data;
     }
     case 'update': {
-      const response = await supabase.from('qr-order-request-list').update({ 'isRead': true }).eq('i', id).select();
+      const response = await supabase.from('qr-order-request-list').update({ 'isRead': true }).eq('id', id).select();
       if (response.error) {
         throw new Error(response.error.message);
       }

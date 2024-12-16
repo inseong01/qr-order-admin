@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { Group, Line, Rect, Text, Transformer } from 'react-konva';
+import { Group, Line, Rect, RegularPolygon, Text, Transformer } from 'react-konva';
+import { fetchUpdateAlertMsg } from '../../../lib/features/submitState/submitSlice';
+
+const initialMsgObj = {
+  list: [],
+  table: {},
+  pos: { x: 0, y: 0, width: 30 },
+};
 
 export default function TableLayer({
   stage,
@@ -8,6 +15,9 @@ export default function TableLayer({
   konvaEditTableIdArr,
   selectTableId,
   konvaEditType,
+  dispatch,
+  state,
+  requestList,
 }) {
   const { init, orderList, tableName, id } = table;
   const totalPrice = orderList.reduce((prev, list) => prev + Number(list.price), 0).toLocaleString();
@@ -18,6 +28,12 @@ export default function TableLayer({
   // useRef
   const shapeRef = useRef(null);
   const trRef = useRef(null);
+  // useState
+  const [requestMsg, hoverTable] = useState(initialMsgObj);
+  const [hasAlert, getAlert] = useState(false);
+  // state
+  const tableRequestAlertOn = state.realtimeState.tableRequestList.isOn;
+  const tableRequestTrigger = state.realtimeState.tableRequestList.trigger;
 
   useEffect(() => {
     if (konvaEditTableIdArr[0] !== id) return;
@@ -25,6 +41,45 @@ export default function TableLayer({
     trRef.current.nodes([shapeRef.current]);
     trRef.current.getLayer().batchDraw();
   }, [konvaEditTableIdArr]);
+  console.log('tableRequestAlertOn: ', tableRequestAlertOn);
+  useEffect(() => {
+    if (requestList.isFetching) return;
+    // 요청 알림이 꺼져 있는 상태
+    if (!tableRequestAlertOn) {
+      const tableAlert = requestList.data.some((request) => request.tableId === id && !request.isRead);
+      if (tableAlert) {
+        getAlert(true);
+        const requestArr = requestList.data.filter((request) => {
+          return request.tableId === id && !request.isRead;
+        });
+
+        const msgContext = requestArr.reduce((prev, curr) => prev + ', ' + curr.requestList, '').slice(2);
+        const msgLength = msgContext.replace(', ', '').split('').length;
+        const msgWidth = msgLength * 23 + 20; // 기본 길이 + 뒷여백(20)
+        const flip = init.x + init.rec.width + 20 + msgWidth >= stageAttrs.width;
+        const newX = flip ? init.x - msgWidth - 20 : init.x + init.rec.width + 20;
+
+        hoverTable((prev) => ({
+          ...prev,
+          list: [msgContext],
+          table: init,
+          pos: {
+            x: newX,
+            y: init.y,
+            width: msgWidth,
+            flip,
+          },
+        }));
+      } else {
+        getAlert(false);
+      }
+    } else {
+      getAlert(false);
+      hoverTable(initialMsgObj);
+    }
+  }, [requestList, tableRequestTrigger, tableRequestAlertOn]);
+
+  useEffect(() => {}, [hasAlert]);
 
   function changeTablePosition(e) {
     const lastPs = e.target.position();
@@ -117,6 +172,14 @@ export default function TableLayer({
   }
 
   function onClickSelectTable() {
+    // 읽음 처리 (DB 연동 필요)
+    if (hasAlert) {
+      stage.current.container().style.cursor = 'default';
+      dispatch(fetchUpdateAlertMsg({ method: 'update', id }));
+      // console.log(dispatch());
+      getAlert(false);
+      hoverTable(initialMsgObj);
+    }
     if (konvaEditType === 'update') {
       stage.current.container().style.cursor = 'move';
       selectTableId([id]);
@@ -130,8 +193,13 @@ export default function TableLayer({
     }
   }
 
-  function onMouseEnterChangePointer() {
-    if (konvaEditType === '') return;
+  function onMouseEnterChangePointer(e) {
+    if (konvaEditType === '' || requestList.isFetched) {
+      if (hasAlert) {
+        stage.current.container().style.cursor = 'pointer';
+      }
+      return;
+    }
     if (konvaEditType === 'delete' || konvaEditType === 'update') {
       stage.current.container().style.cursor = 'pointer';
       return;
@@ -145,61 +213,95 @@ export default function TableLayer({
   }
 
   return (
-    <Group
-      key={id}
-      id={id}
-      x={init.x}
-      y={init.y}
-      draggable={isTransformerAble}
-      onDragEnd={changeTablePosition}
-      onClick={onClickSelectTable}
-      onMouseEnter={onMouseEnterChangePointer}
-      onMouseLeave={onMouseLeaveChangePointer}
-    >
-      <Group>
-        <Rect
-          ref={shapeRef}
-          width={init.rec.width}
-          height={init.rec.height}
-          fill={'#fff'}
-          stroke={isSelectedToDelete ? 'red' : 'white'}
-          cornerRadius={10}
-          onTransform={onDragTransform}
-        />
-        {isTransformerAble && (
-          <Transformer
-            ref={trRef}
-            flipEnabled={false}
-            keepRatio={false}
-            boundBoxFunc={limitBoundBox}
-            rotateEnabled={false}
-            rotateLineVisible={false}
-            enabledAnchors={['middle-right', 'bottom-center']}
+    <>
+      <Group
+        key={id}
+        id={id}
+        x={init.x}
+        y={init.y}
+        draggable={isTransformerAble}
+        onDragEnd={changeTablePosition}
+        onClick={onClickSelectTable}
+        onMouseEnter={onMouseEnterChangePointer}
+        onMouseLeave={onMouseLeaveChangePointer}
+      >
+        <Group>
+          <Rect
+            ref={shapeRef}
+            width={init.rec.width}
+            height={init.rec.height}
+            fill={'#fff'}
+            stroke={isSelectedToDelete ? 'red' : hasAlert ? '#4caff8' : 'white'}
+            cornerRadius={10}
+            onTransform={onDragTransform}
           />
-        )}
-        <Group x={20} y={20}>
-          <Text text={tableName} width={init.tableText.width} fill={'#222'} fontSize={18} align="left" />
-        </Group>
-        <Group x={20} y={init.bottom.y}>
-          <Line points={init.bottom.line.points} strokeWidth={1} stroke={'#8D8D8D'} />
-          <Group x={0} y={10}>
-            <Text
-              text="합계"
-              width={init.bottom.priceText.width}
-              fill={'#8D8D8D'}
-              fontSize={15}
-              align="left"
+          {isTransformerAble && (
+            <Transformer
+              ref={trRef}
+              flipEnabled={false}
+              keepRatio={false}
+              boundBoxFunc={limitBoundBox}
+              rotateEnabled={false}
+              rotateLineVisible={false}
+              enabledAnchors={['middle-right', 'bottom-center']}
             />
-            <Text
-              text={`${totalPrice}원`}
-              width={init.bottom.priceText.width}
-              fill={'#8D8D8D'}
-              fontSize={15}
-              align="right"
-            />
+          )}
+          <Group x={20} y={20}>
+            <Text text={tableName} width={init.tableText.width} fill={'#222'} fontSize={18} align="left" />
+          </Group>
+          <Group x={20} y={init.bottom.y}>
+            <Line points={init.bottom.line.points} strokeWidth={1} stroke={'#8D8D8D'} />
+            <Group x={0} y={10}>
+              <Text
+                text="합계"
+                width={init.bottom.priceText.width}
+                fill={'#8D8D8D'}
+                fontSize={15}
+                align="left"
+              />
+              <Text
+                text={`${totalPrice}원`}
+                width={init.bottom.priceText.width}
+                fill={'#8D8D8D'}
+                fontSize={15}
+                align="right"
+              />
+            </Group>
           </Group>
         </Group>
       </Group>
-    </Group>
+      {requestMsg?.list.length > 0 &&
+        !tableRequestAlertOn &&
+        requestMsg.list.map((request, idx) => {
+          const { pos, table } = requestMsg;
+          console.log(pos);
+          return (
+            <Group key={idx} x={pos.x} y={pos.y}>
+              <Group x={pos.flip ? pos.width : 0}>
+                <RegularPolygon
+                  sides={3}
+                  width={20}
+                  height={20}
+                  y={table.rec.height / 2}
+                  rotation={pos.flip ? 90 : 30}
+                  fill="white"
+                />
+              </Group>
+              <Group x={0} offsetY={-(table.rec.height / 4)}>
+                <Rect
+                  width={pos.width}
+                  height={table.rec.height / 2}
+                  offsetX={pos.flip ? 0 : 0}
+                  cornerRadius={5}
+                  fill="white"
+                />
+                <Group x={15} offsetY={-(table.rec.height / 4) + 5}>
+                  <Text width={pos.width - 30} text={request} fontSize={16} align="center" />
+                </Group>
+              </Group>
+            </Group>
+          );
+        })}
+    </>
   );
 }

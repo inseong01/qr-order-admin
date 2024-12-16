@@ -27,10 +27,9 @@ const widgetSlice = createSlice({
       }
     },
     setWidgetState: (state, action) => {
-      const isWidgetOpen = action.payload.isOpen;
       return {
         ...initialState,
-        isWidgetOpen
+        isWidgetOpen: !(state.isWidgetOpen)
       }
     },
     setWidgeListState: (state, action) => {

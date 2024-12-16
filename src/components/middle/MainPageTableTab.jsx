@@ -6,8 +6,8 @@ import fetchTableList from '../../lib/supabase/func/fetchTableList';
 import TableDraw from './konva/TableDraw';
 import ErrorPage from '../ErrorPage';
 
-import { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { Provider, ReactReduxContext, useDispatch, useSelector } from 'react-redux';
 import { motion } from 'motion/react';
 import { useQuery } from '@tanstack/react-query';
 

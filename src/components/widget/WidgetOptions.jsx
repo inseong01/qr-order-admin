@@ -27,7 +27,7 @@ export default function WidgetOptions() {
 
   function onClickEditor(optNum) {
     return () => {
-      if (isEdited) return;
+      // if (isEdited) return;
       if (isModalOpen || submitError) return;
       if (editTableisEditing) {
         // 편집 저장, db 전송

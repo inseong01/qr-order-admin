@@ -15,18 +15,19 @@ import {
 } from '../lib/features/widgetState/widgetSlice';
 import WidgetMenuWrap from './widget/WidgetOptionWrap';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function Widget() {
+  // useRef
+  const widgetRef = useRef(null);
   // useSelector
   const tab = useSelector((state) => state.tabState.state);
   const isModalOpen = useSelector((state) => state.modalState.isOpen);
   const editTableType = useSelector((state) => state.konvaState.type);
-
+  const isTableEditAble = useSelector((state) => state.konvaState.isAble);
   const clicked = useSelector((state) => state.widgetState.isWidgetOpen);
-
   // useDispatch
   const dispatch = useDispatch();
 
@@ -34,6 +35,19 @@ export default function Widget() {
   useEffect(() => {
     dispatch(resetWidgetState());
   }, [tab]);
+
+  // 외부 선택으로 위젯 닫기
+  useEffect(() => {
+    function onClickWindowToCloseWidget(e) {
+      const isWindowClicked = e.target.offsetParent !== widgetRef.current; // offsetParent = widgetWrap
+      if (clicked && isWindowClicked && !isTableEditAble) {
+        dispatch(setWidgetState());
+      }
+    }
+    window.addEventListener('click', onClickWindowToCloseWidget);
+
+    return () => window.removeEventListener('click', onClickWindowToCloseWidget);
+  }, [clicked, isTableEditAble]);
 
   function onClickOpenWidgetList() {
     if (isModalOpen) return;
@@ -44,11 +58,11 @@ export default function Widget() {
       dispatch(setWidgetEditState({ isEdit: false }));
       return;
     }
-    dispatch(setWidgetState({ isOpen: !clicked }));
+    dispatch(setWidgetState());
   }
 
   return (
-    <div className={styles.widgetWrap}>
+    <div className={styles.widgetWrap} ref={widgetRef}>
       <div className={styles.widget} onClick={onClickOpenWidgetList}>
         <motion.div
           className={styles.iconBox}

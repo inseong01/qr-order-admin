@@ -15,7 +15,7 @@ export default function WidgetFirstOption({ onClickEditor }) {
       <motion.div className={styles.list} key={'list'} onClick={onClickEditor(1)}>
         <div className={styles.iconBox}>
           <div className={styles.icon}>
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="wait" initial={false}>
               {!firstOption || !isEdited ? (
                 <motion.img
                   src={'/img/edit-icon.png'}
