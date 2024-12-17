@@ -39,6 +39,7 @@ export default function Widget() {
   // 외부 선택으로 위젯 닫기
   useEffect(() => {
     function onClickWindowToCloseWidget(e) {
+      if (isModalOpen) return;
       const isWindowClicked = e.target.offsetParent !== widgetRef.current; // offsetParent = widgetWrap
       if (clicked && isWindowClicked && !isTableEditAble) {
         dispatch(setWidgetState());
@@ -47,7 +48,7 @@ export default function Widget() {
     window.addEventListener('click', onClickWindowToCloseWidget);
 
     return () => window.removeEventListener('click', onClickWindowToCloseWidget);
-  }, [clicked, isTableEditAble]);
+  }, [clicked, isTableEditAble, isModalOpen]);
 
   function onClickOpenWidgetList() {
     if (isModalOpen) return;

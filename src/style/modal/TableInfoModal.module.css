@@ -1,0 +1,28 @@
+.submitForm {
+  width: 495px;
+  height: 100%;
+  padding: 16px;
+  border: 1px solid #d8d8d8;
+  border-radius: 15px;
+  background-color: white;
+  overflow: hidden;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.wrap {
+  width: 100%;
+  height: auto;
+  border: 1px solid #d9d9d9;
+  border-radius: 10px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 25px 35px;
+
+  cursor: default;
+}

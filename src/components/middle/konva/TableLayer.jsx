@@ -18,9 +18,19 @@ export default function TableLayer({
   dispatch,
   state,
   requestList,
+  onClickCheckTableInfo,
 }) {
-  const { init, orderList, tableName, id } = table;
-  const totalPrice = orderList.reduce((prev, list) => prev + Number(list.price), 0).toLocaleString();
+  const { init, order, tableName, id } = table;
+  const totalPrice =
+    order
+      ?.reduce(
+        (prev, list) =>
+          prev +
+          list.orderList?.reduce((prevPrice, currMenu) => prevPrice + currMenu.price * currMenu.amount, 0),
+        0
+      )
+      .toLocaleString() ?? 0;
+  // console.log(totalPrice);
   const isTransformerAble = id === konvaEditTableIdArr[0] && konvaEditType !== 'delete';
   const isSelectedToDelete = konvaEditType === 'delete' && konvaEditTableIdArr.includes(id);
   const stageAttrs = stage.current.attrs;
@@ -41,7 +51,7 @@ export default function TableLayer({
     trRef.current.nodes([shapeRef.current]);
     trRef.current.getLayer().batchDraw();
   }, [konvaEditTableIdArr]);
-  console.log('tableRequestAlertOn: ', tableRequestAlertOn);
+
   useEffect(() => {
     if (requestList.isFetching) return;
     // 요청 알림이 꺼져 있는 상태
@@ -78,8 +88,6 @@ export default function TableLayer({
       hoverTable(initialMsgObj);
     }
   }, [requestList, tableRequestTrigger, tableRequestAlertOn]);
-
-  useEffect(() => {}, [hasAlert]);
 
   function changeTablePosition(e) {
     const lastPs = e.target.position();
@@ -172,14 +180,20 @@ export default function TableLayer({
   }
 
   function onClickSelectTable() {
+    // 테이블 결제 창, 알림 X
+    if (!hasAlert && konvaEditType === '') {
+      // 선택하면 모달 창 열림, 주문목록/금액, 결제/닫기 버튼, 결제
+      onClickCheckTableInfo([table]);
+    }
     // 읽음 처리 (DB 연동 필요)
     if (hasAlert) {
       stage.current.container().style.cursor = 'default';
-      dispatch(fetchUpdateAlertMsg({ method: 'update', id }));
-      // console.log(dispatch());
+      // dispatch(fetchUpdateAlertMsg({ method: 'update', id }));
       getAlert(false);
       hoverTable(initialMsgObj);
+      return;
     }
+    // 테이블 편집 중
     if (konvaEditType === 'update') {
       stage.current.container().style.cursor = 'move';
       selectTableId([id]);
@@ -274,7 +288,7 @@ export default function TableLayer({
         !tableRequestAlertOn &&
         requestMsg.list.map((request, idx) => {
           const { pos, table } = requestMsg;
-          console.log(pos);
+
           return (
             <Group key={idx} x={pos.x} y={pos.y}>
               <Group x={pos.flip ? pos.width : 0}>

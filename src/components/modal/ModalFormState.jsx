@@ -1,11 +1,12 @@
-'use client';
-
-import styles from '@/style/modal/ModalFormState.module.css';
-import { changeModalState, resetModalState } from '@/lib/features/modalState/modalSlice';
+import { changeModalState } from '@/lib/features/modalState/modalSlice';
+import { changeSubmitMsgType, fetchFormData } from '@/lib/features/submitState/submitSlice';
+import TableInfoModal from './TableInfoModal';
+import DeleteCategory from './menu/DeleteCategory';
+import AddCategory from './menu/AddCategory';
+import CreateAndEditMenu from './menu/CreateAndEditMenu';
 
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeSubmitMsgType, fetchFormData, resetSubmitState } from '@/lib/features/submitState/submitSlice';
 
 export default function ModalFormState({ categoryList }) {
   // useSelector
@@ -14,7 +15,6 @@ export default function ModalFormState({ categoryList }) {
   const item = useSelector((state) => state.itemState.item);
   const submitStatus = useSelector((state) => state.submitState.status);
   const isSubmit = useSelector((state) => state.submitState.isSubmit);
-  const categoryTitle = useSelector((state) => state.categoryState.title);
   // dispatch
   const dispatch = useDispatch();
   // useState
@@ -66,6 +66,14 @@ export default function ModalFormState({ categoryList }) {
           dispatch(changeModalState({ isOpen: false }));
           return;
         }
+        case 'pay': {
+          alert('결제를 시작합니다.');
+          // 고객 결제 요청
+          // 고객 반응
+          // 결제 완료
+          // 해당 테이블 초기화
+          return;
+        }
         default: {
           dispatch(fetchFormData({ method, itemInfo: [value], table }));
           dispatch(changeModalState({ isOpen: false }));
@@ -79,226 +87,27 @@ export default function ModalFormState({ categoryList }) {
       case 'add':
       case 'edit': {
         return (
-          <form className={styles.submitForm} onSubmit={onSubmitData('menu')}>
-            <input type="file" id="fileInput" className={styles.fileInput} hidden />
-            <label htmlFor="fileInput" className={styles.left}>
-              <div className={styles.iconBox}>
-                <img src={'/img/add-icon.png'} alt="사진 추가" style={{ width: 25, height: 25 }} />
-              </div>
-              <div className={styles.title}>{modalType === 'add' ? '사진 추가' : '사진 변경'}</div>
-            </label>
-            <div className={styles.right}>
-              <div className={styles.title}>{modalType === 'add' ? '새로운 메뉴' : '현재 메뉴'}</div>
-              <ul className={styles.submitInfo}>
-                <li className={styles.info}>
-                  <label htmlFor="nameInput" className={styles.title}>
-                    상품명
-                  </label>
-                  <input
-                    required
-                    type="text"
-                    id="nameInput"
-                    className={styles.input}
-                    value={value.name}
-                    name="name"
-                    onChange={onChangeInputValue('add/edit')}
-                    placeholder="음식 이름을 입력해주세요"
-                  />
-                </li>
-                <li className={styles.info}>
-                  <label htmlFor="priceInput" className={styles.title}>
-                    금액
-                  </label>
-                  <input
-                    required
-                    type="number"
-                    id="priceInput"
-                    step={10}
-                    min={10}
-                    className={styles.input}
-                    value={value.price === 0 ? 0 : value.price}
-                    name="price"
-                    onChange={onChangeInputValue('add/edit')}
-                  />
-                </li>
-                <li className={styles.info}>
-                  <label htmlFor="sortSelect" className={styles.title}>
-                    분류
-                  </label>
-                  <select
-                    id="sortSelect"
-                    className={styles.input}
-                    name="sort"
-                    onChange={onChangeInputValue('add/edit')}
-                    defaultValue={modalType === 'add' ? categoryTitle : value.sort}
-                  >
-                    {categoryList.data.map((category) => {
-                      return (
-                        <option key={category.id} value={category.sort}>
-                          {category.title}
-                        </option>
-                      );
-                    })}
-                  </select>
-                </li>
-              </ul>
-              <div className={styles.submitBtn}>
-                {modalType !== 'add' && (
-                  <input
-                    type="submit"
-                    className={`${styles.btn} ${styles.delete}`}
-                    value={'삭제하기'}
-                    name="delete"
-                  />
-                )}
-                <input
-                  type="submit"
-                  className={styles.btn}
-                  value={modalType === 'add' ? '추가하기' : '수정하기'}
-                  name={modalType === 'add' ? 'insert' : 'update'}
-                />
-              </div>
-            </div>
-          </form>
+          <CreateAndEditMenu
+            onSubmitData={onSubmitData}
+            onChangeInputValue={onChangeInputValue}
+            value={value}
+            categoryList={categoryList}
+          />
         );
       }
       case 'add-category': {
-        return (
-          <form
-            className={`${styles.submitForm} ${styles.category}`}
-            onSubmit={onSubmitData('category-menu')}
-          >
-            <div className={`${styles.sortModal} ${styles.right}`}>
-              <div className={styles.title}>분류명</div>
-              <ul className={styles.submitInfo}>
-                <li className={styles.info}>
-                  <input
-                    required
-                    type="text"
-                    className={styles.input}
-                    name="title"
-                    onChange={onChangeInputValue('category')}
-                    placeholder="분류명을 입력해주세요"
-                  />
-                </li>
-              </ul>
-              <div className={styles.submitBtn}>
-                <input type="submit" className={styles.btn} value={'추가하기'} name={'insert'} />
-              </div>
-            </div>
-          </form>
-        );
+        return <AddCategory onSubmitData={onSubmitData} onChangeInputValue={onChangeInputValue} />;
       }
       case 'delete-category': {
-        return (
-          <form
-            className={`${styles.submitForm} ${styles.categoryDelete}`}
-            onSubmit={onSubmitData('category-menu')}
-          >
-            <div className={`${styles.sortModal} ${styles.right}`}>
-              <div className={styles.title}>분류 목록</div>
-              <ul className={styles.submitInfo}>
-                {categoryList.data.map((category, i) => {
-                  return (
-                    <li key={category.id} className={styles.list}>
-                      <label htmlFor={`sortList${i}CheckBox`}>
-                        <div className={styles.left}>{category.title}</div>
-                      </label>
-                      <input
-                        type="checkbox"
-                        name="check"
-                        id={`sortList${i}CheckBox`}
-                        className={styles.right}
-                        data-title={category.title}
-                        data-id={category.id}
-                      />
-                    </li>
-                  );
-                })}
-              </ul>
-              <div className={styles.submitBtn}>
-                <input type="submit" className={styles.btn} value={'삭제하기'} name={'delete'} />
-              </div>
-            </div>
-          </form>
-        );
+        return <DeleteCategory onSubmitData={onSubmitData} categoryList={categoryList} />;
       }
     }
   } else if (tab === 'table') {
-    return (
-      <form className={styles.submitForm} onSubmit={onSubmitData}>
-        <div className={styles.right}>
-          <div className={styles.title}>{modalType === 'add' ? '새로운 메뉴' : '현재 메뉴'}</div>
-          <ul className={styles.submitInfo}>
-            <li className={styles.info}>
-              <label htmlFor="nameInput" className={styles.title}>
-                상품명
-              </label>
-              <input
-                required
-                type="text"
-                id="nameInput"
-                className={styles.input}
-                value={value.name}
-                name="name"
-                onChange={onChangeInputValue}
-              />
-            </li>
-            <li className={styles.info}>
-              <label htmlFor="priceInput" className={styles.title}>
-                금액
-              </label>
-              <input
-                required
-                type="number"
-                id="priceInput"
-                step={10}
-                min={10}
-                className={styles.input}
-                value={value.price === 0 ? '' : value.price}
-                name="price"
-                onChange={onChangeInputValue}
-              />
-            </li>
-            <li className={styles.info}>
-              <label htmlFor="sortSelect" className={styles.title}>
-                분류
-              </label>
-              <select
-                id="sortSelect"
-                className={styles.input}
-                value={value.sort}
-                name="sort"
-                onChange={onChangeInputValue}
-              >
-                {categoryList.data.map((category) => {
-                  return (
-                    <option key={category.id} value={category.sort}>
-                      {category.title}
-                    </option>
-                  );
-                })}
-              </select>
-            </li>
-          </ul>
-          <div className={styles.submitBtn}>
-            {modalType !== 'add' && (
-              <input
-                type="submit"
-                className={`${styles.btn} ${styles.delete}`}
-                value={'삭제하기'}
-                name="delete"
-              />
-            )}
-            <input
-              type="submit"
-              className={styles.btn}
-              value={modalType === 'add' ? '추가하기' : '수정하기'}
-              name={modalType === 'add' ? 'insert' : 'update'}
-            />
-          </div>
-        </div>
-      </form>
-    );
+    switch (modalType) {
+      case 'pay': {
+        // 테이블 결제 모달창은 useEffect로 실행중 (MainPageTableTab.jsx)
+        return <TableInfoModal onSubmitData={onSubmitData} />;
+      }
+    }
   }
 }

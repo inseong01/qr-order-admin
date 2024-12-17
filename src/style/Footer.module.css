@@ -1,11 +1,40 @@
 .footer {
   width: 100%;
-  min-height: 85px; /* 임시 고정 */
+  height: 75px;
   color: #b4b4b4;
   background-color: white;
   font-size: 23px;
 
   display: flex;
   padding: 0 40px;
+  position: relative;
   z-index: 999;
+}
+
+@media (min-width: 400px) {
+  .footer {
+    height: 55px;
+    font-size: 1.1rem;
+    padding: 0 10px;
+  }
+}
+@media (min-width: 800px) {
+  .footer {
+    height: 55px;
+    font-size: 1.1rem;
+    padding: 0 20px;
+  }
+}
+@media (min-width: 1000px) {
+  .footer {
+    height: 65px;
+    font-size: 1.3rem;
+    padding: 0 30px;
+  }
+}
+@media (min-width: 1200px) {
+  .footer {
+    height: 75px;
+    padding: 0 40px;
+  }
 }

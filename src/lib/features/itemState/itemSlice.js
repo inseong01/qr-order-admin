@@ -11,6 +11,12 @@ const initialState = {
   list: {
     id: ''
   },
+  selectedTable: {
+    id: "",
+    init: {},
+    tableName: "",
+    orderList: []
+  },
   selectedListId: '',
   clientTableList: []
 }
@@ -49,9 +55,16 @@ const itemSlice = createSlice({
         ...state,
         clientTableList
       }
+    },
+    selectTable: (state, action) => {
+      const selectedTable = action.payload.table
+      return {
+        ...state,
+        selectedTable
+      }
     }
   }
 })
 
-export const { resetItemState, getItemInfo, getOrderListInfo, getSelectedListId, getClientTableList } = itemSlice.actions;
+export const { resetItemState, getItemInfo, getOrderListInfo, getSelectedListId, getClientTableList, selectTable } = itemSlice.actions;
 export default itemSlice.reducer;

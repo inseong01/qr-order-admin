@@ -1,4 +1,4 @@
-import styles from '@/style/modal/AddMenuModal.module.css';
+import styles from '@/style/modal/MainModal.module.css';
 import { resetItemState } from '@/lib/features/itemState/itemSlice';
 import { changeModalState } from '@/lib/features/modalState/modalSlice';
 import getTabCategory from '@/lib/supabase/func/getTabCategory';
@@ -9,7 +9,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQuery } from '@tanstack/react-query';
 
-export default function AddMenuModal() {
+export default function MainModal() {
   // useSelector
   const tab = useSelector((state) => state.tabState.state);
   const isModalOpen = useSelector((state) => state.modalState.isOpen);
@@ -27,7 +27,7 @@ export default function AddMenuModal() {
 
   function onClickCloseModal() {
     dispatch(changeModalState({ isOpen: false }));
-    dispatch(resetItemState());
+    // dispatch(resetItemState());
   }
 
   return (

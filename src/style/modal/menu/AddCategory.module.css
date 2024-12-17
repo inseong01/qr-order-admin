@@ -16,24 +16,7 @@
   width: 315px;
 }
 
-.left {
-  width: 140px;
-  height: 100%;
-  border: 1px solid #d8d8d8;
-  border-radius: 7px;
-  color: #8d8d8d;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-  position: relative;
-
-  cursor: pointer;
-}
-
-.right {
+.sortModal {
   height: 100%;
   flex: 1;
 
@@ -41,7 +24,8 @@
   flex-direction: column;
   justify-content: space-between;
 }
-.right > div {
+
+.title {
   font-size: 1.1rem;
   font-weight: 600;
   /* color: #4caff8; */
@@ -56,15 +40,13 @@
   font-size: 13px;
 }
 /* 항목 입력 input */
-.submitInfo input,
-.submitInfo select {
+.submitInfo input {
   width: 75%;
   border: none;
   border-bottom: 1px solid #d8d8d8;
   padding: 4px;
 }
-.submitInfo input:focus,
-.submitInfo select {
+.submitInfo input:focus {
   outline: none;
 }
 .category input[placeholder] {
@@ -73,7 +55,7 @@
 
 .info {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 /* 제출 버튼 */
@@ -85,9 +67,6 @@
   justify-content: space-between;
   align-items: center;
   gap: 10px;
-}
-.submitBtn input {
-  border: none;
 }
 
 .btn {
@@ -101,47 +80,11 @@
 
   cursor: pointer;
 
-  color: #222;
+  color: white;
   font-weight: 600;
-  background-color: #f0f0f0;
-}
-.btn.delete {
-  color: #f30000;
-}
-
-/* 분류명 추가 모달 */
-.sortModal .info {
-  justify-content: center;
-}
-
-/* categoryDelete */
-.categoryDelete {
-  width: auto;
-  height: auto;
-}
-.categoryDelete .submitInfo {
-  width: 250px;
-}
-.categoryDelete .submitInfo input {
-  width: auto;
-  cursor: pointer;
-}
-.categoryDelete .list {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 5px;
-
-  font-size: 1rem;
-}
-.categoryDelete .left {
-  justify-content: flex-start;
-  align-items: start;
+  background-color: #4caff8;
   border: none;
-  padding: 4px;
 }
-.categoryDelete .right {
-  flex: none;
-  gap: 20px;
+.btn:hover {
+  background-color: #80c8fc;
 }

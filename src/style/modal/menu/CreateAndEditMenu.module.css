@@ -12,9 +12,6 @@
   align-items: center;
   gap: 10px;
 }
-.submitForm.category {
-  width: 315px;
-}
 
 .left {
   width: 140px;
@@ -101,47 +98,17 @@
 
   cursor: pointer;
 
-  color: #222;
+  color: white;
   font-weight: 600;
-  background-color: #f0f0f0;
+  background-color: #4caff8;
 }
 .btn.delete {
   color: #f30000;
+  background-color: #f0f0f0;
 }
-
-/* 분류명 추가 모달 */
-.sortModal .info {
-  justify-content: center;
+.btn.delete:hover {
+  background-color: #dfdfdf;
 }
-
-/* categoryDelete */
-.categoryDelete {
-  width: auto;
-  height: auto;
-}
-.categoryDelete .submitInfo {
-  width: 250px;
-}
-.categoryDelete .submitInfo input {
-  width: auto;
-  cursor: pointer;
-}
-.categoryDelete .list {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 5px;
-
-  font-size: 1rem;
-}
-.categoryDelete .left {
-  justify-content: flex-start;
-  align-items: start;
-  border: none;
-  padding: 4px;
-}
-.categoryDelete .right {
-  flex: none;
-  gap: 20px;
+.btn:hover {
+  background-color: #80c8fc;
 }

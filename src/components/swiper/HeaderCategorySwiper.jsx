@@ -25,7 +25,12 @@ export default function HeaderCategorySwiper({ tabCategory, orderList }) {
 
   useEffect(() => {
     new Swiper(headerleftSliderRef.current, {
-      slidesPerView: 3,
+      slidesPerView: 2,
+      breakpoints: {
+        750: {
+          slidesPerView: 3,
+        },
+      },
     });
   }, []);
 

@@ -56,7 +56,7 @@ export default function HeaderLeft({ tabCategory, tab, allOrderList }) {
                 exit={{ opacity: 0, y: -10 }}
                 key={'addBtn'}
               >
-                <img src={'/img/add-icon.png'} alt="분류 추가" style={{ width: 15, height: 15 }} />
+                <img src={'/img/category-add-icon.png'} alt="분류 추가" style={{ width: 15, height: 15 }} />
                 <div className={styles.title}>{title}</div>
               </motion.div>
             </div>

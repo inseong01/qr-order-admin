@@ -1,6 +1,7 @@
 import styles from '@/style/middle/MainPageList.module.css';
 import { changeKonvaIsEditingState, getEditKonvaTableId } from '../../lib/features/konvaState/konvaSlice';
-import { getClientTableList } from '../../lib/features/itemState/itemSlice';
+import { getClientTableList, getItemInfo, selectTable } from '../../lib/features/itemState/itemSlice';
+import { changeModalState } from '../../lib/features/modalState/modalSlice';
 import createKonvaInitTable from '../../lib/function/createKonvaInitTable';
 import fetchTableList from '../../lib/supabase/func/fetchTableList';
 import TableDraw from './konva/TableDraw';
@@ -10,6 +11,7 @@ import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { Provider, ReactReduxContext, useDispatch, useSelector } from 'react-redux';
 import { motion } from 'motion/react';
 import { useQuery } from '@tanstack/react-query';
+import MainModal from '../modal/MainModal';
 
 export default function MainPageTableTab() {
   // useSelector
@@ -18,6 +20,7 @@ export default function MainPageTableTab() {
   const konvaEditType = useSelector((state) => state.konvaState.type);
   const konvaEditIsAble = useSelector((state) => state.konvaState.isAble);
   const konvaEditIsEditing = useSelector((state) => state.konvaState.isEditing);
+  const isModalOpen = useSelector((state) => state.modalState.isOpen);
   // useQueries
   const tableList = useQuery({
     queryKey: ['tableList', isSubmit],
@@ -94,8 +97,8 @@ export default function MainPageTableTab() {
       }
       default: {
         // 초기화
-        if (!tableIdArr.length) return;
-        selectTableId([]);
+        // if (!tableIdArr.length) return;
+        // selectTableId([]);
         return;
       }
     }
@@ -111,21 +114,33 @@ export default function MainPageTableTab() {
     dispatch(changeKonvaIsEditingState({ isEditing: true }));
   }, [clientTableList]);
 
-  // delete, tableIdArr 배열 업데이트
+  // tableIdArr 배열 업데이트
   useEffect(() => {
-    if (konvaEditType !== 'delete') return;
-    // 수정 상태 변경
-    if (tableIdArr.length <= 0) {
-      dispatch(changeKonvaIsEditingState({ isEditing: false }));
-    } else {
-      dispatch(changeKonvaIsEditingState({ isEditing: true }));
+    // delete, 수정 상태 변경
+    if (konvaEditType === 'delete') {
+      if (tableIdArr.length <= 0) {
+        dispatch(changeKonvaIsEditingState({ isEditing: false }));
+      } else {
+        dispatch(changeKonvaIsEditingState({ isEditing: true }));
+      }
+      return;
     }
-  }, [tableIdArr]);
+  }, [konvaEditType, tableIdArr]);
+
+  // 테이블 정보창 열기
+  function onClickCheckTableInfo(tableInfo) {
+    if (!konvaEditIsAble && konvaEditType === '') {
+      // 모달창 상태 true 변환
+      dispatch(changeModalState({ type: 'pay', isOpen: true }));
+      dispatch(selectTable({ table: tableInfo[0] }));
+      return;
+    }
+  }
 
   if (tableList.isError) return <ErrorPage compName={'MainPageTableTab'} />;
 
   return (
-    <div className={styles.listBox} ref={tableBoxRef}>
+    <div className={`${styles.listBox} ${tab === 'table' ? styles.table : ''}`} ref={tableBoxRef}>
       {openKonva && (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
           <TableDraw
@@ -133,9 +148,11 @@ export default function MainPageTableTab() {
             tableList={clientTableList}
             setClientTableList={setClientTableList}
             selectTableId={selectTableId}
+            onClickCheckTableInfo={onClickCheckTableInfo}
           />
         </motion.div>
       )}
+      <MainModal />
     </div>
   );
 }

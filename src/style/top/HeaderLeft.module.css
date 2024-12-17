@@ -1,8 +1,8 @@
 /* 헤더 좌측 */
 .left {
-  width: 60%;
+  width: 50%;
+  max-width: 750px;
   display: flex;
-  font-size: 1.3rem;
 }
 
 .addCategoryBox {
@@ -29,6 +29,16 @@
 }
 
 .addCategoryBox {
-  font-size: 1rem;
   color: #222;
+}
+
+@media (min-width: 400px) {
+  .addCategoryBox {
+    font-size: 0.7rem;
+  }
+}
+@media (min-width: 1200px) {
+  .addCategoryBox {
+    font-size: 1rem;
+  }
 }

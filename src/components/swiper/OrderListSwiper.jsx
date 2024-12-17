@@ -36,8 +36,25 @@ export default function OrderListSwiper({ orderList }) {
         fill: 'row',
         rows: 2,
       },
-      slidesPerView: 4,
+      slidesPerView: 1,
       spaceBetween: 10,
+      breakpoints: {
+        600: {
+          slidesPerView: 2,
+        },
+        900: {
+          slidesPerView: 3,
+        },
+        1100: {
+          slidesPerView: 4,
+        },
+        1400: {
+          slidesPerView: 5,
+        },
+        1700: {
+          slidesPerView: 6,
+        },
+      },
     });
   }, []);
 

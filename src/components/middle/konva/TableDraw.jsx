@@ -7,7 +7,13 @@ import { useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import fetchTableRequestList from '../../../lib/supabase/func/fetchTableRequestList';
 
-export default function TableDraw({ stageSize, tableList, setClientTableList, selectTableId }) {
+export default function TableDraw({
+  stageSize,
+  tableList,
+  setClientTableList,
+  selectTableId,
+  onClickCheckTableInfo,
+}) {
   // useSelector
   const konvaEditTableIdArr = useSelector((state) => state.konvaState.target.id);
   const konvaEditType = useSelector((state) => state.konvaState.type);
@@ -69,6 +75,7 @@ export default function TableDraw({ stageSize, tableList, setClientTableList, se
                     dispatch={dispatch}
                     state={state}
                     requestList={requestList}
+                    onClickCheckTableInfo={onClickCheckTableInfo}
                   />
                 );
               })}

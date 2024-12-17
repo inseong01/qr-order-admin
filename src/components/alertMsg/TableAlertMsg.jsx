@@ -30,10 +30,10 @@ export default function TableAlertMsg() {
     initialData: [],
   });
 
-  // 읽지 않은 이전 요청 불러오기
+  // 읽지 않은 이전 요청 불러오기 (수 제한)
   useEffect(() => {
     if (requestList.isFetching) return;
-    const notReadMsg = requestList.data.filter((list) => !list.isRead);
+    const notReadMsg = requestList.data.filter((list) => !list.isRead).slice(0, 4);
     setRequestAlertList(notReadMsg);
   }, [requestList.isFetching, requestList.data]);
 
