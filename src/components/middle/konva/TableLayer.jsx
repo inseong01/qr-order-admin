@@ -20,7 +20,7 @@ export default function TableLayer({
   requestList,
   onClickCheckTableInfo,
 }) {
-  const { init, order, tableName, id } = table;
+  const { init, order, tableNum, id } = table;
   const totalPrice =
     order
       ?.reduce(
@@ -261,7 +261,13 @@ export default function TableLayer({
             />
           )}
           <Group x={20} y={20}>
-            <Text text={tableName} width={init.tableText.width} fill={'#222'} fontSize={18} align="left" />
+            <Text
+              text={`테이블 ${tableNum}`}
+              width={init.tableText.width}
+              fill={'#222'}
+              fontSize={18}
+              align="left"
+            />
           </Group>
           <Group x={20} y={init.bottom.y}>
             <Line points={init.bottom.line.points} strokeWidth={1} stroke={'#8D8D8D'} />

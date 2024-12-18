@@ -16,6 +16,7 @@
     "dotenv": "^16.4.5",
     "konva": "8.0.1",
     "motion": "^11.11.17",
+    "qrcode": "^1.5.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-konva": "18.0.0-0",

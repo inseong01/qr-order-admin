@@ -131,7 +131,7 @@ export default function MainPageTableTab() {
   function onClickCheckTableInfo(tableInfo) {
     if (!konvaEditIsAble && konvaEditType === '') {
       // 모달창 상태 true 변환
-      dispatch(changeModalState({ type: 'pay', isOpen: true }));
+      dispatch(changeModalState({ type: 'info', isOpen: true }));
       dispatch(selectTable({ table: tableInfo[0] }));
       return;
     }

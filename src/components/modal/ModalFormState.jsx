@@ -7,6 +7,7 @@ import CreateAndEditMenu from './menu/CreateAndEditMenu';
 
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import QRcode from 'qrcode';
 
 export default function ModalFormState({ categoryList }) {
   // useSelector
@@ -66,12 +67,19 @@ export default function ModalFormState({ categoryList }) {
           dispatch(changeModalState({ isOpen: false }));
           return;
         }
-        case 'pay': {
-          alert('결제를 시작합니다.');
-          // 고객 결제 요청
-          // 고객 반응
-          // 결제 완료
-          // 해당 테이블 초기화
+        case 'info': {
+          if (method === 'pay') {
+            alert('결제를 시작합니다.');
+            // 고객 결제 요청
+            // 고객 반응
+            // 결제 완료
+            // 해당 테이블 초기화
+          } else if (method === 'qrcode') {
+            alert('QR코드 확인');
+            QRcode.toDataURL('www.naver.com')
+              .then((url) => console.log(url))
+              .catch((err) => console.error(err));
+          }
           return;
         }
         default: {
@@ -104,8 +112,8 @@ export default function ModalFormState({ categoryList }) {
     }
   } else if (tab === 'table') {
     switch (modalType) {
-      case 'pay': {
-        // 테이블 결제 모달창은 useEffect로 실행중 (MainPageTableTab.jsx)
+      case 'info': {
+        // MainPageTableTab.jsx
         return <TableInfoModal onSubmitData={onSubmitData} />;
       }
     }

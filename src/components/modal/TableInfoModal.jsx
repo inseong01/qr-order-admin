@@ -1,11 +1,10 @@
 import styles from '@/style/modal/TableInfoModal.module.css';
 import createReceipt from '../../lib/function/createReceipt';
-import EmptyTable from './table/EmptyTable';
 
 import { useSelector } from 'react-redux';
-import NotEmptyTable from './table/NotEmptyTable';
+import TableInfo from './table/TableInfo';
 
-// id, init, orderList, tableName
+// id, init, orderList, tableNum
 // 주문목록 형태 [{ id: 주문 식별자, orderList: 주문목록 }, ...]
 export default function TableInfoModal({ onSubmitData }) {
   // useSelector
@@ -17,11 +16,7 @@ export default function TableInfoModal({ onSubmitData }) {
   return (
     <form className={styles.submitForm} onSubmit={onSubmitData('table')}>
       <div className={styles.wrap}>
-        {billArr.length === 0 ? (
-          <EmptyTable />
-        ) : (
-          <NotEmptyTable billArr={billArr} tableName={tableInfo.tableName} />
-        )}
+        <TableInfo billArr={billArr} tableNum={tableInfo.tableNum} />
       </div>
     </form>
   );
