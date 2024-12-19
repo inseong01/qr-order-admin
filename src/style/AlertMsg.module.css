@@ -27,8 +27,8 @@
 }
 
 .closeBtn {
-  width: 20px;
-  height: 20px;
+  width: 17px;
+  height: 17px;
 
   display: flex;
   justify-content: center;
@@ -47,7 +47,7 @@
 }
 
 .reqeustMsg {
-  width: 260px;
+  width: 275px;
 
   display: flex;
   flex-direction: column-reverse;

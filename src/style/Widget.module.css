@@ -2,7 +2,7 @@
   position: fixed;
   right: 15px;
   bottom: 95px;
-  z-index: 9;
+  z-index: 99;
 
   display: flex;
   flex-direction: column-reverse;

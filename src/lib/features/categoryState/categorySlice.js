@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  id: 1,
+  id: 0,
   title: '전체메뉴',
 }
 

@@ -5,7 +5,8 @@ export default async function fetchOrderList(method, data) {
 
   switch (method) {
     case 'select': {
-      response = await supabase.from('qr-order-allOrderList').select('*');
+      response = await supabase.from('qr-order-allOrderList').select('*').order('created_at', { ascending: true });
+      console.log('response', response.data)
       if (response.error) {
         console.error(response.error.message);
         throw new Error(response.error.message);

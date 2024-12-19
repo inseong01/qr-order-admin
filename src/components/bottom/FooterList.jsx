@@ -1,5 +1,5 @@
 import styles from '@/style/bottom/FooterList.module.css';
-import getTabMenu from '@/lib/supabase/func/getTabMenu';
+import getTabCategory from '@/lib/supabase/func/getTabCategory';
 import { changeTabState } from '@/lib/features/tabState/tabSlice';
 import fetchOrderList from '../../lib/supabase/func/fetchOrderList';
 import fetchTableRequestList from '../../lib/supabase/func/fetchTableRequestList';
@@ -28,7 +28,7 @@ export default function FooterList() {
     queries: [
       {
         queryKey: ['tabMenu'],
-        queryFn: getTabMenu,
+        queryFn: () => getTabCategory('tab'),
         // staleTime: 1000 * 60 * 5,
         initialData: [],
       },

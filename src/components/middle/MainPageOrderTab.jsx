@@ -8,7 +8,7 @@ import ErrorPage from '../ErrorPage';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useQuery } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function MainPageOrderTab() {
   // useSelector
@@ -24,20 +24,32 @@ export default function MainPageOrderTab() {
   });
   // useDispatch
   const dispatch = useDispatch();
+  // useState
+  const [sortedOrderList, sortOrder] = useState([]);
 
+  // 주문 탭이고 제출했을 때 동작
   useEffect(() => {
-    // 주문 탭이고 제출했을 때 동작
     if (tab !== 'order' && !isSubmit) return;
     dispatch(changeSubmitState({ isSubmit: false }));
   }, [tab, allOrderList]);
+
+  // 완료 주문 최신순 정렬 적용
+  useEffect(() => {
+    if (allOrderList.isFetching) return;
+    const filteredArr = allOrderList.data.filter((arr) => arr.isDone);
+    const descSortArr = [...filteredArr].sort(
+      (a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+    );
+    sortOrder(descSortArr);
+  }, [allOrderList.data, allOrderList.isFetching]);
 
   if (allOrderList.isError) return <ErrorPage compName={'MainPageOrderTab'} />;
 
   return (
     <>
-      {selectedCategory.id === 1 ? (
+      {selectedCategory.id === 0 ? (
         <>
-          {allOrderList.data && !allOrderList.isFetching ? (
+          {allOrderList.isFetched ? (
             <OrderListSwiper orderList={allOrderList.data.filter((list) => !list.isDone)} />
           ) : (
             <Loader />
@@ -45,8 +57,8 @@ export default function MainPageOrderTab() {
         </>
       ) : (
         <>
-          {allOrderList.data && !allOrderList.isFetching ? (
-            <CompletedOrderListSwiper orderList={allOrderList.data.filter((list) => list.isDone)} />
+          {allOrderList.isFetched && sortedOrderList.length > 0 ? (
+            <CompletedOrderListSwiper orderList={sortedOrderList} />
           ) : (
             <Loader />
           )}

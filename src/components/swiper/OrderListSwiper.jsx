@@ -37,7 +37,7 @@ export default function OrderListSwiper({ orderList }) {
         rows: 2,
       },
       slidesPerView: 1,
-      spaceBetween: 10,
+      spaceBetween: 20,
       breakpoints: {
         600: {
           slidesPerView: 2,
@@ -96,10 +96,10 @@ export default function OrderListSwiper({ orderList }) {
                 <div className={styles.list}>
                   <div className={styles.topBox} onClick={onClickOpenListOption(list)}>
                     <div className={styles.top}>
-                      <div className={styles.title}>#{list.orderNum}</div>
+                      <div className={styles.title}>#{idx + 1}</div>
                       <div className={styles.right}>
-                        <div className={styles.table}>{list.tableName}</div>
-                        <div className={styles.time}>00:00</div>
+                        <div className={styles.table}>테이블 {list.tableNum}</div>
+                        {/* <div className={styles.time}>00:00</div> */}
                       </div>
                     </div>
                   </div>

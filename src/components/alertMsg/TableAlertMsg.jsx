@@ -84,7 +84,7 @@ export default function TableAlertMsg() {
                     layout
                   >
                     <div className={styles.top}>
-                      <div className={styles.title}>{list.tableName}</div>
+                      <div className={styles.title}>테이블 {list.tableNum}</div>
                       <div className={styles.closeBtn} onClick={onClickReadMsg(list)}>
                         <img src="/img/close-icon.png" alt="닫기" />
                       </div>

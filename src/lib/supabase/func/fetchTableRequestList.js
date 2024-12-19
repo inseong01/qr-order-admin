@@ -22,7 +22,7 @@ export default async function fetchTableRequestList(method, id) {
   // 에러 발생 시 supabase 자체 에러 콘솔 출력됨
   switch (method) {
     case 'select': {
-      const response = await supabase.from('qr-order-request-list').select('*');
+      const response = await supabase.from('qr-order-request-list').select('*').order('created_at', { ascending: true });
       if (response.error) {
         console.error(response.error.message);
         return [];

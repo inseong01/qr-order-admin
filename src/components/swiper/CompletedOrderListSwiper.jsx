@@ -26,7 +26,7 @@ export default function CompletedOrderListSwiper({ orderList }) {
         rows: 2,
       },
       slidesPerView: 1,
-      spaceBetween: 10,
+      spaceBetween: 20,
       breakpoints: {
         600: {
           slidesPerView: 2,
@@ -63,9 +63,9 @@ export default function CompletedOrderListSwiper({ orderList }) {
               <div className={styles.list}>
                 <div className={styles.topBox}>
                   <div className={styles.top}>
-                    <div className={styles.title}>#{list.orderNum}</div>
+                    <div className={styles.title}>#{orderList.length - idx}</div>
                     <div className={styles.right}>
-                      <div className={styles.table}>{list.tableName}</div>
+                      <div className={styles.table}>테이블 {list.tableNum}</div>
                     </div>
                   </div>
                 </div>

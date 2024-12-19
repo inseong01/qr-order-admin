@@ -6,7 +6,7 @@
   transform: translate(-50%, -50%);
   background-color: transparent;
   padding: 20px;
-  z-index: 9999;
+  z-index: 99999;
 }
 .backdrop {
   width: 100%;
@@ -15,7 +15,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 999;
+  z-index: 9999;
 }
 
 /* 닫는 버튼 */

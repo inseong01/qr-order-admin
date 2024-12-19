@@ -10,7 +10,7 @@
 
 .listBox {
   width: 100%;
-  max-height: 100%;
+  max-height: 95%;
 
   font-size: 1rem;
   position: relative;
@@ -43,7 +43,8 @@
   color: white;
 }
 .top {
-  font-size: 1.2rem;
+  height: 57px;
+  font-size: 1.05rem;
   padding: 12px 16px;
 }
 
@@ -72,7 +73,7 @@
 
 .right {
   text-align: right;
-  font-size: 13px;
+  /* font-size: 13px; */
 }
 
 .orderList > div {
