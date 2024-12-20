@@ -17,12 +17,27 @@
 .alertStatus {
   width: 8px;
   height: 8px;
+  background-color: #4caff8;
   border-radius: 50%;
-  background-color: #ff6262;
-
   position: absolute;
-  right: -15px;
-  top: 50%;
+  right: -50%;
+  top: 60%;
+  transform: translateY(-50%);
+  animation: blink 1s step-start infinite;
+}
+.alertStatus.moreAlert {
+  background-color: #f84c4c;
+}
+@keyframes blink {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 .clicked .title {

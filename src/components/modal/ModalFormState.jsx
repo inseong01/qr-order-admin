@@ -1,5 +1,6 @@
 import { changeModalState } from '@/lib/features/modalState/modalSlice';
 import { changeSubmitMsgType, fetchFormData } from '@/lib/features/submitState/submitSlice';
+import { changeSubmitState } from '../../lib/features/submitState/submitSlice';
 import TableInfoModal from './TableInfoModal';
 import DeleteCategory from './menu/DeleteCategory';
 import AddCategory from './menu/AddCategory';
@@ -30,6 +31,7 @@ export default function ModalFormState({ categoryList }) {
   useEffect(() => {
     if (tab === 'menu' && isSubmit && submitStatus === 'fulfilled') {
       dispatch(changeModalState({ isOpen: false }));
+      dispatch(changeSubmitState({ isSubmit: false }));
       // dispatch(resetSubmitState()); // alertMsg 나오지 않았던 원인
     }
   }, [submitStatus]);
@@ -38,7 +40,7 @@ export default function ModalFormState({ categoryList }) {
     return (e) => {
       const target = e.target.name;
       if (onChangeType === 'category') {
-        setValue((prev) => (prev = { [target]: e.target.value }));
+        setValue((prev) => ({ ...prev, [target]: e.target.value }));
       } else if (onChangeType === 'add/edit') {
         setValue((prev) => ({
           ...prev,
@@ -83,8 +85,11 @@ export default function ModalFormState({ categoryList }) {
           return;
         }
         default: {
-          dispatch(fetchFormData({ method, itemInfo: [value], table }));
-          dispatch(changeModalState({ isOpen: false }));
+          const adminId = 'store_1';
+          const file = e.target[0].files[0];
+          // 메뉴, 사진 정보 전달
+          dispatch(fetchFormData({ method, itemInfo: value, table, file, adminId }));
+          // dispatch(changeModalState({ isOpen: false }));
         }
       }
     };

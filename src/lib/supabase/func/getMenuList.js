@@ -3,7 +3,7 @@ import supabase from "../supabaseConfig.js";
 export default async function getMenuList({ title }) {
   let response;
   if (title === '전체메뉴' || title === '') {
-    response = await supabase.from('qr-order-menu').select('*');
+    response = await supabase.from('qr-order-menu').select('*').order('price', { ascending: false });
     if (response.error) {
       console.error(response.error.message);
       throw new Error(response.error.message);

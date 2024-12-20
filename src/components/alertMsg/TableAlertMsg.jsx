@@ -43,7 +43,6 @@ export default function TableAlertMsg() {
       setRequestAlertList((prev) => prev.filter((msg) => msg.id !== id));
     }
   }, [id, submitStatus]);
-
   useEffect(() => {
     if (tab === 'table' && requestAlertList.length > 0 && !tableEditIsAble) {
       setAlertOn(requestAlertOn);
@@ -60,7 +59,7 @@ export default function TableAlertMsg() {
       selectId(list.id);
     };
   }
-
+  console.log(requestList.data.filter((list) => !list.isRead));
   return (
     <AnimatePresence>
       {alertOn && (
@@ -71,7 +70,11 @@ export default function TableAlertMsg() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          <motion.ul className={styles.reqeustMsg}>
+          <motion.ul
+            className={`${styles.reqeustMsg} ${
+              requestList.data.filter((list) => !list.isRead).slice(4).length > 0 ? styles.moreAlert : ''
+            }`}
+          >
             <AnimatePresence mode="popLayout">
               {requestAlertList.map((list) => {
                 return (

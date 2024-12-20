@@ -90,7 +90,15 @@ export default function FooterList() {
                 animate={{ opacity: 1, y: 0 }}
               >
                 {list.title}
-                {list.title === '좌석' && isUnreadAlert && <div className={`${styles.alertStatus}`}></div>}
+                {list.title === '좌석' && isUnreadAlert && (
+                  <div
+                    className={`${styles.alertStatus} ${
+                      requestList.data.filter((list) => !list.isRead).slice(4).length > 0
+                        ? styles.moreAlert
+                        : ''
+                    }`}
+                  ></div>
+                )}
                 {list.title === '주문' && isUnDoneList && <div className={`${styles.alertStatus}`}></div>}
               </motion.div>
               {clicked === idx && <motion.div className={styles.line} layoutId="footerLine"></motion.div>}

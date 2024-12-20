@@ -1,12 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { v4 as uuidv4 } from 'uuid'
 
 const initialState = {
   item: {
-    // id: null,
+    id: uuidv4(),
     name: '',
     price: 0,
     sort: '',
-    description: '',
+    tag: '',
+    url: '',
   },
   list: {
     id: ''

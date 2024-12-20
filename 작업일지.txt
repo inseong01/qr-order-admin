@@ -216,4 +216,19 @@
   - client db 연동 확인
     : css, 주문목록 접수 오래된 순/완료 최신순/요청알림 오래된 순 적용, 주문번호 처리 순서대로 반영
 
-<--- 컴포넌트 코드 개선, 스타일링 보완: 목록 더 있을 때 알림 스타일링 추가(TableAlertMsg, menuCategory), 사진 업로드 기능, 추후 라벨링 기능 --->
+24.12.20.
+  - DB 사진 불러오기 구상
+    : 제출 누르면 이미지 uri Storage 전달(이미지명 부여), sql trigger 연동 불가, Storage 반환값 활용
+    링크 예시) https://[project_id].supabase.co/storage/v1/object/public/[bucket]/[asset-name]
+      - 생성: storage에 이미지 저장, 생성된 uri를 해당 메뉴가 있는 DB에 삽입
+      - 갱신: storage 이미지 변경, uri는 그대로
+      - 삭제: storage 이미지 삭제, 해당 메뉴 있는 DB에서 uri 삭제, 관리자에서 사진만 삭제하는 기능 없음 
+  - 메뉴 생성 기능 수정
+    : 카테고리 선택 필수 
+  - Storage 사진 추가/변경/삭제 구현
+  - 선택 이미지 미리보기 기능 추가
+  - 스타일링 보완
+    : 목록 더 있을 때 알림 스타일링 추가(TableAlertMsg)
+  - 추후 기능 추가: 메뉴 사진만 삭제하기, 메뉴 라벨링 하기
+  
+<--- 컴포넌트 코드 개선 --->

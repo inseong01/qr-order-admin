@@ -1,19 +1,49 @@
 import styles from '@/style/modal/menu/CreateAndEditMenu.module.css';
+import { useRef, useState } from 'react';
 
 import { useSelector } from 'react-redux';
 
 export default function CreateAndEditMenu({ onSubmitData, onChangeInputValue, value, categoryList }) {
+  // useSelector
   const modalType = useSelector((state) => state.modalState.type); // 기본: '', 'add'/'edit'/'category'
-  const categoryTitle = useSelector((state) => state.categoryState.title);
+  // useRef
+  const imgBox = useRef(null);
+  // useState
+  const [isPrevImg, setPrevImg] = useState(false);
+
+  function onChangeShowPrevImage(e) {
+    const reader = new FileReader();
+    setPrevImg(true);
+    reader.onload = ({ target }) => {
+      imgBox.current.src = target.result;
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  }
 
   return (
     <form className={styles.submitForm} onSubmit={onSubmitData('menu')}>
-      <input type="file" id="fileInput" className={styles.fileInput} hidden />
+      <input
+        type="file"
+        id="fileInput"
+        className={styles.fileInput}
+        name="url"
+        accept=".png, .jpg"
+        onChange={onChangeShowPrevImage}
+        hidden
+      />
       <label htmlFor="fileInput" className={styles.left}>
-        <div className={styles.iconBox}>
-          <img src={'/img/img-add-icon.png'} alt="사진 추가" style={{ width: 25, height: 25 }} />
-        </div>
-        <div className={styles.title}>{modalType === 'add' ? '사진 추가' : '사진 변경'}</div>
+        {!isPrevImg ? (
+          <>
+            <div className={`${styles.iconBox} `}>
+              <img src={'/img/img-add-icon.png'} alt="사진 추가" />
+            </div>
+            <div className={styles.title}>{modalType === 'add' ? '사진 추가' : '사진 변경'}</div>
+          </>
+        ) : (
+          <div className={styles.prevImgBox}>
+            <img ref={imgBox} alt="미리보기" />
+          </div>
+        )}
       </label>
       <div className={styles.right}>
         <div className={styles.title}>{modalType === 'add' ? '새로운 메뉴' : '현재 메뉴'}</div>
@@ -54,16 +84,21 @@ export default function CreateAndEditMenu({ onSubmitData, onChangeInputValue, va
               분류
             </label>
             <select
+              required
               id="sortSelect"
               className={styles.input}
               name="sort"
               onChange={onChangeInputValue('add/edit')}
-              defaultValue={modalType === 'add' ? categoryTitle : value.sort}
+              defaultValue={value.sort}
             >
               {categoryList.data.map((category) => {
                 return (
-                  <option key={category.id} value={category.sort}>
-                    {category.title}
+                  <option
+                    key={category.id}
+                    value={category.title === '전체메뉴' ? '' : category.title}
+                    disabled={category.title === '전체메뉴'}
+                  >
+                    {category.title === '전체메뉴' ? '분류를 선택해주세요' : category.title}
                   </option>
                 );
               })}

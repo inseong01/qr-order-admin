@@ -52,6 +52,15 @@
 
   font-size: 13px;
 }
+
+.iconBox {
+  width: 25px;
+  height: 25px;
+}
+.prevImgBox {
+  padding: 8px;
+}
+
 /* 항목 입력 input */
 .submitInfo input,
 .submitInfo select {

@@ -14,7 +14,7 @@
   bottom: 5%;
 
   cursor: default;
-  z-index: 999;
+  z-index: 9999;
 }
 .alertMsg.error {
   background-color: #f30000;
@@ -54,7 +54,24 @@
   justify-content: flex-start;
   gap: 10px;
 
+  border: 2px solid;
+  border-color: transparent;
+
   cursor: default;
+}
+
+.reqeustMsg.moreAlert {
+  border-color: #f84c4c;
+  animation: blink 2s step-start infinite;
+}
+@keyframes blink {
+  0%,
+  100% {
+    border-color: transparent;
+  }
+  50% {
+    border-color: #f84c4c;
+  }
 }
 
 .msg {

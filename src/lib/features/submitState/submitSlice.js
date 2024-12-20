@@ -2,6 +2,8 @@ import fetchMenuItem from "@/lib/supabase/func/fetchMenuItem";
 import fetchTableList from "../../supabase/func/fetchTableList";
 import fetchTableRequestList from "../../supabase/func/fetchTableRequestList";
 import fetchOrderList from "../../supabase/func/fetchOrderList";
+import fetchMenuImage from "../../supabase/func/fetchMenuImage";
+import createImgPath from "../../function/createImgPath";
 
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
@@ -17,8 +19,12 @@ const initialState = {
 /* createAsyncThunk */
 export const fetchFormData = createAsyncThunk(
   'submitState/fetchFormData',
-  async ({ method, itemInfo, table }) => {
-    const result = await fetchMenuItem({ method, itemInfo, table })
+  async ({ method, itemInfo, table, file, adminId }) => {
+    const menuInfo = { ...itemInfo };
+    const imgPath = createImgPath({ method, file, menuInfo, adminId });
+    const imgResult = await fetchMenuImage({ method, file, imgPath })
+    const menuResult = await fetchMenuItem({ method, menuInfo, table, imgPath })
+    const result = !imgResult?.error && !menuResult.error;
     return result;
   }
 )
