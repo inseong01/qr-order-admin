@@ -38,7 +38,6 @@ export default function MainPageTableTab() {
   });
   const [clientTableList, setClientTableList] = useState([]);
   const [openKonva, setOpenKonva] = useState(false);
-  const [tableIdArr, selectTableId] = useState([]);
 
   // konva Stage 크기 설정
   useEffect(() => {
@@ -73,38 +72,15 @@ export default function MainPageTableTab() {
     setClientTableList(tableList.data);
   }, [tab, tableBoxRef, tableList, konvaEditIsEditing]);
 
-  // konva 편집 유형 항목
+  // konva 편집 유형 "create", 좌석 생성
   useEffect(() => {
-    if (tab !== 'table') return;
-    switch (konvaEditType) {
-      case 'create': {
-        // 좌석 생성
-        const newTable = createKonvaInitTable({ stageSize, clientTableList });
-        setClientTableList((prev) => [...prev, newTable]);
-        dispatch(getEditKonvaTableId({ id: [newTable.id] }));
-        return;
-      }
-      case 'update': {
-        // 좌석 수정
-        if (!tableIdArr.length) return;
-        if (konvaEditIsAble) dispatch(getEditKonvaTableId({ id: tableIdArr }));
-        return;
-      }
-      case 'delete': {
-        // 좌석 삭제
-        if (konvaEditIsAble) dispatch(getEditKonvaTableId({ id: tableIdArr }));
-        return;
-      }
-      default: {
-        // 초기화
-        // if (!tableIdArr.length) return;
-        // selectTableId([]);
-        return;
-      }
-    }
-  }, [tab, konvaEditType, konvaEditIsAble, tableIdArr]);
+    if (tab !== 'table' || konvaEditType !== 'create') return;
+    const newTable = createKonvaInitTable({ stageSize, clientTableList });
+    setClientTableList((prev) => [...prev, newTable]);
+    dispatch(getEditKonvaTableId({ id: [newTable.id] }));
+  }, [tab, konvaEditType]);
 
-  // create/update, clientTableList 배열 업데이트
+  // konva 편집 유형 "create/update", clientTableList 배열 업데이트
   useEffect(() => {
     if (!clientTableList?.length) return;
     // 수정/추가된 테이블 배열 전달
@@ -113,29 +89,6 @@ export default function MainPageTableTab() {
     if (!konvaEditType) return;
     dispatch(changeKonvaIsEditingState({ isEditing: true }));
   }, [clientTableList]);
-
-  // tableIdArr 배열 업데이트
-  useEffect(() => {
-    // delete, 수정 상태 변경
-    if (konvaEditType === 'delete') {
-      if (tableIdArr.length <= 0) {
-        dispatch(changeKonvaIsEditingState({ isEditing: false }));
-      } else {
-        dispatch(changeKonvaIsEditingState({ isEditing: true }));
-      }
-      return;
-    }
-  }, [konvaEditType, tableIdArr]);
-
-  // 테이블 정보창 열기
-  function onClickCheckTableInfo(tableInfo) {
-    if (!konvaEditIsAble && konvaEditType === '') {
-      // 모달창 상태 true 변환
-      dispatch(changeModalState({ type: 'info', isOpen: true }));
-      dispatch(selectTable({ table: tableInfo[0] }));
-      return;
-    }
-  }
 
   if (tableList.isError) return <ErrorPage compName={'MainPageTableTab'} />;
 
@@ -147,8 +100,6 @@ export default function MainPageTableTab() {
             stageSize={stageSize}
             tableList={clientTableList}
             setClientTableList={setClientTableList}
-            selectTableId={selectTableId}
-            onClickCheckTableInfo={onClickCheckTableInfo}
           />
         </motion.div>
       )}

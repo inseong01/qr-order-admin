@@ -59,7 +59,7 @@ export default function TableAlertMsg() {
       selectId(list.id);
     };
   }
-  console.log(requestList.data.filter((list) => !list.isRead));
+
   return (
     <AnimatePresence>
       {alertOn && (

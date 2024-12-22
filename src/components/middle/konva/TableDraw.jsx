@@ -1,21 +1,14 @@
 import styles from '@/style/middle/konva/TableDraw.module.css';
+import fetchTableRequestList from '../../../lib/supabase/func/fetchTableRequestList';
 import TableLayer from './TableLayer';
 
 import { Layer, Stage } from 'react-konva';
 import { Provider, ReactReduxContext, useSelector } from 'react-redux';
 import { useRef, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import fetchTableRequestList from '../../../lib/supabase/func/fetchTableRequestList';
+import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 
-export default function TableDraw({
-  stageSize,
-  tableList,
-  setClientTableList,
-  selectTableId,
-  onClickCheckTableInfo,
-}) {
+export default function TableDraw({ stageSize, tableList, setClientTableList }) {
   // useSelector
-  const konvaEditTableIdArr = useSelector((state) => state.konvaState.target.id);
   const konvaEditType = useSelector((state) => state.konvaState.type);
   // useRef
   const stageRef = useRef(null);
@@ -47,8 +40,8 @@ export default function TableDraw({
   return (
     <ReactReduxContext.Consumer>
       {({ store }) => {
-        const state = store.getState();
-        const dispatch = store.dispatch;
+        const queryClient = new QueryClient();
+
         return (
           <Stage
             ref={stageRef}
@@ -61,25 +54,23 @@ export default function TableDraw({
             onDblTap={backToInitPos}
             onDragEnd={getLastPos}
           >
-            <Layer>
-              {tableList.map((table) => {
-                return (
-                  <TableLayer
-                    key={table.id}
-                    stage={stageRef}
-                    table={table}
-                    setClientTableList={setClientTableList}
-                    konvaEditTableIdArr={konvaEditTableIdArr}
-                    selectTableId={selectTableId}
-                    konvaEditType={konvaEditType}
-                    dispatch={dispatch}
-                    state={state}
-                    requestList={requestList}
-                    onClickCheckTableInfo={onClickCheckTableInfo}
-                  />
-                );
-              })}
-            </Layer>
+            <Provider store={store}>
+              <QueryClientProvider client={queryClient}>
+                <Layer>
+                  {tableList.map((table) => {
+                    return (
+                      <TableLayer
+                        key={table.id}
+                        stage={stageRef}
+                        table={table}
+                        setClientTableList={setClientTableList}
+                        requestList={requestList}
+                      />
+                    );
+                  })}
+                </Layer>
+              </QueryClientProvider>
+            </Provider>
           </Stage>
         );
       }}

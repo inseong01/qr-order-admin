@@ -3,8 +3,11 @@ import CurrentTimer from './CurrentTimer';
 import ServerStatus from './ServerStatus';
 
 import { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 
 export default function HeaderRight({ tabCategory }) {
+  // function HeaderRight({ tabCategory, store }) {
+  // console.log(store);
   // useState
   const [isFirstRender, setIsFirstRender] = useState(true);
 
@@ -21,3 +24,5 @@ export default function HeaderRight({ tabCategory }) {
     </ul>
   );
 }
+
+// export default connect((store) => ({ store }))(HeaderRight);

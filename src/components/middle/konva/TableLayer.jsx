@@ -1,6 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { Group, Line, Rect, RegularPolygon, Text, Transformer } from 'react-konva';
 import { fetchUpdateAlertMsg } from '../../../lib/features/submitState/submitSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeModalState } from '../../../lib/features/modalState/modalSlice';
+import { selectTable } from '../../../lib/features/itemState/itemSlice';
+import useOpenTableInfo from '../../../lib/hook/tableTab/useOpenTableInfo';
+import { changeKonvaIsEditingState, getEditKonvaTableId } from '../../../lib/features/konvaState/konvaSlice';
+import useEditTable from '../../../lib/hook/tableTab/useEditTable';
+import fetchTableRequestList from '../../../lib/supabase/func/fetchTableRequestList';
+import { useQuery } from '@tanstack/react-query';
+import useOnMouseChangeCursor from '../../../lib/hook/tableTab/useOnMouseChangeCursor';
+import RequestMesgGroup from './RequestMsgGroup';
 
 const initialMsgObj = {
   list: [],
@@ -8,18 +18,11 @@ const initialMsgObj = {
   pos: { x: 0, y: 0, width: 30 },
 };
 
-export default function TableLayer({
-  stage,
-  table,
-  setClientTableList,
-  konvaEditTableIdArr,
-  selectTableId,
-  konvaEditType,
-  dispatch,
-  state,
-  requestList,
-  onClickCheckTableInfo,
-}) {
+export default function TableLayer({ stage, table, setClientTableList }) {
+  // useSelector
+  const konvaEditTableIdArr = useSelector((state) => state.konvaState.target.id);
+  const konvaEditType = useSelector((state) => state.konvaState.type);
+  // variant
   const { init, order, tableNum, id } = table;
   const totalPrice =
     order
@@ -30,7 +33,6 @@ export default function TableLayer({
         0
       )
       .toLocaleString() ?? 0;
-  // console.log(totalPrice);
   const isTransformerAble = id === konvaEditTableIdArr[0] && konvaEditType !== 'delete';
   const isSelectedToDelete = konvaEditType === 'delete' && konvaEditTableIdArr.includes(id);
   const stageAttrs = stage.current.attrs;
@@ -41,9 +43,19 @@ export default function TableLayer({
   // useState
   const [requestMsg, hoverTable] = useState(initialMsgObj);
   const [hasAlert, getAlert] = useState(false);
-  // state
-  const tableRequestAlertOn = state.realtimeState.tableRequestList.isOn;
-  const tableRequestTrigger = state.realtimeState.tableRequestList.trigger;
+  // useSelector
+  const tableRequestAlertOn = useSelector((state) => state.realtimeState.tableRequestList.isOn);
+  const requestTrigger = useSelector((state) => state.realtimeState.tableRequestList.trigger);
+  // hook
+  const { onClickOpenTableInfo } = useOpenTableInfo();
+  const { onClickEditTable } = useEditTable();
+  const { onMouseLeaveChangePointer, onMouseEnterChangePointer } = useOnMouseChangeCursor(stage, id);
+  // useQuery
+  const requestList = useQuery({
+    queryKey: ['requestList', requestTrigger],
+    queryFn: () => fetchTableRequestList('select'),
+    initialData: [],
+  });
 
   useEffect(() => {
     if (konvaEditTableIdArr[0] !== id) return;
@@ -52,15 +64,18 @@ export default function TableLayer({
     trRef.current.getLayer().batchDraw();
   }, [konvaEditTableIdArr]);
 
+  // 요청 알림이 끄면 테이블 메시지 등장
+  // 요청이 많아지면 width가 너무 길어짐
   useEffect(() => {
     if (requestList.isFetching) return;
-    // 요청 알림이 꺼져 있는 상태
     if (!tableRequestAlertOn) {
-      const tableAlert = requestList.data.some((request) => request.tableId === id && !request.isRead);
-      if (tableAlert) {
+      const isTableAlertunRead = requestList.data.some(
+        (request) => !request.isRead && request.tableNum === tableNum
+      );
+      if (isTableAlertunRead) {
         getAlert(true);
         const requestArr = requestList.data.filter((request) => {
-          return request.tableId === id && !request.isRead;
+          return !request.isRead && request.tableNum === tableNum;
         });
 
         const msgContext = requestArr.reduce((prev, curr) => prev + ', ' + curr.requestList, '').slice(2);
@@ -87,9 +102,11 @@ export default function TableLayer({
       getAlert(false);
       hoverTable(initialMsgObj);
     }
-  }, [requestList, tableRequestTrigger, tableRequestAlertOn]);
+  }, [requestList.data, tableRequestAlertOn]);
 
   function changeTablePosition(e) {
+    stage.current.container().style.cursor = 'move';
+
     const lastPs = e.target.position();
 
     setClientTableList((prev) =>
@@ -180,11 +197,9 @@ export default function TableLayer({
   }
 
   function onClickSelectTable() {
-    // 테이블 결제 창, 알림 X
-    if (!hasAlert && konvaEditType === '') {
-      // 선택하면 모달 창 열림, 주문목록/금액, 결제/닫기 버튼, 결제
-      onClickCheckTableInfo([table]);
-    }
+    // 테이블 결제 창
+    onClickOpenTableInfo({ hasAlert, konvaEditType, table });
+
     // 읽음 처리 (DB 연동 필요)
     if (hasAlert) {
       stage.current.container().style.cursor = 'default';
@@ -193,37 +208,9 @@ export default function TableLayer({
       hoverTable(initialMsgObj);
       return;
     }
-    // 테이블 편집 중
-    if (konvaEditType === 'update') {
-      stage.current.container().style.cursor = 'move';
-      selectTableId([id]);
-    } else if (konvaEditType === 'delete') {
-      selectTableId((prev) => {
-        // 다시 누르면 배열 요소 삭제
-        if (prev.includes(id)) return [...prev.filter((prevId) => prevId !== id)];
-        // 클릭하면 배열 요소 추가
-        else return [...prev, id];
-      });
-    }
-  }
 
-  function onMouseEnterChangePointer(e) {
-    if (konvaEditType === '' || requestList.isFetched) {
-      if (hasAlert) {
-        stage.current.container().style.cursor = 'pointer';
-      }
-      return;
-    }
-    if (konvaEditType === 'delete' || konvaEditType === 'update') {
-      stage.current.container().style.cursor = 'pointer';
-      return;
-    } else if (isTransformerAble) {
-      stage.current.container().style.cursor = 'move';
-    }
-  }
-
-  function onMouseLeaveChangePointer() {
-    stage.current.container().style.cursor = 'default';
+    // 테이블 편집 유형
+    onClickEditTable({ stage, id });
   }
 
   return (
@@ -236,7 +223,7 @@ export default function TableLayer({
         draggable={isTransformerAble}
         onDragEnd={changeTablePosition}
         onClick={onClickSelectTable}
-        onMouseEnter={onMouseEnterChangePointer}
+        onMouseEnter={onMouseEnterChangePointer({ requestList })}
         onMouseLeave={onMouseLeaveChangePointer}
       >
         <Group>
@@ -290,38 +277,7 @@ export default function TableLayer({
           </Group>
         </Group>
       </Group>
-      {requestMsg?.list.length > 0 &&
-        !tableRequestAlertOn &&
-        requestMsg.list.map((request, idx) => {
-          const { pos, table } = requestMsg;
-
-          return (
-            <Group key={idx} x={pos.x} y={pos.y}>
-              <Group x={pos.flip ? pos.width : 0}>
-                <RegularPolygon
-                  sides={3}
-                  width={20}
-                  height={20}
-                  y={table.rec.height / 2}
-                  rotation={pos.flip ? 90 : 30}
-                  fill="white"
-                />
-              </Group>
-              <Group x={0} offsetY={-(table.rec.height / 4)}>
-                <Rect
-                  width={pos.width}
-                  height={table.rec.height / 2}
-                  offsetX={pos.flip ? 0 : 0}
-                  cornerRadius={5}
-                  fill="white"
-                />
-                <Group x={15} offsetY={-(table.rec.height / 4) + 5}>
-                  <Text width={pos.width - 30} text={request} fontSize={16} align="center" />
-                </Group>
-              </Group>
-            </Group>
-          );
-        })}
+      <RequestMesgGroup requestMsg={requestMsg} />
     </>
   );
 }
