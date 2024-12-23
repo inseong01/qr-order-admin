@@ -233,6 +233,8 @@
   
 24.12.22.
   - Konva 컴포넌트 uesQuery, redux hook 연동
-  - 컴포넌트 코드 개선
-  
+  - 컴포넌트 코드 개선: tableLayer, TableDraw
+
 <--- 컴포넌트 코드 개선 --->
+24.12.23.
+  - 테이블 링크 이동 QR 설정

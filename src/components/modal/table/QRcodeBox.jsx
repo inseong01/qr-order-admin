@@ -14,7 +14,8 @@ export default function QRcodeBox({ tableNum }) {
   // QR코드 사진 생성
   useEffect(() => {
     if (!qrcodeRef.current) return;
-    QRcode.toDataURL('www.naver.com')
+    // 링크 진입 시 쿠키 전달하여 해당 tableNum이 아닌 주소로 주소변경 접근 제한
+    QRcode.toDataURL(`https://qr-order-client.vercel.app/${tableNum}`)
       .then((url) => {
         qrcodeRef.current.src = url;
         getURL(url);
