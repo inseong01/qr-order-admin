@@ -17,7 +17,7 @@ export default function MenuList() {
   // useDispatch
   const dispatch = useDispatch();
   // useSelector
-  const tab = useSelector((state) => state.tabState.state);
+  const tab = useSelector((state) => state.tabState.title);
   const selectedCategory = useSelector((state) => state.categoryState);
   const submitStatus = useSelector((state) => state.submitState.status);
   const submitError = useSelector((state) => state.submitState.isError);
@@ -26,7 +26,6 @@ export default function MenuList() {
     queryKey: ['menuList', tab, selectedCategory, submitStatus],
     queryFn: () => getMenuList(selectedCategory),
     enabled: tab === 'menu',
-    initialData: [],
   });
 
   useEffect(() => {

@@ -16,7 +16,7 @@ export default function CommonMsgType({ isAlert }) {
       str = submitStatus !== 'rejected' ? '수정되었습니다.' : '요청에 실패했습니다';
       break;
     }
-    case 'add':
+    case 'insert':
     case 'create': {
       str = submitStatus !== 'rejected' ? '생성되었습니다.' : '요청에 실패했습니다';
       break;
@@ -27,7 +27,6 @@ export default function CommonMsgType({ isAlert }) {
     }
     default: {
       if (submitStatus === 'rejected') str = '요청에 실패했습니다.';
-      else return;
     }
   }
 

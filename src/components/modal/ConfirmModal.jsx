@@ -9,7 +9,7 @@ import { AnimatePresence, motion } from 'motion/react';
 
 export default function ConfirmModal() {
   // useSelector
-  const tab = useSelector((state) => state.tabState.state);
+  const tab = useSelector((state) => state.tabState.title);
   const orderList = useSelector((state) => state.itemState.list);
   const submitStatus = useSelector((state) => state.submitState.status);
   const submitMsgType = useSelector((state) => state.submitState.msgType);

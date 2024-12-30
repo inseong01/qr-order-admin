@@ -1,6 +1,6 @@
-import styles from '@/style/modal/menu/AddCategory.module.css';
+import styles from '@/style/modal/menu/InsertCategory.module.css';
 
-export default function AddCategory({ onSubmitData, onChangeInputValue }) {
+export default function InsertCategory({ onSubmitData, onChangeInputValue }) {
   return (
     <form className={`${styles.submitForm} ${styles.category}`} onSubmit={onSubmitData('category-menu')}>
       <div className={`${styles.sortModal}`}>

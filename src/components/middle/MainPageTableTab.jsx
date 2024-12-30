@@ -15,7 +15,7 @@ import MainModal from '../modal/MainModal';
 
 export default function MainPageTableTab() {
   // useSelector
-  const tab = useSelector((state) => state.tabState.state);
+  const tab = useSelector((state) => state.tabState.title);
   const isSubmit = useSelector((state) => state.submitState.isSubmit);
   const konvaEditType = useSelector((state) => state.konvaState.type);
   const konvaEditIsAble = useSelector((state) => state.konvaState.isAble);

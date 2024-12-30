@@ -1,19 +1,56 @@
 import { changeModalState } from '@/lib/features/modalState/modalSlice';
-import { changeSubmitMsgType, fetchFormData } from '@/lib/features/submitState/submitSlice';
+import { changeSubmitMsgType } from '@/lib/features/submitState/submitSlice';
 import { changeSubmitState } from '../../lib/features/submitState/submitSlice';
+import { onSubmitDeleteCategory } from '../../lib/function/modal/onSubmitDeleteCategory';
+import { onSubmitInsertCategory } from '../../lib/function/modal/onSubmitInsertCategory';
+import { onSubmitFetchMenu } from '../../lib/function/modal/onSubmitFetchMenu';
+import { onSubmitDataInfo } from '../../lib/function/modal/onSubmitDataInfo';
 import TableInfoModal from './TableInfoModal';
 import DeleteCategory from './menu/DeleteCategory';
-import AddCategory from './menu/AddCategory';
+import InsertCategory from './menu/InsertCategory';
 import CreateAndEditMenu from './menu/CreateAndEditMenu';
 
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import QRcode from 'qrcode';
+import { debounce } from '../../lib/function/debounce';
+
+function MenuModal({ onSubmitData, onChangeInputValue, value, categoryList }) {
+  const modalType = useSelector((state) => state.modalState.type); // 기본: '', 'add'/'edit'/'category'
+  switch (modalType) {
+    case 'add':
+    case 'edit': {
+      return (
+        <CreateAndEditMenu
+          onSubmitData={onSubmitData}
+          onChangeInputValue={onChangeInputValue}
+          value={value}
+          categoryList={categoryList}
+        />
+      );
+    }
+    case 'insert-category': {
+      return <InsertCategory onSubmitData={onSubmitData} onChangeInputValue={onChangeInputValue} />;
+    }
+    case 'delete-category': {
+      return <DeleteCategory onSubmitData={onSubmitData} categoryList={categoryList} />;
+    }
+  }
+}
+
+function TableModal({ onSubmitData }) {
+  const modalType = useSelector((state) => state.modalState.type); // 기본: '', 'add'/'edit'/'category'
+  switch (modalType) {
+    case 'info': {
+      // MainPageTableTab.jsx
+      return <TableInfoModal onSubmitData={onSubmitData} />;
+    }
+  }
+}
 
 export default function ModalFormState({ categoryList }) {
   // useSelector
   const modalType = useSelector((state) => state.modalState.type); // 기본: '', 'add'/'edit'/'category'
-  const tab = useSelector((state) => state.tabState.state);
+  const tab = useSelector((state) => state.tabState.title);
   const item = useSelector((state) => state.itemState.item);
   const submitStatus = useSelector((state) => state.submitState.status);
   const isSubmit = useSelector((state) => state.submitState.isSubmit);
@@ -27,100 +64,91 @@ export default function ModalFormState({ categoryList }) {
     setValue(item);
   }, [item]);
 
-  // 제출 완료 되면 모달 닫기
+  // 제출 완료 시 모달 닫음
   useEffect(() => {
     if (tab === 'menu' && isSubmit && submitStatus === 'fulfilled') {
       dispatch(changeModalState({ isOpen: false }));
       dispatch(changeSubmitState({ isSubmit: false }));
-      // dispatch(resetSubmitState()); // alertMsg 나오지 않았던 원인
     }
   }, [submitStatus]);
 
+  /* debounce 적용하기 */
+  // 입력 함수
+  function updateValue(target, value) {
+    setValue((prev) => ({ ...prev, [target]: value }));
+  }
   function onChangeInputValue(onChangeType) {
+    console.log('onchange');
     return (e) => {
       const target = e.target.name;
+
       if (onChangeType === 'category') {
-        setValue((prev) => ({ ...prev, [target]: e.target.value }));
+        updateValue(target, e.target.value);
+        // setValue((prev) => ({ ...prev, [target]: e.target.value }));
       } else if (onChangeType === 'add/edit') {
-        setValue((prev) => ({
-          ...prev,
-          [target]: e.target.value,
-        }));
+        updateValue(target, e.target.value);
+        // setValue((prev) => ({
+        //   ...prev,
+        //   [target]: e.target.value,
+        // }));
       } else {
-        console.log('No input value', 'onChangeType: ', onChangeType);
+        console.error('No input value', 'onChangeType: ', onChangeType);
       }
     };
   }
+  // debounce 적용한 입력함수
+  function handleInputChange(onChangeType) {
+    const debouncedOnChangeInputValue = debounce(onChangeInputValue(setValue, onChangeType), 1000);
+    return (e) => debouncedOnChangeInputValue(e);
+  }
 
+  // 폼 제출
   function onSubmitData(table) {
     return (e) => {
-      const method = e.nativeEvent.submitter.name;
       e.preventDefault();
       if (isSubmit) return;
+      // method 선언
+      const method = e.nativeEvent.submitter.name;
+      // 알림 문구 설정
       dispatch(changeSubmitMsgType({ msgType: modalType.split('-')[0] }));
+      // 모달 제출 형식 분류
       switch (modalType) {
+        case 'insert-category': {
+          const title = e.target[0].value;
+          onSubmitInsertCategory({ title, dispatch, method }, table);
+          return;
+        }
         case 'delete-category': {
-          const checkedInputArr = Array.from(e.target.elements.check).filter(
-            (inputList) => inputList?.checked
-          );
-          if (checkedInputArr.length <= 0) return alert('하나 이상은 선택해야 합니다');
-          const deleteCategoryData = checkedInputArr.map((list) => list.dataset);
-          dispatch(fetchFormData({ method, itemInfo: deleteCategoryData, table }));
-          dispatch(changeModalState({ isOpen: false }));
+          const checkElement = e.target.elements.check;
+          onSubmitDeleteCategory({ checkElement, dispatch, method }, table);
           return;
         }
         case 'info': {
-          if (method === 'pay') {
-            alert('결제를 시작합니다.');
-            // 고객 결제 요청
-            // 고객 반응
-            // 결제 완료
-            // 해당 테이블 초기화
-          } else if (method === 'qrcode') {
-            alert('QR코드 확인');
-            QRcode.toDataURL('www.naver.com')
-              .then((url) => console.log(url))
-              .catch((err) => console.error(err));
-          }
+          onSubmitDataInfo({ method });
           return;
         }
         default: {
-          const adminId = 'store_1';
-          const file = e.target[0].files[0];
-          // 메뉴, 사진 정보 전달
-          dispatch(fetchFormData({ method, itemInfo: value, table, file, adminId }));
-          // dispatch(changeModalState({ isOpen: false }));
+          const file = e.target[0].files?.[0] ?? undefined;
+          onSubmitFetchMenu({ file, dispatch, method, value }, table);
         }
       }
     };
   }
 
-  if (tab === 'menu') {
-    switch (modalType) {
-      case 'add':
-      case 'edit': {
-        return (
-          <CreateAndEditMenu
-            onSubmitData={onSubmitData}
-            onChangeInputValue={onChangeInputValue}
-            value={value}
-            categoryList={categoryList}
-          />
-        );
-      }
-      case 'add-category': {
-        return <AddCategory onSubmitData={onSubmitData} onChangeInputValue={onChangeInputValue} />;
-      }
-      case 'delete-category': {
-        return <DeleteCategory onSubmitData={onSubmitData} categoryList={categoryList} />;
-      }
+  // 탭 별 모달 출력 지정
+  switch (tab) {
+    case 'menu': {
+      return (
+        <MenuModal
+          onSubmitData={onSubmitData}
+          onChangeInputValue={handleInputChange}
+          value={value}
+          categoryList={categoryList}
+        />
+      );
     }
-  } else if (tab === 'table') {
-    switch (modalType) {
-      case 'info': {
-        // MainPageTableTab.jsx
-        return <TableInfoModal onSubmitData={onSubmitData} />;
-      }
+    case 'table': {
+      return <TableModal onSubmitData={onSubmitData} />;
     }
   }
 }

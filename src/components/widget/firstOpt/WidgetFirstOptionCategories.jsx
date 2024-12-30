@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 
 export default function WidgetFirstOptionCategories({ isClickEditor }) {
   // useSelector
-  const tab = useSelector((state) => state.tabState.state);
+  const tab = useSelector((state) => state.tabState.title);
 
   switch (tab) {
     case 'menu': {

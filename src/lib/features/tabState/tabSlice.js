@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  state: 'menu',
+  id: 0,
+  title: 'menu',
 }
 
 const tabSlice = createSlice({
@@ -9,30 +10,32 @@ const tabSlice = createSlice({
   initialState,
   reducers: {
     changeTabState: ((state, action) => {
-      const currentState = action.payload.state;
-      let type = ''
+      const currentTitle = action.payload.title;
+      const id = action.payload.id;
+      let title = ''
 
-      switch (currentState) {
+      switch (currentTitle) {
         case '메뉴': {
-          type = 'menu';
+          title = 'menu';
           break;
         }
         case '좌석': {
-          type = 'table'
+          title = 'table'
           break;
         }
         case '주문': {
-          type = 'order';
+          title = 'order';
           break;
         }
         default: {
-          type = 'menu';
+          title = 'menu';
         }
       }
 
       return {
         ...state,
-        state: type
+        title,
+        id
       }
     })
   }

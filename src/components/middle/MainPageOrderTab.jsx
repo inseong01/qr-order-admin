@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 
 export default function MainPageOrderTab() {
   // useSelector
-  const tab = useSelector((state) => state.tabState.state);
+  const tab = useSelector((state) => state.tabState.title);
   const isSubmit = useSelector((state) => state.submitState.isSubmit);
   const selectedCategory = useSelector((state) => state.categoryState);
   const trigger = useSelector((state) => state.realtimeState.allOrderList.trigger);

@@ -13,7 +13,7 @@ export default function TableAlertMsg() {
   const [id, selectId] = useState('');
   const [alertOn, setAlertOn] = useState(false);
   // useSelector
-  const tab = useSelector((state) => state.tabState.state);
+  const tab = useSelector((state) => state.tabState.title);
   const submitStatus = useSelector((state) => state.submitState.status);
   const submitIsError = useSelector((state) => state.submitState.isError);
   const tableEditIsAble = useSelector((state) => state.konvaState.isAble);

@@ -12,6 +12,7 @@ export default function AlertMsg() {
   // useState
   const [isAlert, setIsAlert] = useState(false);
 
+  // 제출되면 실행
   useEffect(() => {
     let timer;
     setIsAlert(true);
@@ -26,7 +27,7 @@ export default function AlertMsg() {
     };
   }, [submitStatus]);
 
-  // fulfilled 때 resetSubmitState() 하면 alertMsg 사라지는 현상 발생
+  // fulfilled 때 alertMsg 사라지는 현상 방지
   if (submitStatus === 'pending') return;
 
   switch (alertType) {

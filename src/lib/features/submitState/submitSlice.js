@@ -17,14 +17,24 @@ const initialState = {
 }
 
 /* createAsyncThunk */
-export const fetchFormData = createAsyncThunk(
-  'submitState/fetchFormData',
+export const fetchFormMenuItem = createAsyncThunk(
+  'submitState/fetchFormMenuItem',
   async ({ method, itemInfo, table, file, adminId }) => {
-    const menuInfo = { ...itemInfo };
-    const imgPath = createImgPath({ method, file, menuInfo, adminId });
+    // const menuInfo = { ...itemInfo };
+    const imgPath = createImgPath({ method, file, itemInfo, adminId });
     const imgResult = await fetchMenuImage({ method, file, imgPath })
-    const menuResult = await fetchMenuItem({ method, menuInfo, table, imgPath })
-    const result = !imgResult?.error && !menuResult.error;
+    const fetchResult = await fetchMenuItem({ method, itemInfo, table, imgPath })
+    const result = !imgResult?.error && !fetchResult.error;
+    return result;
+  }
+)
+
+export const fetchFormCategoryItem = createAsyncThunk(
+  'submitState/fetchFormCategoryItem',
+  async ({ method, itemInfo, table }) => {
+    console.log(itemInfo)
+    const fetchResult = await fetchMenuItem({ method, itemInfo, table })
+    const result = !fetchResult?.error
     return result;
   }
 )
@@ -77,24 +87,24 @@ const submitSlice = createSlice({
     }
   },
   extraReducers: ((builder) => {
-    // fetchFormData
-    builder.addCase(fetchFormData.pending, (state, action) => {
+    // fetchFormMenuItem
+    builder.addCase(fetchFormMenuItem.pending, (state, action) => {
       return {
         ...state,
         isSubmit: true,
         status: 'pending',
+        alertType: 'list',
       }
     })
-    builder.addCase(fetchFormData.fulfilled, (state, action) => {
+    builder.addCase(fetchFormMenuItem.fulfilled, (state, action) => {
       return {
         ...state,
         isSubmit: true,
         status: 'fulfilled',
         callCount: 0,
-        alertType: 'list',
       }
     })
-    builder.addCase(fetchFormData.rejected, (state, action) => {
+    builder.addCase(fetchFormMenuItem.rejected, (state, action) => {
       const callCount = state.callCount + 1;
       const preventSubmit = callCount >= 5 ? true : false;
       console.error(action.error.message)
@@ -104,7 +114,6 @@ const submitSlice = createSlice({
         status: 'rejected',
         callCount,
         isError: preventSubmit,
-        alertType: 'list',
       }
     })
     // fetchOrderListStatus
@@ -113,6 +122,7 @@ const submitSlice = createSlice({
         ...state,
         isSubmit: true,
         status: 'pending',
+        alertType: 'list',
       }
     })
     builder.addCase(fetchOrderListStatus.fulfilled, (state, action) => {
@@ -121,7 +131,6 @@ const submitSlice = createSlice({
         isSubmit: true,
         status: 'fulfilled',
         callCount: 0,
-        alertType: 'list',
       }
     })
     builder.addCase(fetchOrderListStatus.rejected, (state, action) => {
@@ -133,7 +142,6 @@ const submitSlice = createSlice({
         isSubmit: false,
         status: 'rejected',
         callCount,
-        alertType: 'list',
         isError: preventSubmit
       }
     })
@@ -143,6 +151,7 @@ const submitSlice = createSlice({
         ...state,
         isSubmit: true,
         status: 'pending',
+        alertType: 'list',
       }
     })
     builder.addCase(fetchTableListData.fulfilled, (state, action) => {
@@ -151,7 +160,6 @@ const submitSlice = createSlice({
         isSubmit: true,
         status: 'fulfilled',
         callCount: 0,
-        alertType: 'list',
       }
     })
     builder.addCase(fetchTableListData.rejected, (state, action) => {
@@ -163,7 +171,6 @@ const submitSlice = createSlice({
         isSubmit: false,
         status: 'rejected',
         callCount,
-        alertType: 'list',
         isError: preventSubmit
       }
     })
@@ -173,6 +180,7 @@ const submitSlice = createSlice({
         ...state,
         isSubmit: true,
         status: 'pending',
+        alertType: 'list',
       }
     })
     builder.addCase(fetchUpdateAlertMsg.rejected, (state, action) => {
@@ -184,7 +192,35 @@ const submitSlice = createSlice({
         isSubmit: false,
         status: 'rejected',
         callCount,
+        isError: preventSubmit
+      }
+    })
+    // fetchFormCategoryItem
+    builder.addCase(fetchFormCategoryItem.pending, (state, action) => {
+      return {
+        ...state,
+        isSubmit: true,
+        status: 'pending',
         alertType: 'list',
+      }
+    })
+    builder.addCase(fetchFormCategoryItem.fulfilled, (state, action) => {
+      return {
+        ...state,
+        isSubmit: true,
+        status: 'fulfilled',
+        callCount: 0,
+      }
+    })
+    builder.addCase(fetchFormCategoryItem.rejected, (state, action) => {
+      const callCount = state.callCount + 1;
+      const preventSubmit = callCount >= 5 ? true : false;
+      console.error(action.error.message)
+      return {
+        ...state,
+        isSubmit: false,
+        status: 'rejected',
+        callCount,
         isError: preventSubmit
       }
     })

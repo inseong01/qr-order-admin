@@ -1,17 +1,16 @@
 import styles from '@/style/modal/MainModal.module.css';
-import { resetItemState } from '@/lib/features/itemState/itemSlice';
 import { changeModalState } from '@/lib/features/modalState/modalSlice';
 import getTabCategory from '@/lib/supabase/func/getTabCategory';
 import ModalFormState from './modalFormState';
 
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQuery } from '@tanstack/react-query';
 
 export default function MainModal() {
   // useSelector
-  const tab = useSelector((state) => state.tabState.state);
+  const tab = useSelector((state) => state.tabState.title);
   const isModalOpen = useSelector((state) => state.modalState.isOpen);
   const isSubmit = useSelector((state) => state.submitState.isSubmit);
   // dispatch
@@ -22,12 +21,11 @@ export default function MainModal() {
   const categoryList = useQuery({
     queryKey: ['tabCategory', tab, isSubmit],
     queryFn: () => getTabCategory(tab),
-    initialData: [{ title: '전체메뉴', id: 1 }],
+    initialData: [],
   });
 
   function onClickCloseModal() {
     dispatch(changeModalState({ isOpen: false }));
-    // dispatch(resetItemState());
   }
 
   return (
