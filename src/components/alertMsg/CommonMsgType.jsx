@@ -11,7 +11,6 @@ export default function CommonMsgType({ isAlert }) {
 
   let str = '';
   switch (msgType) {
-    case 'edit':
     case 'update': {
       str = submitStatus !== 'rejected' ? '수정되었습니다.' : '요청에 실패했습니다';
       break;

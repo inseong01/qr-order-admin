@@ -1,5 +1,3 @@
-import QRcode from 'qrcode';
-
 export function onSubmitDataInfo({ method }) {
   if (method === 'pay') {
     alert('결제를 시작합니다.');
@@ -9,8 +7,5 @@ export function onSubmitDataInfo({ method }) {
     // 해당 테이블 초기화
   } else if (method === 'qrcode') {
     alert('QR코드 확인');
-    QRcode.toDataURL('www.naver.com')
-      .then((url) => console.log(url))
-      .catch((err) => console.error(err));
   }
 }

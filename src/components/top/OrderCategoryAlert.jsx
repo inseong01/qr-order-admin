@@ -12,6 +12,8 @@ export default function OrderCategoryAlert({ title }) {
     queryFn: () => fetchOrderList('select'),
     initialData: [],
   });
+  // variant
+  const notServedOrder = orderList.data.filter((list) => !list.isDone).length;
 
-  return <>{title === '접수' && (orderList.data ? orderList.data.length : 0)}</>;
+  return <>{title === '접수' && (orderList.data ? notServedOrder : 0)}</>;
 }

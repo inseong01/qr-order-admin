@@ -1,15 +1,16 @@
-export default function createImgPath({ method, file, menuInfo, adminId }) {
+export default function createImgPath({ method, file, itemInfo, adminId }) {
   let imgPath = '';
   let imgName = '';
 
   if (method !== 'delete') {
     const imgType = file?.type.split('/')[1];
-    imgName = imgType ? 'menu_' + menuInfo.id + '.' + imgType : 'icon.jpg';
+    // 사진 유무, 기본 경로 설정
+    imgName = imgType ? 'menu_' + itemInfo.id + '.' + imgType : 'icon.jpg';
     imgPath = adminId + '/' + imgName;
     // menuItem url 설정
-    menuInfo.url = imgPath;
+    itemInfo.url = imgPath;
   } else {
-    imgPath = menuInfo.url;
+    imgPath = itemInfo.url;
   }
 
   // 기본사진 삭제 방지

@@ -53,6 +53,10 @@
   align-items: center;
   gap: 10px;
 }
+.addBtn img {
+  width: 30px;
+  height: 30px;
+}
 
 @media (max-width: 1600px) {
   .list {

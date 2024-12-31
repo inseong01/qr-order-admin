@@ -1,8 +1,8 @@
 import styles from '@/style/modal/TableInfoModal.module.css';
 import createReceipt from '../../lib/function/createReceipt';
+import TableInfo from './table/TableInfo';
 
 import { useSelector } from 'react-redux';
-import TableInfo from './table/TableInfo';
 
 // id, init, orderList, tableNum
 // 주문목록 형태 [{ id: 주문 식별자, orderList: 주문목록 }, ...]

@@ -10,10 +10,10 @@ import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-quer
 export default function TableDraw({ stageSize, tableList, setClientTableList }) {
   // useSelector
   const konvaEditType = useSelector((state) => state.konvaState.type);
+  const konvaEditIsAble = useSelector((state) => state.konvaState.isAble);
   // useRef
   const stageRef = useRef(null);
   // useState
-  const [isResetPos, resetPos] = useState(false);
   const [currentPos, setCurrentPos] = useState({
     x: 0,
     y: 0,
@@ -27,32 +27,33 @@ export default function TableDraw({ stageSize, tableList, setClientTableList }) 
     initialData: [],
   });
 
+  // 초기 위치 화면 이동
   function backToInitPos() {
-    resetPos(true);
+    setCurrentPos({ x: 0, y: 0 });
   }
 
+  // 드래그 위치 화면 이동
   function getLastPos() {
     const lastPos = stageRef.current.position();
-    setCurrentPos(lastPos);
-    resetPos(false);
+    setCurrentPos({ x: lastPos.x, y: lastPos.y });
   }
 
   return (
     <ReactReduxContext.Consumer>
       {({ store }) => {
         const queryClient = new QueryClient();
-
         return (
           <Stage
             ref={stageRef}
-            x={isResetPos ? 0 : currentPos.x}
-            y={isResetPos ? 0 : currentPos.y}
+            x={currentPos.x}
+            y={currentPos.y}
             width={stageSize.stageWidth}
             height={stageSize.stageHeight}
             className={`${styles.stage} ${konvaEditType ? styles.editStroke : ''}`}
             onDblClick={backToInitPos}
             onDblTap={backToInitPos}
             onDragEnd={getLastPos}
+            draggable={!konvaEditIsAble}
           >
             <Provider store={store}>
               <QueryClientProvider client={queryClient}>
@@ -61,10 +62,10 @@ export default function TableDraw({ stageSize, tableList, setClientTableList }) 
                     return (
                       <TableLayer
                         key={table.id}
-                        stage={stageRef}
                         table={table}
-                        setClientTableList={setClientTableList}
+                        stage={stageRef}
                         requestList={requestList}
+                        setClientTableList={setClientTableList}
                       />
                     );
                   })}

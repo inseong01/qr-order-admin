@@ -44,25 +44,14 @@ export default function MainPageOrderTab() {
   }, [allOrderList.data, allOrderList.isFetching]);
 
   if (allOrderList.isError) return <ErrorPage compName={'MainPageOrderTab'} />;
+  if (allOrderList.isFetching) return <Loader />;
 
   return (
     <>
       {selectedCategory.id === 0 ? (
-        <>
-          {allOrderList.isFetched ? (
-            <OrderListSwiper orderList={allOrderList.data.filter((list) => !list.isDone)} />
-          ) : (
-            <Loader />
-          )}
-        </>
+        <OrderListSwiper orderList={allOrderList.data.filter((list) => !list.isDone)} />
       ) : (
-        <>
-          {allOrderList.isFetched && sortedOrderList.length > 0 ? (
-            <CompletedOrderListSwiper orderList={sortedOrderList} />
-          ) : (
-            <Loader />
-          )}
-        </>
+        <CompletedOrderListSwiper orderList={sortedOrderList} />
       )}
       <ConfirmModal />
     </>

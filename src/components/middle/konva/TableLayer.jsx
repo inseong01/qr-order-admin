@@ -11,6 +11,7 @@ import fetchTableRequestList from '../../../lib/supabase/func/fetchTableRequestL
 import { useQuery } from '@tanstack/react-query';
 import useOnMouseChangeCursor from '../../../lib/hook/tableTab/useOnMouseChangeCursor';
 import RequestMesgGroup from './RequestMsgGroup';
+import useSetTable from '../../../lib/hook/tableTab/useSetTable';
 
 const initialMsgObj = {
   list: [],
@@ -18,12 +19,15 @@ const initialMsgObj = {
   pos: { x: 0, y: 0, width: 30 },
 };
 
-export default function TableLayer({ stage, table, setClientTableList }) {
-  // useSelector
-  const konvaEditTableIdArr = useSelector((state) => state.konvaState.target.id);
-  const konvaEditType = useSelector((state) => state.konvaState.type);
-  // variant
-  const { init, order, tableNum, id } = table;
+function TableName({ tableNum, width }) {
+  return (
+    <Group x={20} y={20}>
+      <Text text={`테이블 ${tableNum}`} width={width} fill={'#222'} fontSize={18} align="left" />
+    </Group>
+  );
+}
+
+function TableBillPrice({ order, bottom }) {
   const totalPrice =
     order
       ?.reduce(
@@ -33,10 +37,34 @@ export default function TableLayer({ stage, table, setClientTableList }) {
         0
       )
       .toLocaleString() ?? 0;
+
+  return (
+    <Group x={20} y={bottom.y}>
+      <Line points={bottom.line.points} strokeWidth={1} stroke={'#8D8D8D'} />
+      <Group x={0} y={10}>
+        <Text text="합계" width={bottom.priceText.width} fill={'#8D8D8D'} fontSize={15} align="left" />
+        <Text
+          text={`${totalPrice}원`}
+          width={bottom.priceText.width}
+          fill={'#8D8D8D'}
+          fontSize={15}
+          align="right"
+        />
+      </Group>
+    </Group>
+  );
+}
+
+export default function TableLayer({ stage, table, setClientTableList }) {
+  // useSelector
+  const konvaEditTableIdArr = useSelector((state) => state.konvaState.target.id);
+  const konvaEditType = useSelector((state) => state.konvaState.type);
+  // variant
+  const { init, order, tableNum, id } = table;
+
   const isTransformerAble = id === konvaEditTableIdArr[0] && konvaEditType !== 'delete';
   const isSelectedToDelete = konvaEditType === 'delete' && konvaEditTableIdArr.includes(id);
   const stageAttrs = stage.current.attrs;
-  const blockSize = 10;
   // useRef
   const shapeRef = useRef(null);
   const trRef = useRef(null);
@@ -50,6 +78,7 @@ export default function TableLayer({ stage, table, setClientTableList }) {
   const { onClickOpenTableInfo } = useOpenTableInfo();
   const { onClickEditTable } = useEditTable();
   const { onMouseLeaveChangePointer, onMouseEnterChangePointer } = useOnMouseChangeCursor(stage, id);
+  const { changeTablePosition, onDragTransform } = useSetTable(stage, init, shapeRef, setClientTableList);
   // useQuery
   const requestList = useQuery({
     queryKey: ['requestList', requestTrigger],
@@ -64,15 +93,16 @@ export default function TableLayer({ stage, table, setClientTableList }) {
     trRef.current.getLayer().batchDraw();
   }, [konvaEditTableIdArr]);
 
-  // 요청 알림이 끄면 테이블 메시지 등장
+  // 요청 알림을 끄면 테이블 메시지 등장
   // 요청이 많아지면 width가 너무 길어짐
+  // motion/hover로 변경
   useEffect(() => {
-    if (requestList.isFetching) return;
+    if (!requestList.data.length) return;
     if (!tableRequestAlertOn) {
-      const isTableAlertunRead = requestList.data.some(
+      const isTableAlertUnRead = requestList.data.some(
         (request) => !request.isRead && request.tableNum === tableNum
       );
-      if (isTableAlertunRead) {
+      if (isTableAlertUnRead) {
         getAlert(true);
         const requestArr = requestList.data.filter((request) => {
           return !request.isRead && request.tableNum === tableNum;
@@ -103,76 +133,7 @@ export default function TableLayer({ stage, table, setClientTableList }) {
       hoverTable(initialMsgObj);
     }
   }, [requestList.data, tableRequestAlertOn]);
-
-  function changeTablePosition(e) {
-    stage.current.container().style.cursor = 'move';
-
-    const lastPs = e.target.position();
-
-    setClientTableList((prev) =>
-      prev.map((table) => {
-        if (table.id === konvaEditTableIdArr[0]) {
-          let newPosX = Math.round(lastPs.x / blockSize) * blockSize;
-          let newPosY = Math.round(lastPs.y / blockSize) * blockSize;
-          newPosX = Math.max(10, Math.min(newPosX, stageAttrs.width - init.rec.width - 10)); // stageWidth 임의 설정
-          newPosY = Math.max(10, Math.min(newPosY, stageAttrs.height - init.rec.height - 10)); // stageHeight 임의 설정
-          return {
-            ...table,
-            init: {
-              ...table.init,
-              x: newPosX,
-              y: newPosY,
-            },
-          };
-        }
-        return table;
-      })
-    );
-  }
-
-  function onDragTransform() {
-    const node = shapeRef.current;
-    const scaleX = node.scaleX();
-    const scaleY = node.scaleY();
-
-    // node 초기화
-    node.scaleX(1);
-    node.scaleY(1);
-
-    // 크기 변환 적용
-    setClientTableList((prev) => {
-      return prev.map((table) => {
-        if (table.id === konvaEditTableIdArr[0]) {
-          const newWidth = Math.max(170, Math.round((node.width() * scaleX) / blockSize) * blockSize);
-          const newHeight = Math.max(130, Math.round((node.height() * scaleY) / blockSize) * blockSize);
-
-          return {
-            ...table,
-            init: {
-              ...table.init,
-              rec: {
-                width: newWidth,
-                height: newHeight,
-              },
-              tableText: {
-                width: newWidth - 40,
-              },
-              bottom: {
-                ...table.init.bottom,
-                y: newHeight - 40,
-                line: { points: [0, 0, newWidth - 40, 0] },
-                priceText: {
-                  width: newWidth - 40,
-                },
-              },
-            },
-          };
-        }
-        return table;
-      });
-    });
-  }
-
+  // 좌석 모형 변환 제한값 설정
   function limitBoundBox(oldBox, newBox) {
     const newBoxPosX = Math.round(newBox.x);
     const newBoxWidth = Math.round(newBox.width);
@@ -195,12 +156,11 @@ export default function TableLayer({ stage, table, setClientTableList }) {
     }
     return newBox;
   }
-
+  // 좌석 정보 보기기
   function onClickSelectTable() {
-    // 테이블 결제 창
+    // 테이블 결제 창으로 정보 전달
     onClickOpenTableInfo({ hasAlert, konvaEditType, table });
-
-    // 읽음 처리 (DB 연동 필요)
+    // 요청 알림 읽음 처리 (DB 연동 필요)
     if (hasAlert) {
       stage.current.container().style.cursor = 'default';
       // dispatch(fetchUpdateAlertMsg({ method: 'update', id }));
@@ -208,7 +168,6 @@ export default function TableLayer({ stage, table, setClientTableList }) {
       hoverTable(initialMsgObj);
       return;
     }
-
     // 테이블 편집 유형
     onClickEditTable({ stage, id });
   }
@@ -247,34 +206,8 @@ export default function TableLayer({ stage, table, setClientTableList }) {
               enabledAnchors={['middle-right', 'bottom-center']}
             />
           )}
-          <Group x={20} y={20}>
-            <Text
-              text={`테이블 ${tableNum}`}
-              width={init.tableText.width}
-              fill={'#222'}
-              fontSize={18}
-              align="left"
-            />
-          </Group>
-          <Group x={20} y={init.bottom.y}>
-            <Line points={init.bottom.line.points} strokeWidth={1} stroke={'#8D8D8D'} />
-            <Group x={0} y={10}>
-              <Text
-                text="합계"
-                width={init.bottom.priceText.width}
-                fill={'#8D8D8D'}
-                fontSize={15}
-                align="left"
-              />
-              <Text
-                text={`${totalPrice}원`}
-                width={init.bottom.priceText.width}
-                fill={'#8D8D8D'}
-                fontSize={15}
-                align="right"
-              />
-            </Group>
-          </Group>
+          <TableName tableNum={tableNum} width={init.tableText.width} />
+          <TableBillPrice order={order} bottom={init.bottom} />
         </Group>
       </Group>
       <RequestMesgGroup requestMsg={requestMsg} />

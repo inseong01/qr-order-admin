@@ -4,7 +4,7 @@ import Main from './Main';
 import useSubscribeDBTable from '../lib/hook/useSubscribeDBTable';
 
 export default function PageWrap() {
-  const change = useSubscribeDBTable('*');
+  useSubscribeDBTable('*');
 
   return (
     <>

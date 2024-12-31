@@ -6,7 +6,6 @@ const initialState = {
   isWidgetListOpen: {
     firstOption: false,
     secondOption: false,
-    thirdOption: false,
   },
   isEdit: false,
 }
@@ -32,7 +31,7 @@ const widgetSlice = createSlice({
         isWidgetOpen: !(state.isWidgetOpen)
       }
     },
-    setWidgeListState: (state, action) => {
+    setWidgetListState: (state, action) => {
       let optName = '';
       const optNum = action.payload.optNum;
 
@@ -43,10 +42,6 @@ const widgetSlice = createSlice({
         }
         case 2: {
           optName = 'secondOption'
-          break;
-        }
-        case 3: {
-          optName = 'thirdOption'
           break;
         }
         default: {
@@ -72,5 +67,5 @@ const widgetSlice = createSlice({
   }
 })
 
-export const { resetWidgetState, resetWidgetListState, setWidgetState, setWidgeListState, setWidgetEditState } = widgetSlice.actions;
+export const { resetWidgetState, resetWidgetListState, setWidgetState, setWidgetListState, setWidgetEditState } = widgetSlice.actions;
 export default widgetSlice.reducer;

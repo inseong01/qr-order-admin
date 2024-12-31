@@ -1,5 +1,4 @@
 import CommonMsgType from './alertMsg/CommonMsgType';
-import TableMsgType from './alertMsg/TableAlertMsg';
 
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';

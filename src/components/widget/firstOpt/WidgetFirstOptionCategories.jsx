@@ -4,19 +4,19 @@ import WidgetOrderCategory from './WidgetOrderCategory';
 
 import { useSelector } from 'react-redux';
 
-export default function WidgetFirstOptionCategories({ isClickEditor }) {
+export default function WidgetFirstOptionCategories() {
   // useSelector
   const tab = useSelector((state) => state.tabState.title);
 
   switch (tab) {
     case 'menu': {
-      return <WidgetMenuCategory isClickEditor={isClickEditor} />;
+      return <WidgetMenuCategory />;
     }
     case 'table': {
-      return <WidgetTableCategory isClickEditor={isClickEditor} />;
+      return <WidgetTableCategory />;
     }
     case 'order': {
-      return <WidgetOrderCategory isClickEditor={isClickEditor} />;
+      return <WidgetOrderCategory />;
     }
   }
 }

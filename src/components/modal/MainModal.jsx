@@ -1,7 +1,7 @@
 import styles from '@/style/modal/MainModal.module.css';
 import { changeModalState } from '@/lib/features/modalState/modalSlice';
 import getTabCategory from '@/lib/supabase/func/getTabCategory';
-import ModalFormState from './modalFormState';
+import ModalFormState from './ModalFormState';
 
 import { useRef } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
@@ -42,7 +42,7 @@ export default function MainModal() {
             exit={{ scale: 0 }}
             style={{ translateX: '-50%', translateY: '-50%' }}
           >
-            {<ModalFormState categoryList={categoryList} />}
+            <ModalFormState categoryList={categoryList} />
             <div className={styles.closeBtn} onClick={onClickCloseModal}>
               <img src={'/img/close.png'} alt="닫기" style={{ width: 20, height: 20 }} />
             </div>

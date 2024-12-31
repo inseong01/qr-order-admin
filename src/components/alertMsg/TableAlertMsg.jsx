@@ -1,6 +1,8 @@
 import styles from '@/style/AlertMsg.module.css';
 import { fetchUpdateAlertMsg } from '../../lib/features/submitState/submitSlice';
 import fetchTableRequestList from '../../lib/supabase/func/fetchTableRequestList';
+import HiddenAlertMessage from './HiddenAlertMessage';
+import DisplayedAlertMessage from './DisplayedAlertMessage';
 
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -29,6 +31,8 @@ export default function TableAlertMsg() {
     queryFn: () => fetchTableRequestList('select'),
     initialData: [],
   });
+  // variant
+  const extraMsg = requestList.data.filter((list) => !list.isRead).slice(4);
 
   // 읽지 않은 이전 요청 불러오기 (수 제한)
   useEffect(() => {
@@ -43,6 +47,8 @@ export default function TableAlertMsg() {
       setRequestAlertList((prev) => prev.filter((msg) => msg.id !== id));
     }
   }, [id, submitStatus]);
+
+  // 알림(컴포넌트) On/Off
   useEffect(() => {
     if (tab === 'table' && requestAlertList.length > 0 && !tableEditIsAble) {
       setAlertOn(requestAlertOn);
@@ -51,6 +57,7 @@ export default function TableAlertMsg() {
     }
   }, [tab, requestAlertList, requestAlertOn, tableEditIsAble]);
 
+  // 알림 읽음 처리
   function onClickReadMsg(list) {
     return () => {
       // 오류 발생 시 alert on/off 기능 생성
@@ -64,45 +71,15 @@ export default function TableAlertMsg() {
     <AnimatePresence>
       {alertOn && (
         <motion.div
+          key={'reqeustMsgWrap'}
           className={styles.reqeustMsgWrap}
           ref={reqeustMsgRef}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          <motion.ul
-            className={`${styles.reqeustMsg} ${
-              requestList.data.filter((list) => !list.isRead).slice(4).length > 0 ? styles.moreAlert : ''
-            }`}
-          >
-            <AnimatePresence mode="popLayout">
-              {requestAlertList.map((list) => {
-                return (
-                  <motion.li
-                    key={list.id}
-                    className={styles.msg}
-                    initial={{ scale: 0.8, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    exit={{ scale: 0.8, opacity: 0 }}
-                    layout
-                  >
-                    <div className={styles.top}>
-                      <div className={styles.title}>테이블 {list.tableNum}</div>
-                      <div className={styles.closeBtn} onClick={onClickReadMsg(list)}>
-                        <img src="/img/close-icon.png" alt="닫기" />
-                      </div>
-                    </div>
-                    <div className={styles.bottom}>
-                      <div>
-                        <span className={styles.cate}>요청</span>
-                      </div>
-                      <span>{list.requestList}</span>
-                    </div>
-                  </motion.li>
-                );
-              })}
-            </AnimatePresence>
-          </motion.ul>
+          <HiddenAlertMessage extraMsg={extraMsg} />
+          <DisplayedAlertMessage requestAlertList={requestAlertList} onClickReadMsg={onClickReadMsg} />
         </motion.div>
       )}
     </AnimatePresence>

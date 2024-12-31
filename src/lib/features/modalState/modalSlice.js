@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isOpen: false,
-  type: 'add',
+  type: 'insert',
 }
 
 const modalSlice = createSlice({

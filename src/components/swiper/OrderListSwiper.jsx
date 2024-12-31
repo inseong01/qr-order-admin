@@ -99,7 +99,6 @@ export default function OrderListSwiper({ orderList }) {
                       <div className={styles.title}>#{idx + 1}</div>
                       <div className={styles.right}>
                         <div className={styles.table}>테이블 {list.tableNum}</div>
-                        {/* <div className={styles.time}>00:00</div> */}
                       </div>
                     </div>
                   </div>

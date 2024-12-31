@@ -21,7 +21,8 @@ export default async function fetchMenuItem({ method, itemInfo, table }) {
       return response;
     }
     case 'delete': {
-      const idArr = [...itemInfo].map(item => item.id); // 배열화 필요
+      const isArray = Array.isArray(itemInfo);
+      const idArr = isArray ? [...itemInfo].map(item => item.id) : [itemInfo].map(item => item.id); // 카테고리 배열 : 메뉴 객체
       response = await supabase.from(`qr-order-${table}`).delete().in('id', idArr);
       if (response.error) {
         throw new Error(response.error.message);

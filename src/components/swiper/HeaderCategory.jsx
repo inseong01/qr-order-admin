@@ -37,7 +37,7 @@ function HeaderCategoryBox({ list, children }) {
 function TitleBox({ list }) {
   return (
     <motion.div className={styles.title} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
-      {list.title} <OrderCategoryAlert list={list} />
+      {list.title} <OrderCategoryAlert title={list.title} />
     </motion.div>
   );
 }

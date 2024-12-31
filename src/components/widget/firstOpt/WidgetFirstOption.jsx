@@ -43,7 +43,7 @@ export default function WidgetFirstOption({ onClickEditor }) {
           </div>
         </div>
       </motion.div>
-      <WidgetFirstOptionCategories isClickEditor={firstOption} />
+      <WidgetFirstOptionCategories />
     </motion.li>
   );
 }

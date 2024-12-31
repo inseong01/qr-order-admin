@@ -2,6 +2,22 @@ import styles from '@/style/modal/table/OrderListBox.module.css';
 
 import { motion } from 'motion/react';
 
+function Order({ menu }) {
+  const { name, amount, price } = menu;
+  const priceToString = price.toLocaleString();
+
+  return (
+    <li className={styles.list}>
+      <div className={styles.menuBox}>
+        <div className={styles.name}>{name}</div>
+      </div>
+      <div className={styles.priceBox}>
+        <div className={styles.amount}>{amount}</div>x<div className={styles.price}>{priceToString}원</div>
+      </div>
+    </li>
+  );
+}
+
 export default function OrderListBox({ listData }) {
   const totalPriceToString = listData
     .reduce((prev, curr) => prev + curr.price * curr.amount, 0)
@@ -19,19 +35,7 @@ export default function OrderListBox({ listData }) {
       <ul className={styles.listBox}>
         {listData.length > 0 ? (
           listData.map((menu, idx) => {
-            const { name, amount, price } = menu;
-            const priceToString = price.toLocaleString();
-            return (
-              <li key={idx} className={styles.list}>
-                <div className={styles.menuBox}>
-                  <div className={styles.name}>{name}</div>
-                </div>
-                <div className={styles.priceBox}>
-                  <div className={styles.amount}>{amount}</div>x
-                  <div className={styles.price}>{priceToString}원</div>
-                </div>
-              </li>
-            );
+            return <Order key={idx} menu={menu} />;
           })
         ) : (
           <li className={styles.msg}>

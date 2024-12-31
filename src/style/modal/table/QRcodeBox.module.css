@@ -1,9 +1,10 @@
 .qrcodeBox {
   width: 100%;
-  height: 243px;
+  height: 350px;
 
   display: flex;
   flex-direction: column;
+  margin-bottom: 20px;
 }
 
 .imgBox {

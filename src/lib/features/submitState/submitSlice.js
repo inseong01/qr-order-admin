@@ -20,10 +20,14 @@ const initialState = {
 export const fetchFormMenuItem = createAsyncThunk(
   'submitState/fetchFormMenuItem',
   async ({ method, itemInfo, table, file, adminId }) => {
-    // const menuInfo = { ...itemInfo };
-    const imgPath = createImgPath({ method, file, itemInfo, adminId });
+    // 원본 복제
+    const copyItemInfo = { ...itemInfo };
+    // 사진 경로 생성
+    const imgPath = createImgPath({ method, file, itemInfo: copyItemInfo, adminId });
+    // 사진 파일 전송
     const imgResult = await fetchMenuImage({ method, file, imgPath })
-    const fetchResult = await fetchMenuItem({ method, itemInfo, table, imgPath })
+    // 메뉴 정보 전송
+    const fetchResult = await fetchMenuItem({ method, itemInfo: copyItemInfo, table, imgPath })
     const result = !imgResult?.error && !fetchResult.error;
     return result;
   }
@@ -32,7 +36,6 @@ export const fetchFormMenuItem = createAsyncThunk(
 export const fetchFormCategoryItem = createAsyncThunk(
   'submitState/fetchFormCategoryItem',
   async ({ method, itemInfo, table }) => {
-    console.log(itemInfo)
     const fetchResult = await fetchMenuItem({ method, itemInfo, table })
     const result = !fetchResult?.error
     return result;

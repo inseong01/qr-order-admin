@@ -12,6 +12,7 @@ import { Provider, ReactReduxContext, useDispatch, useSelector } from 'react-red
 import { motion } from 'motion/react';
 import { useQuery } from '@tanstack/react-query';
 import MainModal from '../modal/MainModal';
+import { debounce } from '../../lib/function/debounce';
 
 export default function MainPageTableTab() {
   // useSelector
@@ -56,10 +57,10 @@ export default function MainPageTableTab() {
         stageHeight: tableBoxRef.current.clientHeight,
       }));
     }
-    window.addEventListener('resize', onResizeStageSize);
+    window.addEventListener('resize', debounce(onResizeStageSize, 200));
 
     return () => {
-      window.removeEventListener('resize', onResizeStageSize);
+      window.removeEventListener('resize', debounce(onResizeStageSize, 200));
     };
   }, [tab, tableBoxRef]);
 

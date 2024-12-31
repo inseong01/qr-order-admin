@@ -13,13 +13,14 @@
 
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: 15px;
 }
 
-/* listBox */
+/* listBox - 주문목록 */
 .listBox {
   width: 100%;
-  height: 129px;
+  height: 270px;
 
   display: flex;
   flex-direction: column;
@@ -66,7 +67,6 @@
 /* bottom */
 .totalPrice {
   width: 100%;
-  height: 100%;
   display: flex;
   justify-content: space-between;
 }

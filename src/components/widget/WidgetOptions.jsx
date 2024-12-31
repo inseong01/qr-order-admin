@@ -3,7 +3,7 @@ import { widgetMenuList } from '../../lib/motion/motion_widgetMenu';
 import { fetchTableListData } from '../../lib/features/submitState/submitSlice';
 import { resetItemState } from '../../lib/features/itemState/itemSlice';
 import { resetKonvaState } from '../../lib/features/konvaState/konvaSlice';
-import { setWidgeListState, setWidgetEditState } from '../../lib/features/widgetState/widgetSlice';
+import { setWidgetListState, setWidgetEditState } from '../../lib/features/widgetState/widgetSlice';
 import WidgetFirstOption from './firstOpt/WidgetFirstOption';
 import WidgetSecondOption from './secondOpt/WidgetSecondOption';
 
@@ -19,17 +19,18 @@ export default function WidgetOptions() {
   const editTableType = useSelector((state) => state.konvaState.type);
   const editTableisEditing = useSelector((state) => state.konvaState.isEditing);
 
-  const isEdited = useSelector((state) => state.widgetState.isEdit);
-  const thirdOption = useSelector((state) => state.widgetState.isWidgetListOpen.thirdOption);
-
   // useDispatch
   const dispatch = useDispatch();
 
   function onClickEditor(optNum) {
     return () => {
-      // if (isEdited) return;
       if (isModalOpen || submitError) return;
       if (editTableisEditing) {
+        // 좌석 수정 중 다른 옵션 실행(선택) 방지
+        if (optNum !== 1) {
+          alert('수정 중에 다른 옵션을 실행할 수 없습니다');
+          return;
+        }
         // 편집 저장, db 전송
         const dataArr = editTableType !== 'delete' ? tableListData : tableIdArr;
         dispatch(fetchTableListData({ method: editTableType, dataArr }));
@@ -37,7 +38,7 @@ export default function WidgetOptions() {
         dispatch(resetKonvaState());
         dispatch(setWidgetEditState({ isEdit: false }));
       } else {
-        dispatch(setWidgeListState({ optNum }));
+        dispatch(setWidgetListState({ optNum }));
       }
     };
   }

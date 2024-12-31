@@ -6,10 +6,11 @@ import { changeSubmitMsgType } from '../../../lib/features/submitState/submitSli
 import { motion, AnimatePresence } from 'motion/react';
 import { useDispatch, useSelector } from 'react-redux';
 
-export default function WidgetTableCategory({ isClickEditor }) {
+export default function WidgetTableCategory() {
   // useSelector
   const editTableisEditing = useSelector((state) => state.konvaState.isEditing);
   const editTableType = useSelector((state) => state.konvaState.type);
+  const firstOption = useSelector((state) => state.widgetState.isWidgetListOpen.firstOption);
   // useDispatch
   const dispatch = useDispatch();
 
@@ -26,7 +27,7 @@ export default function WidgetTableCategory({ isClickEditor }) {
 
   return (
     <AnimatePresence>
-      {isClickEditor && (
+      {firstOption && (
         <motion.ul
           key={'optionList'}
           className={styles.editorOption}
@@ -37,38 +38,35 @@ export default function WidgetTableCategory({ isClickEditor }) {
         >
           <motion.li
             className={`${styles.option} ${
-              isClickEditor && editTableType === 'create' ? styles.currentOpt : ''
+              firstOption && editTableType === 'create' ? styles.currentOpt : ''
             }`}
             variants={option}
             onClick={onClickEnableEditTable('create')}
           >
             <span className={styles.iconBox}>
               <span className={styles.textBox}>생성</span>
-              {/* <img src={'/img/shapes-icon.png'} alt="모형 추가" style={{ width: 20, height: 20 }} /> */}
             </span>
           </motion.li>
           <motion.li
             className={`${styles.option} ${
-              isClickEditor && editTableType === 'update' ? styles.currentOpt : ''
+              firstOption && editTableType === 'update' ? styles.currentOpt : ''
             }`}
             variants={option}
             onClick={onClickEnableEditTable('update')}
           >
             <span className={styles.iconBox}>
               <span className={styles.textBox}>수정</span>
-              {/* <img src={'/img/shapes-icon.png'} alt="모형 추가" style={{ width: 20, height: 20 }} /> */}
             </span>
           </motion.li>
           <motion.li
             className={`${styles.option} ${
-              isClickEditor && editTableType === 'delete' ? styles.currentOpt : ''
+              firstOption && editTableType === 'delete' ? styles.currentOpt : ''
             }`}
             variants={option}
             onClick={onClickEnableEditTable('delete')}
           >
             <span className={styles.iconBox}>
               <span className={styles.textBox}>삭제</span>
-              {/* <img src={'/img/shapes-icon.png'} alt="모형 추가" style={{ width: 20, height: 20 }} /> */}
             </span>
           </motion.li>
         </motion.ul>
