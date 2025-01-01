@@ -247,4 +247,9 @@
   - 컴포넌트 코드 개선: modal, wedget, alertMsg, MainPageMenuTab, MainPageTableTab, MainPageOrderTab
   - 가려진 요청 메시지 스타일링, 컴포넌트 개선
 
-<--- 컴포넌트 코드 개선, 요청 알림 motion/hover 적용, 렌더링 최적화 --->
+25.1.1.
+  - motion/hover 적용불가: DOM 아님
+  - 컴포넌트 코드 개선: MainPageTableTab
+  - 렌더링 최적화: konva 도형 변형
+
+<--- 컴포넌트 코드 개선, 렌더링 최적화, 요청 알림 메시지 길이 조절 --->

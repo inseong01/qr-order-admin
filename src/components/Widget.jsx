@@ -1,10 +1,10 @@
 import styles from '@/style/Widget.module.css';
 import { resetWidgetState, setWidgetState } from '../lib/features/widgetState/widgetSlice';
 import WidgetMenuWrap from './widget/WidgetOptionWrap';
+import WidgetBtn from './widget/WidgetBtn';
 
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import WidgetBtn from './widget/WidgetBtn';
 
 export default function Widget() {
   // useRef

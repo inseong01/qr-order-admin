@@ -1,67 +1,24 @@
-import { useEffect, useRef, useState } from 'react';
-import { Group, Line, Rect, RegularPolygon, Text, Transformer } from 'react-konva';
-import { fetchUpdateAlertMsg } from '../../../lib/features/submitState/submitSlice';
-import { useDispatch, useSelector } from 'react-redux';
-import { changeModalState } from '../../../lib/features/modalState/modalSlice';
-import { selectTable } from '../../../lib/features/itemState/itemSlice';
 import useOpenTableInfo from '../../../lib/hook/tableTab/useOpenTableInfo';
-import { changeKonvaIsEditingState, getEditKonvaTableId } from '../../../lib/features/konvaState/konvaSlice';
-import useEditTable from '../../../lib/hook/tableTab/useEditTable';
-import fetchTableRequestList from '../../../lib/supabase/func/fetchTableRequestList';
-import { useQuery } from '@tanstack/react-query';
+import useEditTable, { initialMsgObj } from '../../../lib/hook/tableTab/useEditTable';
 import useOnMouseChangeCursor from '../../../lib/hook/tableTab/useOnMouseChangeCursor';
-import RequestMesgGroup from './RequestMsgGroup';
+import fetchTableRequestList from '../../../lib/supabase/func/fetchTableRequestList';
 import useSetTable from '../../../lib/hook/tableTab/useSetTable';
+import RequestMesgGroup from './RequestMsgGroup';
+import TableName from './TableName';
+import TableBillPrice from './TableBillPrice';
 
-const initialMsgObj = {
-  list: [],
-  table: {},
-  pos: { x: 0, y: 0, width: 30 },
-};
+import { useEffect, useRef, useState } from 'react';
+import { Group, Rect, Transformer } from 'react-konva';
+import { useDispatch, useSelector } from 'react-redux';
+import { useQuery } from '@tanstack/react-query';
+import { getClientTableList } from '../../../lib/features/itemState/itemSlice';
 
-function TableName({ tableNum, width }) {
-  return (
-    <Group x={20} y={20}>
-      <Text text={`테이블 ${tableNum}`} width={width} fill={'#222'} fontSize={18} align="left" />
-    </Group>
-  );
-}
-
-function TableBillPrice({ order, bottom }) {
-  const totalPrice =
-    order
-      ?.reduce(
-        (prev, list) =>
-          prev +
-          list.orderList?.reduce((prevPrice, currMenu) => prevPrice + currMenu.price * currMenu.amount, 0),
-        0
-      )
-      .toLocaleString() ?? 0;
-
-  return (
-    <Group x={20} y={bottom.y}>
-      <Line points={bottom.line.points} strokeWidth={1} stroke={'#8D8D8D'} />
-      <Group x={0} y={10}>
-        <Text text="합계" width={bottom.priceText.width} fill={'#8D8D8D'} fontSize={15} align="left" />
-        <Text
-          text={`${totalPrice}원`}
-          width={bottom.priceText.width}
-          fill={'#8D8D8D'}
-          fontSize={15}
-          align="right"
-        />
-      </Group>
-    </Group>
-  );
-}
-
-export default function TableLayer({ stage, table, setClientTableList }) {
+export default function TableLayer({ stage, table, clientTableList, setClientTableList }) {
   // useSelector
   const konvaEditTableIdArr = useSelector((state) => state.konvaState.target.id);
   const konvaEditType = useSelector((state) => state.konvaState.type);
   // variant
   const { init, order, tableNum, id } = table;
-
   const isTransformerAble = id === konvaEditTableIdArr[0] && konvaEditType !== 'delete';
   const isSelectedToDelete = konvaEditType === 'delete' && konvaEditTableIdArr.includes(id);
   const stageAttrs = stage.current.attrs;
@@ -71,12 +28,13 @@ export default function TableLayer({ stage, table, setClientTableList }) {
   // useState
   const [requestMsg, hoverTable] = useState(initialMsgObj);
   const [hasAlert, getAlert] = useState(false);
+  const [isEditEnd, setEditEnd] = useState(false);
   // useSelector
   const tableRequestAlertOn = useSelector((state) => state.realtimeState.tableRequestList.isOn);
   const requestTrigger = useSelector((state) => state.realtimeState.tableRequestList.trigger);
   // hook
   const { onClickOpenTableInfo } = useOpenTableInfo();
-  const { onClickEditTable } = useEditTable();
+  const { onClickEditTable, onClickReadRequestMsg } = useEditTable();
   const { onMouseLeaveChangePointer, onMouseEnterChangePointer } = useOnMouseChangeCursor(stage, id);
   const { changeTablePosition, onDragTransform } = useSetTable(stage, init, shapeRef, setClientTableList);
   // useQuery
@@ -85,17 +43,36 @@ export default function TableLayer({ stage, table, setClientTableList }) {
     queryFn: () => fetchTableRequestList('select'),
     initialData: [],
   });
+  // useDispatch
+  const dispatch = useDispatch();
 
+  // 편집 유형 '생성/수정', 선택 좌석 transformer 적용
   useEffect(() => {
-    if (konvaEditTableIdArr[0] !== id) return;
-    if (konvaEditType === 'delete') return; // type 제한
-    trRef.current.nodes([shapeRef.current]);
-    trRef.current.getLayer().batchDraw();
+    if (isTransformerAble) {
+      trRef.current.nodes([shapeRef.current]);
+      trRef.current.getLayer().batchDraw();
+    }
   }, [konvaEditTableIdArr]);
+
+  // 테이블 위치 수정, dispatch 요청
+  useEffect(() => {
+    /*
+      isEditEnd true일 때만 전달 허용
+      useState 비동기 동작으로 dispatch 동시에 사용할 수 없음
+      갱신 이전 값이 dispatch로 전달됨
+
+      트리거를 사용하여 조건에 맞춰 dispatch 실행
+      isEditEnd를 의존성으로 추가하면 갱신 이전 값 전달됨 
+    */
+    if (isEditEnd) {
+      // 수정/추가된 테이블 배열 전달
+      dispatch(getClientTableList({ clientTableList }));
+    }
+    setEditEnd(false);
+  }, [clientTableList]);
 
   // 요청 알림을 끄면 테이블 메시지 등장
   // 요청이 많아지면 width가 너무 길어짐
-  // motion/hover로 변경
   useEffect(() => {
     if (!requestList.data.length) return;
     if (!tableRequestAlertOn) {
@@ -133,43 +110,45 @@ export default function TableLayer({ stage, table, setClientTableList }) {
       hoverTable(initialMsgObj);
     }
   }, [requestList.data, tableRequestAlertOn]);
+
   // 좌석 모형 변환 제한값 설정
   function limitBoundBox(oldBox, newBox) {
-    const newBoxPosX = Math.round(newBox.x);
     const newBoxWidth = Math.round(newBox.width);
     const oldBoxPosX = Math.round(oldBox.x);
-    if (newBox.width < 169 || newBoxPosX !== oldBoxPosX || newBoxWidth + newBoxPosX > stageAttrs.width - 9) {
-      // stageWidth 임의 설정
-      return oldBox;
-    }
-
-    const newBoxPosY = Math.round(newBox.y);
     const newBoxHeight = Math.round(newBox.height);
     const oldBoxPosY = Math.round(oldBox.y);
-    if (
-      newBox.height < 129 ||
-      newBoxPosY !== oldBoxPosY ||
-      newBoxHeight + newBoxPosY > stageAttrs.height - 9
-    ) {
-      // stageHeight 임의 설정
-      return oldBox;
-    }
-    return newBox;
+
+    return {
+      ...oldBox,
+      width: 169 > newBoxWidth ? 168 : newBoxWidth,
+      height: 129 > newBoxHeight ? 128 : newBoxHeight,
+      x: oldBoxPosX,
+      y: oldBoxPosY,
+    };
   }
-  // 좌석 정보 보기기
+  // 좌석 선택 조건 별 처리
   function onClickSelectTable() {
-    // 테이블 결제 창으로 정보 전달
-    onClickOpenTableInfo({ hasAlert, konvaEditType, table });
+    // 테이블 정보 창 열기
+    onClickOpenTableInfo({ hasAlert, table });
     // 요청 알림 읽음 처리 (DB 연동 필요)
-    if (hasAlert) {
-      stage.current.container().style.cursor = 'default';
-      // dispatch(fetchUpdateAlertMsg({ method: 'update', id }));
-      getAlert(false);
-      hoverTable(initialMsgObj);
-      return;
-    }
-    // 테이블 편집 유형
+    onClickReadRequestMsg({ hasAlert, getAlert, hoverTable });
+    // 테이블 편집 하기
     onClickEditTable({ stage, id });
+  }
+  // 좌석 변형 마지막 순간
+  function onDragTransformEnd() {
+    /*
+      도형 변형은 매번 clientTableList가 변경되기 때문에
+      변형 마지막 순간에 dispatch 적용
+
+      isEditEnd 적용 시 변형 마지막 순간에 clientTableList가 갱신되지 않으므로 동작하지 않음
+    */
+    dispatch(getClientTableList({ clientTableList }));
+  }
+  // 좌석 위치 이동 마지막 순간
+  function onDragMoveEnd(e) {
+    changeTablePosition(e);
+    setEditEnd(true);
   }
 
   return (
@@ -180,7 +159,7 @@ export default function TableLayer({ stage, table, setClientTableList }) {
         x={init.x}
         y={init.y}
         draggable={isTransformerAble}
-        onDragEnd={changeTablePosition}
+        onDragEnd={onDragMoveEnd}
         onClick={onClickSelectTable}
         onMouseEnter={onMouseEnterChangePointer({ requestList })}
         onMouseLeave={onMouseLeaveChangePointer}
@@ -194,6 +173,7 @@ export default function TableLayer({ stage, table, setClientTableList }) {
             stroke={isSelectedToDelete ? 'red' : hasAlert ? '#4caff8' : 'white'}
             cornerRadius={10}
             onTransform={onDragTransform}
+            onTransformEnd={onDragTransformEnd}
           />
           {isTransformerAble && (
             <Transformer

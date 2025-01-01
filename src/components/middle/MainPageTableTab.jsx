@@ -1,18 +1,17 @@
 import styles from '@/style/middle/MainPageList.module.css';
 import { changeKonvaIsEditingState, getEditKonvaTableId } from '../../lib/features/konvaState/konvaSlice';
-import { getClientTableList, getItemInfo, selectTable } from '../../lib/features/itemState/itemSlice';
-import { changeModalState } from '../../lib/features/modalState/modalSlice';
+import { getClientTableList } from '../../lib/features/itemState/itemSlice';
 import createKonvaInitTable from '../../lib/function/createKonvaInitTable';
 import fetchTableList from '../../lib/supabase/func/fetchTableList';
 import TableDraw from './konva/TableDraw';
 import ErrorPage from '../ErrorPage';
-
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
-import { Provider, ReactReduxContext, useDispatch, useSelector } from 'react-redux';
-import { motion } from 'motion/react';
-import { useQuery } from '@tanstack/react-query';
 import MainModal from '../modal/MainModal';
 import { debounce } from '../../lib/function/debounce';
+
+import { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { motion } from 'motion/react';
+import { useQuery } from '@tanstack/react-query';
 
 export default function MainPageTableTab() {
   // useSelector
@@ -67,27 +66,30 @@ export default function MainPageTableTab() {
   // konva 데이터 패치 완료 여부, 편집 중이면 반환
   useEffect(() => {
     if (tab !== 'table' || !tableBoxRef.current) return;
-    if (!tableList.isFetched || konvaEditIsEditing) return;
+    if (!tableList.data || konvaEditIsEditing) return;
     const isValideToOpen = tableBoxRef.current && tableList.data;
+    // konva 열기
     setOpenKonva(isValideToOpen);
+    // konva 좌석 정보 할당
     setClientTableList(tableList.data);
-  }, [tab, tableBoxRef, tableList, konvaEditIsEditing]);
+  }, [tab, tableBoxRef, tableList.data, konvaEditIsEditing]);
 
   // konva 편집 유형 "create", 좌석 생성
   useEffect(() => {
-    if (tab !== 'table' || konvaEditType !== 'create') return;
-    const newTable = createKonvaInitTable({ stageSize, clientTableList });
-    setClientTableList((prev) => [...prev, newTable]);
-    dispatch(getEditKonvaTableId({ id: [newTable.id] }));
+    if (tab === 'table' && konvaEditType === 'create') {
+      const newTable = createKonvaInitTable({ stageSize, clientTableList });
+      setClientTableList((prev) => [...prev, newTable]);
+      dispatch(getEditKonvaTableId({ id: [newTable.id] }));
+    }
   }, [tab, konvaEditType]);
 
-  // konva 편집 유형 "create/update", clientTableList 배열 업데이트
+  // konva 편집 유형 "create/update", 편집 중 상태 설정
   useEffect(() => {
     if (!clientTableList?.length) return;
-    // 수정/추가된 테이블 배열 전달
-    dispatch(getClientTableList({ clientTableList }));
-    // 배열 수정/추가되면 수정 중으로 상태 변경
+    // Konva 편집 하지 않을 때 상태 변경 제한
     if (!konvaEditType) return;
+    // 배열 수정/추가되면 수정 중으로 상태 변경 (+ 요청 제한)
+    if (konvaEditIsEditing) return;
     dispatch(changeKonvaIsEditingState({ isEditing: true }));
   }, [clientTableList]);
 
@@ -99,7 +101,7 @@ export default function MainPageTableTab() {
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
           <TableDraw
             stageSize={stageSize}
-            tableList={clientTableList}
+            clientTableList={clientTableList}
             setClientTableList={setClientTableList}
           />
         </motion.div>

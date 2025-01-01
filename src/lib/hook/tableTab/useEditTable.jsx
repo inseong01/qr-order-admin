@@ -1,6 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { changeKonvaIsEditingState, getEditKonvaTableId } from '../../features/konvaState/konvaSlice';
 
+export const initialMsgObj = {
+  list: [],
+  table: {},
+  pos: { x: 0, y: 0, width: 30 },
+};
+
 export default function useEditTable() {
   // useDispatch
   const dispatch = useDispatch();
@@ -34,5 +40,15 @@ export default function useEditTable() {
     }
   }
 
-  return { onClickEditTable };
+  // 요청 알림 읽음 처리
+  function onClickReadRequestMsg({ hasAlert, getAlert, hoverTable }) {
+    if (hasAlert) {
+      // dispatch(fetchUpdateAlertMsg({ method: 'update', id }));
+      getAlert(false);
+      hoverTable(initialMsgObj);
+      return;
+    }
+  }
+
+  return { onClickEditTable, onClickReadRequestMsg };
 }

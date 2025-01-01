@@ -10,7 +10,7 @@ export default function useSetTable(stage, init, shapeRef, setClientTableList) {
     stage.current.container().style.cursor = 'move';
     const stageAttrs = stage.current.attrs;
     const lastPs = e.target.position();
-
+    console.log(2);
     setClientTableList((prev) =>
       prev.map((table) => {
         if (table.id === konvaEditTableIdArr[0]) {
@@ -18,6 +18,7 @@ export default function useSetTable(stage, init, shapeRef, setClientTableList) {
           let newPosY = Math.round(lastPs.y / blockSize) * blockSize;
           newPosX = Math.max(10, Math.min(newPosX, stageAttrs.width - init.rec.width - 10)); // stageWidth 임의 설정
           newPosY = Math.max(10, Math.min(newPosY, stageAttrs.height - init.rec.height - 10)); // stageHeight 임의 설정
+          console.log(newPosX, newPosY);
           return {
             ...table,
             init: {
@@ -47,7 +48,6 @@ export default function useSetTable(stage, init, shapeRef, setClientTableList) {
         if (table.id === konvaEditTableIdArr[0]) {
           const newWidth = Math.max(170, Math.round((node.width() * scaleX) / blockSize) * blockSize);
           const newHeight = Math.max(130, Math.round((node.height() * scaleY) / blockSize) * blockSize);
-
           return {
             ...table,
             init: {
