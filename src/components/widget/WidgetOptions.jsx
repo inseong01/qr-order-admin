@@ -14,15 +14,12 @@ export default function WidgetOptions() {
   // useSelector
   const isModalOpen = useSelector((state) => state.modalState.isOpen);
   const submitError = useSelector((state) => state.submitState.isError);
-  const tableListData = useSelector((state) => state.itemState.clientTableList);
-  const tableIdArr = useSelector((state) => state.konvaState.target.id);
   const editTableType = useSelector((state) => state.konvaState.type);
   const editTableisEditing = useSelector((state) => state.konvaState.isEditing);
-
   // useDispatch
   const dispatch = useDispatch();
 
-  function onClickEditor(optNum) {
+  function onClickEditor(optNum, dataArr) {
     return () => {
       if (isModalOpen || submitError) return;
       if (editTableisEditing) {
@@ -32,14 +29,12 @@ export default function WidgetOptions() {
           return;
         }
         // 편집 저장, db 전송
-        const dataArr = editTableType !== 'delete' ? tableListData : tableIdArr;
         dispatch(fetchTableListData({ method: editTableType, dataArr }));
         dispatch(resetItemState());
         dispatch(resetKonvaState());
         dispatch(setWidgetEditState({ isEdit: false }));
-      } else {
-        dispatch(setWidgetListState({ optNum }));
       }
+      dispatch(setWidgetListState({ optNum }));
     };
   }
 

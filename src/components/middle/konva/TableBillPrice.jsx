@@ -1,6 +1,7 @@
+import { useEffect, useRef } from 'react';
 import { Group, Line, Text } from 'react-konva';
 
-export default function TableBillPrice({ order, bottom }) {
+export default function TableBillPrice({ order, bottom, isDragging }) {
   const totalPrice =
     order
       ?.reduce(
@@ -10,9 +11,26 @@ export default function TableBillPrice({ order, bottom }) {
         0
       )
       .toLocaleString() ?? 0;
+  // useRef
+  const billRef = useRef(null);
+
+  // 좌석 변형 시 bottom 투명도 조절
+  useEffect(() => {
+    if (isDragging) {
+      billRef.current.to({
+        opacity: 0,
+        duration: 0.1,
+      });
+      return;
+    }
+    billRef.current.to({
+      opacity: 1,
+      duration: 0.3,
+    });
+  }, [isDragging]);
 
   return (
-    <Group x={20} y={bottom.y}>
+    <Group ref={billRef} x={20} y={bottom.y}>
       <Line points={bottom.line.points} strokeWidth={1} stroke={'#8D8D8D'} />
       <Group x={0} y={10}>
         <Text text="합계" width={bottom.priceText.width} fill={'#8D8D8D'} fontSize={15} align="left" />

@@ -1,11 +1,6 @@
-import { useDispatch, useSelector } from 'react-redux';
 import { changeKonvaIsEditingState, getEditKonvaTableId } from '../../features/konvaState/konvaSlice';
 
-export const initialMsgObj = {
-  list: [],
-  table: {},
-  pos: { x: 0, y: 0, width: 30 },
-};
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function useEditTable() {
   // useDispatch
@@ -13,42 +8,39 @@ export default function useEditTable() {
   // useSelector
   const konvaEditType = useSelector((state) => state.konvaState.type);
   const konvaEditTableIdArr = useSelector((state) => state.konvaState.target.id);
+  const konvaEditIsEditing = useSelector((state) => state.konvaState.isEditing);
 
   // 테이블 편집 유형
   function onClickEditTable({ stage, id }) {
-    if (konvaEditType === 'update') {
-      stage.current.container().style.cursor = 'move';
-      dispatch(getEditKonvaTableId({ id: [id] }));
-    } else if (konvaEditType === 'delete') {
-      let filteredTableIdArr = [];
-
-      // id 모음
-      if (konvaEditTableIdArr.includes(id)) {
-        filteredTableIdArr = konvaEditTableIdArr.filter((currId) => currId !== id);
-      } else {
-        filteredTableIdArr = [...konvaEditTableIdArr, id];
+    switch (konvaEditType) {
+      case 'update': {
+        stage.current.container().style.cursor = 'move';
+        // 좌석 연속 선택 방지
+        if (id === konvaEditTableIdArr[0]) return;
+        dispatch(getEditKonvaTableId({ id: [id] }));
+        return;
       }
-
-      // id 배열로 편집 가능 여부 감지
-      if (filteredTableIdArr.length <= 0) {
-        dispatch(changeKonvaIsEditingState({ isEditing: false }));
-      } else {
+      case 'delete': {
+        let filteredTableIdArr = [];
+        // ID 모음
+        if (konvaEditTableIdArr.includes(id)) {
+          filteredTableIdArr = konvaEditTableIdArr.filter((currId) => currId !== id);
+        } else {
+          filteredTableIdArr = [...konvaEditTableIdArr, id];
+        }
+        // 선택 ID 전달
+        dispatch(getEditKonvaTableId({ id: filteredTableIdArr }));
+        // ID 배열로 편집 가능 여부 감지
+        if (filteredTableIdArr.length <= 0) {
+          dispatch(changeKonvaIsEditingState({ isEditing: false }));
+          return;
+        }
+        // 상태 변경 제한
+        if (konvaEditIsEditing) return;
         dispatch(changeKonvaIsEditingState({ isEditing: true }));
       }
-
-      dispatch(getEditKonvaTableId({ id: filteredTableIdArr }));
     }
   }
 
-  // 요청 알림 읽음 처리
-  function onClickReadRequestMsg({ hasAlert, getAlert, hoverTable }) {
-    if (hasAlert) {
-      // dispatch(fetchUpdateAlertMsg({ method: 'update', id }));
-      getAlert(false);
-      hoverTable(initialMsgObj);
-      return;
-    }
-  }
-
-  return { onClickEditTable, onClickReadRequestMsg };
+  return { onClickEditTable };
 }

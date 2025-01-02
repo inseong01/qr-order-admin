@@ -18,11 +18,10 @@ const konvaSlice = createSlice({
     },
     changeKonvaEditState: (state, action) => {
       const editType = action.payload.editType;
-      const isAble = editType === 'create' ? !state.isAble : true;
       return {
         ...initialState,
         type: editType,
-        isAble,
+        isAble: true,
         isEditing: editType === 'create' && true
       }
     },

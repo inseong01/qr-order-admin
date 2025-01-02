@@ -50,11 +50,11 @@ export default function TableAlertMsg() {
 
   // 알림(컴포넌트) On/Off
   useEffect(() => {
+    // 좌석 탭이고 알림이 있고 편집 중이 아니면
     if (tab === 'table' && requestAlertList.length > 0 && !tableEditIsAble) {
-      setAlertOn(requestAlertOn);
-    } else {
-      setAlertOn(false);
+      return setAlertOn(requestAlertOn);
     }
+    setAlertOn(false);
   }, [tab, requestAlertList, requestAlertOn, tableEditIsAble]);
 
   // 알림 읽음 처리

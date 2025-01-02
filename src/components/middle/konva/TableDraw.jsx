@@ -20,11 +20,14 @@ export default function TableDraw({ stageSize, clientTableList, setClientTableLi
 
   // 초기 위치 화면 이동
   function backToInitPos() {
+    if (konvaEditIsAble) return;
+    if (currentPos.x === 0 && currentPos.y === 0) return;
     setCurrentPos({ x: 0, y: 0 });
   }
 
   // 드래그 위치 화면 이동
   function getLastPos() {
+    if (konvaEditIsAble) return;
     const lastPos = stageRef.current.position();
     setCurrentPos({ x: lastPos.x, y: lastPos.y });
   }

@@ -1,6 +1,5 @@
 import styles from '@/style/middle/MainPageList.module.css';
 import { changeKonvaIsEditingState, getEditKonvaTableId } from '../../lib/features/konvaState/konvaSlice';
-import { getClientTableList } from '../../lib/features/itemState/itemSlice';
 import createKonvaInitTable from '../../lib/function/createKonvaInitTable';
 import fetchTableList from '../../lib/supabase/func/fetchTableList';
 import TableDraw from './konva/TableDraw';
@@ -18,9 +17,7 @@ export default function MainPageTableTab() {
   const tab = useSelector((state) => state.tabState.title);
   const isSubmit = useSelector((state) => state.submitState.isSubmit);
   const konvaEditType = useSelector((state) => state.konvaState.type);
-  const konvaEditIsAble = useSelector((state) => state.konvaState.isAble);
   const konvaEditIsEditing = useSelector((state) => state.konvaState.isEditing);
-  const isModalOpen = useSelector((state) => state.modalState.isOpen);
   // useQueries
   const tableList = useQuery({
     queryKey: ['tableList', isSubmit],
@@ -66,12 +63,13 @@ export default function MainPageTableTab() {
   // konva 데이터 패치 완료 여부, 편집 중이면 반환
   useEffect(() => {
     if (tab !== 'table' || !tableBoxRef.current) return;
-    if (!tableList.data || konvaEditIsEditing) return;
-    const isValideToOpen = tableBoxRef.current && tableList.data;
-    // konva 열기
-    setOpenKonva(isValideToOpen);
-    // konva 좌석 정보 할당
-    setClientTableList(tableList.data);
+    if (tableList.data && !konvaEditIsEditing) {
+      const isValideToOpen = tableBoxRef.current && tableList.data;
+      // konva 열기
+      setOpenKonva(isValideToOpen);
+      // konva 좌석 정보 할당
+      setClientTableList(tableList.data);
+    }
   }, [tab, tableBoxRef, tableList.data, konvaEditIsEditing]);
 
   // konva 편집 유형 "create", 좌석 생성

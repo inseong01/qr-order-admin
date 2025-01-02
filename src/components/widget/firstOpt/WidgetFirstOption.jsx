@@ -5,42 +5,54 @@ import WidgetFirstOptionCategories from './WidgetFirstOptionCategories';
 import { motion, AnimatePresence } from 'motion/react';
 import { useSelector } from 'react-redux';
 
-export default function WidgetFirstOption({ onClickEditor }) {
+function Icon() {
   // useSelector
   const isEdited = useSelector((state) => state.widgetState.isEdit);
-  const firstOption = useSelector((state) => state.widgetState.isWidgetListOpen.firstOption);
+
+  return (
+    <div className={styles.icon}>
+      <AnimatePresence mode="wait" initial={false}>
+        {!isEdited ? (
+          <motion.img
+            src={'/img/edit-icon.png'}
+            alt="편집"
+            style={{ width: 20, height: 20 }}
+            key={'box1'}
+            initial={{ x: 20 }}
+            animate={{ x: 0 }}
+            exit={{ x: -20 }}
+            transition={{ duration: 0.3, ease: 'easeOut' }}
+          />
+        ) : (
+          <motion.img
+            src={'/img/checkmark.png'}
+            alt="편집 저장"
+            style={{ width: 20, height: 20 }}
+            key={'box2'}
+            initial={{ x: 20 }}
+            animate={{ x: 0 }}
+            exit={{ x: -20 }}
+            transition={{ duration: 0.3, ease: 'easeOut' }}
+          />
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+export default function WidgetFirstOption({ onClickEditor }) {
+  // useSelector
+  const editTableType = useSelector((state) => state.konvaState.type);
+  const tableIdArr = useSelector((state) => state.konvaState.target.id);
+  const tableListData = useSelector((state) => state.itemState.clientTableList);
+  // variant
+  const dataArr = editTableType !== 'delete' ? tableListData : tableIdArr;
 
   return (
     <motion.li className={styles.listBox} key={'widgetMenu'} variants={menu}>
-      <motion.div className={styles.list} key={'list'} onClick={onClickEditor(1)}>
+      <motion.div className={styles.list} key={'list'} onClick={onClickEditor(1, dataArr)}>
         <div className={styles.iconBox}>
-          <div className={styles.icon}>
-            <AnimatePresence mode="wait" initial={false}>
-              {!firstOption || !isEdited ? (
-                <motion.img
-                  src={'/img/edit-icon.png'}
-                  alt="편집"
-                  style={{ width: 20, height: 20 }}
-                  key={'box1'}
-                  initial={{ x: 20 }}
-                  animate={{ x: 0 }}
-                  exit={{ x: -20 }}
-                  transition={{ duration: 0.3, ease: 'easeOut' }}
-                />
-              ) : (
-                <motion.img
-                  src={'/img/checkmark.png'}
-                  alt="편집 저장"
-                  style={{ width: 20, height: 20 }}
-                  key={'box2'}
-                  initial={{ x: 20 }}
-                  animate={{ x: 0 }}
-                  exit={{ x: -20 }}
-                  transition={{ duration: 0.3, ease: 'easeOut' }}
-                />
-              )}
-            </AnimatePresence>
-          </div>
+          <Icon />
         </div>
       </motion.div>
       <WidgetFirstOptionCategories />

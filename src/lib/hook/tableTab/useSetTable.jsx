@@ -8,25 +8,15 @@ export default function useSetTable(stage, init, shapeRef, setClientTableList) {
 
   function changeTablePosition(e) {
     stage.current.container().style.cursor = 'move';
-    const stageAttrs = stage.current.attrs;
     const lastPs = e.target.position();
-    console.log(2);
+    console.log(lastPs);
+
     setClientTableList((prev) =>
       prev.map((table) => {
         if (table.id === konvaEditTableIdArr[0]) {
-          let newPosX = Math.round(lastPs.x / blockSize) * blockSize;
-          let newPosY = Math.round(lastPs.y / blockSize) * blockSize;
-          newPosX = Math.max(10, Math.min(newPosX, stageAttrs.width - init.rec.width - 10)); // stageWidth 임의 설정
-          newPosY = Math.max(10, Math.min(newPosY, stageAttrs.height - init.rec.height - 10)); // stageHeight 임의 설정
-          console.log(newPosX, newPosY);
-          return {
-            ...table,
-            init: {
-              ...table.init,
-              x: newPosX,
-              y: newPosY,
-            },
-          };
+          let newPosX = lastPs.x > 10 ? lastPs.x : 10;
+          let newPosY = lastPs.y > 10 ? lastPs.y : 10;
+          return { ...table, init: { ...table.init, x: newPosX, y: newPosY } };
         }
         return table;
       })
