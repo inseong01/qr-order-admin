@@ -9,7 +9,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isSubmit: false,
-  status: '',
+  status: 'initial',
   alertType: '',
   msgType: '',
   callCount: 0,
@@ -76,9 +76,19 @@ const submitSlice = createSlice({
     },
     changeSubmitMsgType: (state, action) => {
       const msgType = action.payload.msgType;
+      const status = action.payload?.status ? action.payload.status : ''
       return {
         ...state,
+        isSubmit: false,
+        status,
         msgType
+      }
+    },
+    changeSubmitStatus: (state, action) => {
+      const status = action.payload.status;
+      return {
+        ...state,
+        status
       }
     },
     changeSubmitState: (state, action) => {
@@ -230,5 +240,5 @@ const submitSlice = createSlice({
   })
 })
 
-export const { resetSubmitState, changeSubmitMsgType, changeSubmitState } = submitSlice.actions;
+export const { resetSubmitState, changeSubmitMsgType, changeSubmitState, changeSubmitStatus } = submitSlice.actions;
 export default submitSlice.reducer;

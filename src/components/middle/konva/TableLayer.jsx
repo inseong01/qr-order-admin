@@ -3,6 +3,7 @@ import useEditTable from '../../../lib/hook/tableTab/useEditTable';
 import useOnMouseChangeCursor from '../../../lib/hook/tableTab/useOnMouseChangeCursor';
 import useSetTable from '../../../lib/hook/tableTab/useSetTable';
 import { getClientTableList } from '../../../lib/features/itemState/itemSlice';
+import { changeKonvaIsEditingState } from '../../../lib/features/konvaState/konvaSlice';
 import TableName from './TableName';
 import TableBillPrice from './TableBillPrice';
 
@@ -14,6 +15,7 @@ export default function TableLayer({ stage, table, clientTableList, setClientTab
   // useSelector
   const konvaEditTableIdArr = useSelector((state) => state.konvaState.target.id);
   const konvaEditType = useSelector((state) => state.konvaState.type);
+  const konvaEditIsEditing = useSelector((state) => state.konvaState.isEditing);
   // variant
   const { init, order, tableNum, id } = table;
   const isTransformerAble = id === konvaEditTableIdArr[0] && konvaEditType !== 'delete';
@@ -28,7 +30,7 @@ export default function TableLayer({ stage, table, clientTableList, setClientTab
   const { onClickOpenTableInfo } = useOpenTableInfo();
   const { onClickEditTable } = useEditTable();
   const { onMouseLeaveChangePointer, onMouseEnterChangePointer } = useOnMouseChangeCursor(stage, table);
-  const { changeTablePosition, onDragTransform } = useSetTable(stage, init, shapeRef, setClientTableList);
+  const { changeTablePosition, onDragTransform } = useSetTable(stage, shapeRef, setClientTableList);
   // useDispatch
   const dispatch = useDispatch();
 
@@ -101,21 +103,47 @@ export default function TableLayer({ stage, table, clientTableList, setClientTab
     // 테이블 편집 하기
     onClickEditTable({ stage, id });
   }
-  // 좌석 변형 시작 순간
+  // 좌석 변형 처음
   function onDragTransformStart() {
     setDrag(true);
   }
-  // 좌석 변형 마지막 순간
+  // 좌석 변형 마지막
   function onDragTransformEnd() {
     onDragTransform();
-    dispatch(getClientTableList({ clientTableList }));
     setEditEnd(true);
     setDrag(false);
+    // Konva 편집 중
+    if (konvaEditIsEditing) return;
+    dispatch(changeKonvaIsEditingState({ isEditing: true }));
   }
-  // 좌석 위치 이동 마지막 순간
+  // 좌석 위치 이동 마지막
   function onDragMoveEnd(e) {
     changeTablePosition(e);
     setEditEnd(true);
+    // Konva 편집 중
+    if (konvaEditIsEditing) return;
+    dispatch(changeKonvaIsEditingState({ isEditing: true }));
+  }
+  // 좌석 이동 범위 제한
+  function onDragMove(e) {
+    // 이동 객체 정보
+    const table = e.target;
+    const newX = table.x();
+    const newY = table.y();
+    // 범위 정보
+    const stageAtrrs = stage.current.attrs;
+    const stageWidth = stageAtrrs.width;
+    const stageHeight = stageAtrrs.height;
+    // 범위 제한 정도
+    const minX = 10;
+    const maxX = stageWidth - init.rec.width - 10;
+    const minY = 10;
+    const maxY = stageHeight - init.rec.height - 10;
+    // 제한 조건
+    if (newX < minX) table.x(minX);
+    if (newX > maxX) table.x(maxX);
+    if (newY < minY) table.y(minY);
+    if (newY > maxY) table.y(maxY);
   }
 
   return (
@@ -126,6 +154,7 @@ export default function TableLayer({ stage, table, clientTableList, setClientTab
         x={init.x}
         y={init.y}
         draggable={isTransformerAble}
+        onDragMove={onDragMove}
         onDragEnd={onDragMoveEnd}
         onClick={onClickSelectTable}
         onMouseEnter={onMouseEnterChangePointer}

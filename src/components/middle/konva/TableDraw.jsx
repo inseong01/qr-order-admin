@@ -1,14 +1,13 @@
-import styles from '@/style/middle/konva/TableDraw.module.css';
 import TableLayer from './TableLayer';
 
 import { Layer, Stage } from 'react-konva';
 import { Provider, ReactReduxContext, useSelector } from 'react-redux';
 import { useRef, useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import TableEditRange from './TableEditRange';
 
 export default function TableDraw({ stageSize, clientTableList, setClientTableList }) {
   // useSelector
-  const konvaEditType = useSelector((state) => state.konvaState.type);
   const konvaEditIsAble = useSelector((state) => state.konvaState.isAble);
   // useRef
   const stageRef = useRef(null);
@@ -27,7 +26,6 @@ export default function TableDraw({ stageSize, clientTableList, setClientTableLi
 
   // 드래그 위치 화면 이동
   function getLastPos() {
-    if (konvaEditIsAble) return;
     const lastPos = stageRef.current.position();
     setCurrentPos({ x: lastPos.x, y: lastPos.y });
   }
@@ -43,14 +41,14 @@ export default function TableDraw({ stageSize, clientTableList, setClientTableLi
             y={konvaEditIsAble ? 0 : currentPos.y}
             width={stageSize.stageWidth}
             height={stageSize.stageHeight}
-            className={`${styles.stage} ${konvaEditType ? styles.editStroke : ''}`}
             onDblClick={backToInitPos}
             onDblTap={backToInitPos}
             onDragEnd={getLastPos}
-            draggable={!konvaEditIsAble}
+            draggable
           >
             <Provider store={store}>
               <QueryClientProvider client={queryClient}>
+                <TableEditRange stageSize={stageSize} />
                 <Layer>
                   {clientTableList.map((table) => {
                     return (

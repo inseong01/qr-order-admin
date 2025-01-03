@@ -14,6 +14,7 @@ export default function WidgetOptions() {
   // useSelector
   const isModalOpen = useSelector((state) => state.modalState.isOpen);
   const submitError = useSelector((state) => state.submitState.isError);
+  const isSubmit = useSelector((state) => state.submitState.isSubmit);
   const editTableType = useSelector((state) => state.konvaState.type);
   const editTableisEditing = useSelector((state) => state.konvaState.isEditing);
   // useDispatch
@@ -23,6 +24,7 @@ export default function WidgetOptions() {
     return () => {
       if (isModalOpen || submitError) return;
       if (editTableisEditing) {
+        if (isSubmit) return;
         // 좌석 수정 중 다른 옵션 실행(선택) 방지
         if (optNum !== 1) {
           alert('수정 중에 다른 옵션을 실행할 수 없습니다');
@@ -34,6 +36,7 @@ export default function WidgetOptions() {
         dispatch(resetKonvaState());
         dispatch(setWidgetEditState({ isEdit: false }));
       }
+      // 위젯 옵션 여닫기
       dispatch(setWidgetListState({ optNum }));
     };
   }

@@ -27,7 +27,7 @@ export default function useSubscribeDBTable(method) {
         'postgres_changes',
         { schema: 'public', event: method, table: 'qr-order-allOrderList' },
         (payload) => {
-          dispatch(setAllOrderListTrigger());
+          // dispatch(setAllOrderListTrigger());
           // console.log(payload);
         }
       )

@@ -1,6 +1,6 @@
 import styles from '@/style/modal/ConfirmModal.module.css';
-import { fetchOrderListStatus } from '@/lib/features/submitState/submitSlice';
-import { changeModalState } from '@/lib/features/modalState/modalSlice';
+import { fetchOrderListStatus } from '../../lib/features/submitState/submitSlice';
+import { changeModalState } from '../../lib/features/modalState/modalSlice';
 import { resetItemState } from '@/lib/features/itemState/itemSlice';
 
 import { useEffect, useRef } from 'react';
@@ -26,9 +26,9 @@ export default function ConfirmModal() {
     dispatch(resetItemState());
   }, [submitStatus]);
 
-  function onClickChangeModalStatus(status) {
+  function onClickChangeModalStatus(state) {
     return () => {
-      switch (status) {
+      switch (state) {
         case 'no': {
           dispatch(changeModalState({ isOpen: false }));
           return;

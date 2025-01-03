@@ -8,6 +8,7 @@ import {
 import { resetItemState } from '../../lib/features/itemState/itemSlice';
 import { resetKonvaState } from '../../lib/features/konvaState/konvaSlice';
 import { setWidgetEditState, setWidgetState } from '../../lib/features/widgetState/widgetSlice';
+import { changeSubmitStatus } from '../../lib/features/submitState/submitSlice';
 
 import { motion } from 'motion/react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -28,6 +29,8 @@ export default function WidgetBtn() {
       dispatch(resetItemState());
       dispatch(resetKonvaState());
       dispatch(setWidgetEditState({ isEdit: false }));
+      // 데이터 패치 가능하도록 초기 상태로 전환
+      dispatch(changeSubmitStatus({ status: 'initial' }));
       return;
     }
     dispatch(setWidgetState());

@@ -14,24 +14,31 @@ export default function MainPageOrderTab() {
   // useSelector
   const tab = useSelector((state) => state.tabState.title);
   const isSubmit = useSelector((state) => state.submitState.isSubmit);
+  const submitStatus = useSelector((state) => state.submitState.status);
   const selectedCategory = useSelector((state) => state.categoryState);
-  const trigger = useSelector((state) => state.realtimeState.allOrderList.trigger);
+  // useSubscribeDBTable.jsx 에서 상태 변경됨
+  // const trigger = useSelector((state) => state.realtimeState.allOrderList.trigger);
   // useQueries
   const allOrderList = useQuery({
-    queryKey: ['allOrderList', trigger],
+    queryKey: ['allOrderList', { status: submitStatus }],
     queryFn: () => fetchOrderList('select'),
     initialData: [],
+    enabled: (query) => {
+      if (query.queryKey[1].status === '') return false;
+      if (query.queryKey[1].status === 'pending') return false;
+      return true;
+    },
   });
   // useDispatch
   const dispatch = useDispatch();
   // useState
   const [sortedOrderList, sortOrder] = useState([]);
-
-  // 주문 탭이고 제출했을 때 동작
+  // 주문 탭이고 제출했을 때 동작 (호출 중첩 원인)
   useEffect(() => {
-    if (tab !== 'order' && !isSubmit) return;
-    dispatch(changeSubmitState({ isSubmit: false }));
-  }, [tab, allOrderList]);
+    if (tab === 'order' && submitStatus === 'fulfilled') {
+      dispatch(changeSubmitState({ isSubmit: false }));
+    }
+  }, [tab, submitStatus]);
 
   // 완료 주문 최신순 정렬 적용
   useEffect(() => {
