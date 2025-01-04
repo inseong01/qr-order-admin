@@ -76,7 +76,7 @@ const submitSlice = createSlice({
     },
     changeSubmitMsgType: (state, action) => {
       const msgType = action.payload.msgType;
-      const status = action.payload?.status ? action.payload.status : ''
+      const status = action.payload?.status ? action.payload.status : state.status
       return {
         ...state,
         isSubmit: false,

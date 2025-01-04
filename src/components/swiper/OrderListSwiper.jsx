@@ -14,33 +14,85 @@ import 'swiper/css/pagination';
 import 'swiper/css/grid';
 import { useDispatch, useSelector } from 'react-redux';
 
-function OrderListSlide({ list, idx }) {
+function ListSlideSubmitBtn({ list }) {
   // useDispatch
   const dispatch = useDispatch();
   // useSelector
   const selectedListId = useSelector((state) => state.itemState.selectedListId);
   const preventSubmit = useSelector((state) => state.submitState.isError);
+
+  function onClickUpdateListState(list) {
+    return () => {
+      if (preventSubmit) return;
+      const type = selectedListId === list.id ? 'delete' : 'complete';
+      dispatch(changeSubmitMsgType({ msgType: type }));
+      dispatch(changeModalState({ isOpen: true, type: 'update' }));
+      dispatch(getOrderListInfo({ list }));
+    };
+  }
+
+  return (
+    <div
+      className={`${styles.completeBtn} ${selectedListId === list.id ? styles.delete : ''}`}
+      onClick={onClickUpdateListState(list)}
+    >
+      {selectedListId === list.id ? '삭제' : '완료'}
+    </div>
+  );
+}
+
+function ListSliceBottom({ list }) {
   // variant
   const amount = list.orderList.reduce((prev, curr) => prev + curr.amount, 0);
 
-  function onClickOpenListOption(list) {
-    return () => {
-      dispatch(getSelectedListId({ selectedListId: list.id }));
-    };
-  }
+  return (
+    <div className={styles.bottomBox}>
+      <div className={styles.bottom}>
+        <div className={styles.totalMenuAmount}>
+          <span>{amount}</span> 개
+        </div>
+        <ListSlideSubmitBtn list={list} />
+      </div>
+    </div>
+  );
+}
+
+function ListSlideOption({ list }) {
+  // useSelector
+  const selectedListId = useSelector((state) => state.itemState.selectedListId);
+  // useDispatch
+  const dispatch = useDispatch();
 
   function onClickCloseListOption(e) {
     e.stopPropagation();
     dispatch(getSelectedListId({ selectedListId: '' }));
   }
+  return (
+    <AnimatePresence>
+      {selectedListId === list.id && (
+        <motion.ul
+          className={styles.listOptionBox}
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          exit={{ scale: 0 }}
+          style={{ x: '-50%', y: 12, transform: 'translateX(-50%)' }}
+        >
+          <li className={styles.option} onClick={onClickCloseListOption}>
+            <img src={'/img/close-icon.png'} alt="옵션 닫기" style={{ width: 30, height: 30 }} />
+          </li>
+        </motion.ul>
+      )}
+    </AnimatePresence>
+  );
+}
 
-  function onClickUpdateListState(list) {
+function OrderListSlide({ list }) {
+  // useDispatch
+  const dispatch = useDispatch();
+
+  function onClickOpenListOption(list) {
     return () => {
-      if (preventSubmit) return;
-      const method = selectedListId === list.id ? 'delete' : 'update';
-      dispatch(changeSubmitMsgType({ msgType: method, status: 'initial' }));
-      dispatch(changeModalState({ isOpen: true, type: 'update' }));
-      dispatch(getOrderListInfo({ list }));
+      dispatch(getSelectedListId({ selectedListId: list.id }));
     };
   }
 
@@ -49,41 +101,15 @@ function OrderListSlide({ list, idx }) {
       <div className={styles.list}>
         <div className={styles.topBox} onClick={onClickOpenListOption(list)}>
           <div className={styles.top}>
-            <div className={styles.title}>#{idx + 1}</div>
+            <div className={styles.title}>#{list.orderNum}</div>
             <div className={styles.right}>
               <div className={styles.table}>테이블 {list.tableNum}</div>
             </div>
           </div>
         </div>
         <MiddleBox orderList={list.orderList} />
-        <div className={styles.bottomBox}>
-          <div className={styles.bottom}>
-            <div className={styles.totalMenuAmount}>
-              <span>{amount}</span> 개
-            </div>
-            <div
-              className={`${styles.completeBtn} ${selectedListId === list.id ? styles.delete : ''}`}
-              onClick={onClickUpdateListState(list)}
-            >
-              {selectedListId === list.id ? '삭제' : '완료'}
-            </div>
-          </div>
-        </div>
-        <AnimatePresence>
-          {selectedListId === list.id && (
-            <motion.ul
-              className={styles.listOptionBox}
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0 }}
-              style={{ y: 10 }}
-            >
-              <li className={styles.option} onClick={onClickCloseListOption}>
-                <img src={'/img/close-icon.png'} alt="옵션 닫기" style={{ width: 30, height: 30 }} />
-              </li>
-            </motion.ul>
-          )}
-        </AnimatePresence>
+        <ListSliceBottom list={list} />
+        <ListSlideOption list={list} />
       </div>
     </li>
   );
@@ -139,7 +165,7 @@ export default function OrderListSwiper({ orderList }) {
       >
         <ul className={`swiper-wrapper ${styles.listBox}`}>
           {orderList.map((list, idx) => {
-            return <OrderListSlide key={idx} list={list} idx={idx} />;
+            return <OrderListSlide key={idx} list={list} />;
           })}
         </ul>
         <div className={`swiper-pagination ${styles.pagination}`}></div>

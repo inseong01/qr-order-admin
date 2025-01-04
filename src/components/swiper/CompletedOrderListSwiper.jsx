@@ -63,7 +63,7 @@ export default function CompletedOrderListSwiper({ orderList }) {
               <div className={styles.list}>
                 <div className={styles.topBox}>
                   <div className={styles.top}>
-                    <div className={styles.title}>#{orderList.length - idx}</div>
+                    <div className={styles.title}>#{list.orderNum}</div>
                     <div className={styles.right}>
                       <div className={styles.table}>테이블 {list.tableNum}</div>
                     </div>

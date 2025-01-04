@@ -15,19 +15,19 @@ export default function AlertMsg() {
   // 알림 메시지 등장/퇴장
   useEffect(() => {
     let timer;
-    // 제출되지 않았으면 반환
-    if (!isSubmit) return;
-    setIsAlert(true);
-    // 오류 발생 4번 제한
-    if (callCount < 5) {
-      timer = setTimeout(() => {
-        setIsAlert(false);
-      }, 1000);
+    if (submitStatus === 'fulfilled' || submitStatus === 'rejected') {
+      setIsAlert(true);
+      // 오류 발생 4번 제한
+      if (callCount < 5) {
+        timer = setTimeout(() => {
+          setIsAlert(false);
+        }, 1500);
+      }
     }
     return () => {
       clearTimeout(timer);
     };
-  }, [submitStatus, isSubmit]);
+  }, [submitStatus]);
 
   // fulfilled 때 alertMsg 사라지는 현상 방지
   if (submitStatus === 'pending') return;

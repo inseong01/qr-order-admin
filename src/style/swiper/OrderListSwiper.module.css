@@ -97,12 +97,9 @@
 
 /* 선택 항목 옵션 */
 .listOptionBox {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
   position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 .option {
   width: 30px;

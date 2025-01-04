@@ -34,7 +34,8 @@ export default function ConfirmModal() {
           return;
         }
         case 'yes': {
-          dispatch(fetchOrderListStatus({ method: submitMsgType, data: orderList }));
+          const method = submitMsgType === 'delete' ? 'delete' : 'update';
+          dispatch(fetchOrderListStatus({ method, data: orderList }));
           dispatch(changeModalState({ isOpen: false }));
           return;
         }
