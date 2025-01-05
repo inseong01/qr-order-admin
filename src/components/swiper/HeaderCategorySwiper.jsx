@@ -27,7 +27,7 @@ export default function HeaderCategorySwiper({ tabCategory }) {
   return (
     <div className={styles.swiper} ref={headerleftSliderRef}>
       <ul className="swiper-wrapper">
-        {tabCategory.map((list) => {
+        {tabCategory?.map((list) => {
           return <HeaderCategory key={list.id} list={list} />;
         })}
       </ul>

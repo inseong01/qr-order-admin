@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 export default function CreateAndEditMenu({ onSubmitData, onChangeInputValue, value, categoryList }) {
   // useSelector
   const modalType = useSelector((state) => state.modalState.type);
+  const categoryTitle = useSelector((state) => state.categoryState.title);
   // useRef
   const imgBox = useRef(null);
   // useState
@@ -89,16 +90,16 @@ export default function CreateAndEditMenu({ onSubmitData, onChangeInputValue, va
               className={styles.input}
               name="sort"
               onChange={onChangeInputValue('insert/update')}
-              defaultValue={value.sort}
+              defaultValue={value.sort ? value.sort : categoryTitle === '전체메뉴' ? '' : categoryTitle}
             >
-              {categoryList.data.map((category) => {
+              <option value={''} disabled>
+                분류를 선택해주세요
+              </option>
+              {categoryList.data.slice(1).map((category) => {
+                const title = category.title === '전체메뉴' ? '' : category.title;
                 return (
-                  <option
-                    key={category.id}
-                    value={category.title === '전체메뉴' ? '' : category.title}
-                    disabled={category.title === '전체메뉴'}
-                  >
-                    {category.title === '전체메뉴' ? '분류를 선택해주세요' : category.title}
+                  <option key={category.id} value={title} disabled={category.title === '전체메뉴'}>
+                    {category.title}
                   </option>
                 );
               })}

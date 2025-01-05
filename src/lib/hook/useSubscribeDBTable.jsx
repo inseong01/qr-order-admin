@@ -1,11 +1,13 @@
 import supabase from '../supabase/supabaseConfig';
-import { setAllOrderListTrigger, setTableRequestListTrigger } from '../features/realtimeState/realtimeSlice';
+import { setTableRequestListTrigger } from '../features/realtimeState/realtimeSlice';
 
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
-// 상위 컴포넌트
-// 상위에 커스텀훅 배치, 재사용 하지 않음, 코드 정리용
+// Supabase Table Realtime 구독 커스텀훅
+
+// 최상단 컴포넌트
+// 상단에 커스텀훅 배치, 재사용 하지 않음, 코드 정리용
 // uesQuery, state 트리거 할당
 // dispatch로 state 트리거 상태 관리
 
@@ -26,10 +28,7 @@ export default function useSubscribeDBTable(method) {
       .on(
         'postgres_changes',
         { schema: 'public', event: method, table: 'qr-order-allOrderList' },
-        (payload) => {
-          // dispatch(setAllOrderListTrigger());
-          // console.log(payload);
-        }
+        (payload) => {}
       )
       .on(
         'postgres_changes',

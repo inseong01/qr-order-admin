@@ -7,7 +7,6 @@ export default function AlertMsg() {
   // useSelector
   const alertType = useSelector((state) => state.submitState.alertType);
   const submitStatus = useSelector((state) => state.submitState.status);
-  const isSubmit = useSelector((state) => state.submitState.isSubmit);
   const callCount = useSelector((state) => state.submitState.callCount);
   // useState
   const [isAlert, setIsAlert] = useState(false);
@@ -21,7 +20,7 @@ export default function AlertMsg() {
       if (callCount < 5) {
         timer = setTimeout(() => {
           setIsAlert(false);
-        }, 1500);
+        }, 1700);
       }
     }
     return () => {

@@ -1,6 +1,6 @@
 import { changeModalState } from '@/lib/features/modalState/modalSlice';
 import { changeSubmitMsgType } from '@/lib/features/submitState/submitSlice';
-import { changeSubmitState } from '../../lib/features/submitState/submitSlice';
+import { changeSubmitState, fetchFormMenuItem } from '../../lib/features/submitState/submitSlice';
 import { onSubmitDeleteCategory } from '../../lib/function/modal/onSubmitDeleteCategory';
 import { onSubmitInsertCategory } from '../../lib/function/modal/onSubmitInsertCategory';
 import { onSubmitFetchMenu } from '../../lib/function/modal/onSubmitFetchMenu';
@@ -10,6 +10,7 @@ import MenuModal from './MenuModal';
 
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function ModalFormState({ categoryList }) {
   // useSelector
@@ -22,6 +23,8 @@ export default function ModalFormState({ categoryList }) {
   const dispatch = useDispatch();
   // useState
   const [value, setValue] = useState(item);
+  // useQueryClient
+  const queryClient = useQueryClient();
 
   // input value 업데이트
   useEffect(() => {
@@ -53,7 +56,7 @@ export default function ModalFormState({ categoryList }) {
 
   // 폼 제출
   function onSubmitData(table) {
-    return (e) => {
+    return async (e) => {
       e.preventDefault();
       if (isSubmit) return;
       // method 선언
@@ -65,11 +68,21 @@ export default function ModalFormState({ categoryList }) {
         case 'insert-category': {
           const title = e.target[0].value;
           onSubmitInsertCategory({ title, dispatch, method }, table);
+          // 메뉴 카테고리 데이터 패칭 요청
+          await queryClient.refetchQueries(
+            { queryKey: ['tabCategory', { tab }], exact: true },
+            { throwOnError: true }
+          );
           return;
         }
         case 'delete-category': {
           const checkElement = e.target.elements.check;
           onSubmitDeleteCategory({ checkElement, dispatch, method }, table);
+          // 메뉴 카테고리 데이터 패칭 요청
+          await queryClient.refetchQueries(
+            { queryKey: ['tabCategory', { tab }], exact: true },
+            { throwOnError: true }
+          );
           return;
         }
         case 'info': {

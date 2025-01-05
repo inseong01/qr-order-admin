@@ -5,6 +5,7 @@ import UnderLine from '../UnderLine';
 
 import { motion } from 'motion/react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useQueryClient } from '@tanstack/react-query';
 
 function HeaderCategoryBox({ list, children }) {
   // useSelector
@@ -12,12 +13,17 @@ function HeaderCategoryBox({ list, children }) {
   const isModalOpen = useSelector((state) => state.modalState.isOpen);
   // useDispatch
   const dispatch = useDispatch();
+  // useQueryClient
+  const queryClient = useQueryClient();
 
   function onClickChangeTabCategory({ id, title }) {
-    return () => {
+    return async () => {
       if (isModalOpen) return;
       if (categoryId == id) return;
+      // 해당 메뉴 카테고리 정보 변경, CSS/애니메이션 적용
       dispatch(changeCategoryId({ id, title }));
+      // 메뉴 새로운 카테고리 ID로 데이터 패칭 요청
+      await queryClient.refetchQueries({ queryKey: ['menuList', id] }, { throwOnError: true });
     };
   }
 

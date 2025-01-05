@@ -32,6 +32,18 @@ const itemSlice = createSlice({
     },
     getItemInfo: (state, action) => {
       const item = action.payload.item;
+      const sort = action.payload.sort;
+      // sort만 있는 상품 추가 경우
+      if (typeof sort === 'string') {
+        return {
+          ...state,
+          item: {
+            ...initialState.item,
+            sort
+          }
+        }
+      }
+      // item만 있는 상품 수정 경우
       return {
         ...state,
         item

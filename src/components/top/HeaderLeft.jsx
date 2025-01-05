@@ -9,12 +9,10 @@ import { useSelector } from 'react-redux';
 export default function HeaderLeft() {
   // useSelector
   const tab = useSelector((state) => state.tabState.title);
-  const isSubmit = useSelector((state) => state.submitState.isSubmit);
   // useQueries
   const tabCategory = useQuery({
-    queryKey: ['tabCategory', tab, isSubmit],
+    queryKey: ['tabCategory', { tab }],
     queryFn: () => getTabCategory(tab),
-    initialData: [],
   });
 
   if (tabCategory.isFetching) {

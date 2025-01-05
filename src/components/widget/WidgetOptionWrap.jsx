@@ -10,7 +10,6 @@ export default function WidgetOptionWrap() {
   const editTableType = useSelector((state) => state.konvaState.type);
   const editTableisEditing = useSelector((state) => state.konvaState.isEditing);
   const clicked = useSelector((state) => state.widgetState.isWidgetOpen);
-
   // dispatch
   const dispatch = useDispatch();
 

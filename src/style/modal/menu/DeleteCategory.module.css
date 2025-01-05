@@ -30,14 +30,17 @@
   text-align: center;
 }
 
+/* 분류 목록 가로/세로 크기 */
 .submitInfo {
   width: 250px;
+  height: 205px;
 
   display: flex;
   flex-direction: column;
   gap: 5px;
 
   font-size: 13px;
+  overflow-y: auto;
 }
 
 .btn {
@@ -67,7 +70,6 @@
 }
 
 .left {
-  width: 140px;
   height: 100%;
   border-radius: 7px;
   color: #8d8d8d;
@@ -113,7 +115,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 5px;
 
   font-size: 1rem;
+}
+.list label {
+  width: 100%;
 }

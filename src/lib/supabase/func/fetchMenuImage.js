@@ -18,7 +18,7 @@ export default async function fetchMenuImage({ method, file, imgPath }) {
     case 'delete': {
       // { "data": [{...}], "error": null }
       // 기본 사진 삭제 방지
-      if (imgPath.include('icon')) return;
+      if (imgPath.includes('icon')) return;
       const response = await supabase.storage.from('qr-order-img').remove([imgPath])
       if (response.error) {
         console.error(response.error.message);
