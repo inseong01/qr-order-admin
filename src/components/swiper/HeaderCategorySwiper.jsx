@@ -1,11 +1,18 @@
 import styles from '@/style/swiper/HeaderCategorySwiper.module.css';
 import HeaderCategory from './HeaderCategory';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
 import Swiper from 'swiper';
 import 'swiper/css';
+import { useSelector } from 'react-redux';
 
-export default function HeaderCategorySwiper({ tabCategory }) {
+export default function HeaderCategorySwiper() {
+  // useSelector
+  const tab = useSelector((state) => state.tabState.title);
+  // useQueryClient
+  const queryClient = useQueryClient();
+  const categoryList = queryClient.getQueryData(['categoryList', { tab }]);
   // useRef
   const headerleftSliderRef = useRef(null);
 
@@ -27,7 +34,7 @@ export default function HeaderCategorySwiper({ tabCategory }) {
   return (
     <div className={styles.swiper} ref={headerleftSliderRef}>
       <ul className="swiper-wrapper">
-        {tabCategory?.map((list) => {
+        {categoryList?.map((list) => {
           return <HeaderCategory key={list.id} list={list} />;
         })}
       </ul>

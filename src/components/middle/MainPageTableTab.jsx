@@ -1,26 +1,24 @@
 import styles from '@/style/middle/MainPageList.module.css';
-import { changeKonvaIsEditingState, getEditKonvaTableId } from '../../lib/features/konvaState/konvaSlice';
+import { getEditKonvaTableId } from '../../lib/features/konvaState/konvaSlice';
 import createKonvaInitTable from '../../lib/function/createKonvaInitTable';
-import fetchTableList from '../../lib/supabase/func/fetchTableList';
 import { debounce } from '../../lib/function/debounce';
 import TableDraw from './konva/TableDraw';
-import ErrorPage from '../ErrorPage';
 import MainModal from '../modal/MainModal';
-import Loader from '../Loader';
 
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'motion/react';
 import { useQuery } from '@tanstack/react-query';
+import TableAlertMsg from '../alertMsg/TableAlertMsg';
+import fetchTableList from '../../lib/supabase/func/fetchTableList';
 
 export default function MainPageTableTab() {
   // useSelector
   const tab = useSelector((state) => state.tabState.title);
-  const isSubmit = useSelector((state) => state.submitState.isSubmit);
   const submitStatus = useSelector((state) => state.submitState.status);
   const konvaEditType = useSelector((state) => state.konvaState.type);
   const konvaEditIsEditing = useSelector((state) => state.konvaState.isEditing);
-  // useQueries
+  // useQuery
   const tableList = useQuery({
     queryKey: ['tableList', { status: submitStatus }],
     queryFn: () => fetchTableList('select'),
@@ -65,19 +63,19 @@ export default function MainPageTableTab() {
 
   // konva 좌석 데이터 패치, 편집 중이면 반환
   useEffect(() => {
-    // 데이터가 없으면
+    // 좌석 데이터가 없다면
     if (!tableList.data) return;
+    // 새로 받아오는 중이면
+    if (tableList.isFetching) return;
     // Konva Stage가 없으면
     if (!tableBoxRef.current) return;
-    // 업데이트 중이면
-    if (tableList.isFetching) return;
     // Konva 편집 중이면
     if (konvaEditIsEditing) return;
     // konva 열기
     setOpenKonva(true);
     // konva 좌석 정보 할당
     setClientTableList(tableList.data);
-  }, [tableBoxRef, tableList.data, konvaEditIsEditing, tableList.isFetching]);
+  }, [tableBoxRef, tableList, konvaEditIsEditing]);
 
   // konva 편집 유형 "create", 좌석 생성
   useEffect(() => {
@@ -89,20 +87,21 @@ export default function MainPageTableTab() {
     }
   }, [konvaEditType]);
 
-  if (tableList.isError) return <ErrorPage compName={'MainPageTableTab'} />;
-
   return (
-    <div className={`${styles.listBox} ${tab === 'table' ? styles.table : ''}`} ref={tableBoxRef}>
-      {openKonva && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-          <TableDraw
-            stageSize={stageSize}
-            clientTableList={clientTableList}
-            setClientTableList={setClientTableList}
-          />
-        </motion.div>
-      )}
-      <MainModal />
-    </div>
+    <>
+      <div className={`${styles.listBox} ${tab === 'table' ? styles.table : ''}`} ref={tableBoxRef}>
+        {openKonva && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            <TableDraw
+              stageSize={stageSize}
+              clientTableList={clientTableList}
+              setClientTableList={setClientTableList}
+            />
+          </motion.div>
+        )}
+        <MainModal />
+      </div>
+      <TableAlertMsg />
+    </>
   );
 }

@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 const initialState = {
   item: {
-    id: uuidv4(),
+    id: '',
     name: '',
     price: 0,
     sort: '',
@@ -33,12 +33,14 @@ const itemSlice = createSlice({
     getItemInfo: (state, action) => {
       const item = action.payload.item;
       const sort = action.payload.sort;
+      const id = uuidv4();
       // sort만 있는 상품 추가 경우
       if (typeof sort === 'string') {
         return {
           ...state,
           item: {
             ...initialState.item,
+            id,
             sort
           }
         }

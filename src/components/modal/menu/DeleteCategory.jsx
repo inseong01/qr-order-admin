@@ -25,7 +25,7 @@ export default function DeleteCategory({ onSubmitData, categoryList }) {
       <div className={`${styles.sortModal}`}>
         <div className={styles.title}>분류 목록</div>
         <ul className={styles.submitInfo}>
-          {categoryList.data.map((category) => {
+          {categoryList?.map((category) => {
             return <Category key={category.id} category={category} />;
           })}
         </ul>

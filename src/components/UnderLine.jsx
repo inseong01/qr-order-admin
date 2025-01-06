@@ -2,10 +2,10 @@ import styles from '../style/underLine.module.css';
 
 import { motion } from 'motion/react';
 
-export default function UnderLine({ list, selectedId, position }) {
+export default function UnderLine({ tab, selectedId, position }) {
   return (
     <>
-      {selectedId === list.id && (
+      {selectedId === tab?.id && (
         <motion.div
           className={`${styles.line} ${styles[position]}`}
           layoutId={position === 'bottom' ? 'headerline' : 'footerLine'}

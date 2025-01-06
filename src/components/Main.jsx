@@ -2,7 +2,6 @@ import styles from '@/style/Main.module.css';
 import MainPageList from './middle/MainPageList';
 import Widget from './Widget';
 import AlertMsg from './AlertMsg';
-import TableAlertMsg from './alertMsg/TableAlertMsg';
 
 export default function Main() {
   return (
@@ -10,7 +9,6 @@ export default function Main() {
       <MainPageList />
       <AlertMsg />
       <Widget />
-      <TableAlertMsg />
     </main>
   );
 }

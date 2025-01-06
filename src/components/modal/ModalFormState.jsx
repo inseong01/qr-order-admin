@@ -1,6 +1,6 @@
 import { changeModalState } from '@/lib/features/modalState/modalSlice';
 import { changeSubmitMsgType } from '@/lib/features/submitState/submitSlice';
-import { changeSubmitState, fetchFormMenuItem } from '../../lib/features/submitState/submitSlice';
+import { changeSubmitState } from '../../lib/features/submitState/submitSlice';
 import { onSubmitDeleteCategory } from '../../lib/function/modal/onSubmitDeleteCategory';
 import { onSubmitInsertCategory } from '../../lib/function/modal/onSubmitInsertCategory';
 import { onSubmitFetchMenu } from '../../lib/function/modal/onSubmitFetchMenu';
@@ -10,9 +10,8 @@ import MenuModal from './MenuModal';
 
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useQueryClient } from '@tanstack/react-query';
 
-export default function ModalFormState({ categoryList }) {
+export default function ModalFormState() {
   // useSelector
   const modalType = useSelector((state) => state.modalState.type);
   const tab = useSelector((state) => state.tabState.title);
@@ -23,8 +22,6 @@ export default function ModalFormState({ categoryList }) {
   const dispatch = useDispatch();
   // useState
   const [value, setValue] = useState(item);
-  // useQueryClient
-  const queryClient = useQueryClient();
 
   // input value 업데이트
   useEffect(() => {
@@ -37,7 +34,7 @@ export default function ModalFormState({ categoryList }) {
       dispatch(changeModalState({ isOpen: false }));
       dispatch(changeSubmitState({ isSubmit: false }));
     }
-  }, [submitStatus]);
+  }, [tab, isSubmit, submitStatus]);
 
   // 입력 함수
   function onChangeInputValue(onChangeType) {
@@ -68,21 +65,11 @@ export default function ModalFormState({ categoryList }) {
         case 'insert-category': {
           const title = e.target[0].value;
           onSubmitInsertCategory({ title, dispatch, method }, table);
-          // 메뉴 카테고리 데이터 패칭 요청
-          await queryClient.refetchQueries(
-            { queryKey: ['tabCategory', { tab }], exact: true },
-            { throwOnError: true }
-          );
           return;
         }
         case 'delete-category': {
           const checkElement = e.target.elements.check;
           onSubmitDeleteCategory({ checkElement, dispatch, method }, table);
-          // 메뉴 카테고리 데이터 패칭 요청
-          await queryClient.refetchQueries(
-            { queryKey: ['tabCategory', { tab }], exact: true },
-            { throwOnError: true }
-          );
           return;
         }
         case 'info': {
@@ -100,14 +87,7 @@ export default function ModalFormState({ categoryList }) {
   // 탭 별 모달 출력 지정
   switch (tab) {
     case 'menu': {
-      return (
-        <MenuModal
-          onSubmitData={onSubmitData}
-          onChangeInputValue={onChangeInputValue}
-          value={value}
-          categoryList={categoryList}
-        />
-      );
+      return <MenuModal onSubmitData={onSubmitData} onChangeInputValue={onChangeInputValue} value={value} />;
     }
     case 'table': {
       return <TableModal onSubmitData={onSubmitData} />;

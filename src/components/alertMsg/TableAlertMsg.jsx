@@ -1,13 +1,13 @@
 import styles from '@/style/AlertMsg.module.css';
 import { fetchUpdateAlertMsg } from '../../lib/features/submitState/submitSlice';
-import fetchTableRequestList from '../../lib/supabase/func/fetchTableRequestList';
 import HiddenAlertMessage from './HiddenAlertMessage';
 import DisplayedAlertMessage from './DisplayedAlertMessage';
+import fetchTableRequestList from '../../lib/supabase/func/fetchTableRequestList';
 
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 export default function TableAlertMsg() {
   // useState
@@ -19,45 +19,48 @@ export default function TableAlertMsg() {
   const submitStatus = useSelector((state) => state.submitState.status);
   const submitIsError = useSelector((state) => state.submitState.isError);
   const tableEditIsAble = useSelector((state) => state.konvaState.isAble);
-  const requestTrigger = useSelector((state) => state.realtimeState.tableRequestList.trigger);
   const requestAlertOn = useSelector((state) => state.realtimeState.tableRequestList.isOn);
   // useRef
   const reqeustMsgRef = useRef(null);
   // useDispatch
   const dispatch = useDispatch();
-  // useQuery
-  const requestList = useQuery({
-    queryKey: ['requestList', requestTrigger],
-    queryFn: () => fetchTableRequestList('select'),
-    initialData: [],
-  });
+  // useQueryClient
+  // const requestList = useQuery({
+  //   queryKey: ['requestList'],
+  //   queryFn: () => fetchTableRequestList('select'),
+  // });
+  const queryClient = useQueryClient();
   // variant
-  const extraMsg = requestList.data.filter((list) => !list.isRead).slice(4);
+  const requestList = queryClient.getQueryData(['requestList']);
+  const extraMsg = requestList?.filter((list) => !list.isRead).slice(4);
 
   // 읽지 않은 이전 요청 불러오기 (수 제한)
   useEffect(() => {
-    if (requestList.isFetching) return;
-    const notReadMsg = requestList.data.filter((list) => !list.isRead).slice(0, 4);
+    if (!requestList) return;
+    const notReadMsg = requestList.filter((list) => !list.isRead).slice(0, 4);
     setRequestAlertList(notReadMsg);
-  }, [requestList.isFetching, requestList.data]);
+  }, [requestList]);
 
-  // 알림 치우기
+  // 읽은 알림 안 읽은 목록에서 제외하기
   useEffect(() => {
     if (id && submitStatus === 'fulfilled') {
       setRequestAlertList((prev) => prev.filter((msg) => msg.id !== id));
     }
   }, [id, submitStatus]);
 
-  // 알림(컴포넌트) On/Off
+  // 알림 On/Off
   useEffect(() => {
-    // 좌석 탭이고 알림이 있고 편집 중이 아니면
-    if (tab === 'table' && requestAlertList.length > 0 && !tableEditIsAble) {
+    // 좌석 탭 아니면 반환
+    if (tab !== 'table') {
+      return setAlertOn(false);
+    }
+    // 알림이 있고 편집 중이 아니면
+    if (requestAlertList.length > 0 && !tableEditIsAble) {
       return setAlertOn(requestAlertOn);
     }
-    setAlertOn(false);
   }, [tab, requestAlertList, requestAlertOn, tableEditIsAble]);
 
-  // 알림 읽음 처리
+  // 클릭 시 알림 읽음 처리 (DB)
   function onClickReadMsg(list) {
     return () => {
       // 오류 발생 시 alert on/off 기능 생성

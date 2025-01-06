@@ -1,28 +1,24 @@
 import styles from '@/style/bottom/TabMenu.module.css';
-import fetchOrderList from '../../lib/supabase/func/fetchOrderList';
 
-import { useQuery } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 
-export default function TabeMenuOrderAlert({ list }) {
+export default function TabeMenuOrderAlert({ tab }) {
   // useState
   const [isUnDoneList, setUndDoneList] = useState(false);
-  // useSelector
-  const orderTrigger = useSelector((state) => state.realtimeState.allOrderList.trigger);
-  // useQuery
-  const allOrderList = useQuery({
-    queryKey: ['allOrderList', orderTrigger],
-    queryFn: () => fetchOrderList('select'),
-    initialData: [],
-  });
+  // useQueryClient
+  const queryClient = useQueryClient();
+  // variant
+  const allOrderList = queryClient.getQueryData(['allOrderList']);
 
+  // 하단 탭, 완료되지 않은 주문 여부 알림 띄우기
   useEffect(() => {
-    if (allOrderList.isFetching) return;
-    const isUnDoneOrderList = allOrderList.data.some((list) => !list.isDone);
-    const isCorrectTab = list.title === '주문';
-    setUndDoneList(isCorrectTab && isUnDoneOrderList);
-  }, [allOrderList.isFetching, allOrderList.data]);
+    if (!allOrderList) return;
+    if (tab.title !== '주문') return;
+    // 완료 되지 않은 주문 여부
+    const isUnDoneOrderList = allOrderList.some((list) => !list.isDone);
+    setUndDoneList(isUnDoneOrderList);
+  }, [allOrderList, tab]);
 
   return <>{isUnDoneList && <div className={`${styles.alertStatus}`}></div>}</>;
 }

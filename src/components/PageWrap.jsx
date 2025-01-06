@@ -4,6 +4,7 @@ import Main from './Main';
 import useSubscribeDBTable from '../lib/hook/useSubscribeDBTable';
 
 export default function PageWrap() {
+  // Supabase Realtime subscribe
   useSubscribeDBTable('*');
 
   return (

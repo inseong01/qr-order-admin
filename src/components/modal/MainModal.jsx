@@ -1,28 +1,18 @@
 import styles from '@/style/modal/MainModal.module.css';
 import { changeModalState } from '@/lib/features/modalState/modalSlice';
-import getTabCategory from '@/lib/supabase/func/getTabCategory';
 import ModalFormState from './ModalFormState';
 
 import { useRef } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useQuery } from '@tanstack/react-query';
 
 export default function MainModal() {
   // useSelector
-  const tab = useSelector((state) => state.tabState.title);
   const isModalOpen = useSelector((state) => state.modalState.isOpen);
-  const isSubmit = useSelector((state) => state.submitState.isSubmit);
   // dispatch
   const dispatch = useDispatch();
   // useRef
   const modalRef = useRef(null);
-  // useQuery
-  const categoryList = useQuery({
-    queryKey: ['tabCategory', tab, isSubmit],
-    queryFn: () => getTabCategory(tab),
-    initialData: [],
-  });
 
   function onClickCloseModal() {
     dispatch(changeModalState({ isOpen: false }));
@@ -42,7 +32,7 @@ export default function MainModal() {
             exit={{ scale: 0 }}
             style={{ translateX: '-50%', translateY: '-50%' }}
           >
-            <ModalFormState categoryList={categoryList} />
+            <ModalFormState />
             <div className={styles.closeBtn} onClick={onClickCloseModal}>
               <img src={'/img/close.png'} alt="닫기" style={{ width: 20, height: 20 }} />
             </div>

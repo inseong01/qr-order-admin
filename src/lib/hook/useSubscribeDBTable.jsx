@@ -1,41 +1,55 @@
 import supabase from '../supabase/supabaseConfig';
-import { setTableRequestListTrigger } from '../features/realtimeState/realtimeSlice';
 
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useQueries } from '@tanstack/react-query';
+import fetchTableRequestList from '../supabase/func/fetchTableRequestList';
+import fetchOrderList from '../supabase/func/fetchOrderList';
 
 // Supabase Table Realtime 구독 커스텀훅
 
 // 최상단 컴포넌트
 // 상단에 커스텀훅 배치, 재사용 하지 않음, 코드 정리용
-// uesQuery, state 트리거 할당
-// dispatch로 state 트리거 상태 관리
+// useQuery 리패치 메소드 활용
 
 // 하위 컴포넌트
-// 필요한 컴포넌트에서 useQuery, useSelector 선언
-// useQuery 캐시 특성 활용
+// 필요한 컴포넌트에서 useQuery 캐시 특성 활용
 
-// 전역 상태 관리 dispatch로 트리거 활용
-// 중요한 점: 구독은 한 번만 이루어지도록 상위 컴포넌트에 선언
+// 중요한 점: 구독은 한 번만 이루어지도록 상위 컴포넌트에 선언 + 의존성에 의한 구독해제 선언
 
 export default function useSubscribeDBTable(method) {
-  // useDispatch
-  const dispatch = useDispatch();
+  // useQuery
+  const [requestList, allOrderList] = useQueries({
+    queries: [
+      {
+        queryKey: ['requestList'],
+        queryFn: () => fetchTableRequestList('select'),
+      },
+      {
+        queryKey: ['allOrderList'],
+        queryFn: () => fetchOrderList('select'),
+      },
+    ],
+  });
 
+  // realtime 활성화 모든 테이블 이벤트 감지
   useEffect(() => {
     const changes = supabase
-      .channel('qr-order-orderList-realtime') // realtime 활성화 모든 테이블 이벤트 감지
+      .channel('qr-order-orderList-realtime')
       .on(
         'postgres_changes',
         { schema: 'public', event: method, table: 'qr-order-allOrderList' },
-        (payload) => {}
+        async (payload) => {
+          // 주문 요청 시 allOrderList 쿼리 리패치
+          console.log(payload);
+          await allOrderList.refetch();
+        }
       )
       .on(
         'postgres_changes',
         { schema: 'public', event: method, table: 'qr-order-request-list' },
-        (payload) => {
-          dispatch(setTableRequestListTrigger());
-          // console.log(payload);
+        async (payload) => {
+          // 요청 알림마다 requestList 쿼리 리패치
+          await requestList.refetch();
         }
       )
       .subscribe();
@@ -43,7 +57,7 @@ export default function useSubscribeDBTable(method) {
     return () => {
       changes.unsubscribe();
     };
-  }, []);
+  }, [method, requestList, allOrderList]);
 
   return;
 }

@@ -95,10 +95,9 @@ export default function CreateAndEditMenu({ onSubmitData, onChangeInputValue, va
               <option value={''} disabled>
                 분류를 선택해주세요
               </option>
-              {categoryList.data.slice(1).map((category) => {
-                const title = category.title === '전체메뉴' ? '' : category.title;
+              {categoryList?.map((category) => {
                 return (
-                  <option key={category.id} value={title} disabled={category.title === '전체메뉴'}>
+                  <option key={category.id} value={category.title}>
                     {category.title}
                   </option>
                 );

@@ -1,14 +1,14 @@
 import styles from '@/style/bottom/TabMenu.module.css';
 import { changeTabState } from '@/lib/features/tabState/tabSlice';
 import { resetCategoryState } from '../../lib/features/categoryState/categorySlice';
-import TabeMenuTableAlert from './TabeMenuTableAlert';
+import TabMenuTableAlert from './TabMenuTableAlert';
 import TabeMenuOrderAlert from './TabeMenuOrderAlert';
 import UnderLine from '../UnderLine';
 
 import { motion } from 'motion/react';
 import { useDispatch, useSelector } from 'react-redux';
 
-function TabMenuBox({ children, list }) {
+function TabMenuBox({ children, tab }) {
   // useSelector
   const isModalOpen = useSelector((state) => state.modalState.isOpen);
   const editTableisEditing = useSelector((state) => state.konvaState.isEditing);
@@ -32,22 +32,22 @@ function TabMenuBox({ children, list }) {
 
   return (
     <div
-      className={`${styles.listBox} ${currentTabId === list.id ? styles.clicked : ''}`}
-      onClick={onClickChangeTab(list)}
+      className={`${styles.listBox} ${currentTabId === tab.id ? styles.clicked : ''}`}
+      onClick={onClickChangeTab(tab)}
     >
       {children}
-      <UnderLine list={list} selectedId={currentTabId} position={'top'} />
+      <UnderLine tab={tab} selectedId={currentTabId} position={'top'} />
     </div>
   );
 }
 
-export default function TabMenu({ list }) {
+export default function TabMenu({ tab }) {
   return (
-    <TabMenuBox list={list}>
+    <TabMenuBox tab={tab}>
       <motion.div className={styles.title} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-        {list.title}
-        <TabeMenuTableAlert list={list} />
-        <TabeMenuOrderAlert list={list} />
+        {tab.title}
+        <TabMenuTableAlert tab={tab} />
+        <TabeMenuOrderAlert tab={tab} />
       </motion.div>
     </TabMenuBox>
   );
