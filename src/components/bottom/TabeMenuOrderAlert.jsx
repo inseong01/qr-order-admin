@@ -1,24 +1,22 @@
 import styles from '@/style/bottom/TabMenu.module.css';
+import useQueryAllOrderList from '../../lib/hook/useQuery/useQueryAllOrderList';
 
-import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 export default function TabeMenuOrderAlert({ tab }) {
   // useState
   const [isUnDoneList, setUndDoneList] = useState(false);
-  // useQueryClient
-  const queryClient = useQueryClient();
-  // variant
-  const allOrderList = queryClient.getQueryData(['allOrderList']);
+  // hook
+  const { data } = useQueryAllOrderList();
 
   // 하단 탭, 완료되지 않은 주문 여부 알림 띄우기
   useEffect(() => {
-    if (!allOrderList) return;
+    if (!data) return;
     if (tab.title !== '주문') return;
     // 완료 되지 않은 주문 여부
-    const isUnDoneOrderList = allOrderList.some((list) => !list.isDone);
+    const isUnDoneOrderList = data.some((list) => !list.isDone);
     setUndDoneList(isUnDoneOrderList);
-  }, [allOrderList, tab]);
+  }, [data, tab]);
 
   return <>{isUnDoneList && <div className={`${styles.alertStatus}`}></div>}</>;
 }

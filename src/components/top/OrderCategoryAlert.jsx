@@ -1,13 +1,11 @@
-import { useQueryClient } from '@tanstack/react-query';
-import { useMemo } from 'react';
+import useQueryAllOrderList from '../../lib/hook/useQuery/useQueryAllOrderList';
 
 export default function OrderCategoryAlert({ title }) {
-  // useQueryClient
-  const queryClient = useQueryClient();
-  const allOrderList = useMemo(() => queryClient.getQueryData(['allOrderList']), [queryClient]);
-  console.log(allOrderList);
+  // hook
+  // const { useQueryAllOrderList } = useQueryHook();
+  const { data } = useQueryAllOrderList();
   // variant
-  const notServedOrder = allOrderList?.filter((list) => !list.isDone).length;
+  const notServedOrder = data?.filter((list) => !list.isDone).length;
 
-  return <>{title === '접수' && (allOrderList.length ? notServedOrder : 0)}</>;
+  return <>{title === '접수' && (data?.length ? notServedOrder : 0)}</>;
 }

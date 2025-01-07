@@ -29,7 +29,10 @@
 }
 
 .addCategoryBox {
-  color: #222;
+  color: #777;
+}
+.title {
+  line-height: 15px;
 }
 
 @media (min-width: 400px) {

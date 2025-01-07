@@ -1,13 +1,12 @@
 import styles from '@/style/AlertMsg.module.css';
 import { fetchUpdateAlertMsg } from '../../lib/features/submitState/submitSlice';
+import useQueryRequestList from '../../lib/hook/useQuery/useQueryRequestList';
 import HiddenAlertMessage from './HiddenAlertMessage';
 import DisplayedAlertMessage from './DisplayedAlertMessage';
-import fetchTableRequestList from '../../lib/supabase/func/fetchTableRequestList';
 
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 export default function TableAlertMsg() {
   // useState
@@ -24,22 +23,17 @@ export default function TableAlertMsg() {
   const reqeustMsgRef = useRef(null);
   // useDispatch
   const dispatch = useDispatch();
-  // useQueryClient
-  // const requestList = useQuery({
-  //   queryKey: ['requestList'],
-  //   queryFn: () => fetchTableRequestList('select'),
-  // });
-  const queryClient = useQueryClient();
+  // useQuery
+  const { data } = useQueryRequestList();
   // variant
-  const requestList = queryClient.getQueryData(['requestList']);
-  const extraMsg = requestList?.filter((list) => !list.isRead).slice(4);
+  const extraMsg = data?.filter((list) => !list.isRead).slice(4);
 
   // 읽지 않은 이전 요청 불러오기 (수 제한)
   useEffect(() => {
-    if (!requestList) return;
-    const notReadMsg = requestList.filter((list) => !list.isRead).slice(0, 4);
+    if (!data) return;
+    const notReadMsg = data.filter((list) => !list.isRead).slice(0, 4);
     setRequestAlertList(notReadMsg);
-  }, [requestList]);
+  }, [data]);
 
   // 읽은 알림 안 읽은 목록에서 제외하기
   useEffect(() => {
@@ -56,6 +50,7 @@ export default function TableAlertMsg() {
     }
     // 알림이 있고 편집 중이 아니면
     if (requestAlertList.length > 0 && !tableEditIsAble) {
+      // 토글 여부에 따라 On/Off
       return setAlertOn(requestAlertOn);
     }
   }, [tab, requestAlertList, requestAlertOn, tableEditIsAble]);

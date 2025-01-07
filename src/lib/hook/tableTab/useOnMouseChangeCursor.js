@@ -1,18 +1,13 @@
-import { useQuery } from '@tanstack/react-query';
+import useQueryRequestList from '../useQuery/useQueryRequestList';
+
 import { useSelector } from 'react-redux';
-import fetchTableRequestList from '../../supabase/func/fetchTableRequestList';
 
 export default function useOnMouseChangeCursor(stage, table) {
   // useSelector
   const konvaEditTableIdArr = useSelector((state) => state.konvaState.target.id);
   const konvaEditType = useSelector((state) => state.konvaState.type);
-  const requestTrigger = useSelector((state) => state.realtimeState.tableRequestList.trigger);
-  // useQuery
-  const requestList = useQuery({
-    queryKey: ['requestList', requestTrigger],
-    queryFn: () => fetchTableRequestList('select'),
-    initialData: [],
-  });
+  // hook
+  const requestList = useQueryRequestList();
   // variant
   const { id } = table;
   const isTransformerAble = id === konvaEditTableIdArr[0] && konvaEditType !== 'delete';

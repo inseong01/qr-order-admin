@@ -2,32 +2,22 @@ import styles from '@/style/middle/MainPageList.module.css';
 import { getEditKonvaTableId } from '../../lib/features/konvaState/konvaSlice';
 import createKonvaInitTable from '../../lib/function/createKonvaInitTable';
 import { debounce } from '../../lib/function/debounce';
+import useQueryTableList from '../../lib/hook/useQuery/useQueryTableList';
+import TableAlertMsg from '../alertMsg/TableAlertMsg';
 import TableDraw from './konva/TableDraw';
 import MainModal from '../modal/MainModal';
 
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'motion/react';
-import { useQuery } from '@tanstack/react-query';
-import TableAlertMsg from '../alertMsg/TableAlertMsg';
-import fetchTableList from '../../lib/supabase/func/fetchTableList';
 
 export default function MainPageTableTab() {
   // useSelector
   const tab = useSelector((state) => state.tabState.title);
-  const submitStatus = useSelector((state) => state.submitState.status);
   const konvaEditType = useSelector((state) => state.konvaState.type);
   const konvaEditIsEditing = useSelector((state) => state.konvaState.isEditing);
   // useQuery
-  const tableList = useQuery({
-    queryKey: ['tableList', { status: submitStatus }],
-    queryFn: () => fetchTableList('select'),
-    enabled: (query) => {
-      if (query.queryKey[1].status === 'initial') return true;
-      if (query.queryKey[1].status === 'fulfilled') return true;
-      return false;
-    },
-  });
+  const tableList = useQueryTableList();
   // useDispatch
   const dispatch = useDispatch();
   // useRef

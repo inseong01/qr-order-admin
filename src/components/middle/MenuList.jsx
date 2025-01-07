@@ -1,10 +1,9 @@
 import { changeModalState } from '@/lib/features/modalState/modalSlice';
 import { getItemInfo } from '@/lib/features/itemState/itemSlice';
-import getMenuList from '../../lib/supabase/func/getMenuList';
+import useQueryMenuList from '../../lib/hook/useQuery/useQueryMenuList';
 import AddMenu from './AddMenu';
 import Menu from './Menu';
 
-import { useQuery } from '@tanstack/react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 
@@ -17,11 +16,9 @@ export default function MenuList() {
   const isSubmit = useSelector((state) => state.submitState.isSubmit);
   const submitError = useSelector((state) => state.submitState.isError);
   const submitStatus = useSelector((state) => state.submitState.status);
-  // useQueries
-  const menuList = useQuery({
-    queryKey: ['menuList', selectedCategory.id],
-    queryFn: () => getMenuList(selectedCategory),
-  });
+  // hook
+  // const { useQueryMenuList } = useQueryHook();
+  const menuList = useQueryMenuList();
 
   // 메뉴 새로 패치
   useEffect(() => {

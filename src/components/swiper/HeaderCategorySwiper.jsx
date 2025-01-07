@@ -3,9 +3,9 @@ import HeaderCategory from './HeaderCategory';
 
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import Swiper from 'swiper';
 import 'swiper/css';
-import { useSelector } from 'react-redux';
 
 export default function HeaderCategorySwiper() {
   // useSelector

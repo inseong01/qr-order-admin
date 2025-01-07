@@ -1,6 +1,7 @@
-import { useDispatch, useSelector } from 'react-redux';
 import { changeModalState } from '../../features/modalState/modalSlice';
 import { selectTable } from '../../features/itemState/itemSlice';
+
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function useOpenTableInfo() {
   // useSelector

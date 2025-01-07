@@ -1,9 +1,8 @@
 import styles from '@/style/top/HeaderLeft.module.css';
-import getTabCategory from '@/lib/supabase/func/getTabCategory';
+import useQueryCategoryList from '../../lib/hook/useQuery/useQueryCategoryList';
 import HeaderCategorySwiper from '../swiper/HeaderCategorySwiper';
 import AddCategoryBox from './AddCategoryBox';
 
-import { useQuery } from '@tanstack/react-query';
 import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
 
@@ -13,12 +12,9 @@ export default function HeaderLeft() {
   const modalType = useSelector((state) => state.modalState.type);
   const isSubmit = useSelector((state) => state.submitState.isSubmit);
   const submitStatus = useSelector((state) => state.submitState.status);
-  // useQuery
-  const categoryList = useQuery({
-    queryKey: ['categoryList', { tab }],
-    queryFn: () => getTabCategory(tab),
-    refetchOnWindowFocus: false,
-  });
+  // hook
+  // const { useQueryCategoryList } = useQueryHook();
+  const categoryList = useQueryCategoryList();
   // variant
   const isNotCateogoryEdit = !modalType.includes('category');
 
