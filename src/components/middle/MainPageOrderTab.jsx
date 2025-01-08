@@ -14,7 +14,6 @@ export default function MainPageOrderTab() {
   const submitStatus = useSelector((state) => state.submitState.status);
   const selectedCategory = useSelector((state) => state.categoryState);
   // hook
-  // const { useQueryAllOrderList } = useQueryHook();
   const { data, isLoading } = useQueryAllOrderList();
   // useDispatch
   const dispatch = useDispatch();
@@ -42,7 +41,7 @@ export default function MainPageOrderTab() {
       ) : (
         <CompletedOrderListSwiper orderList={descDoneOrderList} />
       )}
-      <ConfirmModal />
+      <ConfirmModal title={'주문'} />
     </>
   );
 }

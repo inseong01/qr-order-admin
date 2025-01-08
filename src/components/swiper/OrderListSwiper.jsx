@@ -1,7 +1,7 @@
 import styles from '@/style/swiper/OrderListSwiper.module.css';
 import MiddleBox from '../middle/MiddleBox';
 import { changeModalState } from '@/lib/features/modalState/modalSlice';
-import { getOrderListInfo, getSelectedListId } from '../../lib/features/itemState/itemSlice';
+import { getListInfo, getSelectedListId } from '../../lib/features/itemState/itemSlice';
 import { changeSubmitMsgType } from '../../lib/features/submitState/submitSlice';
 import { swiper_motion } from '../../lib/motion/motion_mainPageOrderTab';
 
@@ -27,7 +27,7 @@ function ListSlideSubmitBtn({ list }) {
       const type = selectedListId === list.id ? 'delete' : 'complete';
       dispatch(changeSubmitMsgType({ msgType: type }));
       dispatch(changeModalState({ isOpen: true, type: 'update' }));
-      dispatch(getOrderListInfo({ list }));
+      dispatch(getListInfo({ list }));
     };
   }
 

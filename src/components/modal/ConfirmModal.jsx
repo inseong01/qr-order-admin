@@ -1,30 +1,19 @@
 import styles from '@/style/modal/ConfirmModal.module.css';
-import { fetchOrderListStatus } from '../../lib/features/submitState/submitSlice';
+import { fetchFormCategoryItem, fetchOrderListStatus } from '../../lib/features/submitState/submitSlice';
 import { changeModalState } from '../../lib/features/modalState/modalSlice';
+import { resetCategoryState } from '../../lib/features/categoryState/categorySlice';
 import { resetItemState } from '@/lib/features/itemState/itemSlice';
 
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AnimatePresence, motion } from 'motion/react';
 
-export default function ConfirmModal() {
+function ConfirmButton({ title }) {
   // useSelector
-  const tab = useSelector((state) => state.tabState.title);
-  const orderList = useSelector((state) => state.itemState.list);
-  const submitStatus = useSelector((state) => state.submitState.status);
+  const selectedList = useSelector((state) => state.itemState.list);
   const submitMsgType = useSelector((state) => state.submitState.msgType);
-  const context = submitMsgType === 'delete' ? '삭제' : '완료';
-  // useRef
-  const modalRef = useRef(null);
-  // useSelector
-  const isModalOpen = useSelector((state) => state.modalState.isOpen);
   // useDispatch
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (tab === 'order' && submitStatus !== 'fulfilled') return;
-    dispatch(resetItemState());
-  }, [submitStatus]);
 
   function onClickChangeModalStatus(state) {
     return () => {
@@ -35,13 +24,78 @@ export default function ConfirmModal() {
         }
         case 'yes': {
           const method = submitMsgType === 'delete' ? 'delete' : 'update';
-          dispatch(fetchOrderListStatus({ method, data: orderList }));
+          if (title === '주문') {
+            dispatch(fetchOrderListStatus({ method, data: selectedList }));
+          } else if (title === '카테고리') {
+            dispatch(fetchFormCategoryItem({ method, itemInfo: selectedList, table: 'category-menu' }));
+          }
           dispatch(changeModalState({ isOpen: false }));
-          return;
         }
       }
     };
   }
+
+  return (
+    <ul className={styles.btnBox}>
+      <li className={styles.btn} onClick={onClickChangeModalStatus('no')}>
+        아니요
+      </li>
+      <li className={styles.btn} onClick={onClickChangeModalStatus('yes')}>
+        예
+      </li>
+    </ul>
+  );
+}
+
+function ConfirmTitle({ title }) {
+  // useSelector
+  const tab = useSelector((state) => state.tabState.title);
+  const selectedList = useSelector((state) => state.itemState.list);
+  const submitMsgType = useSelector((state) => state.submitState.msgType);
+  // variant
+  const context = submitMsgType === 'delete' ? '삭제' : title === '주문' ? '완료' : '수정';
+  const subTitlte = tab === 'menu' ? selectedList.map((list) => list.title).join(', ') : '';
+  return (
+    <div className={styles.title}>
+      {title}을 {context}하시겠습니까?
+      {subTitlte && (
+        <div className={styles.subTitlteBox}>
+          <span className={`${styles.caption} ${styles.subTitlte}`} title={subTitlte}>
+            &#91; {subTitlte} &#93;
+          </span>
+          <span className={styles.caption}>
+            카테고리와 관련된 메뉴들도 <span className={styles.caution}>일괄 삭제</span>됩니다
+          </span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function ConfirmModal({ title }) {
+  // useSelector
+  const tab = useSelector((state) => state.tabState.title);
+  const modalType = useSelector((state) => state.modalState.type);
+  const submitStatus = useSelector((state) => state.submitState.status);
+  // useRef
+  const modalRef = useRef(null);
+  // useSelector
+  const isModalOpen = useSelector((state) => state.modalState.isOpen);
+  // useDispatch
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // 주문 상태 처리 되었다면
+    if (tab === 'order' && submitStatus === 'fulfilled') {
+      dispatch(resetItemState());
+    }
+    // 카테고리 수정 되었다면
+    if (modalType.includes('category') && submitStatus === 'fulfilled') {
+      dispatch(resetItemState());
+      // 없는 카테고리 빈 목록 창 방지, 초기 카테고리로 이동
+      dispatch(resetCategoryState());
+    }
+  }, [tab, submitStatus, modalType]);
 
   return (
     <AnimatePresence>
@@ -56,15 +110,8 @@ export default function ConfirmModal() {
             exit={{ scale: 0 }}
             style={{ translateX: '-50%', translateY: '-50%' }}
           >
-            <div className={styles.title}>주문을 {context}하시겠습니까?</div>
-            <ul className={styles.btnBox}>
-              <li className={styles.btn} onClick={onClickChangeModalStatus('no')}>
-                아니요
-              </li>
-              <li className={styles.btn} onClick={onClickChangeModalStatus('yes')}>
-                예
-              </li>
-            </ul>
+            <ConfirmTitle title={title} />
+            <ConfirmButton title={title} />
           </motion.dialog>
           <motion.div
             className={styles.backdrop}

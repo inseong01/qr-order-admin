@@ -51,7 +51,7 @@ const itemSlice = createSlice({
         item
       }
     },
-    getOrderListInfo: (state, action) => {
+    getListInfo: (state, action) => {
       const list = action.payload.list;
       return {
         ...state,
@@ -82,5 +82,5 @@ const itemSlice = createSlice({
   }
 })
 
-export const { resetItemState, getItemInfo, getOrderListInfo, getSelectedListId, getClientTableList, selectTable } = itemSlice.actions;
+export const { resetItemState, getItemInfo, getListInfo, getSelectedListId, getClientTableList, selectTable } = itemSlice.actions;
 export default itemSlice.reducer;

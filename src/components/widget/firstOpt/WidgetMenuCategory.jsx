@@ -33,7 +33,7 @@ export default function WidgetMenuFirstCategory() {
           <motion.li
             className={styles.option}
             variants={option}
-            onClick={onClickOpenEditor('delete-category')}
+            onClick={onClickOpenEditor('update-category')}
           >
             <span className={styles.textBox}>분류</span>
           </motion.li>

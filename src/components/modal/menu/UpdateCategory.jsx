@@ -1,4 +1,4 @@
-import styles from '@/style/modal/menu/DeleteCategory.module.css';
+import styles from '@/style/modal/menu/UpdateCategory.module.css';
 
 function Category({ category }) {
   const { id, title } = category;
@@ -19,9 +19,9 @@ function Category({ category }) {
   );
 }
 
-export default function DeleteCategory({ onSubmitData, categoryList }) {
+export default function UpdateCategory({ onSubmitData, categoryList }) {
   return (
-    <form className={`${styles.submitForm}`} onSubmit={onSubmitData('category-menu')}>
+    <form className={`${styles.submitForm}`} onSubmit={onSubmitData}>
       <div className={`${styles.sortModal}`}>
         <div className={styles.title}>분류 목록</div>
         <ul className={styles.submitInfo}>
@@ -30,7 +30,13 @@ export default function DeleteCategory({ onSubmitData, categoryList }) {
           })}
         </ul>
         <div className={styles.submitBtn}>
-          <input type="submit" className={styles.btn} value={'삭제하기'} name={'delete'} />
+          <input
+            type="submit"
+            className={`${styles.btn} ${styles.delete}`}
+            value={'삭제하기'}
+            name={'delete'}
+          />
+          <input type="submit" className={styles.btn} value={'수정하기'} name={'update'} />
         </div>
       </div>
     </form>

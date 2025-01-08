@@ -34,7 +34,7 @@ function HeaderCategoryBox({ list, children }) {
         onClick={onClickChangeTabCategory(list)}
       >
         {children}
-        <UnderLine list={list} selectedId={categoryId} position={'bottom'} />
+        <UnderLine tab={list} selectedId={categoryId} position={'bottom'} />
       </div>
     </li>
   );

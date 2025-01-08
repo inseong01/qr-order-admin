@@ -1,4 +1,4 @@
-import fetchMenuItem from "@/lib/supabase/func/fetchMenuItem";
+import fetchMenuItem from "../../supabase/func/fetchMenuItem";
 import fetchTableList from "../../supabase/func/fetchTableList";
 import fetchTableRequestList from "../../supabase/func/fetchTableRequestList";
 import fetchOrderList from "../../supabase/func/fetchOrderList";

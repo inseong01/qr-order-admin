@@ -1,7 +1,7 @@
 import { changeModalState } from '@/lib/features/modalState/modalSlice';
 import { changeSubmitMsgType } from '@/lib/features/submitState/submitSlice';
-import { changeSubmitState } from '../../lib/features/submitState/submitSlice';
-import { onSubmitDeleteCategory } from '../../lib/function/modal/onSubmitDeleteCategory';
+import { changeSubmitState, fetchFormCategoryItem } from '../../lib/features/submitState/submitSlice';
+import { openUpdateCategoryModal } from '../../lib/function/modal/openUpdateCategoryModal';
 import { onSubmitInsertCategory } from '../../lib/function/modal/onSubmitInsertCategory';
 import { onSubmitFetchMenu } from '../../lib/function/modal/onSubmitFetchMenu';
 import { onSubmitDataInfo } from '../../lib/function/modal/onSubmitDataInfo';
@@ -37,50 +37,58 @@ export default function ModalFormState() {
   }, [tab, isSubmit, submitStatus]);
 
   // 입력 함수
-  function onChangeInputValue(onChangeType) {
-    return (e) => {
-      const target = e.target.name;
-
-      if (onChangeType === 'category') {
-        setValue((prev) => ({ ...prev, [target]: e.target.value }));
-      } else if (onChangeType === 'insert/update') {
-        setValue((prev) => ({ ...prev, [target]: e.target.value }));
-      } else {
-        console.error('No input value', 'onChangeType: ', onChangeType);
-      }
-    };
+  function onChangeInputValue(e) {
+    const target = e.target.name;
+    setValue((prev) => ({ ...prev, [target]: e.target.value }));
   }
 
   // 폼 제출
-  function onSubmitData(table) {
+  function onSubmitData(type) {
     return async (e) => {
       e.preventDefault();
       if (isSubmit) return;
       // method 선언
       const method = e.nativeEvent.submitter.name;
-      // 알림 문구 설정
-      dispatch(changeSubmitMsgType({ msgType: method }));
       // 모달 제출 형식 분류
-      switch (modalType) {
+      switch (type) {
         case 'insert-category': {
           const title = e.target[0].value;
+          const table = 'category-menu';
           onSubmitInsertCategory({ title, dispatch, method }, table);
+          break;
+        }
+        case 'update-category': {
+          const checkElement = e.target.elements.check;
+          openUpdateCategoryModal({ checkElement, dispatch, method });
+          // 조건 이후 msgType 코드 실행 제한 되도록 반환
           return;
         }
-        case 'delete-category': {
-          const checkElement = e.target.elements.check;
-          onSubmitDeleteCategory({ checkElement, dispatch, method }, table);
+        case 'upsert-category': {
+          // 이미 update-category에서 msgType 선언된 상태
+          const table = 'category-menu';
+          const assignedInputs = Object.assign([], e.target.elements);
+          const categoryArrData = assignedInputs
+            .slice(0, -1)
+            .map((input) => ({ id: input.dataset.id, title: input.value }));
+          dispatch(fetchFormCategoryItem({ method: 'upsert', itemInfo: categoryArrData, table }));
           return;
         }
         case 'info': {
+          // table 탭 버튼 처리
           onSubmitDataInfo({ method });
-          return;
+          break;
         }
-        default: {
+        case 'menu-insert/update': {
+          // insert/update, 메뉴 관련 처리
           const file = e.target[0].files?.[0] ?? undefined;
+          const table = 'menu';
           onSubmitFetchMenu({ file, dispatch, method, value }, table);
+          break;
         }
+        default:
       }
+      // 알림 문구 설정
+      dispatch(changeSubmitMsgType({ msgType: method }));
     };
   }
 

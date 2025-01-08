@@ -46,7 +46,6 @@
 .btn {
   width: auto;
 
-  color: #f30000;
   font-size: 13px;
   font-weight: 600;
   background-color: #f0f0f0;
@@ -58,6 +57,9 @@
   flex: 1;
   padding: 4px;
   cursor: pointer;
+}
+.delete {
+  color: #f30000;
 }
 .btn:focus {
   outline: none;

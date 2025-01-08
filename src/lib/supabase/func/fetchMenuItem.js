@@ -20,6 +20,13 @@ export default async function fetchMenuItem({ method, itemInfo, table }) {
       }
       return response;
     }
+    case 'upsert': {
+      response = await supabase.from(`qr-order-${table}`).upsert(itemInfo, { ignoreDuplicates: false }).select();
+      if (response.error) {
+        throw new Error(response.error.message);
+      }
+      return response;
+    }
     case 'delete': {
       const isArray = Array.isArray(itemInfo);
       const idArr = isArray ? [...itemInfo].map(item => item.id) : [itemInfo].map(item => item.id); // 카테고리 배열 : 메뉴 객체

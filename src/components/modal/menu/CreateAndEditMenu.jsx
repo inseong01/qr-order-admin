@@ -22,7 +22,7 @@ export default function CreateAndEditMenu({ onSubmitData, onChangeInputValue, va
   }
 
   return (
-    <form className={styles.submitForm} onSubmit={onSubmitData('menu')}>
+    <form className={styles.submitForm} onSubmit={onSubmitData}>
       <input
         type="file"
         id="fileInput"
@@ -60,7 +60,7 @@ export default function CreateAndEditMenu({ onSubmitData, onChangeInputValue, va
               className={styles.input}
               value={value.name}
               name="name"
-              onChange={onChangeInputValue('insert/update')}
+              onChange={onChangeInputValue}
               placeholder="음식 이름을 입력해주세요"
             />
           </li>
@@ -77,7 +77,7 @@ export default function CreateAndEditMenu({ onSubmitData, onChangeInputValue, va
               className={styles.input}
               value={value.price === 0 ? 0 : value.price}
               name="price"
-              onChange={onChangeInputValue('insert/update')}
+              onChange={onChangeInputValue}
             />
           </li>
           <li className={styles.info}>
@@ -89,7 +89,7 @@ export default function CreateAndEditMenu({ onSubmitData, onChangeInputValue, va
               id="sortSelect"
               className={styles.input}
               name="sort"
-              onChange={onChangeInputValue('insert/update')}
+              onChange={onChangeInputValue}
               defaultValue={value.sort ? value.sort : categoryTitle === '전체메뉴' ? '' : categoryTitle}
             >
               <option value={''} disabled>
@@ -97,7 +97,7 @@ export default function CreateAndEditMenu({ onSubmitData, onChangeInputValue, va
               </option>
               {categoryList?.map((category) => {
                 return (
-                  <option key={category.id} value={category.title}>
+                  <option key={category.id} value={category.title} disabled={category.title === '전체메뉴'}>
                     {category.title}
                   </option>
                 );
