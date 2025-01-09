@@ -1,6 +1,5 @@
 import Loader from '../Loader';
 import ConfirmModal from '../modal/ConfirmModal';
-import CompletedOrderListSwiper from '../swiper/CompletedOrderListSwiper';
 import OrderListSwiper from '../swiper/OrderListSwiper';
 import { changeSubmitState } from '../../lib/features/submitState/submitSlice';
 import useQueryAllOrderList from '../../lib/hook/useQuery/useQueryAllOrderList';
@@ -39,7 +38,7 @@ export default function MainPageOrderTab() {
       {selectedCategory.id === 0 ? (
         <OrderListSwiper orderList={notDoneOrderList} />
       ) : (
-        <CompletedOrderListSwiper orderList={descDoneOrderList} />
+        <OrderListSwiper orderList={descDoneOrderList} />
       )}
       <ConfirmModal title={'주문'} />
     </>

@@ -1,0 +1,14 @@
+/* 완료 버튼 */
+.completeBtn {
+  background-color: #e6e6e6;
+  border-radius: 5px;
+  padding: 2px 8px;
+  line-height: 19px;
+  font-size: 13px;
+
+  cursor: pointer;
+}
+.completeBtn.delete {
+  background-color: #ff3535;
+  color: white;
+}

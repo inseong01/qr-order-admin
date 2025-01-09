@@ -1,15 +1,18 @@
 import styles from '@/style/bottom/TabMenu.module.css';
 import { changeTabState } from '@/lib/features/tabState/tabSlice';
 import { resetCategoryState } from '../../lib/features/categoryState/categorySlice';
+import { resetSubmitState } from '../../lib/features/submitState/submitSlice';
 import TabMenuTableAlert from './TabMenuTableAlert';
 import TabeMenuOrderAlert from './TabeMenuOrderAlert';
 import UnderLine from '../UnderLine';
 
 import { motion } from 'motion/react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 
 function TabMenuBox({ children, tab }) {
   // useSelector
+  const tabId = useSelector((state) => state.tabState.id);
   const isModalOpen = useSelector((state) => state.modalState.isOpen);
   const editTableisEditing = useSelector((state) => state.konvaState.isEditing);
   const currentTabId = useSelector((state) => state.tabState.id);
@@ -26,6 +29,8 @@ function TabMenuBox({ children, tab }) {
         return;
       }
       dispatch(changeTabState({ title, id }));
+      // 탭 변경마다 제출 상태 초기화
+      dispatch(resetSubmitState());
       dispatch(resetCategoryState());
     };
   }

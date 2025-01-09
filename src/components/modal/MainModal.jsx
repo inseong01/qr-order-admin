@@ -34,7 +34,7 @@ export default function MainModal() {
           >
             <ModalFormState />
             <div className={styles.closeBtn} onClick={onClickCloseModal}>
-              <img src={'/img/close.png'} alt="닫기" style={{ width: 20, height: 20 }} />
+              <img src={'/img/close.webp'} alt="닫기" style={{ width: 20, height: 20 }} />
             </div>
           </motion.dialog>
           <motion.div

@@ -1,19 +1,19 @@
 import { changeModalState } from '@/lib/features/modalState/modalSlice';
-import { changeSubmitMsgType } from '@/lib/features/submitState/submitSlice';
+import { changeSubmitMsgType } from '../../lib/features/submitState/submitSlice';
 import { changeSubmitState, fetchFormCategoryItem } from '../../lib/features/submitState/submitSlice';
 import { openUpdateCategoryModal } from '../../lib/function/modal/openUpdateCategoryModal';
 import { onSubmitInsertCategory } from '../../lib/function/modal/onSubmitInsertCategory';
 import { onSubmitFetchMenu } from '../../lib/function/modal/onSubmitFetchMenu';
 import { onSubmitDataInfo } from '../../lib/function/modal/onSubmitDataInfo';
-import TableModal from './TableModal';
 import MenuModal from './MenuModal';
 
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
+const LazyTableModal = lazy(() => import('./TableModal'));
 
 export default function ModalFormState() {
   // useSelector
-  const modalType = useSelector((state) => state.modalState.type);
   const tab = useSelector((state) => state.tabState.title);
   const item = useSelector((state) => state.itemState.item);
   const submitStatus = useSelector((state) => state.submitState.status);
@@ -98,7 +98,7 @@ export default function ModalFormState() {
       return <MenuModal onSubmitData={onSubmitData} onChangeInputValue={onChangeInputValue} value={value} />;
     }
     case 'table': {
-      return <TableModal onSubmitData={onSubmitData} />;
+      return <LazyTableModal onSubmitData={onSubmitData} />;
     }
   }
 }

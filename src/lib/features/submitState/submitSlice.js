@@ -79,7 +79,6 @@ const submitSlice = createSlice({
       const status = action.payload?.status ? action.payload.status : state.status
       return {
         ...state,
-        isSubmit: false,
         status,
         msgType
       }

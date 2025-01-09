@@ -1,0 +1,27 @@
+.bottomBox {
+  padding: 0 16px 12px;
+}
+
+.bottom {
+  width: 100%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  color: #8d8d8d;
+  border-top: 1px solid #b4b4b4;
+  padding-top: 12px;
+}
+/* 완료 */
+.bottom.done {
+  justify-content: center;
+}
+
+.bottom span {
+  color: #2bbada;
+}
+/* 완료 */
+.bottom.done span {
+  color: #8d8d8d;
+}

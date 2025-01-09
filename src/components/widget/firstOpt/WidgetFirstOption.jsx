@@ -14,7 +14,7 @@ function Icon() {
       <AnimatePresence mode="wait" initial={false}>
         {!isEdited ? (
           <motion.img
-            src={'/img/edit-icon.png'}
+            src={'/img/edit-icon.webp'}
             alt="편집"
             style={{ width: 20, height: 20 }}
             key={'box1'}
@@ -25,7 +25,7 @@ function Icon() {
           />
         ) : (
           <motion.img
-            src={'/img/checkmark.png'}
+            src={'/img/checkmark.webp'}
             alt="편집 저장"
             style={{ width: 20, height: 20 }}
             key={'box2'}

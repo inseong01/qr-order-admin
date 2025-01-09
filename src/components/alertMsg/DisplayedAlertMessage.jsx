@@ -19,7 +19,7 @@ export default function DisplayedAlertMessage({ requestAlertList, onClickReadMsg
               <div className={styles.top}>
                 <div className={styles.title}>테이블 {tableNum}</div>
                 <div className={styles.closeBtn} onClick={onClickReadMsg(list)}>
-                  <img src="/img/close-icon.png" alt="닫기" />
+                  <img src="/img/close-icon.webp" alt="닫기" />
                 </div>
               </div>
               <div className={styles.bottom}>

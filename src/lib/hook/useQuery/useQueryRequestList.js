@@ -6,6 +6,7 @@ export default function useQueryRequestList() {
   const requestList = useQuery({
     queryKey: ['requestList'],
     queryFn: () => fetchTableRequestList('select'),
+    staleTime: Infinity
   });
 
   return requestList

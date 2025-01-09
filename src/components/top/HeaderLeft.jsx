@@ -1,6 +1,6 @@
 import styles from '@/style/top/HeaderLeft.module.css';
 import useQueryCategoryList from '../../lib/hook/useQuery/useQueryCategoryList';
-import HeaderCategorySwiper from '../swiper/HeaderCategorySwiper';
+import HeaderCategorySwiper from '../swiper/header/HeaderCategorySwiper';
 import AddCategoryBox from './AddCategoryBox';
 
 import { useSelector } from 'react-redux';

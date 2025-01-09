@@ -1,11 +1,19 @@
 .swiper {
-  width: 100%;
-  max-width: calc(70%) !important;
-  overflow: hidden;
+  width: 70%;
+  max-width: 450px;
+  overflow-x: auto;
   cursor: default;
+
+  display: flex;
 }
 
-.categoryBox::after {
+/* 카테고리 틀 */
+.categorySlide {
+  min-width: 140px;
+  position: relative;
+}
+/* 카테고리 구분선 */
+.categorySlide::after {
   content: '';
   width: 1px;
   height: 30%;
@@ -16,15 +24,21 @@
   background-color: #e7e8eb;
 }
 
+/* 카테고리 내용 */
 .category {
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 5px;
 
   cursor: pointer;
+}
+
+/* 접수/숫자 간격 */
+.title {
+  display: flex;
+  gap: 5px;
 }
 
 .clicked {

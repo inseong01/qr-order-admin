@@ -48,11 +48,12 @@ export default function TableAlertMsg() {
     if (tab !== 'table') {
       return setAlertOn(false);
     }
-    // 알림이 있고 편집 중이 아니면
-    if (requestAlertList.length > 0 && !tableEditIsAble) {
-      // 토글 여부에 따라 On/Off
-      return setAlertOn(requestAlertOn);
+    // 편집 중이면
+    if (tableEditIsAble) {
+      return setAlertOn(false);
     }
+    // 토글 여부에 따라 On/Off
+    return setAlertOn(requestAlertOn);
   }, [tab, requestAlertList, requestAlertOn, tableEditIsAble]);
 
   // 클릭 시 알림 읽음 처리 (DB)

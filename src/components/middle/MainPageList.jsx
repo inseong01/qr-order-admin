@@ -1,8 +1,10 @@
-import MainPageOrderTab from './MainPageOrderTab';
 import MainPageMenuTab from './MainPageMenuTab';
-import MainPageTableTab from './MainPageTableTab';
 
 import { useSelector } from 'react-redux';
+import { lazy, Suspense } from 'react';
+
+const LazyMainPageTableTab = lazy(() => import('./MainPageTableTab'));
+const LazyMainPageOrderTab = lazy(() => import('./MainPageOrderTab'));
 
 export default function MainPageList() {
   // useSelector
@@ -13,10 +15,18 @@ export default function MainPageList() {
       return <MainPageMenuTab />;
     }
     case 'table': {
-      return <MainPageTableTab />;
+      return (
+        <Suspense>
+          <LazyMainPageTableTab />
+        </Suspense>
+      );
     }
     case 'order': {
-      return <MainPageOrderTab />;
+      return (
+        <Suspense>
+          <LazyMainPageOrderTab />
+        </Suspense>
+      );
     }
   }
 }

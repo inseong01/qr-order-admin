@@ -10,7 +10,7 @@ export default function AddMenu({ onClickOpenModal }) {
       onClick={onClickOpenModal('insert')}
       variants={list_motion}
     >
-      <img src={'/img/add-icon.png'} alt="상품 추가" />
+      <img src={'/img/add-icon.webp'} alt="상품 추가" />
       <div className="title">상품 추가</div>
     </motion.li>
   );

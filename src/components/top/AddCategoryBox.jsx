@@ -4,7 +4,6 @@ import { changeModalState } from '@/lib/features/modalState/modalSlice';
 import { motion } from 'motion/react';
 import { useDispatch, useSelector } from 'react-redux';
 
-// dynamic 추후 적용
 export default function AddCategoryBox() {
   // useSelector
   const tab = useSelector((state) => state.tabState.title);
@@ -28,7 +27,7 @@ export default function AddCategoryBox() {
           animate={{ opacity: 1, y: 0 }}
         >
           <div className={styles.category}>
-            <img src={'/img/category-add-icon.png'} alt="분류 추가" style={{ width: 15, height: 15 }} />
+            <img src={'/img/category-add-icon.webp'} alt="분류 추가" style={{ width: 15, height: 15 }} />
             <div className={styles.title}>분류</div>
           </div>
         </motion.div>

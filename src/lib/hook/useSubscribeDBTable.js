@@ -11,8 +11,10 @@ import { useEffect } from 'react';
 
 // 필요한 컴포넌트에서 useQueryClient 활용
 
-// 중요: 구독은 한 번만 이루어지도록
-// 업데이트 되면 데이터 갱신되도록, 원본 캐시 useQuery 위치 중요
+// 중요
+// - 구독은 한 번만 이루어지도록
+// - 업데이트 되면 데이터 갱신되도록, 원본 캐시 useQuery 위치 중요
+// - useQuery 커스텀훅 "staleTime: Infinity"로 매번 리렌더링 방지
 
 export default function useSubscribeDBTable(method) {
   const requestList = useQueryRequestList();

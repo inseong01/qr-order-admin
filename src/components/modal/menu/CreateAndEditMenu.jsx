@@ -36,7 +36,7 @@ export default function CreateAndEditMenu({ onSubmitData, onChangeInputValue, va
         {!isPrevImg ? (
           <>
             <div className={`${styles.iconBox} `}>
-              <img src={'/img/img-add-icon.png'} alt="사진 추가" />
+              <img src={'/img/img-add-icon.webp'} alt="사진 추가" />
             </div>
             <div className={styles.title}>{modalType === 'insert' ? '사진 추가' : '사진 변경'}</div>
           </>

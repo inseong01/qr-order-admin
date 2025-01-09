@@ -10,7 +10,7 @@ export default function WidgetSecondOption({ onClickEditor }) {
       <motion.div className={styles.list} key={'list'} onClick={onClickEditor(2)}>
         <div className={styles.iconBox}>
           <div className={styles.icon}>
-            <img src="/img/bell-icon.png" alt="요청알림" />
+            <img src="/img/bell-icon.webp" alt="요청알림" />
           </div>
         </div>
       </motion.div>

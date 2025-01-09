@@ -6,6 +6,7 @@ export default function useQueryAllOrderList() {
   const allOrderList = useQuery({
     queryKey: ['allOrderList'],
     queryFn: () => fetchOrderList('select'),
+    staleTime: Infinity
   });
 
   return allOrderList

@@ -11,6 +11,7 @@ import { AnimatePresence, motion } from 'motion/react';
 function ConfirmButton({ title }) {
   // useSelector
   const selectedList = useSelector((state) => state.itemState.list);
+  const isSubmit = useSelector((state) => state.submitState.isSubmit);
   const submitMsgType = useSelector((state) => state.submitState.msgType);
   // useDispatch
   const dispatch = useDispatch();
@@ -23,13 +24,16 @@ function ConfirmButton({ title }) {
           return;
         }
         case 'yes': {
+          // 반복 제출 방지
+          if (isSubmit) return;
           const method = submitMsgType === 'delete' ? 'delete' : 'update';
           if (title === '주문') {
             dispatch(fetchOrderListStatus({ method, data: selectedList }));
           } else if (title === '카테고리') {
             dispatch(fetchFormCategoryItem({ method, itemInfo: selectedList, table: 'category-menu' }));
           }
-          dispatch(changeModalState({ isOpen: false }));
+          // 누르면 바로 닫힘
+          // dispatch(changeModalState({ isOpen: false }));
         }
       }
     };
@@ -88,12 +92,22 @@ export default function ConfirmModal({ title }) {
     // 주문 상태 처리 되었다면
     if (tab === 'order' && submitStatus === 'fulfilled') {
       dispatch(resetItemState());
+      // 수정 전, 누르면 모달창 닫힘
+      // 수정 후, 누르면 결과값에 따라 닫힘
+      // 문제: 닫히면서 모달이 초기화 될 가능성 있음
+      // 해결방안: useEffect isSubmit 의존성 추가로 해결?
+      // dispatch(changeModalState({ isOpen: false }));
     }
     // 카테고리 수정 되었다면
     if (modalType.includes('category') && submitStatus === 'fulfilled') {
       dispatch(resetItemState());
       // 없는 카테고리 빈 목록 창 방지, 초기 카테고리로 이동
       dispatch(resetCategoryState());
+      // 수정 전, 누르면 모달창 닫힘
+      // 수정 후, 누르면 결과값에 따라 닫힘
+      // 문제: 닫히면서 모달이 초기화 될 가능성 있음
+      // 해결방안: useEffect isSubmit 의존성 추가로 해결?
+      // dispatch(changeModalState({ isOpen: false }));
     }
   }, [tab, submitStatus, modalType]);
 
