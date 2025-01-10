@@ -17,7 +17,6 @@ export default function MenuList() {
   const submitError = useSelector((state) => state.submitState.isError);
   const submitStatus = useSelector((state) => state.submitState.status);
   // hook
-  // const { useQueryMenuList } = useQueryHook();
   const menuList = useQueryMenuList();
 
   // 메뉴 새로 패치

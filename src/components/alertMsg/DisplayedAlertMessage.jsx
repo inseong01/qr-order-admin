@@ -1,4 +1,5 @@
 import styles from '@/style/AlertMsg.module.css';
+
 import { motion, AnimatePresence } from 'motion/react';
 
 export default function DisplayedAlertMessage({ requestAlertList, onClickReadMsg }) {

@@ -8,11 +8,10 @@ import UnderLine from '../UnderLine';
 
 import { motion } from 'motion/react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { resetItemState } from '../../lib/features/itemState/itemSlice';
 
 function TabMenuBox({ children, tab }) {
   // useSelector
-  const tabId = useSelector((state) => state.tabState.id);
   const isModalOpen = useSelector((state) => state.modalState.isOpen);
   const editTableisEditing = useSelector((state) => state.konvaState.isEditing);
   const currentTabId = useSelector((state) => state.tabState.id);
@@ -32,6 +31,7 @@ function TabMenuBox({ children, tab }) {
       // 탭 변경마다 제출 상태 초기화
       dispatch(resetSubmitState());
       dispatch(resetCategoryState());
+      dispatch(resetItemState());
     };
   }
 

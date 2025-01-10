@@ -12,3 +12,19 @@
   grid-auto-rows: max-content;
   grid-gap: 10px;
 }
+
+@media (max-width: 1160px) {
+  .orderList {
+    grid-template-columns: repeat(4, calc(25% - 10px));
+  }
+}
+@media (max-width: 960px) {
+  .orderList {
+    grid-template-columns: repeat(3, calc(33.333% - 10px));
+  }
+}
+@media (max-width: 760px) {
+  .orderList {
+    grid-template-columns: repeat(2, calc(50% - 10px));
+  }
+}

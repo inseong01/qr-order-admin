@@ -10,8 +10,8 @@ import { resetKonvaState } from '../../lib/features/konvaState/konvaSlice';
 import { setWidgetEditState, setWidgetState } from '../../lib/features/widgetState/widgetSlice';
 import { changeSubmitStatus } from '../../lib/features/submitState/submitSlice';
 
-import { motion } from 'motion/react';
 import { useDispatch, useSelector } from 'react-redux';
+import { motion } from 'motion/react';
 
 export default function WidgetBtn() {
   // useSelector

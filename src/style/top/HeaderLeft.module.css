@@ -33,15 +33,5 @@
 }
 .title {
   line-height: 15px;
-}
-
-@media (min-width: 400px) {
-  .addCategoryBox {
-    font-size: 0.7rem;
-  }
-}
-@media (min-width: 1200px) {
-  .addCategoryBox {
-    font-size: 1rem;
-  }
+  font-size: 15px;
 }

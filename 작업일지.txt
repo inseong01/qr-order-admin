@@ -296,4 +296,12 @@
     - 라이브러리 자체 구현: swiper
     - favicon 파일 변경: svg > ico
 
-<--- 로딩 최적화, ConfirmModal 버튼 클릭 이후 모달창 퇴장 처리 수정, swiper 반응형 설정  --->
+25.1.10.
+  - 코드 개선: 모달 제출 함수 커스텀훅 처리, 탭 별 동작 모달 상태처리 useEffect 하나로 통합 
+  - 에러 수정
+    - ConfirmModal 버튼 클릭 이후 모달창 퇴장 처리 수정: MainPageList, 모달 공통 useEffect 처리 
+    - 해당 카테고리 수정 시 빈 메인 창 방지: 모달창 useModalSubmitData 공통 useEffect 처리
+    - 헤더 카테고리 사선 등장 오류: OrderCategoryAlert 등장 조건 빈 태그 삽입
+  - 라이브러리 최소화 시도: motion/react, 빌드 때 트리세이킹 되지 않는 듯함
+    
+<--- 로딩 최적화, swiper 반응형 설정: 모바일 가로로 회전, vite 플러그인 설정해서 번들 분석하기 --->

@@ -5,8 +5,8 @@ import HiddenAlertMessage from './HiddenAlertMessage';
 import DisplayedAlertMessage from './DisplayedAlertMessage';
 
 import { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import { useDispatch, useSelector } from 'react-redux';
+import { motion, AnimatePresence } from 'motion/react';
 
 export default function TableAlertMsg() {
   // useState

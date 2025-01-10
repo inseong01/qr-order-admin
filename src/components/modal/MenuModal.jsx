@@ -1,18 +1,20 @@
-import { useQueryClient } from '@tanstack/react-query';
+import useModalSubmitData from '../../lib/hook/useModalSubmitData';
 import CreateAndEditMenu from './menu/CreateAndEditMenu';
 import UpdateCategory from './menu/UpdateCategory';
 import InsertCategory from './menu/InsertCategory';
 import ConfirmModal from './ConfirmModal';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { useSelector } from 'react-redux';
-import ErrorPage from '../ErrorPage';
 
-export default function MenuModal({ onSubmitData, onChangeInputValue, value }) {
+export default function MenuModal() {
   // useSelector
   const tab = useSelector((state) => state.tabState.title);
   const modalType = useSelector((state) => state.modalState.type);
   const submitMsgType = useSelector((state) => state.submitState.msgType);
   const selectedList = useSelector((state) => state.itemState.list);
+  // hook
+  const { onChangeInputValue, onSubmitData, value } = useModalSubmitData();
   // useQueryClient
   const queryClient = useQueryClient();
   const categoryList = queryClient.getQueryData(['categoryList', { tab }]) || [];
@@ -27,8 +29,8 @@ export default function MenuModal({ onSubmitData, onChangeInputValue, value }) {
         <CreateAndEditMenu
           onSubmitData={onSubmitData('menu-insert/update')}
           onChangeInputValue={onChangeInputValue}
-          value={value}
           categoryList={categoryList}
+          value={value}
         />
       );
     }
@@ -42,23 +44,16 @@ export default function MenuModal({ onSubmitData, onChangeInputValue, value }) {
       );
     }
     case 'update-category': {
-      return (
-        <>
-          {submitMsgType === '' ? (
-            <UpdateCategory onSubmitData={onSubmitData('update-category')} categoryList={categoryList} />
-          ) : isCateogoryDelete ? (
-            <ConfirmModal title={'카테고리'} />
-          ) : isCateogoryUpdate ? (
-            <InsertCategory
-              type={'update'}
-              onSubmitData={onSubmitData('upsert-category')}
-              onChangeInputValue={onChangeInputValue}
-            />
-          ) : (
-            <ErrorPage compName={'MenuModal'} />
-          )}
-        </>
-      );
+      if (isCateogoryDelete) return <ConfirmModal title={'카테고리'} />;
+      if (isCateogoryUpdate)
+        return (
+          <InsertCategory
+            type={'update'}
+            onSubmitData={onSubmitData('upsert-category')}
+            onChangeInputValue={onChangeInputValue}
+          />
+        );
+      return <UpdateCategory onSubmitData={onSubmitData('update-category')} categoryList={categoryList} />;
     }
   }
 }

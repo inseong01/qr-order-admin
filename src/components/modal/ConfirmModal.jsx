@@ -1,10 +1,7 @@
 import styles from '@/style/modal/ConfirmModal.module.css';
 import { fetchFormCategoryItem, fetchOrderListStatus } from '../../lib/features/submitState/submitSlice';
 import { changeModalState } from '../../lib/features/modalState/modalSlice';
-import { resetCategoryState } from '../../lib/features/categoryState/categorySlice';
-import { resetItemState } from '@/lib/features/itemState/itemSlice';
 
-import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AnimatePresence, motion } from 'motion/react';
 
@@ -32,8 +29,6 @@ function ConfirmButton({ title }) {
           } else if (title === '카테고리') {
             dispatch(fetchFormCategoryItem({ method, itemInfo: selectedList, table: 'category-menu' }));
           }
-          // 누르면 바로 닫힘
-          // dispatch(changeModalState({ isOpen: false }));
         }
       }
     };
@@ -78,38 +73,7 @@ function ConfirmTitle({ title }) {
 
 export default function ConfirmModal({ title }) {
   // useSelector
-  const tab = useSelector((state) => state.tabState.title);
-  const modalType = useSelector((state) => state.modalState.type);
-  const submitStatus = useSelector((state) => state.submitState.status);
-  // useRef
-  const modalRef = useRef(null);
-  // useSelector
   const isModalOpen = useSelector((state) => state.modalState.isOpen);
-  // useDispatch
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    // 주문 상태 처리 되었다면
-    if (tab === 'order' && submitStatus === 'fulfilled') {
-      dispatch(resetItemState());
-      // 수정 전, 누르면 모달창 닫힘
-      // 수정 후, 누르면 결과값에 따라 닫힘
-      // 문제: 닫히면서 모달이 초기화 될 가능성 있음
-      // 해결방안: useEffect isSubmit 의존성 추가로 해결?
-      // dispatch(changeModalState({ isOpen: false }));
-    }
-    // 카테고리 수정 되었다면
-    if (modalType.includes('category') && submitStatus === 'fulfilled') {
-      dispatch(resetItemState());
-      // 없는 카테고리 빈 목록 창 방지, 초기 카테고리로 이동
-      dispatch(resetCategoryState());
-      // 수정 전, 누르면 모달창 닫힘
-      // 수정 후, 누르면 결과값에 따라 닫힘
-      // 문제: 닫히면서 모달이 초기화 될 가능성 있음
-      // 해결방안: useEffect isSubmit 의존성 추가로 해결?
-      // dispatch(changeModalState({ isOpen: false }));
-    }
-  }, [tab, submitStatus, modalType]);
 
   return (
     <AnimatePresence>
@@ -118,7 +82,6 @@ export default function ConfirmModal({ title }) {
           <motion.dialog
             open={isModalOpen}
             className={styles.dialog}
-            ref={modalRef}
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             exit={{ scale: 0 }}

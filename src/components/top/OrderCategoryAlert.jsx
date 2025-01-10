@@ -6,5 +6,5 @@ export default function OrderCategoryAlert({ title }) {
   // variant
   const notServedOrder = data?.filter((list) => !list.isDone).length;
 
-  return <div>{title === '접수' && (data?.length ? notServedOrder : 0)}</div>;
+  return <>{title === '접수' && <div>{data?.length ? notServedOrder : 0}</div>}</>;
 }
