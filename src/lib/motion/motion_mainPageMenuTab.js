@@ -8,10 +8,8 @@ export const ul_motion = {
 export const list_motion = {
   load: {
     opacity: 1,
-    y: 0,
   },
   notLoad: {
     opacity: 0,
-    y: -10,
   },
 };

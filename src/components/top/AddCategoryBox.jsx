@@ -23,8 +23,8 @@ export default function AddCategoryBox() {
         <motion.div
           className={styles.addCategoryBox}
           onClick={onClickOpenModal}
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
         >
           <div className={styles.category}>
             <img src={'/img/category-add-icon.webp'} alt="분류 추가" style={{ width: 15, height: 15 }} />
