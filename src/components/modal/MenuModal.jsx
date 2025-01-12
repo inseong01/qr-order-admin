@@ -1,4 +1,5 @@
 import useModalSubmitData from '../../lib/hook/useModalSubmitData';
+import { useBoundStore } from '../../lib/store/useBoundStore';
 import CreateAndEditMenu from './menu/CreateAndEditMenu';
 import UpdateCategory from './menu/UpdateCategory';
 import InsertCategory from './menu/InsertCategory';
@@ -9,12 +10,14 @@ import { useSelector } from 'react-redux';
 
 export default function MenuModal() {
   // useSelector
-  const tab = useSelector((state) => state.tabState.title);
+  // const tab = useSelector((state) => state.tabState.title);
   const modalType = useSelector((state) => state.modalState.type);
   const submitMsgType = useSelector((state) => state.submitState.msgType);
   const selectedList = useSelector((state) => state.itemState.list);
   // hook
   const { onChangeInputValue, onSubmitData, value } = useModalSubmitData();
+  // store
+  const tab = useBoundStore((state) => state.tab.title);
   // useQueryClient
   const queryClient = useQueryClient();
   const categoryList = queryClient.getQueryData(['categoryList', { tab }]) || [];

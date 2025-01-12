@@ -3,6 +3,7 @@ import { getEditKonvaTableId } from '../../lib/features/konvaState/konvaSlice';
 import createKonvaInitTable from '../../lib/function/createKonvaInitTable';
 import { debounce } from '../../lib/function/debounce';
 import useQueryTableList from '../../lib/hook/useQuery/useQueryTableList';
+import { useBoundStore } from '../../lib/store/useBoundStore';
 import TableAlertMsg from '../alertMsg/TableAlertMsg';
 import TableDraw from './konva/TableDraw';
 import MainModal from '../modal/MainModal';
@@ -13,7 +14,7 @@ import { motion } from 'motion/react';
 
 export default function MainPageTableTab() {
   // useSelector
-  const tab = useSelector((state) => state.tabState.title);
+  // const tab = useSelector((state) => state.tabState.title);
   const konvaEditType = useSelector((state) => state.konvaState.type);
   const konvaEditIsEditing = useSelector((state) => state.konvaState.isEditing);
   // useQuery
@@ -29,6 +30,8 @@ export default function MainPageTableTab() {
   });
   const [clientTableList, setClientTableList] = useState([]);
   const [openKonva, setOpenKonva] = useState(false);
+  // hook
+  const tab = useBoundStore((state) => state.tab.title);
 
   // konva Stage 크기 설정
   useEffect(() => {

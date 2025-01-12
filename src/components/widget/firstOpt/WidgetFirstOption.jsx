@@ -1,18 +1,19 @@
 import styles from '@/style/Widget.module.css';
 import { menu } from '../../../lib/motion/motion_widgetMenu';
+import { useBoundStore } from '../../../lib/store/useBoundStore';
 import WidgetFirstOptionCategories from './WidgetFirstOptionCategories';
 
 import { motion, AnimatePresence } from 'motion/react';
 import { useSelector } from 'react-redux';
 
 function Icon() {
-  // useSelector
-  const isEdited = useSelector((state) => state.widgetState.isEdit);
+  // hook
+  const isEdit = useBoundStore((state) => state.widget.isEdit);
 
   return (
     <div className={styles.icon}>
       <AnimatePresence mode="wait" initial={false}>
-        {!isEdited ? (
+        {!isEdit ? (
           <motion.img
             src={'/img/edit-icon.webp'}
             alt="편집"

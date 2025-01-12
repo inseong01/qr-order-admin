@@ -1,6 +1,7 @@
 import { changeModalState } from '@/lib/features/modalState/modalSlice';
 import { getItemInfo } from '@/lib/features/itemState/itemSlice';
 import useQueryMenuList from '../../lib/hook/useQuery/useQueryMenuList';
+import { useBoundStore } from '../../lib/store/useBoundStore';
 import AddMenu from './AddMenu';
 import Menu from './Menu';
 
@@ -11,13 +12,16 @@ export default function MenuList() {
   // useDispatch
   const dispatch = useDispatch();
   // useSelector
-  const tab = useSelector((state) => state.tabState.title);
-  const selectedCategory = useSelector((state) => state.categoryState);
+  // const tab = useSelector((state) => state.tabState.title);
+  // const selectedCategory = useSelector((state) => state.categoryState);
   const isSubmit = useSelector((state) => state.submitState.isSubmit);
   const submitError = useSelector((state) => state.submitState.isError);
   const submitStatus = useSelector((state) => state.submitState.status);
   // hook
   const menuList = useQueryMenuList();
+  // store
+  const tab = useBoundStore((state) => state.tab.title);
+  const selectedCategory = useBoundStore((state) => state.category);
 
   // 메뉴 새로 패치
   useEffect(() => {

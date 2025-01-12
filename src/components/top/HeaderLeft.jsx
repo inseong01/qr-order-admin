@@ -1,5 +1,6 @@
 import styles from '@/style/top/HeaderLeft.module.css';
 import useQueryCategoryList from '../../lib/hook/useQuery/useQueryCategoryList';
+import { useBoundStore } from '../../lib/store/useBoundStore';
 import HeaderCategorySwiper from '../swiper/header/HeaderCategorySwiper';
 import AddCategoryBox from './AddCategoryBox';
 
@@ -8,12 +9,14 @@ import { useEffect, useState } from 'react';
 
 export default function HeaderLeft() {
   // useSelector
-  const tab = useSelector((state) => state.tabState.title);
+  // const tab = useSelector((state) => state.tabState.title);
   const modalType = useSelector((state) => state.modalState.type);
   const isSubmit = useSelector((state) => state.submitState.isSubmit);
   const submitStatus = useSelector((state) => state.submitState.status);
   // hook
   const categoryList = useQueryCategoryList();
+  // store
+  const tab = useBoundStore((state) => state.tab.title);
   // variant
   const isNotCategoryEdit = !modalType.includes('category');
   // useState
@@ -37,7 +40,6 @@ export default function HeaderLeft() {
 
     if (isAbleRefetch && submitStatus === 'fulfilled') {
       categoryList.refetch();
-      console.log('refetch');
       setAlbeRefetch(false);
     }
   }, [isSubmit, submitStatus, isNotCategoryEdit, isAbleRefetch]);

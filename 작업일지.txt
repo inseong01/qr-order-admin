@@ -309,4 +309,9 @@
     : 트리세이킹 기본값 true, 이미 반영되어 있었음, false와 비교(0.2MB 차이) 
   - 로딩 최적화 과정 문서 작성
 
-<--- 로딩 최적화, swiper 반응형 설정: 모바일 가로로 회전 --->
+25.1.12.
+  - redux -> zustand 마이그레이션
+    : widget, alert, tab, category 완료
+    (item, konvav, modal, submit)
+
+<--- 로딩 최적화, swiper 반응형 설정: 모바일 가로로 회전, zustand 마이그레이션 --->

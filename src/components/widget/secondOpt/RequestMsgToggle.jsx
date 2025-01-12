@@ -1,11 +1,10 @@
 import styles from '@/style/WidgetCategoryList.module.css';
+import { useBoundStore } from '../../../lib/store/useBoundStore';
 
 import { motion, AnimatePresence } from 'motion/react';
-import { useSelector } from 'react-redux';
 
 export default function RequestMsgToggle() {
-  // useSelector
-  const tableRequestAlertOn = useSelector((state) => state.realtimeState.tableRequestList.isOn);
+  const tableRequestAlertOn = useBoundStore((state) => state.alert.isOn);
 
   return (
     <div className={`${styles.toggle}`}>

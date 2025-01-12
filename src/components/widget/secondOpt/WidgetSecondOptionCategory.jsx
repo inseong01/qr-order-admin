@@ -1,19 +1,17 @@
 import styles from '@/style/WidgetCategoryList.module.css';
-import { setTableRequestListAlertOn } from '../../../lib/features/realtimeState/realtimeSlice';
 import { option, optionList } from '../../../lib/motion/motion_widgetOption';
+import { useBoundStore } from '../../../lib/store/useBoundStore';
 import RequestMsgToggle from './RequestMsgToggle';
 
 import { motion, AnimatePresence } from 'motion/react';
-import { useDispatch, useSelector } from 'react-redux';
 
 export default function WidgetSecondOptionCategory() {
-  // useSelector
-  const secondOption = useSelector((state) => state.widgetState.isWidgetListOpen.secondOption);
-  // useDispatch
-  const dispatch = useDispatch();
+  // hook
+  const secondOption = useBoundStore((state) => state.widget.openOptionList[2]);
+  const toggleRequestAlert = useBoundStore((state) => state.toggleRequestAlert);
 
   function onClickAlertEditor() {
-    dispatch(setTableRequestListAlertOn());
+    toggleRequestAlert();
   }
 
   return (

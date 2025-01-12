@@ -2,6 +2,7 @@ import styles from '@/style/WidgetCategoryList.module.css';
 import { option, optionList } from '../../../lib/motion/motion_widgetOption';
 import { changeKonvaEditState } from '../../../lib/features/konvaState/konvaSlice';
 import { changeSubmitMsgType } from '../../../lib/features/submitState/submitSlice';
+import { useBoundStore } from '../../../lib/store/useBoundStore';
 
 import { motion, AnimatePresence } from 'motion/react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,9 +11,10 @@ export default function WidgetTableCategory() {
   // useSelector
   const editTableisEditing = useSelector((state) => state.konvaState.isEditing);
   const editTableType = useSelector((state) => state.konvaState.type);
-  const firstOption = useSelector((state) => state.widgetState.isWidgetListOpen.firstOption);
   // useDispatch
   const dispatch = useDispatch();
+  // hook
+  const firstOption = useBoundStore((state) => state.widget.openOptionList[1]);
 
   function onClickEnableEditTable(editType) {
     return () => {

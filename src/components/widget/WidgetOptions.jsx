@@ -3,7 +3,7 @@ import { widgetMenuList } from '../../lib/motion/motion_widgetMenu';
 import { fetchTableListData } from '../../lib/features/submitState/submitSlice';
 import { resetItemState } from '../../lib/features/itemState/itemSlice';
 import { resetKonvaState } from '../../lib/features/konvaState/konvaSlice';
-import { setWidgetListState, setWidgetEditState } from '../../lib/features/widgetState/widgetSlice';
+import { useBoundStore } from '../../lib/store/useBoundStore';
 import WidgetFirstOption from './firstOpt/WidgetFirstOption';
 import WidgetSecondOption from './secondOpt/WidgetSecondOption';
 
@@ -19,6 +19,9 @@ export default function WidgetOptions() {
   const editTableisEditing = useSelector((state) => state.konvaState.isEditing);
   // useDispatch
   const dispatch = useDispatch();
+  // hook
+  const setWidgetOptionListState = useBoundStore((state) => state.setWidgetOptionListState);
+  const setWidgetEditState = useBoundStore((state) => state.setWidgetEditState);
 
   function onClickEditor(optNum, dataArr) {
     return () => {
@@ -34,10 +37,11 @@ export default function WidgetOptions() {
         dispatch(fetchTableListData({ method: editTableType, dataArr }));
         dispatch(resetItemState());
         dispatch(resetKonvaState());
-        dispatch(setWidgetEditState({ isEdit: false }));
+        setWidgetEditState(false);
+        return;
       }
       // 위젯 옵션 여닫기
-      dispatch(setWidgetListState({ optNum }));
+      setWidgetOptionListState(optNum);
     };
   }
 

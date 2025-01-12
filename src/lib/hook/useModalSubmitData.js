@@ -5,6 +5,7 @@ import { resetCategoryState } from "../features/categoryState/categorySlice";
 import { changeSubmitMsgType, fetchFormCategoryItem } from "../features/submitState/submitSlice";
 import { onSubmitDataInfo } from "../function/modal/onSubmitDataInfo";
 import { onSubmitFetchMenu } from "../function/modal/onSubmitFetchMenu";
+import { useBoundStore } from "../store/useBoundStore";
 
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,11 +14,13 @@ export default function useModalSubmitData() {
   // useSelector
   const item = useSelector((state) => state.itemState.item);
   const isSubmit = useSelector((state) => state.submitState.isSubmit);
-  const tab = useSelector((state) => state.tabState.title);
+  // const tab = useSelector((state) => state.tabState.title);
   const modalType = useSelector((state) => state.modalState.type);
   const submitStatus = useSelector((state) => state.submitState.status);
   // dispatch
   const dispatch = useDispatch();
+  // store
+  const tab = useBoundStore((state) => state.tab.title);
   // useState
   const [value, setValue] = useState(item);
 

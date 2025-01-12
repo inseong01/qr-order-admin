@@ -1,6 +1,7 @@
 import styles from '@/style/modal/ConfirmModal.module.css';
 import { fetchFormCategoryItem, fetchOrderListStatus } from '../../lib/features/submitState/submitSlice';
 import { changeModalState } from '../../lib/features/modalState/modalSlice';
+import { useBoundStore } from '../../lib/store/useBoundStore';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { AnimatePresence, motion } from 'motion/react';
@@ -48,9 +49,11 @@ function ConfirmButton({ title }) {
 
 function ConfirmTitle({ title }) {
   // useSelector
-  const tab = useSelector((state) => state.tabState.title);
+  // const tab = useSelector((state) => state.tabState.title);
   const selectedList = useSelector((state) => state.itemState.list);
   const submitMsgType = useSelector((state) => state.submitState.msgType);
+  // store
+  const tab = useBoundStore((state) => state.tab.title);
   // variant
   const context = submitMsgType === 'delete' ? '삭제' : title === '주문' ? '완료' : '수정';
   const subTitlte = tab === 'menu' ? selectedList.map((list) => list.title).join(', ') : '';

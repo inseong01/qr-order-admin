@@ -1,4 +1,5 @@
 import styles from '@/style/modal/menu/CreateAndEditMenu.module.css';
+import { useBoundStore } from '../../../lib/store/useBoundStore';
 
 import { useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -6,7 +7,9 @@ import { useSelector } from 'react-redux';
 export default function CreateAndEditMenu({ onSubmitData, onChangeInputValue, value, categoryList }) {
   // useSelector
   const modalType = useSelector((state) => state.modalState.type);
-  const categoryTitle = useSelector((state) => state.categoryState.title);
+  // const categoryTitle = useSelector((state) => state.categoryState.title);
+  // store
+  const categoryTitle = useBoundStore((state) => state.category.title);
   // useRef
   const imgBox = useRef(null);
   // useState

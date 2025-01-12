@@ -1,6 +1,7 @@
 import styles from '@/style/AlertMsg.module.css';
 import { fetchUpdateAlertMsg } from '../../lib/features/submitState/submitSlice';
 import useQueryRequestList from '../../lib/hook/useQuery/useQueryRequestList';
+import { useBoundStore } from '../../lib/store/useBoundStore';
 import HiddenAlertMessage from './HiddenAlertMessage';
 import DisplayedAlertMessage from './DisplayedAlertMessage';
 
@@ -14,11 +15,15 @@ export default function TableAlertMsg() {
   const [id, selectId] = useState('');
   const [alertOn, setAlertOn] = useState(false);
   // useSelector
-  const tab = useSelector((state) => state.tabState.title);
+  // const tab = useSelector((state) => state.tabState.title);
   const submitStatus = useSelector((state) => state.submitState.status);
   const submitIsError = useSelector((state) => state.submitState.isError);
   const tableEditIsAble = useSelector((state) => state.konvaState.isAble);
-  const requestAlertOn = useSelector((state) => state.realtimeState.tableRequestList.isOn);
+  // const requestAlertOn = useSelector((state) => state.realtimeState.tableRequestList.isOn);
+  // store
+  const tab = useBoundStore((state) => state.tab.title);
+  const requestAlertOn = useBoundStore((state) => state.alert.isOn);
+
   // useRef
   const reqeustMsgRef = useRef(null);
   // useDispatch

@@ -1,11 +1,11 @@
 import styles from '@/style/WidgetCategoryList.module.css';
 import { option, optionList } from '../../../lib/motion/motion_widgetOption';
+import { useBoundStore } from '../../../lib/store/useBoundStore';
 
 import { motion, AnimatePresence } from 'motion/react';
-import { useSelector } from 'react-redux';
 
 export default function WidgetOrderCategory() {
-  const firstOption = useSelector((state) => state.widgetState.isWidgetListOpen.firstOption);
+  const firstOption = useBoundStore((state) => state.widget.openOptionList[1]);
 
   return (
     <AnimatePresence>

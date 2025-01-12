@@ -7,8 +7,8 @@ import {
 } from '../../lib/motion/motion_widget';
 import { resetItemState } from '../../lib/features/itemState/itemSlice';
 import { resetKonvaState } from '../../lib/features/konvaState/konvaSlice';
-import { setWidgetEditState, setWidgetState } from '../../lib/features/widgetState/widgetSlice';
 import { changeSubmitStatus } from '../../lib/features/submitState/submitSlice';
+import { useBoundStore } from '../../lib/store/useBoundStore';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'motion/react';
@@ -17,9 +17,12 @@ export default function WidgetBtn() {
   // useSelector
   const isModalOpen = useSelector((state) => state.modalState.isOpen);
   const editTableType = useSelector((state) => state.konvaState.type);
-  const clicked = useSelector((state) => state.widgetState.isWidgetOpen);
   // useDispatch
   const dispatch = useDispatch();
+  // hook
+  const openCloseWidget = useBoundStore((state) => state.openCloseWidget);
+  const setWidgetEditState = useBoundStore((state) => state.setWidgetEditState);
+  const isWidgetOpen = useBoundStore((state) => state.widget.isOpen);
 
   // 위젯 열기/닫기
   function onClickOpenWidgetList() {
@@ -28,12 +31,12 @@ export default function WidgetBtn() {
     if (editTableType) {
       dispatch(resetItemState());
       dispatch(resetKonvaState());
-      dispatch(setWidgetEditState({ isEdit: false }));
+      setWidgetEditState(false);
       // 데이터 패치 가능하도록 초기 상태로 전환
       dispatch(changeSubmitStatus({ status: 'initial' }));
       return;
     }
-    dispatch(setWidgetState());
+    openCloseWidget();
   }
 
   return (
@@ -41,8 +44,8 @@ export default function WidgetBtn() {
       <motion.div
         className={styles.iconBox}
         variants={iconBoxVariant}
-        initial={clicked ? 'notClicked' : 'notClicked'}
-        animate={clicked ? 'clicked' : 'notClicked'}
+        initial={isWidgetOpen ? 'notClicked' : 'notClicked'}
+        animate={isWidgetOpen ? 'clicked' : 'notClicked'}
       >
         <motion.span variants={firstSpanVariant}></motion.span>
         <motion.span variants={middleSpanVariant}></motion.span>

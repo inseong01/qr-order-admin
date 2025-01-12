@@ -1,10 +1,10 @@
 import TableLayer from './TableLayer';
+import TableEditRange from './TableEditRange';
 
 import { Layer, Stage } from 'react-konva';
 import { Provider, ReactReduxContext, useSelector } from 'react-redux';
 import { useRef, useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import TableEditRange from './TableEditRange';
 
 export default function TableDraw({ stageSize, clientTableList, setClientTableList }) {
   // useSelector

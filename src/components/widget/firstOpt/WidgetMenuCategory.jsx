@@ -1,16 +1,17 @@
 import styles from '@/style/WidgetCategoryList.module.css';
 import { resetSubmitState } from '../../../lib/features/submitState/submitSlice';
-import { changeModalState } from '@/lib/features/modalState/modalSlice';
+import { changeModalState } from '../../../lib/features/modalState/modalSlice';
 import { option, optionList } from '../../../lib/motion/motion_widgetOption';
+import { useBoundStore } from '../../../lib/store/useBoundStore';
 
 import { motion, AnimatePresence } from 'motion/react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 export default function WidgetMenuFirstCategory() {
-  // useSelector
-  const firstOption = useSelector((state) => state.widgetState.isWidgetListOpen.firstOption);
   // useDispatch
   const dispatch = useDispatch();
+  // hook
+  const firstOption = useBoundStore((state) => state.widget.openOptionList[1]);
 
   function onClickOpenEditor(modalType) {
     return () => {

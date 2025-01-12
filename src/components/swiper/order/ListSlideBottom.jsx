@@ -1,11 +1,14 @@
 import styles from '@/style/swiper/order/ListSlideBottom.module.css';
+import { useBoundStore } from '../../../lib/store/useBoundStore';
 import ListSlideSubmitBtn from './ListSlideSubmitBtn';
 
 import { useSelector } from 'react-redux';
 
 export default function ListSlideBottom({ list }) {
   // useSelector
-  const categoryId = useSelector((state) => state.categoryState.id);
+  // const categoryId = useSelector((state) => state.categoryState.id);
+  // store
+  const categoryId = useBoundStore((state) => state.category.id);
   // variant
   const amount = list.orderList.reduce((prev, curr) => prev + curr.amount, 0);
 
