@@ -1,6 +1,5 @@
 import styles from '@/style/modal/ConfirmModal.module.css';
 import { fetchFormCategoryItem, fetchOrderListStatus } from '../../lib/features/submitState/submitSlice';
-import { changeModalState } from '../../lib/features/modalState/modalSlice';
 import { useBoundStore } from '../../lib/store/useBoundStore';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,17 +7,23 @@ import { AnimatePresence, motion } from 'motion/react';
 
 function ConfirmButton({ title }) {
   // useSelector
-  const selectedList = useSelector((state) => state.itemState.list);
-  const isSubmit = useSelector((state) => state.submitState.isSubmit);
-  const submitMsgType = useSelector((state) => state.submitState.msgType);
+  // const isSubmit = useSelector((state) => state.submitState.isSubmit);
+  // const submitMsgType = useSelector((state) => state.submitState.msgType);
   // useDispatch
   const dispatch = useDispatch();
+  // store
+  const selectedList = useBoundStore((state) => state.itemBox.list);
+  const isSubmit = useBoundStore((state) => state.submit.isSubmit);
+  const submitMsgType = useBoundStore((state) => state.submit.msgType);
+
+  const changeModalState = useBoundStore((state) => state.changeModalState);
 
   function onClickChangeModalStatus(state) {
     return () => {
       switch (state) {
         case 'no': {
-          dispatch(changeModalState({ isOpen: false }));
+          // dispatch(changeModalState({ isOpen: false }));
+          changeModalState({ isOpen: false });
           return;
         }
         case 'yes': {
@@ -49,11 +54,10 @@ function ConfirmButton({ title }) {
 
 function ConfirmTitle({ title }) {
   // useSelector
-  // const tab = useSelector((state) => state.tabState.title);
-  const selectedList = useSelector((state) => state.itemState.list);
   const submitMsgType = useSelector((state) => state.submitState.msgType);
   // store
   const tab = useBoundStore((state) => state.tab.title);
+  const selectedList = useBoundStore((state) => state.itemBox.list);
   // variant
   const context = submitMsgType === 'delete' ? '삭제' : title === '주문' ? '완료' : '수정';
   const subTitlte = tab === 'menu' ? selectedList.map((list) => list.title).join(', ') : '';
@@ -75,8 +79,8 @@ function ConfirmTitle({ title }) {
 }
 
 export default function ConfirmModal({ title }) {
-  // useSelector
-  const isModalOpen = useSelector((state) => state.modalState.isOpen);
+  // store
+  const isModalOpen = useBoundStore((state) => state.modal.isOpen);
 
   return (
     <AnimatePresence>

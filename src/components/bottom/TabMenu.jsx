@@ -1,24 +1,24 @@
 import styles from '@/style/bottom/TabMenu.module.css';
-import { resetCategoryState } from '../../lib/features/categoryState/categorySlice';
 import { resetSubmitState } from '../../lib/features/submitState/submitSlice';
-import { resetItemState } from '../../lib/features/itemState/itemSlice';
 import { useBoundStore } from '../../lib/store/useBoundStore';
 import TabMenuTableAlert from './TabMenuTableAlert';
 import TabeMenuOrderAlert from './TabeMenuOrderAlert';
 import UnderLine from '../UnderLine';
 
 import { motion } from 'motion/react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 function TabMenuBox({ children, tab }) {
-  // useSelector
-  const isModalOpen = useSelector((state) => state.modalState.isOpen);
-  const editTableisEditing = useSelector((state) => state.konvaState.isEditing);
   // useDispatch
   const dispatch = useDispatch();
   // store
   const currentTabId = useBoundStore((state) => state.tab.id);
+  const isModalOpen = useBoundStore((state) => state.modal.isOpen);
+  const editTableisEditing = useBoundStore((state) => state.konva.isEditing);
   const changeTabState = useBoundStore((state) => state.changeTabState);
+  const resetCategoryState = useBoundStore((state) => state.resetCategoryState);
+  const resetItemState = useBoundStore((state) => state.resetItemState);
+  const resetSubmitState = useBoundStore((state) => state.resetSubmitState);
 
   function onClickChangeTab({ title, id }) {
     return () => {
@@ -29,11 +29,15 @@ function TabMenuBox({ children, tab }) {
         alert('수정 중입니다.');
         return;
       }
-      dispatch(changeTabState({ tableId: id }));
+      // dispatch(changeTabState({ tableId: id }));
+      changeTabState({ tableId: id });
       // 탭 변경마다 제출 상태 초기화
-      dispatch(resetSubmitState());
-      dispatch(resetCategoryState());
-      dispatch(resetItemState());
+      // dispatch(resetSubmitState());
+      resetSubmitState();
+      // dispatch(resetCategoryState());
+      resetCategoryState();
+      // dispatch(resetItemState());
+      resetItemState();
     };
   }
 

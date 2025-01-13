@@ -1,20 +1,17 @@
-import { changeModalState } from '../../features/modalState/modalSlice';
-import { selectTable } from '../../features/itemState/itemSlice';
-
-import { useDispatch, useSelector } from 'react-redux';
+import { useBoundStore } from '../../store/useBoundStore';
 
 export default function useOpenTableInfo() {
-  // useSelector
-  const konvaEditType = useSelector((state) => state.konvaState.type);
-  // useDispatch
-  const dispatch = useDispatch();
+  // store
+  const konvaEditType = useBoundStore((state) => state.konva.type);
+  const changeModalState = useBoundStore((state) => state.changeModalState);
+  const selectTable = useBoundStore((state) => state.selectTable);
 
   // 선택하면 모달 창 열림, 주문목록/금액, 결제/닫기 버튼, 결제
   function onClickOpenTableInfo({ table }) {
     if (konvaEditType === '') {
       // 모달창 상태 true 변환
-      dispatch(changeModalState({ type: 'info', isOpen: true }));
-      dispatch(selectTable({ table }));
+      changeModalState({ type: 'info', isOpen: true });
+      selectTable({ selectedTable: table });
       return;
     }
   }

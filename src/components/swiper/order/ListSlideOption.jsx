@@ -1,19 +1,18 @@
 import styles from '@/style/swiper/order/ListSlideOption.module.css';
-import { getSelectedListId } from '../../../lib/features/itemState/itemSlice';
+import { useBoundStore } from '../../../lib/store/useBoundStore';
 
-import { useDispatch, useSelector } from 'react-redux';
 import { AnimatePresence, motion } from 'motion/react';
 
 export default function ListSlideOption({ list }) {
-  // useSelector
-  const selectedListId = useSelector((state) => state.itemState.selectedListId);
-  // useDispatch
-  const dispatch = useDispatch();
+  // store
+  const selectedListId = useBoundStore((state) => state.itemBox.selectedListId);
+  const getSelectedListId = useBoundStore((state) => state.getSelectedListId);
 
   function onClickCloseListOption(e) {
     e.stopPropagation();
-    dispatch(getSelectedListId({ selectedListId: '' }));
+    getSelectedListId({ selectedListId: '' });
   }
+
   return (
     <AnimatePresence>
       {selectedListId === list.id && (

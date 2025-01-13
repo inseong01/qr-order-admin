@@ -1,14 +1,12 @@
-import { changeKonvaIsEditingState, getEditKonvaTableId } from '../../features/konvaState/konvaSlice';
-
-import { useDispatch, useSelector } from 'react-redux';
+import { useBoundStore } from '../../store/useBoundStore';
 
 export default function useEditTable() {
-  // useDispatch
-  const dispatch = useDispatch();
-  // useSelector
-  const konvaEditType = useSelector((state) => state.konvaState.type);
-  const konvaEditTableIdArr = useSelector((state) => state.konvaState.target.id);
-  const konvaEditIsEditing = useSelector((state) => state.konvaState.isEditing);
+  // store
+  const konvaEditType = useBoundStore((state) => state.konva.type);
+  const konvaEditTableIdArr = useBoundStore((state) => state.konva.target.id);
+  const konvaEditIsEditing = useBoundStore((state) => state.konva.isEditing);
+  const getEditKonvaTableId = useBoundStore((state) => state.getEditKonvaTableId);
+  const changeKonvaIsEditingState = useBoundStore((state) => state.changeKonvaIsEditingState);
 
   // 테이블 편집 유형
   function onClickEditTable({ stage, id }) {
@@ -17,7 +15,7 @@ export default function useEditTable() {
         stage.current.container().style.cursor = 'move';
         // 좌석 연속 선택 방지
         if (id === konvaEditTableIdArr[0]) return;
-        dispatch(getEditKonvaTableId({ id: [id] }));
+        getEditKonvaTableId({ id: [id] });
         return;
       }
       case 'delete': {
@@ -29,15 +27,15 @@ export default function useEditTable() {
           filteredTableIdArr = [...konvaEditTableIdArr, id];
         }
         // 선택 ID 전달
-        dispatch(getEditKonvaTableId({ id: filteredTableIdArr }));
+        getEditKonvaTableId({ id: filteredTableIdArr });
         // ID 배열로 편집 가능 여부 감지
         if (filteredTableIdArr.length <= 0) {
-          dispatch(changeKonvaIsEditingState({ isEditing: false }));
+          changeKonvaIsEditingState({ isEditing: false });
           return;
         }
         // 상태 변경 제한
         if (konvaEditIsEditing) return;
-        dispatch(changeKonvaIsEditingState({ isEditing: true }));
+        changeKonvaIsEditingState({ isEditing: true });
       }
     }
   }

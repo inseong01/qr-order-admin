@@ -2,20 +2,20 @@ import useOpenTableInfo from '../../../lib/hook/tableTab/useOpenTableInfo';
 import useEditTable from '../../../lib/hook/tableTab/useEditTable';
 import useOnMouseChangeCursor from '../../../lib/hook/tableTab/useOnMouseChangeCursor';
 import useSetTable from '../../../lib/hook/tableTab/useSetTable';
-import { getClientTableList } from '../../../lib/features/itemState/itemSlice';
-import { changeKonvaIsEditingState } from '../../../lib/features/konvaState/konvaSlice';
+import { useBoundStore } from '../../../lib/store/useBoundStore';
 import TableName from './TableName';
 import TableBillPrice from './TableBillPrice';
 
 import { useEffect, useRef, useState } from 'react';
 import { Group, Rect, Transformer } from 'react-konva';
-import { useDispatch, useSelector } from 'react-redux';
 
 export default function TableLayer({ stage, table, clientTableList, setClientTableList }) {
-  // useSelector
-  const konvaEditTableIdArr = useSelector((state) => state.konvaState.target.id);
-  const konvaEditType = useSelector((state) => state.konvaState.type);
-  const konvaEditIsEditing = useSelector((state) => state.konvaState.isEditing);
+  // store
+  const konvaEditTableIdArr = useBoundStore((state) => state.konva.target.id);
+  const konvaEditType = useBoundStore((state) => state.konva.type);
+  const konvaEditIsEditing = useBoundStore((state) => state.konva.isEditing);
+  const getClientTableList = useBoundStore((state) => state.getClientTableList);
+  const changeKonvaIsEditingState = useBoundStore((state) => state.changeKonvaIsEditingState);
   // variant
   const { init, order, tableNum, id } = table;
   const isTransformerAble = id === konvaEditTableIdArr[0] && konvaEditType !== 'delete';
@@ -31,8 +31,6 @@ export default function TableLayer({ stage, table, clientTableList, setClientTab
   const { onClickEditTable } = useEditTable();
   const { onMouseLeaveChangePointer, onMouseEnterChangePointer } = useOnMouseChangeCursor(stage, table);
   const { changeTablePosition, onDragTransform } = useSetTable(stage, shapeRef, setClientTableList);
-  // useDispatch
-  const dispatch = useDispatch();
 
   // 편집 유형 '생성/수정', 선택 좌석 transformer 적용
   useEffect(() => {
@@ -54,7 +52,7 @@ export default function TableLayer({ stage, table, clientTableList, setClientTab
     */
     if (isEditEnd) {
       // 수정/추가된 테이블 배열 전달
-      dispatch(getClientTableList({ clientTableList }));
+      getClientTableList({ clientTableList });
     }
     setEditEnd(false);
   }, [clientTableList]);
@@ -107,22 +105,29 @@ export default function TableLayer({ stage, table, clientTableList, setClientTab
   function onDragTransformStart() {
     setDrag(true);
   }
-  // 좌석 변형 마지막
-  function onDragTransformEnd() {
-    onDragTransform();
-    setEditEnd(true);
-    setDrag(false);
-    // Konva 편집 중
-    if (konvaEditIsEditing) return;
-    dispatch(changeKonvaIsEditingState({ isEditing: true }));
-  }
-  // 좌석 위치 이동 마지막
-  function onDragMoveEnd(e) {
-    changeTablePosition(e);
-    setEditEnd(true);
-    // Konva 편집 중
-    if (konvaEditIsEditing) return;
-    dispatch(changeKonvaIsEditingState({ isEditing: true }));
+  // 드래그 마지막 순간 통합 함수
+  function onDragEnd(event) {
+    return (e) => {
+      // 이벤트 별 적용
+      switch (event) {
+        // 좌석 위치 이동 마지막
+        case 'onDragEnd': {
+          changeTablePosition(e);
+          break;
+        }
+        // 좌석 변형 마지막
+        case 'onTransformEnd': {
+          onDragTransform();
+          setDrag(false);
+          break;
+        }
+      }
+      // 공통 부분
+      setEditEnd(true);
+      // Konva 편집 중
+      if (konvaEditIsEditing) return;
+      changeKonvaIsEditingState({ isEditing: true });
+    };
   }
   // 좌석 이동 범위 제한
   function onDragMove(e) {
@@ -155,7 +160,7 @@ export default function TableLayer({ stage, table, clientTableList, setClientTab
         y={init.y}
         draggable={isTransformerAble}
         onDragMove={onDragMove}
-        onDragEnd={onDragMoveEnd}
+        onDragEnd={onDragEnd('onDragMoveEnd')}
         onClick={onClickSelectTable}
         onMouseEnter={onMouseEnterChangePointer}
         onMouseLeave={onMouseLeaveChangePointer}
@@ -169,7 +174,7 @@ export default function TableLayer({ stage, table, clientTableList, setClientTab
             stroke={isSelectedToDelete ? 'red' : 'white'}
             cornerRadius={10}
             onTransformStart={onDragTransformStart}
-            onTransformEnd={onDragTransformEnd}
+            onTransformEnd={onDragEnd('onDragTransformEnd')}
           />
           {isTransformerAble && (
             <Transformer

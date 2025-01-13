@@ -9,16 +9,17 @@ import { useEffect, useState } from 'react';
 
 export default function HeaderLeft() {
   // useSelector
-  // const tab = useSelector((state) => state.tabState.title);
-  const modalType = useSelector((state) => state.modalState.type);
-  const isSubmit = useSelector((state) => state.submitState.isSubmit);
-  const submitStatus = useSelector((state) => state.submitState.status);
+  // const isSubmit = useSelector((state) => state.submitState.isSubmit);
+  // const submitStatus = useSelector((state) => state.submitState.status);
   // hook
   const categoryList = useQueryCategoryList();
   // store
   const tab = useBoundStore((state) => state.tab.title);
+  const modalType = useBoundStore((state) => state.modal.type);
+  const isSubmit = useBoundStore((state) => state.submit.isSubmit);
+  const submitStatus = useBoundStore((state) => state.submit.status);
   // variant
-  const isNotCategoryEdit = !modalType.includes('category');
+  const isNotCategoryEdit = !modalType?.includes('category');
   // useState
   const [isAbleRefetch, setAlbeRefetch] = useState(true);
 

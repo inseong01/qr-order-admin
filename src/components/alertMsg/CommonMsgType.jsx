@@ -1,13 +1,13 @@
 import styles from '@/style/AlertMsg.module.css';
+import { useBoundStore } from '../../lib/store/useBoundStore';
 
 import { motion, AnimatePresence } from 'motion/react';
-import { useSelector } from 'react-redux';
 
 export default function CommonMsgType({ isAlert }) {
-  // useSelector
-  const msgType = useSelector((state) => state.submitState.msgType);
-  const submitStatus = useSelector((state) => state.submitState.status);
-  const callCount = useSelector((state) => state.submitState.callCount);
+  // store
+  const msgType = useBoundStore((state) => state.submit.msgType);
+  const submitStatus = useBoundStore((state) => state.submit.status);
+  const callCount = useBoundStore((state) => state.submit.callCount);
 
   let str = '';
   switch (msgType) {

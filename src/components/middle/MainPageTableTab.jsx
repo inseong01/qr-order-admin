@@ -1,5 +1,4 @@
 import styles from '@/style/middle/MainPageList.module.css';
-import { getEditKonvaTableId } from '../../lib/features/konvaState/konvaSlice';
 import createKonvaInitTable from '../../lib/function/createKonvaInitTable';
 import { debounce } from '../../lib/function/debounce';
 import useQueryTableList from '../../lib/hook/useQuery/useQueryTableList';
@@ -9,18 +8,16 @@ import TableDraw from './konva/TableDraw';
 import MainModal from '../modal/MainModal';
 
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'motion/react';
 
 export default function MainPageTableTab() {
-  // useSelector
-  // const tab = useSelector((state) => state.tabState.title);
-  const konvaEditType = useSelector((state) => state.konvaState.type);
-  const konvaEditIsEditing = useSelector((state) => state.konvaState.isEditing);
+  // store
+  const tab = useBoundStore((state) => state.tab.title);
+  const konvaEditType = useBoundStore((state) => state.konva.type);
+  const konvaEditIsEditing = useBoundStore((state) => state.konva.isEditing);
+  const getEditKonvaTableId = useBoundStore((state) => state.getEditKonvaTableId);
   // useQuery
   const tableList = useQueryTableList();
-  // useDispatch
-  const dispatch = useDispatch();
   // useRef
   const tableBoxRef = useRef(null);
   // useState
@@ -30,8 +27,6 @@ export default function MainPageTableTab() {
   });
   const [clientTableList, setClientTableList] = useState([]);
   const [openKonva, setOpenKonva] = useState(false);
-  // hook
-  const tab = useBoundStore((state) => state.tab.title);
 
   // konva Stage 크기 설정
   useEffect(() => {
@@ -76,7 +71,7 @@ export default function MainPageTableTab() {
     if (konvaEditType === 'create') {
       const newTable = createKonvaInitTable({ stageSize, clientTableList });
       setClientTableList((prev) => [...prev, newTable]);
-      dispatch(getEditKonvaTableId({ id: [newTable.id] }));
+      getEditKonvaTableId({ id: [newTable.id] });
     }
   }, [konvaEditType]);
 

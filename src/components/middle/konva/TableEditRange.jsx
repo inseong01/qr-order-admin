@@ -1,10 +1,11 @@
+import { useBoundStore } from '../../../lib/store/useBoundStore';
+
 import { useEffect, useRef } from 'react';
 import { Group, Layer, Rect, Text } from 'react-konva';
-import { useSelector } from 'react-redux';
 
 export default function TableEditRange({ stageSize }) {
-  // useSelector
-  const konvaEditIsAble = useSelector((state) => state.konvaState.isAble);
+  // store
+  const konvaEditIsAble = useBoundStore((state) => state.konva.isAble);
   // useRef
   const tableRangeRef = useRef(null);
 

@@ -1,26 +1,22 @@
-import { onSubmitInsertCategory } from "../function/modal/onSubmitInsertCategory";
-import { openUpdateCategoryModal } from "../function/modal/openUpdateCategoryModal";
-import { resetItemState } from "../features/itemState/itemSlice";
-import { resetCategoryState } from "../features/categoryState/categorySlice";
-import { changeSubmitMsgType, fetchFormCategoryItem } from "../features/submitState/submitSlice";
 import { onSubmitDataInfo } from "../function/modal/onSubmitDataInfo";
-import { onSubmitFetchMenu } from "../function/modal/onSubmitFetchMenu";
 import { useBoundStore } from "../store/useBoundStore";
 
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 
 export default function useModalSubmitData() {
-  // useSelector
-  const item = useSelector((state) => state.itemState.item);
-  const isSubmit = useSelector((state) => state.submitState.isSubmit);
-  // const tab = useSelector((state) => state.tabState.title);
-  const modalType = useSelector((state) => state.modalState.type);
-  const submitStatus = useSelector((state) => state.submitState.status);
-  // dispatch
-  const dispatch = useDispatch();
   // store
   const tab = useBoundStore((state) => state.tab.title);
+  const item = useBoundStore((state) => state.itemBox.item);
+  const modalType = useBoundStore((state) => state.modal.type);
+  const isSubmit = useBoundStore((state) => state.submit.isSubmit);
+  const submitStatus = useBoundStore((state) => state.submit.status);
+  const resetItemState = useBoundStore((state) => state.resetItemState);
+  const resetCategoryState = useBoundStore((state) => state.resetCategoryState);
+  const changeSubmitMsgType = useBoundStore((state) => state.changeSubmitMsgType);
+  const fetchFormCategoryItem = useBoundStore((state) => state.fetchFormCategoryItem);
+  const fetchFormMenuItem = useBoundStore((state) => state.fetchFormMenuItem);
+
+  const getListInfo = useBoundStore((state) => state.getListInfo)
   // useState
   const [value, setValue] = useState(item);
 
@@ -34,12 +30,12 @@ export default function useModalSubmitData() {
     if (!isSubmit) return;
     // 주문 삭제/완료 처리 되었다면
     if (tab === 'order' && submitStatus === 'fulfilled') {
-      dispatch(resetItemState());
+      resetItemState();
     }
     // 카테고리 수정/삭제 되었다면
     if (tab === 'menu' && modalType.includes('category') && submitStatus === 'fulfilled') {
       // 없는 카테고리 빈 목록 창 방지, 초기 카테고리로 이동
-      dispatch(resetCategoryState());
+      resetCategoryState();
       /* 선택 항목 초기화는 퇴장 애니메이션 중 모달 창 변경 발생, 
       menu 탭에서는 카테고리만 list 상태 사용 중, 탭 전환 때만 초기화 적용 */
     }
@@ -63,12 +59,25 @@ export default function useModalSubmitData() {
         case 'insert-category': {
           const title = e.target[0].value;
           const table = 'category-menu';
-          onSubmitInsertCategory({ title, dispatch, method }, table);
+          // ----------------------------
+          const itemInfo = { title };
+          fetchFormCategoryItem({ method, itemInfo, table });
+          // ----------------------------
           break;
         }
         case 'update-category': {
           const checkElement = e.target.elements.check;
-          openUpdateCategoryModal({ checkElement, dispatch, method });
+          // ----------------------------
+          const checkedInputArr = Array.from(checkElement).filter((inputList) => inputList?.checked);
+          // 이후 코드 실행 제한 조건 알림
+          if (checkedInputArr.length <= 0) return alert('하나 이상은 선택해야 합니다');
+          // DOMStringMap 직렬화
+          const selectedCategoryData = checkedInputArr.map((list) => Object.assign({}, list.dataset));
+          // 카테고리 정보 저장
+          getListInfo({ list: selectedCategoryData });
+          // msgType 할당하면 다음 모달로 전환 
+          changeSubmitMsgType({ msgType: method });
+          // ----------------------------
           // 조건 이후 msgType 코드 실행 제한 되도록 반환
           return;
         }
@@ -76,10 +85,12 @@ export default function useModalSubmitData() {
           // 이미 update-category에서 msgType 선언된 상태
           const table = 'category-menu';
           const assignedInputs = Object.assign([], e.target.elements);
+          // ----------------------------
           const categoryArrData = assignedInputs
             .slice(0, -1)
             .map((input) => ({ id: input.dataset.id, title: input.value }));
-          dispatch(fetchFormCategoryItem({ method: 'upsert', itemInfo: categoryArrData, table }));
+          fetchFormCategoryItem({ method: 'upsert', itemInfo: categoryArrData, table });
+          // ----------------------------
           return;
         }
         case 'table': {
@@ -91,13 +102,18 @@ export default function useModalSubmitData() {
           // insert/update, 메뉴 관련 처리
           const file = e.target[0].files?.[0] ?? undefined;
           const table = 'menu';
-          onSubmitFetchMenu({ file, dispatch, method, value }, table);
+          // ----------------------------
+          // 임시 admin id 지정
+          const adminId = 'store_1';
+          // 메뉴, 사진 정보 전달
+          fetchFormMenuItem({ method, itemInfo: value, table, file, adminId });
+          // ----------------------------
           break;
         }
         default:
       }
       // 알림 문구 설정
-      dispatch(changeSubmitMsgType({ msgType: method }));
+      // changeSubmitMsgType({ msgType: method });
     };
   }
 

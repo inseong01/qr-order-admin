@@ -1,20 +1,16 @@
 import styles from '@/style/WidgetCategoryList.module.css';
 import { option, optionList } from '../../../lib/motion/motion_widgetOption';
-import { changeKonvaEditState } from '../../../lib/features/konvaState/konvaSlice';
-import { changeSubmitMsgType } from '../../../lib/features/submitState/submitSlice';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
 
 import { motion, AnimatePresence } from 'motion/react';
-import { useDispatch, useSelector } from 'react-redux';
 
 export default function WidgetTableCategory() {
-  // useSelector
-  const editTableisEditing = useSelector((state) => state.konvaState.isEditing);
-  const editTableType = useSelector((state) => state.konvaState.type);
-  // useDispatch
-  const dispatch = useDispatch();
-  // hook
+  // store
   const firstOption = useBoundStore((state) => state.widget.openOptionList[1]);
+  const editTableType = useBoundStore((state) => state.konva.type);
+  const editTableisEditing = useBoundStore((state) => state.konva.isEditing);
+  const changeKonvaEditState = useBoundStore((state) => state.changeKonvaEditState);
+  const changeSubmitMsgType = useBoundStore((state) => state.changeSubmitMsgType);
 
   function onClickEnableEditTable(editType) {
     return () => {
@@ -22,8 +18,8 @@ export default function WidgetTableCategory() {
         // 편집 중에 다른 editType으로 변환 제한
         return alert('편집 중에 변경할 수 없습니다.');
       }
-      dispatch(changeSubmitMsgType({ msgType: editType }));
-      dispatch(changeKonvaEditState({ editType }));
+      // changeSubmitMsgType({ msgType: editType });
+      changeKonvaEditState({ editType });
     };
   }
 

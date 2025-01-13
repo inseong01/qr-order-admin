@@ -4,17 +4,15 @@ import WidgetMenuWrap from './widget/WidgetOptionWrap';
 import WidgetBtn from './widget/WidgetBtn';
 
 import { useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
 
 export default function Widget() {
   // useRef
   const widgetRef = useRef(null);
-  // useSelector
-  const isModalOpen = useSelector((state) => state.modalState.isOpen);
-  const isTableEditAble = useSelector((state) => state.konvaState.isAble);
-  // hook
+  // store
   const tab = useBoundStore((state) => state.tab.id);
+  const isModalOpen = useBoundStore((state) => state.modal.isOpen);
   const isWidgetOpen = useBoundStore((state) => state.widget.isOpen);
+  const isTableEditAble = useBoundStore((state) => state.konva.isAble);
   const resetWidgetState = useBoundStore((state) => state.resetWidgetState);
 
   // 외부 선택으로 위젯 닫기

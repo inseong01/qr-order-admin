@@ -3,15 +3,13 @@ import WidgetOptions from './WidgetOptions';
 
 import { AnimatePresence } from 'motion/react';
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
 
 export default function WidgetOptionWrap() {
-  // useSelector
-  const editTableType = useSelector((state) => state.konvaState.type);
-  const editTableisEditing = useSelector((state) => state.konvaState.isEditing);
-  // hook
-  const setWidgetEditState = useBoundStore((state) => state.setWidgetEditState);
+  // store
   const isWidgetOpen = useBoundStore((state) => state.widget.isOpen);
+  const editTableType = useBoundStore((state) => state.konva.type);
+  const editTableisEditing = useBoundStore((state) => state.konva.isEditing);
+  const setWidgetEditState = useBoundStore((state) => state.setWidgetEditState);
 
   // 좌석 편집 시 저장 이미지로 전환
   useEffect(() => {

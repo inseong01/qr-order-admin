@@ -1,11 +1,11 @@
 import getTabCategory from "../../supabase/func/getTabCategory";
+import { useBoundStore } from "../../store/useBoundStore";
 
 import { useQuery } from "@tanstack/react-query";
-import { useSelector } from "react-redux";
 
 export default function useQueryCategoryList() {
-  // useSelector
-  const tab = useSelector((state) => state.tabState.title);
+  // store
+  const tab = useBoundStore((state) => state.tab.title);
   // useQuery
   const categoryList = useQuery({
     queryKey: ['categoryList', { tab }],

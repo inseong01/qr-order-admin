@@ -1,11 +1,10 @@
+import { useBoundStore } from '../../store/useBoundStore';
 import useQueryRequestList from '../useQuery/useQueryRequestList';
 
-import { useSelector } from 'react-redux';
-
 export default function useOnMouseChangeCursor(stage, table) {
-  // useSelector
-  const konvaEditTableIdArr = useSelector((state) => state.konvaState.target.id);
-  const konvaEditType = useSelector((state) => state.konvaState.type);
+  // store
+  const konvaEditTableIdArr = useBoundStore((state) => state.konva.target.id);
+  const konvaEditType = useBoundStore((state) => state.konva.type);
   // hook
   const requestList = useQueryRequestList();
   // variant

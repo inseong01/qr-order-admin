@@ -14,15 +14,13 @@ export default function TableAlertMsg() {
   const [requestAlertList, setRequestAlertList] = useState([]);
   const [id, selectId] = useState('');
   const [alertOn, setAlertOn] = useState(false);
-  // useSelector
-  // const tab = useSelector((state) => state.tabState.title);
-  const submitStatus = useSelector((state) => state.submitState.status);
-  const submitIsError = useSelector((state) => state.submitState.isError);
-  const tableEditIsAble = useSelector((state) => state.konvaState.isAble);
-  // const requestAlertOn = useSelector((state) => state.realtimeState.tableRequestList.isOn);
+  // store
+  const submitStatus = useBoundStore((state) => state.submit.status);
+  const submitIsError = useBoundStore((state) => state.submit.isError);
   // store
   const tab = useBoundStore((state) => state.tab.title);
   const requestAlertOn = useBoundStore((state) => state.alert.isOn);
+  const tableEditIsAble = useBoundStore((state) => state.konva.isAble);
 
   // useRef
   const reqeustMsgRef = useRef(null);

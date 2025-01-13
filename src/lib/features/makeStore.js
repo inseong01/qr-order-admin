@@ -11,14 +11,14 @@ import widgetSliceReducer from '@/lib/features/widgetState/widgetSlice.js'
 export default function makeStore() {
   return configureStore({
     reducer: {
-      tabState: tabSliceReducer,
-      modalState: modalSliceReducer,
-      submitState: submitSliceReducer,
-      itemState: itemSliceReducer,
-      categoryState: categorySliceReducer,
-      konvaState: konvaSliceReducer,
-      realtimeState: realtimeSliceReducer,
-      widgetState: widgetSliceReducer,
+      // tabState: tabSliceReducer,
+      // modalState: modalSliceReducer,
+      // submitState: submitSliceReducer,
+      // itemState: itemSliceReducer,
+      // categoryState: categorySliceReducer,
+      // konvaState: konvaSliceReducer,
+      // realtimeState: realtimeSliceReducer,
+      // widgetState: widgetSliceReducer,
     }
   })
 }

@@ -10,14 +10,14 @@ import { useSelector } from 'react-redux';
 
 export default function MenuModal() {
   // useSelector
-  // const tab = useSelector((state) => state.tabState.title);
-  const modalType = useSelector((state) => state.modalState.type);
-  const submitMsgType = useSelector((state) => state.submitState.msgType);
-  const selectedList = useSelector((state) => state.itemState.list);
+  // const submitMsgType = useSelector((state) => state.submitState.msgType);
   // hook
   const { onChangeInputValue, onSubmitData, value } = useModalSubmitData();
   // store
   const tab = useBoundStore((state) => state.tab.title);
+  const modalType = useBoundStore((state) => state.modal.type);
+  const selectedList = useBoundStore((state) => state.itemBox.list);
+  const submitMsgType = useBoundStore((state) => state.submit.msgType);
   // useQueryClient
   const queryClient = useQueryClient();
   const categoryList = queryClient.getQueryData(['categoryList', { tab }]) || [];

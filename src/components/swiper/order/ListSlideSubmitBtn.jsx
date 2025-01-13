@@ -1,24 +1,29 @@
 import styles from '@/style/swiper/order/ListSlideSubmitBtn.module.css';
 import { changeSubmitMsgType } from '../../../lib/features/submitState/submitSlice';
-import { getListInfo } from '../../../lib/features/itemState/itemSlice';
-import { changeModalState } from '../../../lib/features/modalState/modalSlice';
+import { useBoundStore } from '../../../lib/store/useBoundStore';
 
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function ListSlideSubmitBtn({ list }) {
   // useDispatch
   const dispatch = useDispatch();
-  // useSelector
-  const selectedListId = useSelector((state) => state.itemState.selectedListId);
-  const preventSubmit = useSelector((state) => state.submitState.isError);
+  // store
+  const selectedListId = useBoundStore((state) => state.itemBox.selectedListId);
+  const changeModalState = useBoundStore((state) => state.changeModalState);
+  const getListInfo = useBoundStore((state) => state.getListInfo);
+  const changeSubmitMsgType = useBoundStore((state) => state.changeSubmitMsgType);
+
+  const preventSubmit = false;
 
   function onClickUpdateListState(list) {
     return () => {
+      // 제출 오류 있다면
       if (preventSubmit) return;
       const type = selectedListId === list.id ? 'delete' : 'complete';
-      dispatch(changeSubmitMsgType({ msgType: type }));
-      dispatch(changeModalState({ isOpen: true, type: 'update' }));
-      dispatch(getListInfo({ list }));
+      // dispatch(changeSubmitMsgType({ msgType: type }));
+      changeSubmitMsgType({ msgType: type });
+      changeModalState({ isOpen: true, type: 'update' });
+      getListInfo({ list });
     };
   }
 

@@ -6,7 +6,6 @@ import RequestMsgToggle from './RequestMsgToggle';
 import { motion, AnimatePresence } from 'motion/react';
 
 export default function WidgetSecondOptionCategory() {
-  // hook
   const secondOption = useBoundStore((state) => state.widget.openOptionList[2]);
   const toggleRequestAlert = useBoundStore((state) => state.toggleRequestAlert);
 

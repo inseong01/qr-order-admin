@@ -1,8 +1,8 @@
 import styles from '@/style/modal/menu/InsertCategory.module.css';
-import { useSelector } from 'react-redux';
+import { useBoundStore } from '../../../lib/store/useBoundStore';
 
 function CategoryInfo({ type, onChangeInputValue }) {
-  const selectedList = useSelector((state) => state.itemState.list);
+  const selectedList = useBoundStore((state) => state.itemBox.list);
   switch (type) {
     case 'insert': {
       return (

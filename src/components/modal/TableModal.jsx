@@ -1,9 +1,8 @@
+import { useBoundStore } from '../../lib/store/useBoundStore';
 import TableInfoModal from './TableInfoModal';
 
-import { useSelector } from 'react-redux';
-
 export default function TableModal() {
-  const modalType = useSelector((state) => state.modalState.type);
+  const modalType = useBoundStore((state) => state.modal.type);
   switch (modalType) {
     case 'info': {
       // MainPageTableTab.jsx

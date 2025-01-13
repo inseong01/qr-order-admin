@@ -1,8 +1,8 @@
-import { useSelector } from 'react-redux';
+import { useBoundStore } from '../../store/useBoundStore';
 
 export default function useSetTable(stage, shapeRef, setClientTableList) {
-  // useSelector
-  const konvaEditTableIdArr = useSelector((state) => state.konvaState.target.id);
+  // store
+  const konvaEditTableIdArr = useBoundStore((state) => state.konva.target.id);
   // variant
   const blockSize = 10;
 

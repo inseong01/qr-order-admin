@@ -4,12 +4,10 @@ import { useBoundStore } from '../../../lib/store/useBoundStore';
 import WidgetFirstOptionCategories from './WidgetFirstOptionCategories';
 
 import { motion, AnimatePresence } from 'motion/react';
-import { useSelector } from 'react-redux';
 
 function Icon() {
   // hook
   const isEdit = useBoundStore((state) => state.widget.isEdit);
-
   return (
     <div className={styles.icon}>
       <AnimatePresence mode="wait" initial={false}>
@@ -42,10 +40,10 @@ function Icon() {
 }
 
 export default function WidgetFirstOption({ onClickEditor }) {
-  // useSelector
-  const editTableType = useSelector((state) => state.konvaState.type);
-  const tableIdArr = useSelector((state) => state.konvaState.target.id);
-  const tableListData = useSelector((state) => state.itemState.clientTableList);
+  // store
+  const tableListData = useBoundStore((state) => state.itemBox.clientTableList);
+  const editTableType = useBoundStore((state) => state.konva.type);
+  const tableIdArr = useBoundStore((state) => state.konva.target.id);
   // variant
   const dataArr = editTableType !== 'delete' ? tableListData : tableIdArr;
 

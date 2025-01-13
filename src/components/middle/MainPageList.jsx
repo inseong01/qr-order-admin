@@ -1,5 +1,5 @@
 import MainPageMenuTab from './MainPageMenuTab';
-import { changeModalState } from '../../lib/features/modalState/modalSlice';
+// import { changeModalState } from '../../lib/features/modalState/modalSlice';
 import { changeSubmitState } from '../../lib/features/submitState/submitSlice';
 import { useBoundStore } from '../../lib/store/useBoundStore';
 
@@ -12,18 +12,25 @@ const LazyMainPageOrderTab = lazy(() => import('./MainPageOrderTab'));
 export default function MainPageList() {
   // useSelector
   // const tab = useSelector((state) => state.tabState.title);
-  const submitStatus = useSelector((state) => state.submitState.status);
-  const isSubmit = useSelector((state) => state.submitState.isSubmit);
+  // const submitStatus = useSelector((state) => state.submitState.status);
+  // const isSubmit = useSelector((state) => state.submitState.isSubmit);
+  // store
+  const isSubmit = useBoundStore((state) => state.submit.isSubmit);
+  const submitStatus = useBoundStore((state) => state.submit.status);
+  const changeSubmitState = useBoundStore((state) => state.changeSubmitState);
   // dispatch
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   // store
   const tab = useBoundStore((state) => state.tab.title);
+  const changeModalState = useBoundStore((state) => state.changeModalState);
 
   // 제출 완료 시 모달 닫음
   useEffect(() => {
     if (isSubmit && submitStatus === 'fulfilled') {
-      dispatch(changeModalState({ isOpen: false }));
-      dispatch(changeSubmitState({ isSubmit: false }));
+      // dispatch(changeModalState({ isOpen: false }));
+      changeModalState({ isOpen: false });
+      // dispatch(changeSubmitState({ isSubmit: false }));
+      changeSubmitState({ isSubmit: false });
     }
   }, [isSubmit, submitStatus]);
 

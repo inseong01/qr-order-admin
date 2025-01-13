@@ -1,21 +1,19 @@
 import styles from '@/style/modal/MainModal.module.css';
-import { changeModalState } from '@/lib/features/modalState/modalSlice';
+import { useBoundStore } from '../../lib/store/useBoundStore';
 import ModalFormState from './ModalFormState';
 
 import { useRef } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { useDispatch, useSelector } from 'react-redux';
 
 export default function MainModal() {
-  // useSelector
-  const isModalOpen = useSelector((state) => state.modalState.isOpen);
-  // dispatch
-  const dispatch = useDispatch();
   // useRef
   const modalRef = useRef(null);
+  // store
+  const isModalOpen = useBoundStore((state) => state.modal.isOpen);
+  const changeModalState = useBoundStore((state) => state.changeModalState);
 
   function onClickCloseModal() {
-    dispatch(changeModalState({ isOpen: false }));
+    changeModalState({ isOpen: false });
   }
 
   return (

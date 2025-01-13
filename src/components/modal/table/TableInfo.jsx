@@ -1,15 +1,15 @@
 import styles from '@/style/modal/table/TableInfo.module.css';
 import createReceipt from '../../../lib/function/createReceipt';
+import { useBoundStore } from '../../../lib/store/useBoundStore';
 import OrderListBox from './OrderListBox';
 import QRcodeBox from './QRcodeBox';
 
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { useSelector } from 'react-redux';
 
 export default function TableInfo() {
-  // useSelector
-  const tableInfo = useSelector((state) => state.itemState.selectedTable);
+  // store
+  const tableInfo = useBoundStore((state) => state.itemBox.selectedTable);
   // useState
   const [isCicked, clickDiv] = useState(false);
   // variable

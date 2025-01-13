@@ -9,10 +9,6 @@ export default async function fetchMenuImage({ method, file, imgPath }) {
     case 'update': {
       // { "data": {...}, "error": null }
       const response = await supabase.storage.from('qr-order-img').upload(imgPath, file, { upsert: true })
-      if (response.error) {
-        console.error(response.error.message);
-        throw new Error(response.error.message);
-      }
       return response;
     }
     case 'delete': {
@@ -20,10 +16,6 @@ export default async function fetchMenuImage({ method, file, imgPath }) {
       // 기본 사진 삭제 방지
       if (imgPath.includes('icon')) return;
       const response = await supabase.storage.from('qr-order-img').remove([imgPath])
-      if (response.error) {
-        console.error(response.error.message);
-        throw new Error(response.error.message);
-      }
       return response;
     }
   }

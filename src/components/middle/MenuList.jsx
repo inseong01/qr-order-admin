@@ -1,5 +1,5 @@
-import { changeModalState } from '@/lib/features/modalState/modalSlice';
-import { getItemInfo } from '@/lib/features/itemState/itemSlice';
+// import { changeModalState } from '@/lib/features/modalState/modalSlice';
+// import { getItemInfo } from '@/lib/features/itemState/itemSlice';
 import useQueryMenuList from '../../lib/hook/useQuery/useQueryMenuList';
 import { useBoundStore } from '../../lib/store/useBoundStore';
 import AddMenu from './AddMenu';
@@ -10,18 +10,23 @@ import { useEffect } from 'react';
 
 export default function MenuList() {
   // useDispatch
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   // useSelector
   // const tab = useSelector((state) => state.tabState.title);
   // const selectedCategory = useSelector((state) => state.categoryState);
-  const isSubmit = useSelector((state) => state.submitState.isSubmit);
-  const submitError = useSelector((state) => state.submitState.isError);
-  const submitStatus = useSelector((state) => state.submitState.status);
+  // const isSubmit = useSelector((state) => state.submitState.isSubmit);
+  // const submitError = useSelector((state) => state.submitState.isError);
+  // const submitStatus = useSelector((state) => state.submitState.status);
   // hook
   const menuList = useQueryMenuList();
   // store
   const tab = useBoundStore((state) => state.tab.title);
+  const isSubmit = useBoundStore((state) => state.submit.isSubmit);
+  const submitStatus = useBoundStore((state) => state.submit.status);
+  const submitError = false;
   const selectedCategory = useBoundStore((state) => state.category);
+  const changeModalState = useBoundStore((state) => state.changeModalState);
+  const getItemInfo = useBoundStore((state) => state.getItemInfo);
 
   // 메뉴 새로 패치
   useEffect(() => {
@@ -43,15 +48,19 @@ export default function MenuList() {
   function onClickOpenModal(modalType, list) {
     return () => {
       if (submitError) return;
-      dispatch(changeModalState({ type: modalType, isOpen: true }));
+      // dispatch(changeModalState({ type: modalType, isOpen: true }));
+      changeModalState({ type: modalType, isOpen: true });
       // 상품 추가
       if (modalType === 'insert') {
+        // 전체메뉴 카테고리일 때 빈 문자열로 분류 미지정 할당
         const sort = selectedCategory.title === '전체메뉴' ? '' : selectedCategory.title;
-        dispatch(getItemInfo({ item: list, sort }));
+        // dispatch(getItemInfo({ item: list, sort }));
+        getItemInfo({ item: list, sort });
         return;
       }
       // 상품 수정
-      dispatch(getItemInfo({ item: list }));
+      // dispatch(getItemInfo({ item: list }));
+      getItemInfo({ item: list });
     };
   }
 

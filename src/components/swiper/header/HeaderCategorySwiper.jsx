@@ -6,11 +6,8 @@ import HeaderCategory from './HeaderCategory';
 
 import { useQueryClient } from '@tanstack/react-query';
 import { useRef } from 'react';
-import { useSelector } from 'react-redux';
 
 export default function HeaderCategorySwiper() {
-  // useSelector
-  // const tab = useSelector((state) => state.tabState.title);
   // useRef
   const headerleftSliderRef = useRef(null);
   // hook

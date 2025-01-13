@@ -1,13 +1,12 @@
+import useQueryAllOrderList from '../../lib/hook/useQuery/useQueryAllOrderList';
+import { useBoundStore } from '../../lib/store/useBoundStore';
 import Loader from '../Loader';
 import ConfirmModal from '../modal/ConfirmModal';
 import OrderListSwiper from '../swiper/OrderListSwiper';
-import useQueryAllOrderList from '../../lib/hook/useQuery/useQueryAllOrderList';
-
-import { useSelector } from 'react-redux';
 
 export default function MainPageOrderTab() {
-  // useSelector
-  const selectedCategory = useSelector((state) => state.categoryState);
+  // store
+  const selectedCategory = useBoundStore((state) => state.category);
   // hook
   const { data, isLoading } = useQueryAllOrderList();
   // variant

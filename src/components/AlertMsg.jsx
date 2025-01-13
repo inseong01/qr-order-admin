@@ -1,13 +1,13 @@
 import CommonMsgType from './alertMsg/CommonMsgType';
+import { useBoundStore } from '../lib/store/useBoundStore';
 
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 export default function AlertMsg() {
-  // useSelector
-  const alertType = useSelector((state) => state.submitState.alertType);
-  const submitStatus = useSelector((state) => state.submitState.status);
-  const callCount = useSelector((state) => state.submitState.callCount);
+  // store
+  const alertType = useBoundStore((state) => state.submit.alertType);
+  const submitStatus = useBoundStore((state) => state.submit.status);
+  const callCount = useBoundStore((state) => state.submit.callCount);
   // useState
   const [isAlert, setIsAlert] = useState(false);
 

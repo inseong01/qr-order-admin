@@ -1,8 +1,6 @@
 import styles from '@/style/Widget.module.css';
 import { widgetMenuList } from '../../lib/motion/motion_widgetMenu';
 import { fetchTableListData } from '../../lib/features/submitState/submitSlice';
-import { resetItemState } from '../../lib/features/itemState/itemSlice';
-import { resetKonvaState } from '../../lib/features/konvaState/konvaSlice';
 import { useBoundStore } from '../../lib/store/useBoundStore';
 import WidgetFirstOption from './firstOpt/WidgetFirstOption';
 import WidgetSecondOption from './secondOpt/WidgetSecondOption';
@@ -11,17 +9,18 @@ import { motion } from 'motion/react';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function WidgetOptions() {
-  // useSelector
-  const isModalOpen = useSelector((state) => state.modalState.isOpen);
-  const submitError = useSelector((state) => state.submitState.isError);
-  const isSubmit = useSelector((state) => state.submitState.isSubmit);
-  const editTableType = useSelector((state) => state.konvaState.type);
-  const editTableisEditing = useSelector((state) => state.konvaState.isEditing);
   // useDispatch
   const dispatch = useDispatch();
-  // hook
-  const setWidgetOptionListState = useBoundStore((state) => state.setWidgetOptionListState);
+  // store
+  const isSubmit = useBoundStore((state) => state.submit.isSubmit);
+  const submitError = useBoundStore((state) => state.submit.isError);
+  const isModalOpen = useBoundStore((state) => state.modal.isOpen);
+  const editTableType = useBoundStore((state) => state.konva.type);
+  const editTableisEditing = useBoundStore((state) => state.konva.isEditing);
+  const resetItemState = useBoundStore((state) => state.resetItemState);
+  const resetKonvaState = useBoundStore((state) => state.resetKonvaState);
   const setWidgetEditState = useBoundStore((state) => state.setWidgetEditState);
+  const setWidgetOptionListState = useBoundStore((state) => state.setWidgetOptionListState);
 
   function onClickEditor(optNum, dataArr) {
     return () => {
@@ -35,13 +34,13 @@ export default function WidgetOptions() {
         }
         // 편집 저장, db 전송
         dispatch(fetchTableListData({ method: editTableType, dataArr }));
-        dispatch(resetItemState());
-        dispatch(resetKonvaState());
+        resetItemState();
+        resetKonvaState();
         setWidgetEditState(false);
         return;
       }
       // 위젯 옵션 여닫기
-      setWidgetOptionListState(optNum);
+      setWidgetOptionListState({ optNum });
     };
   }
 

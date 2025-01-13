@@ -1,14 +1,15 @@
+import { useBoundStore } from '../../../lib/store/useBoundStore';
 import TableLayer from './TableLayer';
 import TableEditRange from './TableEditRange';
 
 import { Layer, Stage } from 'react-konva';
-import { Provider, ReactReduxContext, useSelector } from 'react-redux';
+import { Provider, ReactReduxContext } from 'react-redux';
 import { useRef, useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 export default function TableDraw({ stageSize, clientTableList, setClientTableList }) {
-  // useSelector
-  const konvaEditIsAble = useSelector((state) => state.konvaState.isAble);
+  // store
+  const konvaEditIsAble = useBoundStore((state) => state.konva.isAble);
   // useRef
   const stageRef = useRef(null);
   // useState
