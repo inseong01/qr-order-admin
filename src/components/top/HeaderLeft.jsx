@@ -4,46 +4,35 @@ import { useBoundStore } from '../../lib/store/useBoundStore';
 import HeaderCategorySwiper from '../swiper/header/HeaderCategorySwiper';
 import AddCategoryBox from './AddCategoryBox';
 
-import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 
 export default function HeaderLeft() {
-  // useSelector
-  // const isSubmit = useSelector((state) => state.submitState.isSubmit);
-  // const submitStatus = useSelector((state) => state.submitState.status);
   // hook
   const categoryList = useQueryCategoryList();
   // store
   const tab = useBoundStore((state) => state.tab.title);
-  const modalType = useBoundStore((state) => state.modal.type);
-  const isSubmit = useBoundStore((state) => state.submit.isSubmit);
   const submitStatus = useBoundStore((state) => state.submit.status);
-  // variant
-  const isNotCategoryEdit = !modalType?.includes('category');
   // useState
-  const [isAbleRefetch, setAlbeRefetch] = useState(true);
+  const [isAbleRefetch, setAbleRefetch] = useState(true);
 
   // 메뉴 카테고리 데이터 패칭 요청
   useEffect(() => {
     /*
       메뉴 카테고리 리패치, useEffect 사용 이유
-      - ModalFormState.jsx에서 폼 제출 이후 리패치는 새로운 데이터를 받아오지 못함
-      dispatch, await 코드 순은 순서대로 동작하지 않음
-      - fulfilled 무한 리패치
-      isSubmit true 일 때 무한 리패치, flag 세워서 한 번만 되도록 설정  
+      - useModalSubmitData.js에서 폼 제출 이후 리패치는 새로운 데이터를 받아오지 못함
+        : 제출 상태 변화로 불가능
+      - 무한 리패치
+        : flag 세워서 한 번만 되도록 설정, 불필요 의존성 제외  
     */
-    if (isNotCategoryEdit || tab !== 'menu') return;
+    if (tab !== 'menu') return;
 
-    if (!isSubmit) {
-      setAlbeRefetch(true);
-      return;
-    }
+    setAbleRefetch(true);
 
     if (isAbleRefetch && submitStatus === 'fulfilled') {
       categoryList.refetch();
-      setAlbeRefetch(false);
+      setAbleRefetch(false);
     }
-  }, [isSubmit, submitStatus, isNotCategoryEdit, isAbleRefetch]);
+  }, [submitStatus]);
 
   if (categoryList.isFetching) {
     return <div className={styles.left}></div>;

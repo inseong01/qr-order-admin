@@ -3,6 +3,7 @@ const initialState = {
     type: '',
     isAble: false,
     isEditing: false,
+    isEditEnd: false,
     target: {
       id: []
     }
@@ -40,7 +41,8 @@ export const useKonvaSlice = process.env.NODE_ENV === 'development' ?
           isEditing
         }
       }
-    }, undefined, 'konva/changeKonvaIsEditingState')
+    }, undefined, 'konva/changeKonvaIsEditingState'),
+    setKonvaEditEnd: ({ isEditEnd }) => set(state => ({ konva: { ...state.konva, isEditEnd } }), undefined, 'konva/setKonvaEditEnd')
   }) :
   (set) => ({
     ...initialState,
@@ -72,5 +74,6 @@ export const useKonvaSlice = process.env.NODE_ENV === 'development' ?
           isEditing
         }
       }
-    })
+    }),
+    setKonvaEditEnd: ({ isEditEnd }) => set(state => ({ konva: { ...state.konva, isEditEnd } }))
   }) 

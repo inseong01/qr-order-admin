@@ -9,13 +9,13 @@ import TableBillPrice from './TableBillPrice';
 import { useEffect, useRef, useState } from 'react';
 import { Group, Rect, Transformer } from 'react-konva';
 
-export default function TableLayer({ stage, table, clientTableList, setClientTableList }) {
+export default function TableLayer({ stage, table, setClientTableList }) {
   // store
   const konvaEditTableIdArr = useBoundStore((state) => state.konva.target.id);
   const konvaEditType = useBoundStore((state) => state.konva.type);
   const konvaEditIsEditing = useBoundStore((state) => state.konva.isEditing);
-  const getClientTableList = useBoundStore((state) => state.getClientTableList);
   const changeKonvaIsEditingState = useBoundStore((state) => state.changeKonvaIsEditingState);
+  const setKonvaEditEnd = useBoundStore((state) => state.setKonvaEditEnd);
   // variant
   const { init, order, tableNum, id } = table;
   const isTransformerAble = id === konvaEditTableIdArr[0] && konvaEditType !== 'delete';
@@ -24,7 +24,6 @@ export default function TableLayer({ stage, table, clientTableList, setClientTab
   const shapeRef = useRef(null);
   const trRef = useRef(null);
   // useState
-  const [isEditEnd, setEditEnd] = useState(false);
   const [isDragging, setDrag] = useState(false);
   // hook
   const { onClickOpenTableInfo } = useOpenTableInfo();
@@ -39,23 +38,6 @@ export default function TableLayer({ stage, table, clientTableList, setClientTab
       trRef.current.getLayer().batchDraw();
     }
   }, [konvaEditTableIdArr]);
-
-  // 테이블 위치 수정, dispatch 요청
-  useEffect(() => {
-    /*
-      isEditEnd true일 때만 전달 허용
-      useState 비동기 동작으로 dispatch 동시에 사용할 수 없음
-      갱신 이전 값이 dispatch로 전달됨
-
-      트리거를 사용하여 조건에 맞춰 dispatch 실행
-      isEditEnd를 의존성으로 추가하면 갱신 이전 값 전달됨 
-    */
-    if (isEditEnd) {
-      // 수정/추가된 테이블 배열 전달
-      getClientTableList({ clientTableList });
-    }
-    setEditEnd(false);
-  }, [clientTableList]);
 
   // 좌석 모형 변환 제한 설정
   function limitBoundBox(oldBox, newBox) {
@@ -111,19 +93,20 @@ export default function TableLayer({ stage, table, clientTableList, setClientTab
       // 이벤트 별 적용
       switch (event) {
         // 좌석 위치 이동 마지막
-        case 'onDragEnd': {
+        case 'onDragMoveEnd': {
           changeTablePosition(e);
           break;
         }
+
         // 좌석 변형 마지막
-        case 'onTransformEnd': {
+        case 'onDragTransformEnd': {
           onDragTransform();
           setDrag(false);
           break;
         }
       }
       // 공통 부분
-      setEditEnd(true);
+      setKonvaEditEnd({ isEditEnd: true });
       // Konva 편집 중
       if (konvaEditIsEditing) return;
       changeKonvaIsEditingState({ isEditing: true });

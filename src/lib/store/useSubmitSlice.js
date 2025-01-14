@@ -1,7 +1,8 @@
 const initialState = {
   submit: {
     isSubmit: false,
-    status: 'initial',
+    status: '',
+    // status: 'initial',
     alertType: '',
     msgType: '',
     callCount: 0,

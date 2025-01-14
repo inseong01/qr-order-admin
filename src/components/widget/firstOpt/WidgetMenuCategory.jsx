@@ -1,14 +1,10 @@
 import styles from '@/style/WidgetCategoryList.module.css';
-import { resetSubmitState } from '../../../lib/features/submitState/submitSlice';
 import { option, optionList } from '../../../lib/motion/motion_widgetOption';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
 
 import { motion, AnimatePresence } from 'motion/react';
-import { useDispatch } from 'react-redux';
 
 export default function WidgetMenuFirstCategory() {
-  // useDispatch
-  const dispatch = useDispatch();
   // store
   const firstOption = useBoundStore((state) => state.widget.openOptionList[1]);
   const changeModalState = useBoundStore((state) => state.changeModalState);
@@ -16,7 +12,6 @@ export default function WidgetMenuFirstCategory() {
 
   function onClickOpenEditor(modalType) {
     return () => {
-      // dispatch(resetSubmitState());
       resetSubmitState();
       changeModalState({ type: modalType, isOpen: true });
     };

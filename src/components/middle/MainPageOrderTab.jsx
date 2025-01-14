@@ -10,8 +10,8 @@ export default function MainPageOrderTab() {
   // hook
   const { data, isLoading } = useQueryAllOrderList();
   // variant
-  const doneOrderList = data?.filter((arr) => arr.isDone) ?? [];
-  const notDoneOrderList = data?.filter((arr) => !arr.isDone) ?? [];
+  const doneOrderList = data.data ? data.data.filter((arr) => arr.isDone) : [];
+  const notDoneOrderList = data.data ? data.data.filter((arr) => !arr.isDone) : [];
   const descDoneOrderList = [...doneOrderList].sort(
     (a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
   );

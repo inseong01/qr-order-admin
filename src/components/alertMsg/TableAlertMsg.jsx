@@ -1,12 +1,10 @@
 import styles from '@/style/AlertMsg.module.css';
-import { fetchUpdateAlertMsg } from '../../lib/features/submitState/submitSlice';
 import useQueryRequestList from '../../lib/hook/useQuery/useQueryRequestList';
 import { useBoundStore } from '../../lib/store/useBoundStore';
 import HiddenAlertMessage from './HiddenAlertMessage';
 import DisplayedAlertMessage from './DisplayedAlertMessage';
 
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { motion, AnimatePresence } from 'motion/react';
 
 export default function TableAlertMsg() {
@@ -21,22 +19,20 @@ export default function TableAlertMsg() {
   const tab = useBoundStore((state) => state.tab.title);
   const requestAlertOn = useBoundStore((state) => state.alert.isOn);
   const tableEditIsAble = useBoundStore((state) => state.konva.isAble);
-
+  const fetchUpdateAlertMsg = useBoundStore((state) => state.fetchUpdateAlertMsg);
   // useRef
   const reqeustMsgRef = useRef(null);
-  // useDispatch
-  const dispatch = useDispatch();
   // useQuery
-  const { data } = useQueryRequestList();
+  const { data, isFetching } = useQueryRequestList();
   // variant
-  const extraMsg = data?.filter((list) => !list.isRead).slice(4);
+  const extraMsg = data?.data ? data.data.filter((list) => !list.isRead).slice(4) : [];
 
   // 읽지 않은 이전 요청 불러오기 (수 제한)
   useEffect(() => {
-    if (!data) return;
-    const notReadMsg = data.filter((list) => !list.isRead).slice(0, 4);
+    if (isFetching) return;
+    const notReadMsg = data.data ? data.data.filter((list) => !list.isRead).slice(0, 4) : [];
     setRequestAlertList(notReadMsg);
-  }, [data]);
+  }, [data, isFetching]);
 
   // 읽은 알림 안 읽은 목록에서 제외하기
   useEffect(() => {
@@ -62,9 +58,9 @@ export default function TableAlertMsg() {
   // 클릭 시 알림 읽음 처리 (DB)
   function onClickReadMsg(list) {
     return () => {
-      // 오류 발생 시 alert on/off 기능 생성
+      // 오류 발생 시 읽음 처리 제한
       if (submitIsError) return;
-      dispatch(fetchUpdateAlertMsg({ method: 'update', id: list.id }));
+      fetchUpdateAlertMsg({ method: 'update', id: list.id });
       selectId(list.id);
     };
   }

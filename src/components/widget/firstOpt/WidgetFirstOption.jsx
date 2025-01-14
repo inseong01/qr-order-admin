@@ -45,7 +45,7 @@ export default function WidgetFirstOption({ onClickEditor }) {
   const editTableType = useBoundStore((state) => state.konva.type);
   const tableIdArr = useBoundStore((state) => state.konva.target.id);
   // variant
-  const dataArr = editTableType !== 'delete' ? tableListData : tableIdArr;
+  const dataArr = editTableType === 'delete' ? tableIdArr : tableListData;
 
   return (
     <motion.li className={styles.listBox} key={'widgetMenu'} variants={menu}>

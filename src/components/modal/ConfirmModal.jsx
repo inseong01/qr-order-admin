@@ -1,28 +1,22 @@
 import styles from '@/style/modal/ConfirmModal.module.css';
-import { fetchFormCategoryItem, fetchOrderListStatus } from '../../lib/features/submitState/submitSlice';
 import { useBoundStore } from '../../lib/store/useBoundStore';
 
-import { useDispatch, useSelector } from 'react-redux';
 import { AnimatePresence, motion } from 'motion/react';
 
 function ConfirmButton({ title }) {
-  // useSelector
-  // const isSubmit = useSelector((state) => state.submitState.isSubmit);
-  // const submitMsgType = useSelector((state) => state.submitState.msgType);
-  // useDispatch
-  const dispatch = useDispatch();
   // store
   const selectedList = useBoundStore((state) => state.itemBox.list);
   const isSubmit = useBoundStore((state) => state.submit.isSubmit);
   const submitMsgType = useBoundStore((state) => state.submit.msgType);
-
   const changeModalState = useBoundStore((state) => state.changeModalState);
+  const fetchOrderListStatus = useBoundStore((state) => state.fetchOrderListStatus);
+  const fetchFormCategoryItem = useBoundStore((state) => state.fetchFormCategoryItem);
 
+  // 카테고리 삭제, 주문 상태 완료 처리
   function onClickChangeModalStatus(state) {
     return () => {
       switch (state) {
         case 'no': {
-          // dispatch(changeModalState({ isOpen: false }));
           changeModalState({ isOpen: false });
           return;
         }
@@ -31,9 +25,9 @@ function ConfirmButton({ title }) {
           if (isSubmit) return;
           const method = submitMsgType === 'delete' ? 'delete' : 'update';
           if (title === '주문') {
-            dispatch(fetchOrderListStatus({ method, data: selectedList }));
+            fetchOrderListStatus({ method, data: selectedList });
           } else if (title === '카테고리') {
-            dispatch(fetchFormCategoryItem({ method, itemInfo: selectedList, table: 'category-menu' }));
+            fetchFormCategoryItem({ method, itemInfo: selectedList, table: 'category-menu' });
           }
         }
       }
@@ -53,11 +47,10 @@ function ConfirmButton({ title }) {
 }
 
 function ConfirmTitle({ title }) {
-  // useSelector
-  const submitMsgType = useSelector((state) => state.submitState.msgType);
   // store
   const tab = useBoundStore((state) => state.tab.title);
   const selectedList = useBoundStore((state) => state.itemBox.list);
+  const submitMsgType = useBoundStore((state) => state.submit.msgType);
   // variant
   const context = submitMsgType === 'delete' ? '삭제' : title === '주문' ? '완료' : '수정';
   const subTitlte = tab === 'menu' ? selectedList.map((list) => list.title).join(', ') : '';

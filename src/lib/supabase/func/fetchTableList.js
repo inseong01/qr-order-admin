@@ -1,33 +1,35 @@
 import supabase from "../supabaseConfig";
 
 export default async function fetchTableList(method, dataArr) {
+  let response;
+
   switch (method) {
     case 'select': {
-      let response = await supabase.from('qr-order-table-list').select('*').order('tableNum', { ascending: true });
-      if (response.error) {
-        console.error(response.error.message);
-        throw new Error(response.error.message)
-      }
-      return response.data;
+      response = await supabase.from('qr-order-table-list').select('*').order('tableNum', { ascending: true });
+      break;
     }
-    case 'create':
+    case 'create': {
+      const idx = dataArr.length - 1
+      response = await supabase.from('qr-order-table-list').insert(dataArr[idx]).select();
+      break;
+    }
     case 'update': {
-      // data: arrary type
-      let response = await supabase.from('qr-order-table-list').upsert(dataArr, { ignoreDuplicates: false }).select();
-      if (response.error) {
-        throw new Error(response.error.message);
-      }
-      return response.data;
+      response = await supabase.from('qr-order-table-list').upsert(dataArr, { ignoreDuplicates: false }).select();
+      break;
     }
     case 'delete': {
-      let response = await supabase.from('qr-order-table-list').delete().in('id', dataArr).select();
-      if (response.error) {
-        throw new Error(response.error.message);
-      }
-      return response.data;
+      response = await supabase.from('qr-order-table-list').delete().in('id', dataArr).select();
+      break;
     }
     default: {
-      throw new Error(`"${method}": Method is not defined!`);
+      console.error(`"${method.toUpperCase()}": Method is not defined`)
+      return { status: 1 }
     }
   }
+
+  if (response.error) {
+    console.error(response.error.message ?? `${method.toUpperCase()} error`)
+  }
+
+  return response
 }

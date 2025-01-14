@@ -6,28 +6,25 @@ export default async function fetchOrderList(method, data) {
   switch (method) {
     case 'select': {
       response = await supabase.from('qr-order-allOrderList').select('*').order('created_at', { ascending: true });
-      if (response.error) {
-        console.error(response.error.message);
-        throw new Error(response.error.message);
-      };
-      return response.data
+      break;
     }
     case 'update': {
       response = await supabase.from('qr-order-allOrderList').update({ isDone: true, updated_at: new Date() }).eq('id', data.id).select();
-      if (response.error) {
-        throw new Error(response.error.message)
-      };
-      return response;
+      break
     }
     case 'delete': {
       response = await supabase.from('qr-order-allOrderList').delete().eq('id', data.id).select();
-      if (response.error) {
-        throw new Error(response.error.message)
-      };
-      return response;
+      break
     }
     default: {
-      throw new Error(`"${method}" : Method is not defined!`)
+      console.error(`"${method.toUpperCase()}" : Method is not defined`)
+      return { status: 1 };
     }
   }
+
+  if (response.error) {
+    console.error(response.error.message ?? `${method.toUpperCase()} error`);
+  };
+
+  return response;
 }

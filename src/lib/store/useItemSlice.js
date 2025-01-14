@@ -1,10 +1,6 @@
-// import { v4 as uuidv4 } from 'uuid'
-
 const initialState = {
   itemBox: {
     item: {
-      // db에서 생성되도록
-      // id: '',
       name: '',
       price: 0,
       sort: '',
@@ -28,9 +24,8 @@ const initialState = {
 export const useItemSlice = process.env.NODE_ENV === 'development' ?
   (set) => ({
     ...initialState,
-    resetItemState: () => set(initialState, undefined, 'item/resetItemState'),
+    resetItemState: () => set(initialState, undefined, 'itemBox/resetItemState'),
     getItemInfo: ({ item, sort }) => set((state) => {
-      // const id = uuidv4();
       // item 없는 상품 추가 경우
       if (!item) {
         return {
@@ -51,7 +46,7 @@ export const useItemSlice = process.env.NODE_ENV === 'development' ?
           item
         }
       }
-    }, undefined, 'item/getItemInfo'),
+    }, undefined, 'itemBox/getItemInfo'),
     getListInfo: ({ list }) => set((state) => {
       return {
         itemBox: {
@@ -59,7 +54,7 @@ export const useItemSlice = process.env.NODE_ENV === 'development' ?
           list
         }
       }
-    }, undefined, 'item/getListInfo'),
+    }, undefined, 'itemBox/getListInfo'),
     getSelectedListId: ({ selectedListId }) => set((state) => {
       return {
         itemBox: {
@@ -67,7 +62,7 @@ export const useItemSlice = process.env.NODE_ENV === 'development' ?
           selectedListId
         }
       }
-    }, undefined, 'item/getSelectedListId'),
+    }, undefined, 'itemBox/getSelectedListId'),
     getClientTableList: ({ clientTableList }) => set((state) => {
       return {
         itemBox: {
@@ -75,7 +70,7 @@ export const useItemSlice = process.env.NODE_ENV === 'development' ?
           clientTableList
         }
       }
-    }, undefined, 'item/getClientTableList'),
+    }, undefined, 'itemBox/getClientTableList'),
     selectTable: ({ selectedTable }) => set((state) => {
       return {
         itemBox: {
@@ -83,7 +78,7 @@ export const useItemSlice = process.env.NODE_ENV === 'development' ?
           selectedTable
         }
       }
-    }, undefined, 'item/selectTable')
+    }, undefined, 'itemBox/selectTable')
   }) :
   (set) => ({
     ...initialState,

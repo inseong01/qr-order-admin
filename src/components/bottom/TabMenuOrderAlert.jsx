@@ -3,7 +3,7 @@ import useQueryAllOrderList from '../../lib/hook/useQuery/useQueryAllOrderList';
 
 import { useEffect, useState } from 'react';
 
-export default function TabeMenuOrderAlert({ tab }) {
+export default function TabMenuOrderAlert({ tab }) {
   // useState
   const [isUnDoneList, setUndDoneList] = useState(false);
   // hook
@@ -14,7 +14,7 @@ export default function TabeMenuOrderAlert({ tab }) {
     if (!data) return;
     if (tab.title !== '주문') return;
     // 완료 되지 않은 주문 여부
-    const isUnDoneOrderList = data.some((list) => !list.isDone);
+    const isUnDoneOrderList = data.data ? data.data.some((list) => !list.isDone) : false;
     setUndDoneList(isUnDoneOrderList);
   }, [data, tab]);
 

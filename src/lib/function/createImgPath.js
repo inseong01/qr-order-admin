@@ -5,7 +5,7 @@ export default function createImgPath({ method, file, itemInfo, adminId }) {
   if (method !== 'delete') {
     const imgType = file?.type.split('/')[1];
     // 사진 유무, 기본 경로 설정
-    imgName = imgType ? 'menu_' + itemInfo.id + '.' + imgType : 'icon.jpg';
+    imgName = imgType ? 'menu_' + itemInfo.name + '.' + imgType : 'icon.jpg';
     imgPath = adminId + '/' + imgName;
     // menuItem url 설정
     itemInfo.url = imgPath;

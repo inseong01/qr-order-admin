@@ -1,16 +1,12 @@
 import styles from '@/style/Widget.module.css';
 import { widgetMenuList } from '../../lib/motion/motion_widgetMenu';
-import { fetchTableListData } from '../../lib/features/submitState/submitSlice';
 import { useBoundStore } from '../../lib/store/useBoundStore';
 import WidgetFirstOption from './firstOpt/WidgetFirstOption';
 import WidgetSecondOption from './secondOpt/WidgetSecondOption';
 
 import { motion } from 'motion/react';
-import { useDispatch, useSelector } from 'react-redux';
 
 export default function WidgetOptions() {
-  // useDispatch
-  const dispatch = useDispatch();
   // store
   const isSubmit = useBoundStore((state) => state.submit.isSubmit);
   const submitError = useBoundStore((state) => state.submit.isError);
@@ -21,6 +17,7 @@ export default function WidgetOptions() {
   const resetKonvaState = useBoundStore((state) => state.resetKonvaState);
   const setWidgetEditState = useBoundStore((state) => state.setWidgetEditState);
   const setWidgetOptionListState = useBoundStore((state) => state.setWidgetOptionListState);
+  const fetchTableListData = useBoundStore((state) => state.fetchTableListData);
 
   function onClickEditor(optNum, dataArr) {
     return () => {
@@ -33,7 +30,7 @@ export default function WidgetOptions() {
           return;
         }
         // 편집 저장, db 전송
-        dispatch(fetchTableListData({ method: editTableType, dataArr }));
+        fetchTableListData({ method: editTableType, dataArr });
         resetItemState();
         resetKonvaState();
         setWidgetEditState(false);

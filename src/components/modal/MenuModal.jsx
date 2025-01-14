@@ -6,11 +6,8 @@ import InsertCategory from './menu/InsertCategory';
 import ConfirmModal from './ConfirmModal';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { useSelector } from 'react-redux';
 
 export default function MenuModal() {
-  // useSelector
-  // const submitMsgType = useSelector((state) => state.submitState.msgType);
   // hook
   const { onChangeInputValue, onSubmitData, value } = useModalSubmitData();
   // store

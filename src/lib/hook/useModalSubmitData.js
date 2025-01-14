@@ -10,6 +10,7 @@ export default function useModalSubmitData() {
   const modalType = useBoundStore((state) => state.modal.type);
   const isSubmit = useBoundStore((state) => state.submit.isSubmit);
   const submitStatus = useBoundStore((state) => state.submit.status);
+  const submitIsError = useBoundStore((state) => state.submit.isError);
   const resetItemState = useBoundStore((state) => state.resetItemState);
   const resetCategoryState = useBoundStore((state) => state.resetCategoryState);
   const changeSubmitMsgType = useBoundStore((state) => state.changeSubmitMsgType);
@@ -51,7 +52,10 @@ export default function useModalSubmitData() {
   function onSubmitData(type) {
     return async (e) => {
       e.preventDefault();
+      // 연속 제출 제한
       if (isSubmit) return;
+      // 오류 발생 시 제출 제한
+      if (submitIsError) return;
       // method 선언
       const method = e.nativeEvent.submitter.name;
       // 모달 제출 형식 분류
@@ -112,8 +116,6 @@ export default function useModalSubmitData() {
         }
         default:
       }
-      // 알림 문구 설정
-      // changeSubmitMsgType({ msgType: method });
     };
   }
 

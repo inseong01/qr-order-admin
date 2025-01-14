@@ -9,8 +9,8 @@ export default function HeaderCategoryBox({ list, children }) {
   const queryClient = useQueryClient();
   // store
   const categoryId = useBoundStore((state) => state.category.id);
-  const changeCategory = useBoundStore((state) => state.changeCategory);
   const isModalOpen = useBoundStore((state) => state.modal.isOpen);
+  const changeCategory = useBoundStore((state) => state.changeCategory);
 
   function onClickChangeTabCategory({ id, title }) {
     return async () => {

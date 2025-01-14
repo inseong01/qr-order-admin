@@ -7,10 +7,12 @@ import OrderMiddleBox from './OrderMiddleBox';
 export default function OrderListSlide({ list }) {
   // store
   const categoryId = useBoundStore((state) => state.category.id);
+  const submitError = useBoundStore((state) => state.submit.isError);
   const getSelectedListId = useBoundStore((state) => state.getSelectedListId);
 
   function onClickOpenListOption(list) {
     return () => {
+      if (submitError) return;
       // "접수"일 때만 실행
       if (categoryId === 0) {
         getSelectedListId({ selectedListId: list.id });

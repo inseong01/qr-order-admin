@@ -1,65 +1,49 @@
-// import { changeModalState } from '@/lib/features/modalState/modalSlice';
-// import { getItemInfo } from '@/lib/features/itemState/itemSlice';
 import useQueryMenuList from '../../lib/hook/useQuery/useQueryMenuList';
 import { useBoundStore } from '../../lib/store/useBoundStore';
 import AddMenu from './AddMenu';
 import Menu from './Menu';
 
-import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 
 export default function MenuList() {
-  // useDispatch
-  // const dispatch = useDispatch();
-  // useSelector
-  // const tab = useSelector((state) => state.tabState.title);
-  // const selectedCategory = useSelector((state) => state.categoryState);
-  // const isSubmit = useSelector((state) => state.submitState.isSubmit);
-  // const submitError = useSelector((state) => state.submitState.isError);
-  // const submitStatus = useSelector((state) => state.submitState.status);
   // hook
   const menuList = useQueryMenuList();
   // store
   const tab = useBoundStore((state) => state.tab.title);
-  const isSubmit = useBoundStore((state) => state.submit.isSubmit);
   const submitStatus = useBoundStore((state) => state.submit.status);
-  const submitError = false;
+  const submitError = useBoundStore((state) => state.submit.isError);
   const selectedCategory = useBoundStore((state) => state.category);
   const changeModalState = useBoundStore((state) => state.changeModalState);
   const getItemInfo = useBoundStore((state) => state.getItemInfo);
 
-  // 메뉴 새로 패치
+  // 메뉴 리패치
   useEffect(() => {
     /*
       메뉴 생성 리패치, useEffect 사용 이유
-      - ModalFormState.jsx에서 추가하기 버튼을 누른 다음 리패치는 새로운 데이터를 받아오지 못함
-        dispatch, await 코드 순은 순서대로 동작하지 않음  
-      - menuList의 useQuery key 추가 할당은 enabled 설정이 복잡하고 서로 다른 쿼리가 생성되어 캐시 공유 못함
+      - useModalSubmitData.js에서 리패치 적용은 새로운 데이터를 받아오지 못함
+        : "pending", "fulfilled", "rejected" 상태 변화로 최신화 데이터 정확하게 못 받음
+      - useQueryMenuList는 초기 상태 선언 필요로 useFetchSlice.js에서 리패치 선언 불가
     */
     //  refetch 제한
     if (tab !== 'menu') return;
-    if (!isSubmit) return;
     if (menuList.isFetched && submitStatus === 'fulfilled') {
       menuList.refetch();
     }
-  }, [tab, isSubmit, submitStatus, menuList]);
+  }, [tab, submitStatus, menuList]);
 
   // 모달창 열기
   function onClickOpenModal(modalType, list) {
     return () => {
       if (submitError) return;
-      // dispatch(changeModalState({ type: modalType, isOpen: true }));
       changeModalState({ type: modalType, isOpen: true });
       // 상품 추가
       if (modalType === 'insert') {
         // 전체메뉴 카테고리일 때 빈 문자열로 분류 미지정 할당
         const sort = selectedCategory.title === '전체메뉴' ? '' : selectedCategory.title;
-        // dispatch(getItemInfo({ item: list, sort }));
         getItemInfo({ item: list, sort });
         return;
       }
       // 상품 수정
-      // dispatch(getItemInfo({ item: list }));
       getItemInfo({ item: list });
     };
   }
