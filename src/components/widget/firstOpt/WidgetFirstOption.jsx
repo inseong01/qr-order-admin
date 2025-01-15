@@ -4,38 +4,38 @@ import { useBoundStore } from '../../../lib/store/useBoundStore';
 import WidgetFirstOptionCategories from './WidgetFirstOptionCategories';
 
 import { motion, AnimatePresence } from 'motion/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 
 function Icon() {
   // hook
   const isEdit = useBoundStore((state) => state.widget.isEdit);
   return (
-    <div className={styles.icon}>
-      <AnimatePresence mode="wait" initial={false}>
-        {!isEdit ? (
-          <motion.img
-            src={'/img/edit-icon.webp'}
-            alt="편집"
-            style={{ width: 20, height: 20 }}
-            key={'box1'}
-            initial={{ x: 20 }}
-            animate={{ x: 0 }}
-            exit={{ x: -20 }}
-            transition={{ duration: 0.3, ease: 'easeOut' }}
-          />
-        ) : (
-          <motion.img
-            src={'/img/checkmark.webp'}
-            alt="편집 저장"
-            style={{ width: 20, height: 20 }}
-            key={'box2'}
-            initial={{ x: 20 }}
-            animate={{ x: 0 }}
-            exit={{ x: -20 }}
-            transition={{ duration: 0.3, ease: 'easeOut' }}
-          />
-        )}
-      </AnimatePresence>
-    </div>
+    <AnimatePresence mode="wait" initial={false}>
+      {!isEdit ? (
+        <motion.div
+          className={styles.icon}
+          key={'box1'}
+          initial={{ x: 20 }}
+          animate={{ x: 0 }}
+          exit={{ x: -20 }}
+          transition={{ duration: 0.3, ease: 'easeOut' }}
+        >
+          <FontAwesomeIcon icon={faPenToSquare} size="lg" />
+        </motion.div>
+      ) : (
+        <motion.div
+          className={styles.icon}
+          key={'box2'}
+          initial={{ x: 20 }}
+          animate={{ x: 0 }}
+          exit={{ x: -20 }}
+          transition={{ duration: 0.3, ease: 'easeOut' }}
+        >
+          <FontAwesomeIcon icon={faCheck} size="lg" />
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 

@@ -28,7 +28,7 @@ export const middleSpanVariant = {
 export const lastSpanVariant = {
   clicked: {
     rotateZ: -45,
-    y: -6,
+    y: -7,
   },
   notClicked: {
     rotateZ: 0,

@@ -2,6 +2,8 @@ import styles from '@/style/modal/menu/CreateAndEditMenu.module.css';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
 
 import { useRef, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 export default function CreateAndEditMenu({ onSubmitData, onChangeInputValue, value, categoryList }) {
   // store
@@ -35,8 +37,8 @@ export default function CreateAndEditMenu({ onSubmitData, onChangeInputValue, va
       <label htmlFor="fileInput" className={styles.left}>
         {!isPrevImg ? (
           <>
-            <div className={`${styles.iconBox} `}>
-              <img src={'/img/img-add-icon.webp'} alt="사진 추가" />
+            <div className={styles.iconBox}>
+              <FontAwesomeIcon icon={faPlus} size="xl" />
             </div>
             <div className={styles.title}>{modalType === 'insert' ? '사진 추가' : '사진 변경'}</div>
           </>

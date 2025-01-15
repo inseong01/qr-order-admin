@@ -43,6 +43,7 @@
 
 /* 추가 버튼 */
 .addBtn {
+  color: #222;
   border: 2px solid #222;
   background-color: transparent;
   font-weight: 600;
@@ -53,10 +54,14 @@
   align-items: center;
   gap: 5px;
 }
-.addBtn img {
+.iconBox {
+  width: 32px;
+  height: 32px;
+}
+/* .addBtn img {
   width: 30px;
   height: 30px;
-}
+} */
 
 @media (max-width: 1600px) {
   .list {

@@ -90,7 +90,9 @@
   width: 100%;
   color: white;
   background-color: #4caff8;
-  padding: 2px 16px;
+  padding: 2px;
+  padding-left: 16px;
+  padding-right: 8px;
 
   display: flex;
   justify-content: space-between;

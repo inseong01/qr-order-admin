@@ -2,6 +2,8 @@ import styles from '@/style/swiper/order/ListSlideOption.module.css';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
 
 import { AnimatePresence, motion } from 'motion/react';
+import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default function ListSlideOption({ list }) {
   // store
@@ -24,7 +26,7 @@ export default function ListSlideOption({ list }) {
           style={{ x: '-50%', y: 12, transform: 'translateX(-50%)' }}
         >
           <li className={styles.option} onClick={onClickCloseListOption}>
-            <img src={'/img/close-icon.webp'} alt="옵션 닫기" style={{ width: 30, height: 30 }} />
+            <FontAwesomeIcon icon={faCircleXmark} size="xl" />
           </li>
         </motion.ul>
       )}

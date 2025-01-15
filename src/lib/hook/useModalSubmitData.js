@@ -28,19 +28,19 @@ export default function useModalSubmitData() {
 
   // 제출 후 상태 초기화
   useEffect(() => {
-    if (!isSubmit) return;
+    if (submitStatus !== 'fulfilled') return;
     // 주문 삭제/완료 처리 되었다면
-    if (tab === 'order' && submitStatus === 'fulfilled') {
+    if (tab === 'order') {
       resetItemState();
     }
     // 카테고리 수정/삭제 되었다면
-    if (tab === 'menu' && modalType.includes('category') && submitStatus === 'fulfilled') {
+    if (tab === 'menu' && modalType.includes('category')) {
       // 없는 카테고리 빈 목록 창 방지, 초기 카테고리로 이동
       resetCategoryState();
       /* 선택 항목 초기화는 퇴장 애니메이션 중 모달 창 변경 발생, 
       menu 탭에서는 카테고리만 list 상태 사용 중, 탭 전환 때만 초기화 적용 */
     }
-  }, [tab, isSubmit, submitStatus, modalType]);
+  }, [submitStatus]);
 
   // 입력 함수
   function onChangeInputValue(e) {

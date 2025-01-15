@@ -32,6 +32,12 @@
   color: #777;
 }
 .title {
-  line-height: 15px;
+  line-height: 18px;
   font-size: 15px;
+}
+
+.iconBox {
+  width: 14px;
+  height: 14px;
+  display: flex;
 }

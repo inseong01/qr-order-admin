@@ -1,4 +1,6 @@
 import styles from '@/style/AlertMsg.module.css';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -20,7 +22,7 @@ export default function DisplayedAlertMessage({ requestAlertList, onClickReadMsg
               <div className={styles.top}>
                 <div className={styles.title}>테이블 {tableNum}</div>
                 <div className={styles.closeBtn} onClick={onClickReadMsg(list)}>
-                  <img src="/img/close-icon.webp" alt="닫기" />
+                  <FontAwesomeIcon icon={faXmark} size="lg" />
                 </div>
               </div>
               <div className={styles.bottom}>

@@ -2,7 +2,6 @@ const initialState = {
   submit: {
     isSubmit: false,
     status: '',
-    // status: 'initial',
     alertType: '',
     msgType: '',
     callCount: 0,
@@ -22,22 +21,6 @@ export const useSubmitSlice = process.env.NODE_ENV === 'development' ?
         }
       }
     }, undefined, 'submit/changeSubmitMsgType'),
-    changeSubmitStatus: ({ status }) => set((state) => {
-      return {
-        submit: {
-          ...state.submit,
-          status
-        }
-      }
-    }, undefined, 'submit/changeSubmitStatus'),
-    changeSubmitState: ({ isSubmit }) => set((state) => {
-      return {
-        submit: {
-          ...state.submit,
-          isSubmit,
-        }
-      }
-    }, undefined, 'submit/changeSubmitState')
   }) :
   (set) => ({
     ...initialState,
@@ -50,18 +33,4 @@ export const useSubmitSlice = process.env.NODE_ENV === 'development' ?
         }
       }
     }),
-    changeSubmitStatus: ({ status }) => set((state) => {
-      return {
-        submit: {
-          ...state.submit,
-          status
-        }
-      }
-    }),
-    changeSubmitState: ({ isSubmit }) => set((state) => {
-      return {
-        ...state,
-        isSubmit
-      }
-    })
   })

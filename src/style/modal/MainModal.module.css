@@ -5,7 +5,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: transparent;
-  padding: 20px;
+  padding: 22px;
   z-index: 99999;
 }
 .backdrop {
@@ -20,10 +20,12 @@
 
 /* 닫는 버튼 */
 .closeBtn {
-  width: 20px;
-  height: 20px;
+  width: auto;
+  height: auto;
   position: absolute;
   top: 0;
   right: 0;
   cursor: pointer;
+
+  color: white;
 }

@@ -2,6 +2,8 @@ import styles from '@/style/middle/MenuList.module.css';
 import { list_motion } from '../../lib/motion/motion_mainPageMenuTab';
 
 import { motion } from 'motion/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 export default function AddMenu({ onClickOpenModal }) {
   return (
@@ -10,7 +12,9 @@ export default function AddMenu({ onClickOpenModal }) {
       onClick={onClickOpenModal('insert')}
       variants={list_motion}
     >
-      <img src={'/img/add-icon.webp'} alt="상품 추가" />
+      <div className={styles.iconBox}>
+        <FontAwesomeIcon icon={faPlus} size="2xl" />
+      </div>
       <div className="title">상품 추가</div>
     </motion.li>
   );

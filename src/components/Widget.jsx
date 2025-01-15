@@ -18,7 +18,11 @@ export default function Widget() {
   // 외부 선택으로 위젯 닫기
   useEffect(() => {
     function onClickWindowToCloseWidget(e) {
+      // 모달 열려 있을 때 클릭 방지
       if (isModalOpen) return;
+      // icon(path) 클릭 시 닫기 방지
+      const isNodePath = e.target.tagName === 'path' || e.target.tagName === 'svg';
+      if (isNodePath) return;
       const isWindowClicked = e.target.offsetParent !== widgetRef.current; // offsetParent = widgetWrap
       if (isWidgetOpen && isWindowClicked && !isTableEditAble) {
         resetWidgetState();

@@ -4,6 +4,8 @@ import ModalFormState from './ModalFormState';
 
 import { useRef } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 export default function MainModal() {
   // useRef
@@ -32,7 +34,7 @@ export default function MainModal() {
           >
             <ModalFormState />
             <div className={styles.closeBtn} onClick={onClickCloseModal}>
-              <img src={'/img/close.webp'} alt="닫기" style={{ width: 20, height: 20 }} />
+              <FontAwesomeIcon icon={faXmark} size="xl" />
             </div>
           </motion.dialog>
           <motion.div

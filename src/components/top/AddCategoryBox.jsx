@@ -2,6 +2,8 @@ import styles from '@/style/top/HeaderLeft.module.css';
 import { useBoundStore } from '../../lib/store/useBoundStore';
 
 import { motion } from 'motion/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 export default function AddCategoryBox() {
   // store
@@ -25,7 +27,9 @@ export default function AddCategoryBox() {
           animate={{ opacity: 1 }}
         >
           <div className={styles.category}>
-            <img src={'/img/category-add-icon.webp'} alt="분류 추가" style={{ width: 15, height: 15 }} />
+            <div className={styles.iconBox}>
+              <FontAwesomeIcon icon={faPlus} size="xs" />
+            </div>
             <div className={styles.title}>분류</div>
           </div>
         </motion.div>
