@@ -8,10 +8,9 @@ const LazyMainPageOrderTab = lazy(() => import('./MainPageOrderTab'));
 
 export default function MainPageList() {
   // store
+  const tab = useBoundStore((state) => state.tab.title);
   const isSubmit = useBoundStore((state) => state.submit.isSubmit);
   const submitStatus = useBoundStore((state) => state.submit.status);
-  // store
-  const tab = useBoundStore((state) => state.tab.title);
   const changeModalState = useBoundStore((state) => state.changeModalState);
 
   // 제출 완료 시 모달 닫음

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 
 export default function CurrentTimer() {
-  // useState
   const [date, setDate] = useState(new Date().toLocaleDateString());
   const [time, setTime] = useState(new Date().toLocaleTimeString().slice(0, -3));
 

@@ -10,7 +10,6 @@ import { useBoundStore } from '../../lib/store/useBoundStore';
 import { motion } from 'motion/react';
 
 export default function WidgetBtn() {
-  // store
   const isWidgetOpen = useBoundStore((state) => state.widget.isOpen);
   const editTableType = useBoundStore((state) => state.konva.type);
   const isModalOpen = useBoundStore((state) => state.modal.isOpen);

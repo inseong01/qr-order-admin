@@ -7,7 +7,6 @@ import WidgetSecondOption from './secondOpt/WidgetSecondOption';
 import { motion } from 'motion/react';
 
 export default function WidgetOptions() {
-  // store
   const isSubmit = useBoundStore((state) => state.submit.isSubmit);
   const submitError = useBoundStore((state) => state.submit.isError);
   const isModalOpen = useBoundStore((state) => state.modal.isOpen);

@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 export default function AddCategoryBox() {
-  // store
   const tab = useBoundStore((state) => state.tab.title);
   const isModalOpen = useBoundStore((state) => state.modal.isOpen);
   const submitError = useBoundStore((state) => state.submit.isError);

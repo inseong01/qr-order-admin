@@ -1,9 +1,9 @@
-import MenuModal from './MenuModal';
+import MenuModal from './menu/MenuModal';
 import { useBoundStore } from '../../lib/store/useBoundStore';
 
 import { lazy, Suspense } from 'react';
 
-const LazyTableModal = lazy(() => import('./TableModal'));
+const LazyTableModal = lazy(() => import('./table/TableModal'));
 
 export default function ModalFormState() {
   const tab = useBoundStore((state) => state.tab.title);

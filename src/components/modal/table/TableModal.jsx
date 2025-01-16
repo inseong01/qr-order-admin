@@ -1,4 +1,4 @@
-import { useBoundStore } from '../../lib/store/useBoundStore';
+import { useBoundStore } from '../../../lib/store/useBoundStore';
 import TableInfoModal from './TableInfoModal';
 
 export default function TableModal() {

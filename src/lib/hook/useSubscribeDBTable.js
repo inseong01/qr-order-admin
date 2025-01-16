@@ -16,7 +16,7 @@ import { useEffect } from 'react';
 // - 업데이트 되면 데이터 갱신되도록, 원본 캐시 useQuery 위치 중요
 // - useQuery 커스텀훅 "staleTime: Infinity"로 매번 리렌더링 방지
 
-export default function useSubscribeDBTable(method) {
+export function useSubscribeDBTable(method) {
   const requestList = useQueryRequestList();
   const allOrderList = useQueryAllOrderList();
 

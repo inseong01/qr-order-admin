@@ -1,4 +1,4 @@
-import styles from '@/style/swiper/HeaderCategorySwiper.module.css';
+import styles from '@/style/swiper/header/HeaderCategorySwiper.module.css';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
 import UnderLine from '../../UnderLine';
 

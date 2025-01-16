@@ -1,20 +1,15 @@
 import styles from '@/style/modal/table/TableInfo.module.css';
-import createReceipt from '../../../lib/function/createReceipt';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
-import OrderListBox from './OrderListBox';
-import QRcodeBox from './QRcodeBox';
+import SwitchContentBox from './SwitchContentBox';
 
 import { useState } from 'react';
-import { AnimatePresence, motion } from 'motion/react';
+import { motion } from 'motion/react';
 
 export default function TableInfo() {
   // store
   const tableInfo = useBoundStore((state) => state.itemBox.selectedTable);
   // useState
   const [isCicked, clickDiv] = useState(false);
-  // variable
-  const allOrderList = tableInfo.order?.map((list) => list.orderList);
-  const billArr = createReceipt(allOrderList);
 
   function onClickChangeBox() {
     clickDiv((prev) => !prev);
@@ -28,11 +23,7 @@ export default function TableInfo() {
           <motion.div layout className={styles.toggle}></motion.div>
         </div>
       </div>
-      <div className={styles.content}>
-        <AnimatePresence mode="wait" initial={false}>
-          {isCicked ? <QRcodeBox tableNum={tableInfo.tableNum} /> : <OrderListBox listData={billArr} />}
-        </AnimatePresence>
-      </div>
+      <SwitchContentBox isCicked={isCicked} />
     </>
   );
 }

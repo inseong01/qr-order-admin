@@ -1,6 +1,6 @@
-import styles from '@/style/modal/TableInfoModal.module.css';
-import useModalSubmitData from '../../lib/hook/useModalSubmitData';
-import TableInfo from './table/TableInfo';
+import styles from '@/style/modal/table/TableInfoModal.module.css';
+import useModalSubmitData from '../../../lib/hook/useModalSubmitData';
+import TableInfo from './TableInfo';
 
 export default function TableInfoModal() {
   const { onSubmitData } = useModalSubmitData();

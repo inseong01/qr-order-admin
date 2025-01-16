@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 
 function Icon() {
-  // hook
   const isEdit = useBoundStore((state) => state.widget.isEdit);
   return (
     <AnimatePresence mode="wait" initial={false}>

@@ -1,5 +1,5 @@
-import useQueryMenuList from '../../lib/hook/useQuery/useQueryMenuList';
-import { useBoundStore } from '../../lib/store/useBoundStore';
+import useQueryMenuList from '../../../lib/hook/useQuery/useQueryMenuList';
+import { useBoundStore } from '../../../lib/store/useBoundStore';
 import AddMenu from './AddMenu';
 import Menu from './Menu';
 
@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 
 export default function MenuList() {
   // hook
-  const menuList = useQueryMenuList();
+  const { data, isFetched, refetch } = useQueryMenuList();
   // store
   const tab = useBoundStore((state) => state.tab.title);
   const submitStatus = useBoundStore((state) => state.submit.status);
@@ -26,10 +26,10 @@ export default function MenuList() {
     */
     //  refetch 제한
     if (tab !== 'menu') return;
-    if (menuList.isFetched && submitStatus === 'fulfilled') {
-      menuList.refetch();
+    if (isFetched && submitStatus === 'fulfilled') {
+      refetch();
     }
-  }, [tab, submitStatus, menuList]);
+  }, [tab, submitStatus, isFetched]);
 
   // 모달창 열기
   function onClickOpenModal(modalType, list) {
@@ -50,9 +50,9 @@ export default function MenuList() {
 
   return (
     <>
-      {menuList.data && (
+      {data && (
         <>
-          {menuList.data?.map((list, idx) => {
+          {data?.map((list, idx) => {
             return <Menu key={idx} onClickOpenModal={onClickOpenModal} list={list} />;
           })}
           <AddMenu onClickOpenModal={onClickOpenModal} />

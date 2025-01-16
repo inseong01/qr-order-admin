@@ -1,4 +1,4 @@
-import styles from '@/style/swiper/HeaderCategorySwiper.module.css';
+import styles from '@/style/swiper/header/HeaderCategorySwiper.module.css';
 import HeaderCategoryBox from './HeaderCategoryBox';
 import OrderCategoryAlert from '../../top/OrderCategoryAlert';
 

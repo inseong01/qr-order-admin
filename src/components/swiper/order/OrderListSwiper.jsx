@@ -1,6 +1,6 @@
-import styles from '@/style/swiper/OrderListSwiper.module.css';
-import OrderListSlide from './order/OrderListSlide';
-import { swiper_motion } from '../../lib/motion/motion_mainPageOrderTab';
+import styles from '@/style/swiper/order/OrderListSwiper.module.css';
+import { swiper_motion } from '../../../lib/motion/motion_mainPageOrderTab';
+import OrderListSlide from './OrderListSlide';
 
 import { motion } from 'motion/react';
 

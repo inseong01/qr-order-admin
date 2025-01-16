@@ -1,4 +1,4 @@
-import styles from '@/style/WidgetCategoryList.module.css';
+import styles from '@/style/widget/WidgetCategoryList.module.css';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
 
 import { motion, AnimatePresence } from 'motion/react';

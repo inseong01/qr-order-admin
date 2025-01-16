@@ -1,4 +1,4 @@
-import styles from '@/style/WidgetCategoryList.module.css';
+import styles from '@/style/widget/WidgetCategoryList.module.css';
 import { option, optionList } from '../../../lib/motion/motion_widgetOption';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
 

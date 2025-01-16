@@ -3,7 +3,6 @@ import TabMenu from './TabMenu';
 
 // DB, footerList 추가 시 tabSlice.js switch case 영문 명 반환 추가
 export default function FooterList() {
-  // useQuery
   const { data } = useQueryTabMenu();
 
   return (

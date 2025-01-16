@@ -1,5 +1,5 @@
-import styles from '@/style/middle/MenuList.module.css';
-import { list_motion } from '../../lib/motion/motion_mainPageMenuTab';
+import styles from '@/style/middle/menu/MenuList.module.css';
+import { list_motion } from '../../../lib/motion/motion_mainPageMenuTab';
 
 import { motion } from 'motion/react';
 

@@ -1,4 +1,4 @@
-import styles from '@/style/swiper/HeaderCategorySwiper.module.css';
+import styles from '@/style/swiper/header/HeaderCategorySwiper.module.css';
 import { throttle } from '../../../lib/function/throttle';
 import useScroll from '../../../lib/hook/useScroll';
 import { useBoundStore } from '../../../lib/store/useBoundStore';

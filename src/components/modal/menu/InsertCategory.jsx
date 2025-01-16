@@ -1,45 +1,5 @@
 import styles from '@/style/modal/menu/InsertCategory.module.css';
-import { useBoundStore } from '../../../lib/store/useBoundStore';
-
-function CategoryInfo({ type, onChangeInputValue }) {
-  const selectedList = useBoundStore((state) => state.itemBox.list);
-  switch (type) {
-    case 'insert': {
-      return (
-        <li className={styles.info}>
-          <input
-            required
-            type="text"
-            className={styles.input}
-            name="title"
-            onChange={onChangeInputValue}
-            placeholder={'분류명을 입력해주세요'}
-          />
-        </li>
-      );
-    }
-    case 'update': {
-      return selectedList.map((list, idx) => {
-        return (
-          <li key={idx} className={styles.info}>
-            <div className={styles.subtitle} title={list.title}>
-              {list.title}
-            </div>
-            <input
-              required
-              type="text"
-              className={styles.input}
-              name="title"
-              onChange={onChangeInputValue}
-              placeholder={'분류명을 입력해주세요'}
-              data-id={list.id}
-            />
-          </li>
-        );
-      });
-    }
-  }
-}
+import TypeCategoryInfo from './TypeCategoryInfo';
 
 export default function InsertCategory({ type, onSubmitData, onChangeInputValue }) {
   return (
@@ -47,7 +7,7 @@ export default function InsertCategory({ type, onSubmitData, onChangeInputValue 
       <div className={`${styles.sortModal}`}>
         <div className={styles.title}>분류명</div>
         <ul className={styles.submitInfo}>
-          <CategoryInfo type={type} onChangeInputValue={onChangeInputValue} />
+          <TypeCategoryInfo type={type} onChangeInputValue={onChangeInputValue} />
         </ul>
 
         <div className={styles.submitBtn}>

@@ -5,7 +5,6 @@ import { AnimatePresence } from 'motion/react';
 import { useEffect } from 'react';
 
 export default function WidgetOptionWrap() {
-  // store
   const isWidgetOpen = useBoundStore((state) => state.widget.isOpen);
   const editTableType = useBoundStore((state) => state.konva.type);
   const editTableisEditing = useBoundStore((state) => state.konva.isEditing);

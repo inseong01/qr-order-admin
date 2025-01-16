@@ -1,7 +1,6 @@
 import { useBoundStore } from '../../store/useBoundStore';
 
 export default function useEditTable() {
-  // store
   const konvaEditType = useBoundStore((state) => state.konva.type);
   const konvaEditTableIdArr = useBoundStore((state) => state.konva.target.id);
   const konvaEditIsEditing = useBoundStore((state) => state.konva.isEditing);

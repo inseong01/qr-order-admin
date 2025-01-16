@@ -4,7 +4,6 @@ import CurrentTimer from './CurrentTimer';
 import { useEffect, useState } from 'react';
 
 export default function HeaderRight() {
-  // useState
   const [isFirstRender, setIsFirstRender] = useState(true);
 
   // 첫 렌더링 이후 렌더링 제한
