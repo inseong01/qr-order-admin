@@ -1,4 +1,4 @@
-import styles from '../style/underLine.module.css';
+import styles from '../style/UnderLine.module.css';
 
 import { motion } from 'motion/react';
 
