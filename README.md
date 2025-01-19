@@ -34,7 +34,8 @@
 
 ## 미리보기
 
-클릭하면 [QR-ORDER Admin 전용 서비스](https://qr-code-admin-inseong01-inseongs-projects-ab5eeeed.vercel.app/)를 웹 브라우저에서 경험할 수 있어요 
+클릭하면 [QR-ORDER Admin 전용 서비스](https://qr-code-admin-inseong01-inseongs-projects-ab5eeeed.vercel.app/)를 웹 브라우저에서 경험할 수 있어요.   
+PC 접속을 권장드려요 😊
 
 ## 설치하기
 ```bash

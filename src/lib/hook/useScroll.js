@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { measureCallbackCount } from "../function/measureCallbackCount";
 
 export default function useScroll(ref) {
   const [scrollStart, geScrollX] = useState({});
@@ -18,6 +19,11 @@ export default function useScroll(ref) {
 
   // 드래그 시작
   function onDragStart(e) {
+    // throttle 측정 시작 (개발 전용)
+    if (import.meta.env.DEV) {
+      // 60fps 지향, delay는 최대 16.666ms
+      measureCallbackCount(0, 15)
+    }
     geScrollX({ x: e.clientX, scrollX: ref.current.scrollLeft });
     // 드래그 사진 잔상 투명화
     const img = new Image();
