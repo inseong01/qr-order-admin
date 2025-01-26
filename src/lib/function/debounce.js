@@ -3,7 +3,6 @@ export function debounce(callback, delay) {
   return () => {
     clearTimeout(timer);
     timer = setTimeout(() => {
-      console.log('process', callback)
       callback()
     }, delay)
   }
