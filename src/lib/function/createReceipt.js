@@ -1,34 +1,34 @@
-const mockArr = [
-  [
-    {
-      "name": "음식 이름 2",
-      "price": 20,
-      "amount": 1
-    },
-    {
-      "name": "음식 이름 3",
-      "price": 400,
-      "amount": 1
-    }
-  ],
-  [
-    {
-      "name": "음식 이름 1",
-      "price": 1000,
-      "amount": 1
-    },
-    {
-      "name": "음식 이름 4",
-      "price": 1000,
-      "amount": 1
-    },
-    {
-      "name": "음식 이름 3",
-      "price": 400,
-      "amount": 1
-    }
-  ]
-]
+// const mockArr = [
+//   [
+//     {
+//       "name": "음식 이름 2",
+//       "price": 20,
+//       "amount": 1
+//     },
+//     {
+//       "name": "음식 이름 3",
+//       "price": 400,
+//       "amount": 1
+//     }
+//   ],
+//   [
+//     {
+//       "name": "음식 이름 1",
+//       "price": 1000,
+//       "amount": 1
+//     },
+//     {
+//       "name": "음식 이름 4",
+//       "price": 1000,
+//       "amount": 1
+//     },
+//     {
+//       "name": "음식 이름 3",
+//       "price": 400,
+//       "amount": 1
+//     }
+//   ]
+// ]
 
 function createReceipt(orderList) {
   if (!orderList?.length) return [];

@@ -11,7 +11,8 @@ export default function OrderSection() {
   // variant
   const doneOrderList = data.data ? data.data.filter((arr) => arr.isDone) : [];
   const notDoneOrderList = data.data ? data.data.filter((arr) => !arr.isDone) : [];
-  const descDoneOrderList = [...doneOrderList].sort(
+  const ascNotDoneList = [...notDoneOrderList].sort((a, b) => a.orderNum - b.orderNum);
+  const descDoneList = [...doneOrderList].sort(
     (a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
   );
 
@@ -20,9 +21,9 @@ export default function OrderSection() {
   return (
     <>
       {selectedCategory.id === 0 ? (
-        <OrderListSwiper orderList={notDoneOrderList} />
+        <OrderListSwiper orderList={ascNotDoneList} />
       ) : (
-        <OrderListSwiper orderList={descDoneOrderList} />
+        <OrderListSwiper orderList={descDoneList} />
       )}
     </>
   );

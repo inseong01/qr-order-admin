@@ -350,7 +350,20 @@
     : <Widget /> lazy 적용
   - README 작성
   
-<--- swiper 반응형 설정: 모바일 가로로 회전 --->
 25.1.19.
   - throttle 측정 추가
   - docs 수정
+
+25.1.26.
+  - 반응형 CSS 수정
+    : 주문 탭
+  - UX 개선
+    : toggle 커서 변경
+
+  - 수정할 것
+    : 미완료 주문 번호 할당, int8 자동 부여 값과 이전 부여하지 않은 행에 SQL로 할당한 숫자 값이 서로 겹치고 있음,
+    **int8 초기화 하는 기능 추가 필요, JS 방법 필요
+      SQL 설정 방법
+      -> https://stackoverflow.com/questions/73800232/how-to-reset-the-auto-incremented-id-column-to-1-whenever-i-seed-the-database-in
+
+<--- swiper 반응형 설정: 모바일 가로로 회전 --->

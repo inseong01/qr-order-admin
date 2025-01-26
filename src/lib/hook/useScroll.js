@@ -19,7 +19,7 @@ export default function useScroll(ref) {
 
   // 드래그 시작
   function onDragStart(e) {
-    // throttle 측정 시작 (개발 전용)
+    // throttle 측정 시작
     if (import.meta.env.DEV) {
       // 60fps 지향, delay는 최대 16.666ms
       measureCallbackCount(0, 15)
