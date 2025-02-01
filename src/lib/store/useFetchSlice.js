@@ -15,7 +15,7 @@ export const useFetchSlice = process.env.NODE_ENV === 'development' ?
           ...state.submit,
           status: 'pending',
           isSubmit: true,
-          alertType: 'list',
+          alertType: 'category',
           msgType: method === 'upsert' ? 'update' : method
         }
       }))
@@ -50,13 +50,14 @@ export const useFetchSlice = process.env.NODE_ENV === 'development' ?
     },
     // 메뉴 생성/수정/삭제
     fetchFormMenuItem: async ({ method, itemInfo, table, file, adminId }) => {
+      console.log(itemInfo)
       // pending
       set((state) => ({
         submit: {
           ...state.submit,
           status: 'pending',
           isSubmit: true,
-          alertType: 'list',
+          alertType: 'menu',
           msgType: method
         }
       }), undefined, 'fetchFormMenuItem/pending')
@@ -215,7 +216,7 @@ export const useFetchSlice = process.env.NODE_ENV === 'development' ?
           ...state.submit,
           status: 'pending',
           isSubmit: true,
-          alertType: 'list',
+          alertType: 'category',
           msgType: method === 'upsert' ? 'update' : method
         }
       }))
@@ -255,7 +256,7 @@ export const useFetchSlice = process.env.NODE_ENV === 'development' ?
           ...state.submit,
           status: 'pending',
           isSubmit: true,
-          alertType: 'list',
+          alertType: 'menu',
           msgType: method
         }
       }))

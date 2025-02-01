@@ -7,7 +7,6 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 export default function CreateAndEditMenu({ onSubmitData, onChangeInputValue, value, categoryList }) {
   // store
-  const categoryTitle = useBoundStore((state) => state.category.title);
   const categoryId = useBoundStore((state) => state.category.id);
   const modalType = useBoundStore((state) => state.modal.type);
   // useRef
@@ -101,9 +100,11 @@ export default function CreateAndEditMenu({ onSubmitData, onChangeInputValue, va
               {categoryList?.map((category) => {
                 // 카테고리, 0: 전체메뉴
                 return (
-                  <option key={category.id} value={category.id} disabled={category.id === 0}>
-                    {category.title}
-                  </option>
+                  category.id !== 0 && (
+                    <option key={category.id} value={category.id} disabled={category.id === 0}>
+                      {category.title}
+                    </option>
+                  )
                 );
               })}
             </select>

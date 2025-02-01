@@ -4,6 +4,7 @@
   border: 1px solid #4caff8;
   border-radius: 10px;
   background-color: #4caff8;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 
   display: flex;
   justify-content: center;

@@ -11,6 +11,7 @@ export default function HeaderLeft() {
   const categoryList = useQueryCategoryList();
   // store
   const tab = useBoundStore((state) => state.tab.title);
+  const alertType = useBoundStore((state) => state.submit.alertType);
   const submitStatus = useBoundStore((state) => state.submit.status);
   // useState
   const [isAbleRefetch, setAbleRefetch] = useState(true);
@@ -24,7 +25,9 @@ export default function HeaderLeft() {
       - 무한 리패치
         : flag 세워서 한 번만 되도록 설정, 불필요 의존성 제외  
     */
+    // 카테고리 관련일 때 리패치
     if (tab !== 'menu') return;
+    if (alertType !== 'category') return;
 
     setAbleRefetch(true);
 

@@ -32,6 +32,8 @@ export default function AlertMsg() {
   if (submitStatus === 'pending') return;
 
   switch (alertType) {
+    case 'menu':
+    case 'category':
     case 'list':
     case 'product': {
       return <CommonMsgType isAlert={isAlert} />;

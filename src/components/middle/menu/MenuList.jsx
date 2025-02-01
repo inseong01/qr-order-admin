@@ -26,6 +26,7 @@ export default function MenuList() {
     */
     //  refetch 제한
     if (tab !== 'menu') return;
+    // 메뉴 생성/수정 시 메뉴 리패치
     if (isFetched && submitStatus === 'fulfilled') {
       refetch();
     }
@@ -38,9 +39,9 @@ export default function MenuList() {
       changeModalState({ type: modalType, isOpen: true });
       // 상품 추가
       if (modalType === 'insert') {
-        // 전체메뉴 카테고리일 때 빈 문자열로 분류 미지정 할당
-        const sort = selectedCategory.title === '전체메뉴' ? '' : selectedCategory.title;
-        getItemInfo({ item: list, sort });
+        // 전체메뉴 카테고리일 때 분류 미지정 할당, 에러 발생
+        const sortId = selectedCategory.id === 0 ? null : selectedCategory.id;
+        getItemInfo({ item: list, sortId });
         return;
       }
       // 상품 수정
