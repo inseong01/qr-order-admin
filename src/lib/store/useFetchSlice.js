@@ -18,7 +18,7 @@ export const useFetchSlice = process.env.NODE_ENV === 'development' ?
           alertType: 'list',
           msgType: method === 'upsert' ? 'update' : method
         }
-      }), undefined, 'fetchFormCategoryItem/pending')
+      }))
       // fetching
       const fetchResult = await fetchMenuItem({ method, itemInfo, table })
       // rejected 추후 함수 처리
@@ -60,15 +60,12 @@ export const useFetchSlice = process.env.NODE_ENV === 'development' ?
           msgType: method
         }
       }), undefined, 'fetchFormMenuItem/pending')
-      // fetching
-      // 원본 복제
-      const copyItemInfo = { ...itemInfo };
       // 사진 경로 생성
-      const imgPath = createImgPath({ method, file, itemInfo: copyItemInfo, adminId });
+      const imgPath = createImgPath({ method, file, itemInfo, adminId });
       // 사진 파일 전송
       const imgResult = await fetchMenuImage({ method, file, imgPath })
       // 메뉴 정보 전송
-      const fetchResult = await fetchMenuItem({ method, itemInfo: copyItemInfo, table, imgPath })
+      const fetchResult = await fetchMenuItem({ method, itemInfo, table, imgPath })
       // rejected 추후 함수 처리
       if (imgResult?.error || !fetchResult.status.toString().startsWith('2')) {
         set((state) => {
@@ -262,15 +259,12 @@ export const useFetchSlice = process.env.NODE_ENV === 'development' ?
           msgType: method
         }
       }))
-      // fetching
-      // 원본 복제
-      const copyItemInfo = { ...itemInfo };
       // 사진 경로 생성
-      const imgPath = createImgPath({ method, file, itemInfo: copyItemInfo, adminId });
+      const imgPath = createImgPath({ method, file, itemInfo, adminId });
       // 사진 파일 전송
       const imgResult = await fetchMenuImage({ method, file, imgPath })
       // 메뉴 정보 전송
-      const fetchResult = await fetchMenuItem({ method, itemInfo: copyItemInfo, table, imgPath })
+      const fetchResult = await fetchMenuItem({ method, itemInfo, table, imgPath })
       // rejected 추후 함수 처리
       if (imgResult?.error || !fetchResult.status.toString().startsWith('2')) {
         set((state) => {

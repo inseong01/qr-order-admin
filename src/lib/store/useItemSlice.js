@@ -1,9 +1,13 @@
+import { v4 as uuidv4 } from 'uuid';
+
 const initialState = {
   itemBox: {
     item: {
+      id: '',
       name: '',
       price: 0,
-      sort: '',
+      sort: '전체메뉴',
+      sortId: 0,
       tag: '',
       url: '',
     },
@@ -25,16 +29,18 @@ export const useItemSlice = process.env.NODE_ENV === 'development' ?
   (set) => ({
     ...initialState,
     resetItemState: () => set(initialState, undefined, 'itemBox/resetItemState'),
-    getItemInfo: ({ item, sort }) => set((state) => {
+    getItemInfo: ({ item, sortId }) => set((state) => {
       // item 없는 상품 추가 경우
       if (!item) {
+        // 사진 이름 저장으로 uuid 사용
+        const id = uuidv4();
         return {
           itemBox: {
             ...state.itemBox,
             item: {
               ...initialState.itemBox.item,
-              // id,
-              sort
+              id,
+              sortId
             }
           }
         }
@@ -83,17 +89,18 @@ export const useItemSlice = process.env.NODE_ENV === 'development' ?
   (set) => ({
     ...initialState,
     resetItemState: () => set(initialState),
-    getItemInfo: ({ item, sort }) => set((state) => {
-      // const id = uuidv4();
+    getItemInfo: ({ item, sortId }) => set((state) => {
       // item 없는 상품 추가 경우
       if (!item) {
+        // 사진 이름 저장으로 uuid 사용
+        const id = uuidv4();
         return {
           itemBox: {
             ...state.itemBox,
             item: {
               ...initialState.itemBox.item,
-              // id,
-              sort
+              id,
+              sortId
             }
           }
         }

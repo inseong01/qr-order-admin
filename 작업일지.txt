@@ -368,3 +368,8 @@
       -> https://stackoverflow.com/questions/73800232/how-to-reset-the-auto-incremented-id-column-to-1-whenever-i-seed-the-database-in
 
 <--- swiper 반응형 설정: 모바일 가로로 회전 --->
+25.2.1.
+  - 메뉴 이미지 첨부 오류 수정
+    : 메뉴 uuid 부여, 상품명 incode 해서 데이터로 삽입할 수 있지만 콘솔 오류 발생
+  - 메뉴 sort 카테고리명 부여 
+    : 트리거 설정하여 해결

@@ -32,6 +32,15 @@
 ### 기술 스택
 `React` `Tanstack React Query` `Zustand` `Supabase` `Konva`
 
+<!-- ## 미리보기 -->
+<!-- 메뉴 추가/수정/삭제
+카테고리 추가/수정/삭제
+좌석/QR코드 확인
+좌석 생성/수정/삭제
+주문 미/완료 확인
+주문 완료/삭제 -->
+
+<!-- ## 체험하기 -->
 ## 미리보기
 
 클릭하면 [QR-ORDER Admin 전용 서비스](https://qr-code-admin-inseong01-inseongs-projects-ab5eeeed.vercel.app/)를 웹 브라우저에서 경험할 수 있어요.   

@@ -44,7 +44,8 @@ export default function useModalSubmitData() {
   // 입력 함수
   function onChangeInputValue(e) {
     const target = e.target.name;
-    setValue((prev) => ({ ...prev, [target]: e.target.value }));
+    const value = e.target.value;
+    setValue((prev) => ({ ...prev, [target]: value }));
   }
 
   // 폼 제출
@@ -108,8 +109,10 @@ export default function useModalSubmitData() {
           // ----------------------------
           // 임시 admin id 지정
           const adminId = 'store_1';
+          // value readonly 형태, 복사해서 전달
+          const itemInfo = { ...value };
           // 메뉴, 사진 정보 전달
-          fetchFormMenuItem({ method, itemInfo: value, table, file, adminId });
+          fetchFormMenuItem({ method, itemInfo, table, file, adminId });
           // ----------------------------
           break;
         }
