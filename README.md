@@ -32,16 +32,97 @@
 ### 기술 스택
 `React` `Tanstack React Query` `Zustand` `Supabase` `Konva`
 
-<!-- ## 미리보기 -->
-<!-- 메뉴 추가/수정/삭제
-카테고리 추가/수정/삭제
-좌석/QR코드 확인
-좌석 생성/수정/삭제
-주문 미/완료 확인
-주문 완료/삭제 -->
-
-<!-- ## 체험하기 -->
 ## 미리보기
+<details>
+<summary>메뉴 탭</summary>
+
+--- 
+**카테고리 생성**
+
+![](./docs/src/gif/menu/menu-1-create%20category-1.gif)
+
+**지정된 카테고리에서 메뉴 생성 (+사진첨부)**
+
+![](./docs/src/gif/menu/menu-2-create%20menu-1.gif)
+
+**메뉴 삭제**
+
+![](./docs/src/gif/menu/menu-3-update%20delete-1.gif)
+
+**전체메뉴에서 메뉴 생성**
+
+![](./docs/src/gif/menu/menu-4-create%20menu-1.gif)
+
+**카테고리 이름 변경**
+
+![](./docs/src/gif/menu/menu-5-update%20category-1.gif)
+
+**카테고리 삭제**
+
+![](./docs/src/gif/menu/menu-6-delete%20category-1.gif)
+
+[올라가기](#미리보기)
+
+</details>
+
+<details>
+<summary>좌석 탭</summary>
+
+---
+**좌석 정보 확인 (+QR 다운로드)**
+
+![](./docs/src/gif/table/table-7-click%20table-1.gif)
+
+**좌석 요청 수신**
+
+![](./docs/src/gif/table/request/table-1-request%20reception-1.gif)
+
+**좌석 요청 읽음**
+
+![](./docs/src/gif/table/request/table-2-request%20read-1.gif)
+
+**좌석 요청 숨김**
+
+![](./docs/src/gif/table/request/table-3-request%20toggle-1.gif)
+
+**좌석 생성**
+
+![](./docs/src/gif/table/edit/table-4-create%20table-2.gif)
+
+**좌석 수정**
+
+![](./docs/src/gif/table/edit/table-5-update%20table-2.gif)
+
+**좌석 삭제**
+
+![](./docs/src/gif/table/edit/table-6-delete%20table-2.gif)
+
+[올라가기](#미리보기)
+
+</details>
+
+<details>
+<summary>주문 탭</summary>
+
+---
+**주문 수신**
+
+![](./docs/src/gif/order/order-1-reception-1.gif)
+
+**주문 완료 처리**
+
+![](./docs/src/gif/order/order-2-complete-1.gif)
+
+**주문 삭제 처리**
+
+![](./docs/src/gif/order/order-3-delete%20order-1.gif)
+
+[올라가기](#미리보기)
+
+</details>
+
+
+## 체험하기
 
 클릭하면 [QR-ORDER Admin 전용 서비스](https://qr-code-admin-inseong01-inseongs-projects-ab5eeeed.vercel.app/)를 웹 브라우저에서 경험할 수 있어요.   
 
