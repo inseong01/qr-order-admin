@@ -379,3 +379,6 @@
   - docs gif 추가
   
 <--- swiper 반응형 설정: 모바일 가로로 회전 --->
+25.2.3.
+  - JS -> TS 마이그레이션 
+    : store, supabase/func

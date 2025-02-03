@@ -26,7 +26,7 @@ function TabMenuBox({ children, tab }) {
         alert('위젯을 닫고 클릭해주세요');
         return;
       }
-      changeTabState({ tableId: id });
+      changeTabState({ tabId: id });
       resetCategoryState();
       resetItemState();
       // 탭 변경마다 제출 상태 초기화, 에러 상황 예외

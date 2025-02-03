@@ -25,3 +25,7 @@ dist-ssr
 
 .env
 .vercel
+
+/supabase
+/database.types.ts
+/src/vite-env.d.ts

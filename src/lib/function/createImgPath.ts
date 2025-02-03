@@ -1,4 +1,17 @@
-export default function createImgPath({ method, file, itemInfo, adminId }) {
+import { Tables } from '../../../database.types';
+import { AdminId, FileBody, Method } from '../store/useFetchSlice';
+
+export default function createImgPath({
+  method,
+  file,
+  itemInfo,
+  adminId,
+}: {
+  method: Method;
+  file: FileBody;
+  itemInfo: Tables<'qr-order-menu'>;
+  adminId: AdminId;
+}) {
   let imgPath = '';
   let imgName = '';
 
