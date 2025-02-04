@@ -3,7 +3,7 @@ import { useBoundStore } from '../../lib/store/useBoundStore';
 
 import { motion, AnimatePresence } from 'motion/react';
 
-export default function CommonMsgType({ isAlert }) {
+export default function CommonMsgType({ isAlert }: { isAlert: boolean }) {
   // store
   const msgType = useBoundStore((state) => state.submit.msgType);
   const submitStatus = useBoundStore((state) => state.submit.status);
@@ -41,7 +41,7 @@ export default function CommonMsgType({ isAlert }) {
           className={`${styles.alertMsg} ${submitStatus !== 'rejected' ? '' : styles.error}`}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={callCount <= 5 ? { opacity: 0, y: 10 } : false}
+          exit={callCount <= 5 ? { opacity: 0, y: 10 } : undefined}
           style={{ translateX: '-50%' }}
         >
           <div className={styles.title}>{callCount < 5 ? str : '페이지를 새로고침 해주세요!'}</div>

@@ -4,15 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { StateCreator } from 'zustand';
 
 export type Item = Tables<'qr-order-menu'>;
-// export type Item = {
-//   id: string;
-//   name: string;
-//   price: number;
-//   sort: string;
-//   sortId: number;
-//   tag: string;
-//   url: string;
-// };
+export type CategotyOrderList = Tables<'qr-order-allOrderList'>[] | DOMStringMap[];
 
 export type SelectedTable = {
   id: string;
@@ -24,12 +16,10 @@ export type SelectedTable = {
 type InitialState = {
   itemBox: {
     item: Item;
-    list: {
-      id: Tables<'qr-order-allOrderList'>['id'];
-    };
+    list: CategotyOrderList;
     selectedTable: SelectedTable;
     selectedListId: string;
-    clientTableList: Array<object>;
+    clientTableList: Tables<'qr-order-table-list'>[];
   };
 };
 
@@ -44,9 +34,7 @@ const initialState: InitialState = {
       tag: '',
       url: '',
     },
-    list: {
-      id: '',
-    },
+    list: [],
     selectedTable: {
       id: '',
       init: {},
@@ -61,18 +49,16 @@ const initialState: InitialState = {
 export interface UseItemSlice {
   itemBox: {
     item: Item;
-    list: {
-      id: string;
-    };
+    list: CategotyOrderList;
     selectedTable: SelectedTable;
     selectedListId: string;
-    clientTableList: Array<object>;
+    clientTableList: Tables<'qr-order-table-list'>[];
   };
   resetItemState: () => void;
   getItemInfo: ({ item, sortId }: { item: Item; sortId: number }) => void;
-  getListInfo: ({ list }: { list: { id: string } }) => void;
+  getListInfo: ({ list }: { list: CategotyOrderList }) => void;
   getSelectedListId: ({ selectedListId }: { selectedListId: string }) => void;
-  getClientTableList: ({ clientTableList }: { clientTableList: Array<object> }) => void;
+  getClientTableList: ({ clientTableList }: { clientTableList: Tables<'qr-order-table-list'>[] }) => void;
   selectTable: ({ selectedTable }: { selectedTable: SelectedTable }) => void;
 }
 

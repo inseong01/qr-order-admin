@@ -1,6 +1,6 @@
-import supabase from "../supabaseConfig.js";
+import supabase from '../supabaseConfig.js';
 
-export default async function getMenuList({ title, id }) {
+export default async function getMenuList({ title, id }: { title: string; id: number }) {
   let response;
   if (title === '전체메뉴' || title === '') {
     response = await supabase.from('qr-order-menu').select('*').order('price', { ascending: false });

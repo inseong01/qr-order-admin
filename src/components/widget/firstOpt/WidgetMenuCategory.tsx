@@ -1,4 +1,5 @@
 import styles from '@/style/widget/WidgetCategoryList.module.css';
+import { ModalType } from '../../../lib/store/useModalSlice';
 import { option, optionList } from '../../../lib/motion/motion_widgetOption';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
 
@@ -10,7 +11,7 @@ export default function WidgetMenuFirstCategory() {
   const changeModalState = useBoundStore((state) => state.changeModalState);
   const resetSubmitState = useBoundStore((state) => state.resetSubmitState);
 
-  function onClickOpenEditor(modalType) {
+  function onClickOpenEditor(modalType: ModalType) {
     return () => {
       resetSubmitState();
       changeModalState({ type: modalType, isOpen: true });

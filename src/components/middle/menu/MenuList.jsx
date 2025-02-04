@@ -43,9 +43,10 @@ export default function MenuList() {
         const sortId = selectedCategory.id === 0 ? null : selectedCategory.id;
         getItemInfo({ item: list, sortId });
         return;
+      } else if (modalType === 'update') {
+        // 상품 수정
+        getItemInfo({ item: list });
       }
-      // 상품 수정
-      getItemInfo({ item: list });
     };
   }
 

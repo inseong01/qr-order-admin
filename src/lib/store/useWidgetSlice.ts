@@ -1,5 +1,8 @@
 import { StateCreator } from 'zustand';
 
+// opt 추가 시 숫자(옵션 번호) 할당
+export type OptNum = 1 | 2;
+
 type InitialState = {
   widget: {
     isOpen: boolean;
@@ -36,7 +39,7 @@ export interface UseWidgetSlice {
   resetWidgetState: () => void;
   openCloseWidget: () => void;
   setWidgetEditState: (isEdit: boolean) => void;
-  setWidgetOptionListState: ({ optNum }: { optNum: 1 | 2 }) => void;
+  setWidgetOptionListState: ({ optNum }: { optNum: OptNum }) => void;
 }
 
 export const useWidgetSlice: StateCreator<UseWidgetSlice, [['zustand/devtools', never]], [], UseWidgetSlice> =

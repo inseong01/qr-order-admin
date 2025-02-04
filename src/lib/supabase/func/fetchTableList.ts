@@ -2,7 +2,11 @@ import { Method } from '../../store/useFetchSlice';
 import { Tables } from '../../../../database.types';
 import supabase from '../supabaseConfig';
 
-export default async function fetchTableList(method: Method, dataArr: Tables<'qr-order-table-list'>[]) {
+export type DataArr<T> = T extends 'delete'
+  ? Tables<'qr-order-table-list'>['id'][]
+  : Tables<'qr-order-table-list'>[];
+
+export default async function fetchTableList(method: Method, dataArr: DataArr<Method>) {
   let response;
 
   switch (method) {
@@ -15,18 +19,21 @@ export default async function fetchTableList(method: Method, dataArr: Tables<'qr
     }
     case 'create': {
       const idx = dataArr.length - 1;
-      response = await supabase.from('qr-order-table-list').insert(dataArr[idx]).select();
+      const data = dataArr[idx] as Tables<'qr-order-table-list'>;
+      response = await supabase.from('qr-order-table-list').insert(data).select();
       break;
     }
     case 'update': {
+      const data = dataArr as Tables<'qr-order-table-list'>[];
       response = await supabase
         .from('qr-order-table-list')
-        .upsert(dataArr, { ignoreDuplicates: false })
+        .upsert(data, { ignoreDuplicates: false })
         .select();
       break;
     }
     case 'delete': {
-      response = await supabase.from('qr-order-table-list').delete().in('id', dataArr).select();
+      const data = dataArr as Tables<'qr-order-table-list'>['id'][];
+      response = await supabase.from('qr-order-table-list').delete().in('id', data).select();
       break;
     }
     default: {

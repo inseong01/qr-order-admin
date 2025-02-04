@@ -1,7 +1,7 @@
 import { Method } from '../../store/useFetchSlice';
 import supabase from '../supabaseConfig';
 
-export default async function fetchTableRequestList(method: Method, id: string) {
+export default async function fetchTableRequestList(method: Method, id: string | undefined = undefined) {
   let response;
 
   switch (method) {
@@ -13,6 +13,10 @@ export default async function fetchTableRequestList(method: Method, id: string) 
       break;
     }
     case 'update': {
+      if (!id) {
+        console.error(`"${id}" : ID is not defined`);
+        return { data: [], status: 1 };
+      }
       response = await supabase.from('qr-order-request-list').update({ isRead: true }).eq('id', id).select();
       break;
     }

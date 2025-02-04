@@ -1,8 +1,10 @@
 import { StateCreator } from 'zustand';
 
+export type EditType = 'create' | 'update' | 'delete' | '';
+
 type InitialState = {
   konva: {
-    type: string;
+    type: EditType;
     isAble: boolean;
     isEditing: boolean;
     isEditEnd: boolean;
@@ -26,7 +28,7 @@ const initialState: InitialState = {
 
 export interface UseKonvaSlice {
   konva: {
-    type: string;
+    type: EditType;
     isAble: boolean;
     isEditing: boolean;
     isEditEnd: boolean;
@@ -35,7 +37,7 @@ export interface UseKonvaSlice {
     };
   };
   resetKonvaState: () => void;
-  changeKonvaEditState: ({ editType }: { editType: string }) => void;
+  changeKonvaEditState: ({ editType }: { editType: EditType }) => void;
   getEditKonvaTableId: ({ id }: { id: Array<string> }) => void;
   changeKonvaIsEditingState: ({ isEditing }: { isEditing: boolean }) => void;
   setKonvaEditEnd: ({ isEditEnd }: { isEditEnd: boolean }) => void;

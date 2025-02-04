@@ -1,9 +1,11 @@
 import { StateCreator } from 'zustand';
 
+export type ModalType = 'info' | 'insert' | 'update' | 'update-category' | 'insert-category';
+
 type InitialState = {
   modal: {
     isOpen: boolean;
-    type: string;
+    type: ModalType;
   };
 };
 const initialState: InitialState = {
@@ -16,10 +18,10 @@ const initialState: InitialState = {
 export interface UseModalSlice {
   modal: {
     isOpen: boolean;
-    type: string;
+    type: ModalType;
   };
   resetModalState: () => void;
-  changeModalState: ({ type, isOpen }: { type: string; isOpen: boolean }) => void;
+  changeModalState: ({ type, isOpen }: { type?: ModalType; isOpen: boolean }) => void;
 }
 
 export const useModalSlice: StateCreator<UseModalSlice, [['zustand/devtools', never]], [], UseModalSlice> =

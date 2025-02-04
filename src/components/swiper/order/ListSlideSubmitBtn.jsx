@@ -15,7 +15,7 @@ export default function ListSlideSubmitBtn({ list }) {
       if (submitIsError) return;
       const type = selectedListId === list.id ? 'delete' : 'complete';
       changeSubmitMsgType({ msgType: type });
-      changeModalState({ isOpen: true, type: 'update' });
+      changeModalState({ type: 'update', isOpen: true });
       getListInfo({ list });
     };
   }

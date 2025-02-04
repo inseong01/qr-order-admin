@@ -2,17 +2,16 @@ import createImgPath from '../function/createImgPath';
 import fetchMenuImage from '../supabase/func/fetchMenuImage';
 import fetchMenuItem from '../supabase/func/fetchMenuItem';
 import fetchOrderList from '../supabase/func/fetchOrderList';
-import fetchTableList from '../supabase/func/fetchTableList';
+import fetchTableList, { DataArr } from '../supabase/func/fetchTableList';
 import fetchTableRequestList from '../supabase/func/fetchTableRequestList';
 import { Item } from './useItemSlice';
 import { MsgType } from './useSubmitSlice';
 import { UseBoundStore } from './useBoundStore';
-import { Tables } from '../../../database.types';
 
 import { StateCreator } from 'zustand';
 
 // select는 orderList 조회할 때 사용, 알림에서 사용되지 않는 문자열 타입
-export type Method = 'select' | 'update' | 'delete' | 'upsert' | 'insert' | 'create';
+export type Method = 'select' | 'update' | 'delete' | 'upsert' | 'insert' | 'create' | '';
 export type Table = 'category-menu' | 'menu';
 export type AdminId = 'store_1';
 export type FileBody = {
@@ -46,13 +45,7 @@ export interface UseFetchSlice {
     adminId: AdminId;
   }) => Promise<void>;
   fetchOrderListStatus: ({ method, data }: { method: Method; data: object }) => Promise<void>;
-  fetchTableListData: ({
-    method,
-    dataArr,
-  }: {
-    method: Method;
-    dataArr: Tables<'qr-order-table-list'>[];
-  }) => Promise<void>;
+  fetchTableListData: ({ method, dataArr }: { method: Method; dataArr: DataArr<Method> }) => Promise<void>;
   fetchUpdateAlertMsg: ({ method, id }: { method: Method; id: string }) => Promise<void>;
 }
 
@@ -133,7 +126,7 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
           // 사진 파일 전송
           const imgResult = await fetchMenuImage({ method, file, imgPath });
           // 메뉴 정보 전송
-          const fetchResult = await fetchMenuItem({ method, itemInfo, table, imgPath });
+          const fetchResult = await fetchMenuItem({ method, itemInfo, table });
           // rejected 추후 함수 처리
           if (imgResult?.error || !fetchResult.status.toString().startsWith('2')) {
             set(
@@ -187,7 +180,8 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
           );
           const fetchResult = await fetchOrderList(method, data);
           // rejected 추후 함수 처리
-          if (!fetchResult.status.toString().startsWith('2')) {
+          if (!fetchResult.data) {
+            // if (!fetchResult.status.toString().startsWith('2')) {
             set(
               (state) => {
                 const callCount = state.submit.callCount + 1;
@@ -372,7 +366,7 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
           // 사진 파일 전송
           const imgResult = await fetchMenuImage({ method, file, imgPath });
           // 메뉴 정보 전송
-          const fetchResult = await fetchMenuItem({ method, itemInfo, table, imgPath });
+          const fetchResult = await fetchMenuItem({ method, itemInfo, table });
           // rejected 추후 함수 처리
           if (imgResult?.error || !fetchResult.status.toString().startsWith('2')) {
             set((state) => {
@@ -413,7 +407,8 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
           }));
           const fetchResult = await fetchOrderList(method, data);
           // rejected 추후 함수 처리
-          if (!fetchResult.status.toString().startsWith('2')) {
+          if (!fetchResult.data) {
+            // if (!fetchResult.status.toString().startsWith('2')) {
             set((state) => {
               const callCount = state.submit.callCount + 1;
               const preventSubmit = callCount >= 5 ? true : false;

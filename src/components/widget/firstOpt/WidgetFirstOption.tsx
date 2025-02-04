@@ -1,4 +1,8 @@
 import styles from '@/style/Widget.module.css';
+import { OptNum } from '../../../lib/store/useWidgetSlice';
+import { Tables } from '../../../../database.types';
+import { DataArr } from '../../../lib/supabase/func/fetchTableList';
+import { Method } from '../../../lib/store/useFetchSlice';
 import { menu } from '../../../lib/motion/motion_widgetMenu';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
 import WidgetFirstOptionCategories from './WidgetFirstOptionCategories';
@@ -38,13 +42,20 @@ function Icon() {
   );
 }
 
-export default function WidgetFirstOption({ onClickEditor }) {
+export default function WidgetFirstOption({
+  onClickEditor,
+}: {
+  onClickEditor: (optNum: OptNum, dataArr: DataArr<Method>) => () => void;
+}) {
   // store
   const tableListData = useBoundStore((state) => state.itemBox.clientTableList);
   const editTableType = useBoundStore((state) => state.konva.type);
   const tableIdArr = useBoundStore((state) => state.konva.target.id);
   // variant
-  const dataArr = editTableType === 'delete' ? tableIdArr : tableListData;
+  const dataArr =
+    editTableType === 'delete'
+      ? (tableIdArr as Tables<'qr-order-table-list'>['id'][])
+      : (tableListData as Tables<'qr-order-table-list'>[]);
 
   return (
     <motion.li className={styles.listBox} key={'widgetMenu'} variants={menu}>

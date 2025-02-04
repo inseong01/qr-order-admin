@@ -1,10 +1,18 @@
 import styles from '@/style/swiper/header/HeaderCategorySwiper.module.css';
+import { Tables } from '../../../../database.types';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
 import UnderLine from '../../UnderLine';
 
 import { useQueryClient } from '@tanstack/react-query';
+import { ReactNode } from 'react';
 
-export default function HeaderCategoryBox({ list, children }) {
+export default function HeaderCategoryBox({
+  list,
+  children,
+}: {
+  list: Tables<'qr-order-category-menu'>;
+  children: ReactNode;
+}) {
   // useQueryClient
   const queryClient = useQueryClient();
   // store
@@ -12,7 +20,7 @@ export default function HeaderCategoryBox({ list, children }) {
   const isModalOpen = useBoundStore((state) => state.modal.isOpen);
   const changeCategory = useBoundStore((state) => state.changeCategory);
 
-  function onClickChangeTabCategory({ id, title }) {
+  function onClickChangeTabCategory({ id, title }: Tables<'qr-order-category-menu'>) {
     return async () => {
       if (isModalOpen) return;
       if (categoryId == id) return;

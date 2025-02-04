@@ -3,6 +3,7 @@ import useQueryRequestList from './useQuery/useQueryRequestList';
 import useQueryAllOrderList from './useQuery/useQueryAllOrderList';
 
 import { useEffect } from 'react';
+import { REALTIME_LISTEN_TYPES, REALTIME_POSTGRES_CHANGES_LISTEN_EVENT } from '@supabase/supabase-js';
 
 // Supabase Table Realtime 구독 커스텀훅
 
@@ -16,7 +17,7 @@ import { useEffect } from 'react';
 // - 업데이트 되면 데이터 갱신되도록, 원본 캐시 useQuery 위치 중요
 // - useQuery 커스텀훅 "staleTime: Infinity"로 매번 리렌더링 방지
 
-export function useSubscribeDBTable(method) {
+export function useSubscribeDBTable(method: REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.ALL) {
   const requestList = useQueryRequestList();
   const allOrderList = useQueryAllOrderList();
 
@@ -25,17 +26,17 @@ export function useSubscribeDBTable(method) {
     const changes = supabase
       .channel('qr-order-orderList-realtime')
       .on(
-        'postgres_changes',
+        `${REALTIME_LISTEN_TYPES.POSTGRES_CHANGES}`,
         { schema: 'public', event: method, table: 'qr-order-allOrderList' },
-        async (payload) => {
+        async () => {
           // 주문 요청 시 allOrderList 쿼리 리패치
           allOrderList.refetch();
         }
       )
       .on(
-        'postgres_changes',
+        `${REALTIME_LISTEN_TYPES.POSTGRES_CHANGES}`,
         { schema: 'public', event: method, table: 'qr-order-request-list' },
-        async (payload) => {
+        async () => {
           // 요청 알림마다 requestList 쿼리 리패치
           requestList.refetch();
         }

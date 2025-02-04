@@ -1,7 +1,10 @@
-import { onSubmitDataInfo } from "../function/modal/onSubmitDataInfo";
-import { useBoundStore } from "../store/useBoundStore";
+import { onSubmitDataInfo } from '../function/modal/onSubmitDataInfo';
+import { useBoundStore } from '../store/useBoundStore';
+import { AdminId } from '../store/useFetchSlice';
 
-import { useEffect, useState } from "react";
+import { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
+
+type SubmitType = 'insert-category' | 'update-category' | 'upsert-category' | 'table' | 'menu-insert/update';
 
 export default function useModalSubmitData() {
   // store
@@ -16,7 +19,7 @@ export default function useModalSubmitData() {
   const changeSubmitMsgType = useBoundStore((state) => state.changeSubmitMsgType);
   const fetchFormCategoryItem = useBoundStore((state) => state.fetchFormCategoryItem);
   const fetchFormMenuItem = useBoundStore((state) => state.fetchFormMenuItem);
-  const getListInfo = useBoundStore((state) => state.getListInfo)
+  const getListInfo = useBoundStore((state) => state.getListInfo);
   // useState
   const [value, setValue] = useState(item);
 
@@ -42,26 +45,29 @@ export default function useModalSubmitData() {
   }, [submitStatus]);
 
   // 입력 함수
-  function onChangeInputValue(e) {
+  function onChangeInputValue(e: ChangeEvent<HTMLInputElement>) {
     const target = e.target.name;
     const value = e.target.value;
     setValue((prev) => ({ ...prev, [target]: value }));
   }
 
   // 폼 제출
-  function onSubmitData(type) {
-    return async (e) => {
+  function onSubmitData(submitType: SubmitType) {
+    return async (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
       e.preventDefault();
       // 연속 제출 제한
       if (isSubmit) return;
       // 오류 발생 시 제출 제한
       if (submitIsError) return;
+      const submitter = e.nativeEvent.submitter as HTMLButtonElement;
       // method 선언
-      const method = e.nativeEvent.submitter.name;
+      const method = submitter.name;
       // 모달 제출 형식 분류
-      switch (type) {
+      switch (submitType) {
         case 'insert-category': {
-          const title = e.target[0].value;
+          const target = e.target as HTMLFormElement;
+          const inputElement = target.elements[0] as HTMLInputElement;
+          const title = inputElement.value;
           const table = 'category-menu';
           // ----------------------------
           const itemInfo = { title };
@@ -70,25 +76,28 @@ export default function useModalSubmitData() {
           break;
         }
         case 'update-category': {
-          const checkElement = e.target.elements.check;
+          const target = e.target as HTMLFormElement;
+          const inputElement = target.elements as HTMLFormControlsCollection;
+          const checkElement = inputElement.namedItem('check') as HTMLInputElement;
           // ----------------------------
-          const checkedInputArr = Array.from(checkElement).filter((inputList) => inputList?.checked);
+          const checkedInputArr = Array(checkElement).filter((inputList) => inputList?.checked);
           // 이후 코드 실행 제한 조건 알림
           if (checkedInputArr.length <= 0) return alert('하나 이상은 선택해야 합니다');
           // DOMStringMap 직렬화
           const selectedCategoryData = checkedInputArr.map((list) => Object.assign({}, list.dataset));
           // 카테고리 정보 저장
           getListInfo({ list: selectedCategoryData });
-          // msgType 할당하면 다음 모달로 전환 
+          // msgType 할당하면 다음 모달로 전환
           changeSubmitMsgType({ msgType: method });
           // ----------------------------
           // 조건 이후 msgType 코드 실행 제한 되도록 반환
           return;
         }
         case 'upsert-category': {
+          const target = e.target as HTMLFormElement;
           // 이미 update-category에서 msgType 선언된 상태
           const table = 'category-menu';
-          const assignedInputs = Object.assign([], e.target.elements);
+          const assignedInputs = Object.assign([], target.elements);
           // ----------------------------
           const categoryArrData = assignedInputs
             .slice(0, -1)
@@ -103,12 +112,13 @@ export default function useModalSubmitData() {
           break;
         }
         case 'menu-insert/update': {
+          const target = e.target as HTMLFormElement;
           // insert/update, 메뉴 관련 처리
-          const file = e.target[0].files?.[0] ?? undefined;
+          const file = target[0].files?.[0] ?? undefined;
           const table = 'menu';
           // ----------------------------
           // 임시 admin id 지정
-          const adminId = 'store_1';
+          const adminId: AdminId = 'store_1';
           // value readonly 형태, 복사해서 전달
           const itemInfo = { ...value };
           // 메뉴, 사진 정보 전달
@@ -121,5 +131,5 @@ export default function useModalSubmitData() {
     };
   }
 
-  return { onChangeInputValue, onSubmitData, value }
+  return { onChangeInputValue, onSubmitData, value };
 }

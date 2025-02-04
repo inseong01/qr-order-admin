@@ -378,7 +378,19 @@
 25.2.2.
   - docs gif 추가
   
-<--- swiper 반응형 설정: 모바일 가로로 회전 --->
 25.2.3.
   - JS -> TS 마이그레이션 
     : store, supabase/func
+    - imgPath 타입 추후 설정
+    - supabase type 자동생성
+      https://supabase.com/docs/guides/api/rest/generating-types 참고
+    - env 타입 설정
+      https://ko.vite.dev/guide/env-and-mode 참고
+  : https://github.com/vitejs/vite/discussions/6799 참고
+
+25.2.4.
+  - JS -> TS 마이그레이션 
+    : Header, Footer, AlertMsg, Widget
+  -> useFetchSlice 에러 처리 수정요: if (!result.data) {}
+
+<--- swiper 반응형 설정: 모바일 가로로 회전 --->

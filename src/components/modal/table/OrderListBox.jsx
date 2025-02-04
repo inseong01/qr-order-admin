@@ -49,7 +49,7 @@ export default function OrderListBox({ listData }) {
         <div className={styles.price}>{totalPriceToString}원</div>
       </div>
       <div className={styles.submitBtn}>
-        <input type="submit" className={styles.btn} value={'결제하기'} name={'pay'} />
+        <input type="submit" className={styles.btn} value={'결제하기'} name={'update'} />
       </div>
     </motion.div>
   );

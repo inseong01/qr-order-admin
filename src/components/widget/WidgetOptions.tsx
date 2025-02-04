@@ -1,4 +1,7 @@
 import styles from '@/style/Widget.module.css';
+import { OptNum } from '../../lib/store/useWidgetSlice';
+import { Method } from '../../lib/store/useFetchSlice';
+import { DataArr } from '../../lib/supabase/func/fetchTableList';
 import { widgetMenuList } from '../../lib/motion/motion_widgetMenu';
 import { useBoundStore } from '../../lib/store/useBoundStore';
 import WidgetFirstOption from './firstOpt/WidgetFirstOption';
@@ -18,7 +21,7 @@ export default function WidgetOptions() {
   const setWidgetOptionListState = useBoundStore((state) => state.setWidgetOptionListState);
   const fetchTableListData = useBoundStore((state) => state.fetchTableListData);
 
-  function onClickEditor(optNum, dataArr) {
+  function onClickEditor(optNum: OptNum, dataArr?: DataArr<Method>) {
     return () => {
       if (isModalOpen || submitError) return;
       if (editTableisEditing) {
@@ -28,8 +31,9 @@ export default function WidgetOptions() {
           alert('수정 중에 다른 옵션을 실행할 수 없습니다');
           return;
         }
+        const data = dataArr as DataArr<Method>;
         // 편집 저장, db 전송
-        fetchTableListData({ method: editTableType, dataArr });
+        fetchTableListData({ method: editTableType, dataArr: data });
         resetItemState();
         resetKonvaState();
         setWidgetEditState(false);

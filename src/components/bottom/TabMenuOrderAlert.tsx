@@ -1,9 +1,10 @@
 import styles from '@/style/bottom/TabMenu.module.css';
+import { Tables } from '../../../database.types';
 import useQueryAllOrderList from '../../lib/hook/useQuery/useQueryAllOrderList';
 
 import { useEffect, useState } from 'react';
 
-export default function TabMenuOrderAlert({ tab }) {
+export default function TabMenuOrderAlert({ tab }: { tab: Tables<'qr-order-category-tab'> }) {
   // useState
   const [isUnDoneList, setUndDoneList] = useState(false);
   // hook

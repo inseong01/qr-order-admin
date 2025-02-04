@@ -17,13 +17,16 @@ export default function Widget() {
 
   // 외부 선택으로 위젯 닫기
   useEffect(() => {
-    function onClickWindowToCloseWidget(e) {
+    function onClickWindowToCloseWidget(e: MouseEvent) {
+      // e.target 타입 단언
+      if (!e.target) return;
+      const target = e.target as HTMLElement;
       // 모달 열려 있을 때 클릭 방지
       if (isModalOpen) return;
       // icon(path) 클릭 시 닫기 방지
-      const isNodePath = e.target.tagName === 'path' || e.target.tagName === 'svg';
+      const isNodePath = target.tagName === 'path' || target.tagName === 'svg';
       if (isNodePath) return;
-      const isWindowClicked = e.target.offsetParent !== widgetRef.current; // offsetParent = widgetWrap
+      const isWindowClicked = target.offsetParent !== widgetRef.current; // offsetParent = widgetWrap
       if (isWidgetOpen && isWindowClicked && !isTableEditAble) {
         resetWidgetState();
       }

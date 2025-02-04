@@ -1,4 +1,5 @@
 import styles from '@/style/widget/WidgetCategoryList.module.css';
+import { EditType } from '../../../lib/store/useKonvaSlice';
 import { option, optionList } from '../../../lib/motion/motion_widgetOption';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
 
@@ -10,7 +11,7 @@ export default function WidgetTableCategory() {
   const editTableisEditing = useBoundStore((state) => state.konva.isEditing);
   const changeKonvaEditState = useBoundStore((state) => state.changeKonvaEditState);
 
-  function onClickEnableEditTable(editType) {
+  function onClickEnableEditTable(editType: EditType) {
     return () => {
       if (editTableType !== editType && editTableisEditing) {
         // 편집 중에 다른 editType으로 변환 제한

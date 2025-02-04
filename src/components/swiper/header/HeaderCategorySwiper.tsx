@@ -5,18 +5,22 @@ import { useBoundStore } from '../../../lib/store/useBoundStore';
 import HeaderCategory from './HeaderCategory';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { useRef } from 'react';
+import { MutableRefObject, useRef } from 'react';
+import { Tables } from '../../../../database.types';
 
 export default function HeaderCategorySwiper() {
   // useRef
-  const headerleftSliderRef = useRef(null);
+  const headerleftSliderRef: MutableRefObject<HTMLUListElement | null> = useRef(null);
   // hook
   const { onDrag, onDragStart } = useScroll(headerleftSliderRef);
   // store
   const tab = useBoundStore((state) => state.tab.title);
   // useQueryClient
   const queryClient = useQueryClient();
-  const categoryList = queryClient.getQueryData(['categoryList', { tab }]);
+  const categoryList: Tables<'qr-order-category-menu'>[] | undefined = queryClient.getQueryData([
+    'categoryList',
+    { tab },
+  ]);
 
   return (
     <ul
@@ -27,7 +31,7 @@ export default function HeaderCategorySwiper() {
       onDragEnd={onDrag}
       draggable
     >
-      {categoryList?.map((list) => {
+      {categoryList?.map((list: Tables<'qr-order-category-menu'>) => {
         return <HeaderCategory key={list.id} list={list} />;
       })}
     </ul>

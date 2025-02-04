@@ -13,7 +13,7 @@ export default function AlertMsg() {
 
   // 알림 메시지 등장/퇴장
   useEffect(() => {
-    let timer;
+    let timer: ReturnType<typeof setTimeout>;
     if (submitStatus === 'fulfilled' || submitStatus === 'rejected') {
       setIsAlert(true);
       // 오류 발생 4번 제한
