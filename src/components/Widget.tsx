@@ -18,7 +18,7 @@ export default function Widget() {
   // 외부 선택으로 위젯 닫기
   useEffect(() => {
     function onClickWindowToCloseWidget(e: MouseEvent) {
-      // e.target 타입 단언
+      // e.target 타입 가드
       if (!e.target) return;
       const target = e.target as HTMLElement;
       // 모달 열려 있을 때 클릭 방지

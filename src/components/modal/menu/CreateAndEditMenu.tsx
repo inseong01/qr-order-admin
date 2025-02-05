@@ -1,26 +1,42 @@
 import styles from '@/style/modal/menu/CreateAndEditMenu.module.css';
+import { Tables } from '../../../../database.types';
+import { Item } from '../../../lib/store/useItemSlice';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
 
-import { useRef, useState } from 'react';
+import { ChangeEvent, SyntheticEvent, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
-export default function CreateAndEditMenu({ onSubmitData, onChangeInputValue, value, categoryList }) {
+export default function CreateAndEditMenu({
+  onSubmitData,
+  onChangeInputValue,
+  categoryList,
+  value,
+}: {
+  onSubmitData: (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => Promise<void>;
+  onChangeInputValue: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  categoryList: Tables<'qr-order-category-menu'>[] | [];
+  value: Item;
+}) {
   // store
   const categoryId = useBoundStore((state) => state.category.id);
   const modalType = useBoundStore((state) => state.modal.type);
   // useRef
-  const imgBox = useRef(null);
+  const imgBox = useRef<HTMLImageElement>(null);
   // useState
   const [isPrevImg, setPrevImg] = useState(false);
 
-  function onChangeShowPrevImage(e) {
+  function onChangeShowPrevImage(e: ChangeEvent<HTMLInputElement>) {
     const reader = new FileReader();
     setPrevImg(true);
     reader.onload = ({ target }) => {
-      imgBox.current.src = target.result;
+      if (imgBox.current && target) {
+        imgBox.current.src = target.result as string;
+      }
     };
-    reader.readAsDataURL(e.target.files[0]);
+    if (e.target.files) {
+      reader.readAsDataURL(e.target.files[0]);
+    }
   }
 
   return (

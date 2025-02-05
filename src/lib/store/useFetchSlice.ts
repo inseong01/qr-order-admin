@@ -4,9 +4,11 @@ import fetchMenuItem from '../supabase/func/fetchMenuItem';
 import fetchOrderList from '../supabase/func/fetchOrderList';
 import fetchTableList, { DataArr } from '../supabase/func/fetchTableList';
 import fetchTableRequestList from '../supabase/func/fetchTableRequestList';
+import fetchCategoryMenu from '../supabase/func/fetchCategoryMenu';
 import { Item } from './useItemSlice';
 import { MsgType } from './useSubmitSlice';
 import { UseBoundStore } from './useBoundStore';
+import { TablesInsert } from '../../../database.types';
 
 import { StateCreator } from 'zustand';
 
@@ -14,12 +16,7 @@ import { StateCreator } from 'zustand';
 export type Method = 'select' | 'update' | 'delete' | 'upsert' | 'insert' | 'create' | '';
 export type Table = 'category-menu' | 'menu';
 export type AdminId = 'store_1';
-export type FileBody = {
-  name: string;
-  size: number;
-  type: string;
-  content: Uint8Array;
-} | null;
+export type FileBody = File | undefined;
 
 export interface UseFetchSlice {
   fetchFormCategoryItem: ({
@@ -28,7 +25,7 @@ export interface UseFetchSlice {
     table,
   }: {
     method: Method;
-    itemInfo: Item;
+    itemInfo: TablesInsert<'qr-order-category-menu'> | TablesInsert<'qr-order-category-menu'>[];
     table: Table;
   }) => Promise<void>;
   fetchFormMenuItem: ({
@@ -68,7 +65,7 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
             };
           });
           // fetching
-          const fetchResult = await fetchMenuItem({ method, itemInfo, table });
+          const fetchResult = await fetchCategoryMenu({ method, itemInfo, table });
           // rejected 추후 함수 처리
           if (!fetchResult.status.toString().startsWith('2')) {
             set(
@@ -322,7 +319,7 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
             },
           }));
           // fetching
-          const fetchResult = await fetchMenuItem({ method, itemInfo, table });
+          const fetchResult = await fetchCategoryMenu({ method, itemInfo, table });
           // rejected 추후 함수 처리
           if (!fetchResult.status.toString().startsWith('2')) {
             set((state) => {

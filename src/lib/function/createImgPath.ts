@@ -8,7 +8,7 @@ export default function createImgPath({
   adminId,
 }: {
   method: Method;
-  file: FileBody;
+  file?: FileBody;
   itemInfo: Tables<'qr-order-menu'>;
   adminId: AdminId;
 }) {

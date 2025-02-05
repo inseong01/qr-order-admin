@@ -393,4 +393,8 @@
     : Header, Footer, AlertMsg, Widget
   -> useFetchSlice 에러 처리 수정요: if (!result.data) {}
 
+25.2.5.
+  - JS -> TS 마이그레이션 
+    : fetch Category/Menu 파일 분할, Main 작업 중
+
 <--- swiper 반응형 설정: 모바일 가로로 회전 --->

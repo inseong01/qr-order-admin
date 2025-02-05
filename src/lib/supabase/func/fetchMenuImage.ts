@@ -28,6 +28,11 @@ export default async function fetchMenuImage({
   switch (method) {
     case 'insert':
     case 'update': {
+      // 타입 가드
+      if (!file) {
+        console.error(`File is empty, METHOD: ${method} FILE: ${file} IMGPath: ${imgPath}`);
+        return { error: { statusCode: 1 } };
+      }
       response = await supabase.storage.from('qr-order-img').upload(imgPath, file, { upsert: true });
       break;
     }

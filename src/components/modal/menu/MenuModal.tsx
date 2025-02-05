@@ -1,5 +1,6 @@
 import useModalSubmitData from '../../../lib/hook/useModalSubmitData';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
+import { Tables } from '../../../../database.types';
 import CreateAndEditMenu from './CreateAndEditMenu';
 import UpdateCategory from './UpdateCategory';
 import InsertCategory from './InsertCategory';
@@ -17,7 +18,8 @@ export default function MenuModal() {
   const submitMsgType = useBoundStore((state) => state.submit.msgType);
   // useQueryClient
   const queryClient = useQueryClient();
-  const categoryList = queryClient.getQueryData(['categoryList', { tab }]) || [];
+  const queryCategoryRes = queryClient.getQueryData(['categoryList', { tab }]);
+  const categoryList = queryCategoryRes ? (queryCategoryRes as Tables<'qr-order-category-menu'>[]) : [];
   // variant
   const isCateogoryDelete = submitMsgType === 'delete' && selectedList.length > 0;
   const isCateogoryUpdate = submitMsgType === 'update' && selectedList.length > 0;

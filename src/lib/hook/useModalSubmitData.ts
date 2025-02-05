@@ -1,10 +1,15 @@
 import { onSubmitDataInfo } from '../function/modal/onSubmitDataInfo';
 import { useBoundStore } from '../store/useBoundStore';
-import { AdminId } from '../store/useFetchSlice';
+import { AdminId, FileBody, Method } from '../store/useFetchSlice';
 
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
 
-type SubmitType = 'insert-category' | 'update-category' | 'upsert-category' | 'table' | 'menu-insert/update';
+export type SubmitType =
+  | 'insert-category'
+  | 'update-category'
+  | 'upsert-category'
+  | 'table'
+  | 'menu-insert/update';
 
 export default function useModalSubmitData() {
   // store
@@ -45,7 +50,7 @@ export default function useModalSubmitData() {
   }, [submitStatus]);
 
   // 입력 함수
-  function onChangeInputValue(e: ChangeEvent<HTMLInputElement>) {
+  function onChangeInputValue(e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     const target = e.target.name;
     const value = e.target.value;
     setValue((prev) => ({ ...prev, [target]: value }));
@@ -61,7 +66,7 @@ export default function useModalSubmitData() {
       if (submitIsError) return;
       const submitter = e.nativeEvent.submitter as HTMLButtonElement;
       // method 선언
-      const method = submitter.name;
+      const method = submitter.name as Method;
       // 모달 제출 형식 분류
       switch (submitType) {
         case 'insert-category': {
@@ -97,11 +102,11 @@ export default function useModalSubmitData() {
           const target = e.target as HTMLFormElement;
           // 이미 update-category에서 msgType 선언된 상태
           const table = 'category-menu';
-          const assignedInputs = Object.assign([], target.elements);
+          const assignedInputs = Array.from(target.elements) as HTMLInputElement[];
           // ----------------------------
           const categoryArrData = assignedInputs
             .slice(0, -1)
-            .map((input) => ({ id: input.dataset.id, title: input.value }));
+            .map((input) => ({ id: Number(input.dataset.id), title: input.value }));
           fetchFormCategoryItem({ method: 'upsert', itemInfo: categoryArrData, table });
           // ----------------------------
           return;
@@ -114,7 +119,8 @@ export default function useModalSubmitData() {
         case 'menu-insert/update': {
           const target = e.target as HTMLFormElement;
           // insert/update, 메뉴 관련 처리
-          const file = target[0].files?.[0] ?? undefined;
+          const fileObj = target[0] as HTMLInputElement;
+          const fileData = fileObj.files?.[0] ?? (undefined as FileBody);
           const table = 'menu';
           // ----------------------------
           // 임시 admin id 지정
@@ -122,7 +128,7 @@ export default function useModalSubmitData() {
           // value readonly 형태, 복사해서 전달
           const itemInfo = { ...value };
           // 메뉴, 사진 정보 전달
-          fetchFormMenuItem({ method, itemInfo, table, file, adminId });
+          fetchFormMenuItem({ method, itemInfo, table, file: fileData, adminId });
           // ----------------------------
           break;
         }
