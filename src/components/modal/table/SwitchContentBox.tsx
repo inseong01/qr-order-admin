@@ -3,14 +3,16 @@ import createReceipt from '../../../lib/function/createReceipt';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
 import QRcodeBox from './QRcodeBox';
 import OrderListBox from './OrderListBox';
+import { Order } from '../../../types/common';
 
 import { AnimatePresence } from 'motion/react';
 
-export default function SwitchContentBox({ isCicked }) {
+export default function SwitchContentBox({ isCicked }: { isCicked: boolean }) {
   // store
   const tableInfo = useBoundStore((state) => state.itemBox.selectedTable);
   // variable
-  const allOrderList = tableInfo.order?.map((list) => list.orderList);
+  const orderArr = tableInfo.order as Order[];
+  const allOrderList = orderArr?.map((list) => list.orderList);
   const billArr = createReceipt(allOrderList);
 
   return (

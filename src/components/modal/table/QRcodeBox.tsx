@@ -1,26 +1,28 @@
 import styles from '@/style/modal/table/QRcodeBox.module.css';
 import downloadFile from '../../../lib/function/downloadFile';
+import { TableNum } from '../../../types/common';
 
 import { motion } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
 import QRcode from 'qrcode';
 
-export default function QRcodeBox({ tableNum }) {
+export default function QRcodeBox({ tableNum }: { tableNum: TableNum }) {
   // useState
   const [url, getURL] = useState('');
   // useRef
-  const qrcodeRef = useRef(null);
+  const qrcodeRef = useRef<HTMLImageElement>(null);
 
   // QR코드 사진 생성
   useEffect(() => {
     if (!qrcodeRef.current) return;
+    const ref = qrcodeRef.current;
     // 링크 진입 시 쿠키 전달하여 해당 tableNum이 아닌 주소로 주소변경 접근 제한
     QRcode.toDataURL(`https://qr-order-client.vercel.app/${tableNum}`)
-      .then((url) => {
-        qrcodeRef.current.src = url;
+      .then((url: string) => {
+        ref.src = url;
         getURL(url);
       })
-      .catch((err) => console.error(err));
+      .catch((err: string) => console.error(err));
   }, [qrcodeRef]);
 
   function onClickDownloadQRcode() {

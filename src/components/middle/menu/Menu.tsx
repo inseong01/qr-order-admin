@@ -1,9 +1,17 @@
 import styles from '@/style/middle/menu/MenuList.module.css';
 import { list_motion } from '../../../lib/motion/motion_mainPageMenuTab';
+import { ModalType } from '../../../lib/store/useModalSlice';
+import { MenuList } from '../../../types/common';
 
 import { motion } from 'motion/react';
 
-export default function Menu({ onClickOpenModal, list }) {
+export default function Menu({
+  onClickOpenModal,
+  list,
+}: {
+  onClickOpenModal: (modalType: ModalType, list: MenuList) => () => void;
+  list: MenuList;
+}) {
   const { name, price } = list;
   const menuPrice = price.toLocaleString();
 

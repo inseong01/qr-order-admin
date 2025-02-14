@@ -1,8 +1,9 @@
 import styles from '@/style/modal/table/OrderListBox.module.css';
+import { AllMenuObj } from '../../../lib/function/createReceipt';
 
 import { motion } from 'motion/react';
 
-function Order({ menu }) {
+function Order({ menu }: { menu: AllMenuObj }) {
   const { name, amount, price } = menu;
   const priceToString = price.toLocaleString();
 
@@ -18,10 +19,11 @@ function Order({ menu }) {
   );
 }
 
-export default function OrderListBox({ listData }) {
-  const totalPriceToString = listData
-    .reduce((prev, curr) => prev + curr.price * curr.amount, 0)
-    .toLocaleString();
+export default function OrderListBox({ listData }: { listData: AllMenuObj[] }) {
+  const totalPrice = listData.reduce((prev, curr) => {
+    return prev + curr.price * curr.amount;
+  }, 0);
+  const priceToString = totalPrice.toLocaleString();
 
   return (
     <motion.div
@@ -46,7 +48,7 @@ export default function OrderListBox({ listData }) {
       <div className={styles.line}></div>
       <div className={styles.totalPrice}>
         <div className={styles.name}>결제금액</div>
-        <div className={styles.price}>{totalPriceToString}원</div>
+        <div className={styles.price}>{priceToString}원</div>
       </div>
       <div className={styles.submitBtn}>
         <input type="submit" className={styles.btn} value={'결제하기'} name={'update'} />

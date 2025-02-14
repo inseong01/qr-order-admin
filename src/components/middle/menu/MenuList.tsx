@@ -1,5 +1,7 @@
 import useQueryMenuList from '../../../lib/hook/useQuery/useQueryMenuList';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
+import { ModalType } from '../../../lib/store/useModalSlice';
+import { MenuList } from '../../../types/common';
 import AddMenu from './AddMenu';
 import Menu from './Menu';
 
@@ -33,14 +35,16 @@ export default function MenuList() {
   }, [tab, submitStatus, isFetched]);
 
   // 모달창 열기
-  function onClickOpenModal(modalType, list) {
+  function onClickOpenModal(modalType: ModalType, list: MenuList) {
     return () => {
       if (submitError) return;
       changeModalState({ type: modalType, isOpen: true });
       // 상품 추가
       if (modalType === 'insert') {
         // 전체메뉴 카테고리일 때 분류 미지정 할당, 에러 발생
-        const sortId = selectedCategory.id === 0 ? null : selectedCategory.id;
+        // const sortId = selectedCategory.id === 0 ? null : selectedCategory.id;
+        // sortId 타입 숫자만 허용, 모달창에서 전체메뉴로 카테고리 지정되는 오류 추후 확인요
+        const sortId = selectedCategory.id;
         getItemInfo({ item: list, sortId });
         return;
       } else if (modalType === 'update') {

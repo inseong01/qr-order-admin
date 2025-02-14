@@ -1,4 +1,6 @@
-export default async function downloadFile(url, tableNum) {
+import { TableNum } from '../../types/common';
+
+export default async function downloadFile(url: string, tableNum: TableNum) {
   try {
     // 파일 다운로드
     const response = await fetch(url);

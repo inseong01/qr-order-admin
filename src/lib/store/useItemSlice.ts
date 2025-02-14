@@ -5,20 +5,14 @@ import { StateCreator } from 'zustand';
 
 export type Item = Tables<'qr-order-menu'>;
 export type CategotyOrderList = Tables<'qr-order-allOrderList'>[] | DOMStringMap[];
-
-export type SelectedTable = {
-  id: string;
-  init: object;
-  tableName: string;
-  orderList: Array<object>;
-};
+export type SelectedTable = Tables<'qr-order-table-list'>;
 
 type InitialState = {
   itemBox: {
     item: Item;
     list: CategotyOrderList;
     selectedTable: SelectedTable;
-    selectedListId: string;
+    selectedListId: SelectedTable['id'];
     clientTableList: Tables<'qr-order-table-list'>[];
   };
 };
@@ -38,8 +32,8 @@ const initialState: InitialState = {
     selectedTable: {
       id: '',
       init: {},
-      tableName: '',
-      orderList: [],
+      tableNum: 0,
+      order: [],
     },
     selectedListId: '',
     clientTableList: [],
@@ -51,11 +45,12 @@ export interface UseItemSlice {
     item: Item;
     list: CategotyOrderList;
     selectedTable: SelectedTable;
-    selectedListId: string;
+    selectedListId: SelectedTable['id'];
     clientTableList: Tables<'qr-order-table-list'>[];
   };
   resetItemState: () => void;
-  getItemInfo: ({ item, sortId }: { item: Item; sortId: number }) => void;
+  // sortId? -> 오류 반환 왜?
+  getItemInfo: ({ item, sortId }: { item: Item; sortId?: number }) => void;
   getListInfo: ({ list }: { list: CategotyOrderList }) => void;
   getSelectedListId: ({ selectedListId }: { selectedListId: string }) => void;
   getClientTableList: ({ clientTableList }: { clientTableList: Tables<'qr-order-table-list'>[] }) => void;
