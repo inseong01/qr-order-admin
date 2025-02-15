@@ -1,15 +1,26 @@
 import { useBoundStore } from '../../../lib/store/useBoundStore';
-import TableLayer from './TableLayer';
 import TableEditRange from './TableEditRange';
+import TableLayer from './TableLayer';
+import { SetClientTableList, StageSize } from './KonvaSection';
+import { TableList } from '../../../types/common';
 
 import { Layer, Stage } from 'react-konva';
 import { useRef, useState } from 'react';
+import Konva from 'konva';
 
-export default function TableDraw({ stageSize, clientTableList, setClientTableList }) {
+export default function TableDraw({
+  stageSize,
+  clientTableList,
+  setClientTableList,
+}: {
+  stageSize: StageSize;
+  clientTableList: TableList[];
+  setClientTableList: SetClientTableList;
+}) {
   // store
   const konvaEditIsAble = useBoundStore((state) => state.konva.isAble);
   // useRef
-  const stageRef = useRef(null);
+  const stageRef = useRef<Konva.Stage>(null);
   // useState
   const [currentPos, setCurrentPos] = useState({
     x: 0,
@@ -25,8 +36,11 @@ export default function TableDraw({ stageSize, clientTableList, setClientTableLi
 
   // 드래그 위치 화면 이동
   function getLastPos() {
-    const lastPos = stageRef.current.position();
-    setCurrentPos({ x: lastPos.x, y: lastPos.y });
+    const ref = stageRef.current;
+    if (ref) {
+      const lastPos = ref.position();
+      setCurrentPos({ x: lastPos.x, y: lastPos.y });
+    }
   }
 
   return (
@@ -48,8 +62,7 @@ export default function TableDraw({ stageSize, clientTableList, setClientTableLi
             <TableLayer
               key={table.tableNum}
               table={table}
-              stage={stageRef}
-              clientTableList={clientTableList}
+              stageRef={stageRef}
               setClientTableList={setClientTableList}
             />
           );

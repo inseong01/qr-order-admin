@@ -399,6 +399,10 @@
 
 25.2.14.
   - JS -> TS 마이그레이션 
-    : ModalFormState, 
+    : ModalFormState, Main 작업 중
+
+25.2.14.
+  - JS -> TS 마이그레이션 
+    : MainPageMenuTab, Main 작업 중
 
 <--- swiper 반응형 설정: 모바일 가로로 회전 --->

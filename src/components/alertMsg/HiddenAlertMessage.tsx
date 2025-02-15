@@ -1,8 +1,9 @@
 import styles from '@/style/AlertMsg.module.css';
+import { RequestList } from '../../types/common';
 
 import { motion, AnimatePresence } from 'motion/react';
 
-export default function HiddenAlertMessage({ extraMsg }) {
+export default function HiddenAlertMessage({ extraMsg }: { extraMsg: RequestList[] }) {
   const hasExtraMsg = extraMsg.length > 0;
   const limitExtraMsg = hasExtraMsg ? extraMsg.slice(0, 4) : extraMsg;
   return (

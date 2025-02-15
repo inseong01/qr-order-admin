@@ -5,11 +5,24 @@ import useSetTable from '../../../lib/hook/tableTab/useSetTable';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
 import TableName from './TableName';
 import TableBillPrice from './TableBillPrice';
+import { Order, TableInit, TableList } from '../../../types/common';
+import { SetClientTableList } from './KonvaSection';
 
-import { useEffect, useRef, useState } from 'react';
+import { RefObject, useEffect, useRef, useState } from 'react';
 import { Group, Rect, Transformer } from 'react-konva';
+import Konva from 'konva';
 
-export default function TableLayer({ stage, table, setClientTableList }) {
+type EventType = 'onDragMoveEnd' | 'onDragTransformEnd';
+
+export default function TableLayer({
+  stageRef,
+  table,
+  setClientTableList,
+}: {
+  stageRef: RefObject<Konva.Stage>;
+  table: TableList;
+  setClientTableList: SetClientTableList;
+}) {
   // store
   const konvaEditTableIdArr = useBoundStore((state) => state.konva.target.id);
   const konvaEditType = useBoundStore((state) => state.konva.type);
@@ -18,53 +31,61 @@ export default function TableLayer({ stage, table, setClientTableList }) {
   const setKonvaEditEnd = useBoundStore((state) => state.setKonvaEditEnd);
   // variant
   const { init, order, tableNum, id } = table;
+  const currentTableOrder = order as Order[];
+  const tableInit = init as TableInit;
   const isTransformerAble = id === konvaEditTableIdArr[0] && konvaEditType !== 'delete';
   const isSelectedToDelete = konvaEditType === 'delete' && konvaEditTableIdArr.includes(id);
   // useRef
-  const shapeRef = useRef(null);
-  const trRef = useRef(null);
+  const shapeRef = useRef<Konva.Rect>(null);
+  const trRef = useRef<Konva.Transformer>(null);
   // useState
   const [isDragging, setDrag] = useState(false);
   // hook
   const { onClickOpenTableInfo } = useOpenTableInfo();
   const { onClickEditTable } = useEditTable();
-  const { onMouseLeaveChangePointer, onMouseEnterChangePointer } = useOnMouseChangeCursor(stage, table);
-  const { changeTablePosition, onDragTransform } = useSetTable(stage, shapeRef, setClientTableList);
+  const { onMouseLeaveChangePointer, onMouseEnterChangePointer } = useOnMouseChangeCursor(stageRef, table);
+  const { changeTablePosition, onDragTransform } = useSetTable(stageRef, shapeRef, setClientTableList);
 
   // 편집 유형 '생성/수정', 선택 좌석 transformer 적용
   useEffect(() => {
-    if (isTransformerAble) {
-      trRef.current.nodes([shapeRef.current]);
-      trRef.current.getLayer().batchDraw();
+    const ref = trRef.current;
+    const shape = shapeRef.current;
+    if (ref && shape) {
+      if (isTransformerAble) {
+        ref.nodes([shape]);
+        const selectedLayer = ref.getLayer() as Konva.Layer;
+        selectedLayer.batchDraw();
+      }
     }
   }, [konvaEditTableIdArr]);
 
   // 좌석 모형 변환 제한 설정
-  function limitBoundBox(oldBox, newBox) {
+  function limitBoundBox(oldBox: any, newBox: any) {
+    if (!stageRef.current) return;
     // 커서 위치
-    const mousePos = stage.current.getPointerPosition();
+    const mousePos = stageRef.current.getPointerPosition() as Konva.Vector2d;
     // 새로운 박스 크기
     const newBoxWidthAmount = parseInt(newBox.width, 10);
     const newBoxHeightAmount = parseInt(newBox.height, 10);
     // 변형 조건
-    const isMoousePosXLess = mousePos.x < init.x;
+    const isMoousePosXLess = mousePos.x < tableInit.x;
     const isWidthLess = 170 > newBoxWidthAmount;
-    const isMousePosYLess = mousePos.y < init.y;
+    const isMousePosYLess = mousePos.y < tableInit.y;
     const isHeightLess = 130 > newBoxHeightAmount;
     // 최종 변형 값
     if (isMoousePosXLess || isWidthLess) {
       return {
         ...oldBox,
         width: 170,
-        x: init.x,
-        y: init.y,
+        x: tableInit.x,
+        y: tableInit.y,
       };
     } else if (isMousePosYLess || isHeightLess) {
       return {
         ...oldBox,
         height: 130,
-        x: init.x,
-        y: init.y,
+        x: tableInit.x,
+        y: tableInit.y,
       };
     }
 
@@ -72,8 +93,8 @@ export default function TableLayer({ stage, table, setClientTableList }) {
       ...oldBox,
       width: newBoxWidthAmount,
       height: newBoxHeightAmount,
-      x: init.x,
-      y: init.y,
+      x: tableInit.x,
+      y: tableInit.y,
     };
   }
   // 좌석 선택, 조건 별 처리
@@ -81,17 +102,17 @@ export default function TableLayer({ stage, table, setClientTableList }) {
     // 테이블 정보 창 열기
     onClickOpenTableInfo({ table });
     // 테이블 편집 하기
-    onClickEditTable({ stage, id });
+    onClickEditTable({ stageRef, id });
   }
   // 좌석 변형 처음
   function onDragTransformStart() {
     setDrag(true);
   }
   // 드래그 마지막 순간 통합 함수
-  function onDragEnd(event) {
-    return (e) => {
+  function onDragEnd(eventType: EventType) {
+    return (e: Konva.KonvaEventObject<DragEvent> | Konva.KonvaEventObject<Event>) => {
       // 이벤트 별 적용
-      switch (event) {
+      switch (eventType) {
         // 좌석 위치 이동 마지막
         case 'onDragMoveEnd': {
           changeTablePosition(e);
@@ -113,20 +134,21 @@ export default function TableLayer({ stage, table, setClientTableList }) {
     };
   }
   // 좌석 이동 범위 제한
-  function onDragMove(e) {
+  function onDragMove(e: Konva.KonvaEventObject<DragEvent>) {
+    if (!stageRef.current) return;
     // 이동 객체 정보
     const table = e.target;
     const newX = table.x();
     const newY = table.y();
     // 범위 정보
-    const stageAtrrs = stage.current.attrs;
-    const stageWidth = stageAtrrs.width;
-    const stageHeight = stageAtrrs.height;
+    const stageAtrrs = stageRef.current.attrs;
+    const stageWidth: number = stageAtrrs.width;
+    const stageHeight: number = stageAtrrs.height;
     // 범위 제한 정도
     const minX = 10;
-    const maxX = stageWidth - init.rec.width - 10;
+    const maxX = stageWidth - tableInit.rec.width - 10;
     const minY = 10;
-    const maxY = stageHeight - init.rec.height - 10;
+    const maxY = stageHeight - tableInit.rec.height - 10;
     // 제한 조건
     if (newX < minX) table.x(minX);
     if (newX > maxX) table.x(maxX);
@@ -139,8 +161,8 @@ export default function TableLayer({ stage, table, setClientTableList }) {
       <Group
         key={id}
         id={id}
-        x={init.x}
-        y={init.y}
+        x={tableInit.x}
+        y={tableInit.y}
         draggable={isTransformerAble}
         onDragMove={onDragMove}
         onDragEnd={onDragEnd('onDragMoveEnd')}
@@ -151,8 +173,8 @@ export default function TableLayer({ stage, table, setClientTableList }) {
         <Group>
           <Rect
             ref={shapeRef}
-            width={init.rec.width}
-            height={init.rec.height}
+            width={tableInit.rec.width}
+            height={tableInit.rec.height}
             fill={'#fff'}
             stroke={isSelectedToDelete ? 'red' : 'white'}
             cornerRadius={10}
@@ -170,8 +192,8 @@ export default function TableLayer({ stage, table, setClientTableList }) {
               enabledAnchors={['middle-right', 'bottom-center']}
             />
           )}
-          <TableName tableNum={tableNum} width={init.tableText.width} />
-          <TableBillPrice order={order} bottom={init.bottom} isDragging={isDragging} />
+          <TableName tableNum={tableNum} width={tableInit.tableText.width} />
+          <TableBillPrice order={currentTableOrder} bottom={tableInit.bottom} isDragging={isDragging} />
         </Group>
       </Group>
     </>

@@ -1,7 +1,18 @@
+import { Bottom, Order } from '../../../types/common';
+
+import Konva from 'konva';
 import { useEffect, useRef } from 'react';
 import { Group, Line, Text } from 'react-konva';
 
-export default function TableBillPrice({ order, bottom, isDragging }) {
+export default function TableBillPrice({
+  order,
+  bottom,
+  isDragging,
+}: {
+  order: Order[];
+  bottom: Bottom;
+  isDragging: boolean;
+}) {
   const totalPrice =
     order
       ?.reduce(
@@ -12,10 +23,11 @@ export default function TableBillPrice({ order, bottom, isDragging }) {
       )
       .toLocaleString() ?? 0;
   // useRef
-  const billRef = useRef(null);
+  const billRef = useRef<Konva.Group>(null);
 
   // 좌석 변형 시 bottom 투명도 조절
   useEffect(() => {
+    if (!billRef.current) return;
     if (isDragging) {
       billRef.current.to({
         opacity: 0,

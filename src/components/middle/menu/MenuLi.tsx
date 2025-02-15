@@ -7,7 +7,7 @@ import Menu from './Menu';
 
 import { useEffect } from 'react';
 
-export default function MenuList() {
+export default function MenuLi() {
   // hook
   const { data, isFetched, refetch } = useQueryMenuList();
   // store
@@ -35,10 +35,12 @@ export default function MenuList() {
   }, [tab, submitStatus, isFetched]);
 
   // 모달창 열기
-  function onClickOpenModal(modalType: ModalType, list: MenuList) {
+  function onClickOpenModal(modalType: ModalType, list?: MenuList) {
     return () => {
       if (submitError) return;
       changeModalState({ type: modalType, isOpen: true });
+      // list 공백 방지
+      if (!list) return;
       // 상품 추가
       if (modalType === 'insert') {
         // 전체메뉴 카테고리일 때 분류 미지정 할당, 에러 발생
@@ -49,7 +51,7 @@ export default function MenuList() {
         return;
       } else if (modalType === 'update') {
         // 상품 수정
-        getItemInfo({ item: list });
+        getItemInfo({ item: list, sortId: list.sortId });
       }
     };
   }
@@ -58,7 +60,7 @@ export default function MenuList() {
     <>
       {data && (
         <>
-          {data?.map((list, idx) => {
+          {data.map((list: MenuList, idx: number) => {
             return <Menu key={idx} onClickOpenModal={onClickOpenModal} list={list} />;
           })}
           <AddMenu onClickOpenModal={onClickOpenModal} />

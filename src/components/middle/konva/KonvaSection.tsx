@@ -4,9 +4,16 @@ import { useBoundStore } from '../../../lib/store/useBoundStore';
 import useQueryTableList from '../../../lib/hook/useQuery/useQueryTableList';
 import createKonvaInitTable from '../../../lib/function/createKonvaInitTable';
 import TableDraw from './TableDraw';
+import { TableList } from '../../../types/common';
 
-import { useEffect, useRef, useState } from 'react';
+import { Dispatch, useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
+
+export type StageSize = {
+  stageWidth: number;
+  stageHeight: number;
+};
+export type SetClientTableList = Dispatch<React.SetStateAction<TableList[]>>;
 
 export default function KonvaSection() {
   // store
@@ -21,29 +28,35 @@ export default function KonvaSection() {
   // useQuery
   const { data, isFetching, refetch } = useQueryTableList();
   // useRef
-  const tableBoxRef = useRef(null);
+  const tableBoxRef = useRef<HTMLDivElement>(null);
   // useState
-  const [stageSize, setStageSize] = useState({
+  const [stageSize, setStageSize] = useState<StageSize>({
     stageWidth: 0,
     stageHeight: 0,
   });
-  const [clientTableList, setClientTableList] = useState([]);
+  const [clientTableList, setClientTableList] = useState<TableList[]>([]);
   const [openKonva, setOpenKonva] = useState(false);
 
   // konva Stage 크기 설정
   useEffect(() => {
-    if (tab !== 'table' || !tableBoxRef.current) return;
+    if (tab !== 'table') return;
+    const tableRef = tableBoxRef?.current;
+    if (!tableRef) return;
     // 너비 높이 할당
-    setStageSize(() => ({
-      stageWidth: tableBoxRef.current.clientWidth,
-      stageHeight: tableBoxRef.current.clientHeight,
-    }));
-    // 리사이즈
+    setStageSize(() => {
+      return {
+        stageWidth: tableRef.clientWidth,
+        stageHeight: tableRef.clientHeight,
+      };
+    });
+    // Konva 화면 리사이즈
     function onResizeStageSize() {
-      setStageSize(() => ({
-        stageWidth: tableBoxRef.current.clientWidth,
-        stageHeight: tableBoxRef.current.clientHeight,
-      }));
+      if (tableRef) {
+        setStageSize(() => ({
+          stageWidth: tableRef.clientWidth,
+          stageHeight: tableRef.clientHeight,
+        }));
+      }
     }
     window.addEventListener('resize', debounce(onResizeStageSize, 200));
     return () => {

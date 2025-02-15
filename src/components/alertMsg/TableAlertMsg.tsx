@@ -3,13 +3,14 @@ import useQueryRequestList from '../../lib/hook/useQuery/useQueryRequestList';
 import { useBoundStore } from '../../lib/store/useBoundStore';
 import HiddenAlertMessage from './HiddenAlertMessage';
 import DisplayedAlertMessage from './DisplayedAlertMessage';
+import { RequestList } from '../../types/common';
 
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 
 export default function TableAlertMsg() {
   // useState
-  const [requestAlertList, setRequestAlertList] = useState([]);
+  const [requestAlertList, setRequestAlertList] = useState<RequestList[]>([]);
   const [id, selectId] = useState('');
   const [alertOn, setAlertOn] = useState(false);
   // store
@@ -27,10 +28,14 @@ export default function TableAlertMsg() {
   // variant
   const extraMsg = data?.data ? data.data.filter((list) => !list.isRead).slice(4) : [];
 
-  // 읽지 않은 이전 요청 불러오기 (수 제한)
+  // 읽지 않은 이전 요청 불러오기
   useEffect(() => {
+    /*
+      - 내용 표시 요청 개수 4개로 제한
+      - 요청이 없다면 [] 할당하여 오류 발생 방지
+    */
     if (isFetching) return;
-    const notReadMsg = data.data ? data.data.filter((list) => !list.isRead).slice(0, 4) : [];
+    const notReadMsg = data?.data ? data.data.filter((list) => !list.isRead).slice(0, 4) : [];
     setRequestAlertList(notReadMsg);
   }, [data, isFetching]);
 
@@ -56,7 +61,7 @@ export default function TableAlertMsg() {
   }, [tab, requestAlertList, requestAlertOn, tableEditIsAble]);
 
   // 클릭 시 알림 읽음 처리 (DB)
-  function onClickReadMsg(list) {
+  function onClickReadMsg(list: RequestList) {
     return () => {
       // 오류 발생 시 읽음 처리 제한
       if (submitIsError) return;

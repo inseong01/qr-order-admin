@@ -1,11 +1,17 @@
 import styles from '@/style/middle/menu/MenuList.module.css';
 import { list_motion } from '../../../lib/motion/motion_mainPageMenuTab';
+import { ModalType } from '../../../lib/store/useModalSlice';
+import { MenuList } from '../../../types/common';
 
 import { motion } from 'motion/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
-export default function AddMenu({ onClickOpenModal }) {
+export default function AddMenu({
+  onClickOpenModal,
+}: {
+  onClickOpenModal: (modalType: ModalType, list?: MenuList) => () => void;
+}) {
   return (
     <motion.li
       className={`${styles.list} ${styles.addBtn}`}

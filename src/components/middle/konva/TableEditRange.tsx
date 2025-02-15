@@ -1,13 +1,15 @@
 import { useBoundStore } from '../../../lib/store/useBoundStore';
+import { StageSize } from './KonvaSection';
 
 import { useEffect, useRef } from 'react';
 import { Group, Layer, Rect, Text } from 'react-konva';
+import Konva from 'konva';
 
-export default function TableEditRange({ stageSize }) {
+export default function TableEditRange({ stageSize }: { stageSize: StageSize }) {
   // store
   const konvaEditIsAble = useBoundStore((state) => state.konva.isAble);
   // useRef
-  const tableRangeRef = useRef(null);
+  const tableRangeRef = useRef<Konva.Layer>(null);
 
   // 배경 애니메이션
   useEffect(() => {

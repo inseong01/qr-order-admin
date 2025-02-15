@@ -1,10 +1,17 @@
 import styles from '@/style/AlertMsg.module.css';
+import { RequestList } from '../../types/common';
+
+import { motion, AnimatePresence } from 'motion/react';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { motion, AnimatePresence } from 'motion/react';
-
-export default function DisplayedAlertMessage({ requestAlertList, onClickReadMsg }) {
+export default function DisplayedAlertMessage({
+  requestAlertList,
+  onClickReadMsg,
+}: {
+  requestAlertList: RequestList[];
+  onClickReadMsg: (list: RequestList) => () => void;
+}) {
   return (
     <motion.ul className={`${styles.reqeustMsg}`}>
       <AnimatePresence mode="popLayout">

@@ -49,8 +49,7 @@ export interface UseItemSlice {
     clientTableList: Tables<'qr-order-table-list'>[];
   };
   resetItemState: () => void;
-  // sortId? -> 오류 반환 왜?
-  getItemInfo: ({ item, sortId }: { item: Item; sortId?: number }) => void;
+  getItemInfo: ({ item, sortId }: { item: Item; sortId: number }) => void;
   getListInfo: ({ list }: { list: CategotyOrderList }) => void;
   getSelectedListId: ({ selectedListId }: { selectedListId: string }) => void;
   getClientTableList: ({ clientTableList }: { clientTableList: Tables<'qr-order-table-list'>[] }) => void;
