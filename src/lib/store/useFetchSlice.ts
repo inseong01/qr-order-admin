@@ -67,7 +67,9 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
           // fetching
           const fetchResult = await fetchCategoryMenu({ method, itemInfo, table });
           // rejected 추후 함수 처리
-          if (!fetchResult.status.toString().startsWith('2')) {
+          // 오류 발생 시 null 반환 임시 적용, 확인요
+          if (fetchResult === null) {
+            // if (!fetchResult.status.toString().startsWith('2')) {
             set(
               (state) => {
                 const callCount = state.submit.callCount + 1;
@@ -125,7 +127,8 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
           // 메뉴 정보 전송
           const fetchResult = await fetchMenuItem({ method, itemInfo, table });
           // rejected 추후 함수 처리
-          if (imgResult?.error || !fetchResult.status.toString().startsWith('2')) {
+          if (imgResult?.error || fetchResult === null) {
+            // if (imgResult?.error || !fetchResult.status.toString().startsWith('2')) {
             set(
               (state) => {
                 const callCount = state.submit.callCount + 1;
@@ -230,7 +233,9 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
           );
           const fetchResult = await fetchTableList(method, dataArr);
           // rejected 추후 함수 처리
-          if (!fetchResult.status.toString().startsWith('2')) {
+          // 오류 발생 시 null 반환 임시 적용, 확인요요
+          if (typeof fetchResult === null) {
+            // if (!fetchResult.status.toString().startsWith('2')) {
             set(
               (state) => {
                 const callCount = state.submit.callCount + 1;
@@ -283,7 +288,8 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
           // fetching
           const fetchResult = await fetchTableRequestList(method, id);
           // rejected 추후 함수 처리
-          if (!fetchResult.status.toString().startsWith('2')) {
+          if (fetchResult === null) {
+            // if (!fetchResult.status.toString().startsWith('2')) {
             set(
               (state) => {
                 const callCount = state.submit.callCount + 1;
@@ -321,7 +327,8 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
           // fetching
           const fetchResult = await fetchCategoryMenu({ method, itemInfo, table });
           // rejected 추후 함수 처리
-          if (!fetchResult.status.toString().startsWith('2')) {
+          if (fetchResult === null) {
+            // if (!fetchResult.status.toString().startsWith('2')) {
             set((state) => {
               const callCount = state.submit.callCount + 1;
               const preventSubmit = callCount >= 5 ? true : false;
@@ -365,7 +372,8 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
           // 메뉴 정보 전송
           const fetchResult = await fetchMenuItem({ method, itemInfo, table });
           // rejected 추후 함수 처리
-          if (imgResult?.error || !fetchResult.status.toString().startsWith('2')) {
+          if (imgResult?.error || !fetchResult === null) {
+            // if (imgResult?.error || !fetchResult.status.toString().startsWith('2')) {
             set((state) => {
               const callCount = state.submit.callCount + 1;
               const preventSubmit = callCount >= 5 ? true : false;
@@ -444,7 +452,8 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
           }));
           const fetchResult = await fetchTableList(method, dataArr);
           // rejected 추후 함수 처리
-          if (!fetchResult.status.toString().startsWith('2')) {
+          if (typeof fetchResult === null) {
+            // if (!fetchResult.status.toString().startsWith('2')) {
             set((state) => {
               const callCount = state.submit.callCount + 1;
               const preventSubmit = callCount >= 5 ? true : false;
@@ -484,7 +493,8 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
           // fetching
           const fetchResult = await fetchTableRequestList(method, id);
           // rejected 추후 함수 처리
-          if (!fetchResult.status.toString().startsWith('2')) {
+          // if (!fetchResult.status.toString().startsWith('2')) {
+          if (fetchResult === null) {
             set((state) => {
               const callCount = state.submit.callCount + 1;
               const preventSubmit = callCount >= 5 ? true : false;

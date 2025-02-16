@@ -13,6 +13,7 @@ import { Group, Rect, Transformer } from 'react-konva';
 import Konva from 'konva';
 
 type EventType = 'onDragMoveEnd' | 'onDragTransformEnd';
+export type OnDrageEndEvent = Konva.KonvaEventObject<DragEvent> | Konva.KonvaEventObject<Event>;
 
 export default function TableLayer({
   stageRef,
@@ -110,7 +111,7 @@ export default function TableLayer({
   }
   // 드래그 마지막 순간 통합 함수
   function onDragEnd(eventType: EventType) {
-    return (e: Konva.KonvaEventObject<DragEvent> | Konva.KonvaEventObject<Event>) => {
+    return (e: OnDrageEndEvent) => {
       // 이벤트 별 적용
       switch (eventType) {
         // 좌석 위치 이동 마지막

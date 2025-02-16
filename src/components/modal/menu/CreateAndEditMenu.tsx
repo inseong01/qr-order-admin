@@ -1,9 +1,10 @@
 import styles from '@/style/modal/menu/CreateAndEditMenu.module.css';
-import { Tables } from '../../../../database.types';
+import { OnChangeInputValueEvent, OnSubmitDataEvent } from '../../../lib/hook/useModalSubmitData';
 import { Item } from '../../../lib/store/useItemSlice';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
+import { MenuCategoryList } from '../../../types/common';
 
-import { ChangeEvent, SyntheticEvent, useRef, useState } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
@@ -13,9 +14,9 @@ export default function CreateAndEditMenu({
   categoryList,
   value,
 }: {
-  onSubmitData: (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => Promise<void>;
-  onChangeInputValue: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
-  categoryList: Tables<'qr-order-category-menu'>[] | [];
+  onSubmitData: (e: OnSubmitDataEvent) => Promise<void>;
+  onChangeInputValue: (e: OnChangeInputValueEvent) => void;
+  categoryList: MenuCategoryList[] | [];
   value: Item;
 }) {
   // store

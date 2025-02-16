@@ -1,16 +1,18 @@
 import styles from '@/style/swiper/order/ListSlideOption.module.css';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
+import { AllOrderList } from '../../../types/common';
 
+import { MouseEvent } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export default function ListSlideOption({ list }) {
+export default function ListSlideOption({ list }: { list: AllOrderList }) {
   // store
   const selectedListId = useBoundStore((state) => state.itemBox.selectedListId);
   const getSelectedListId = useBoundStore((state) => state.getSelectedListId);
 
-  function onClickCloseListOption(e) {
+  function onClickCloseListOption(e: MouseEvent<HTMLLIElement>) {
     e.stopPropagation();
     getSelectedListId({ selectedListId: '' });
   }

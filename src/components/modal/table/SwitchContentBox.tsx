@@ -1,9 +1,9 @@
 import styles from '@/style/modal/table/TableInfo.module.css';
 import createReceipt from '../../../lib/function/createReceipt';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
+import { Order } from '../../../types/common';
 import QRcodeBox from './QRcodeBox';
 import OrderListBox from './OrderListBox';
-import { Order } from '../../../types/common';
 
 import { AnimatePresence } from 'motion/react';
 

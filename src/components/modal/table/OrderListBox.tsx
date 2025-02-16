@@ -3,7 +3,7 @@ import { AllMenuObj } from '../../../lib/function/createReceipt';
 
 import { motion } from 'motion/react';
 
-function Order({ menu }: { menu: AllMenuObj }) {
+function OrderComponent({ menu }: { menu: AllMenuObj }) {
   const { name, amount, price } = menu;
   const priceToString = price.toLocaleString();
 
@@ -37,7 +37,7 @@ export default function OrderListBox({ listData }: { listData: AllMenuObj[] }) {
       <ul className={styles.listBox}>
         {listData.length > 0 ? (
           listData.map((menu, idx) => {
-            return <Order key={idx} menu={menu} />;
+            return <OrderComponent key={idx} menu={menu} />;
           })
         ) : (
           <li className={styles.msg}>

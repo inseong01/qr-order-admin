@@ -1,10 +1,17 @@
 import styles from '@/style/swiper/order/OrderListSwiper.module.css';
 import { swiper_motion } from '../../../lib/motion/motion_mainPageOrderTab';
+import { AllOrderList } from '../../../types/common';
 import OrderListSlide from './OrderListSlide';
 
 import { motion } from 'motion/react';
 
-export default function OrderListSwiper({ orderList, isDone }) {
+export default function OrderListSwiper({
+  orderList,
+  isDone,
+}: {
+  orderList: AllOrderList[];
+  isDone?: boolean;
+}) {
   return (
     <motion.ul
       className={`${styles.orderList} ${isDone ? styles.done : ''}`}

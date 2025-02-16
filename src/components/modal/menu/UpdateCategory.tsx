@@ -1,6 +1,8 @@
 import styles from '@/style/modal/menu/UpdateCategory.module.css';
+import { MenuCategoryList } from '../../../types/common';
+import { OnSubmitDataEvent } from '../../../lib/hook/useModalSubmitData';
 
-function Category({ category }) {
+function CategoryComponent({ category }: { category: MenuCategoryList }) {
   const { id, title } = category;
   return (
     <li key={id} className={styles.list}>
@@ -19,14 +21,20 @@ function Category({ category }) {
   );
 }
 
-export default function UpdateCategory({ onSubmitData, categoryList }) {
+export default function UpdateCategory({
+  onSubmitData,
+  categoryList,
+}: {
+  onSubmitData: (e: OnSubmitDataEvent) => Promise<void>;
+  categoryList: MenuCategoryList[];
+}) {
   return (
     <form className={`${styles.submitForm}`} onSubmit={onSubmitData}>
       <div className={`${styles.sortModal}`}>
         <div className={styles.title}>분류 목록</div>
         <ul className={styles.submitInfo}>
           {categoryList?.map((category) => {
-            return <Category key={category.id} category={category} />;
+            return <CategoryComponent key={category.id} category={category} />;
           })}
         </ul>
         <div className={styles.submitBtn}>

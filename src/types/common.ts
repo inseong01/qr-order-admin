@@ -1,21 +1,27 @@
-import { Tables } from '../../database.types';
+import { Tables, TablesInsert, TablesUpdate } from '../../database.types';
 
 // supabase
+export type AllOrderList = Tables<'qr-order-allOrderList'>;
+export type UpdateAllOrderList = TablesUpdate<'qr-order-allOrderList'>;
 export type TableList = Tables<'qr-order-table-list'>;
 export type TableNum = Tables<'qr-order-table-list'>['tableNum'];
 export type MenuList = Tables<'qr-order-menu'>;
 export type RequestList = Tables<'qr-order-request-list'>;
+export type MenuCategoryList = Tables<'qr-order-category-menu'>;
+export type InsertMenuCategoryList = TablesInsert<'qr-order-category-menu'>;
+export type TabCategoryList = Tables<'qr-order-category-tab'>;
 
 // qr-order-allOrderList
 export type Order = {
   id: string;
-  orderList: {
-    id: number;
-    name: string;
-    price: number;
-    amount: number;
-  }[];
+  orderList: MenuOrderList[];
   created_at: string;
+};
+type MenuOrderList = {
+  id: number;
+  name: string;
+  price: number;
+  amount: number;
 };
 
 // qr-order-table-list

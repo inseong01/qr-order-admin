@@ -9,11 +9,12 @@ export default function OrderSection() {
   // hook
   const { data, isLoading } = useQueryAllOrderList();
   // variant
+  if (!data) return;
   const doneOrderList = data.data ? data.data.filter((arr) => arr.isDone) : [];
   const notDoneOrderList = data.data ? data.data.filter((arr) => !arr.isDone) : [];
   const ascNotDoneList = [...notDoneOrderList].sort((a, b) => a.orderNum - b.orderNum);
   const descDoneList = [...doneOrderList].sort(
-    (a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+    (a, b) => new Date(b.updated_at as string).getTime() - new Date(a.updated_at as string).getTime()
   );
 
   if (isLoading) return <Loader />;

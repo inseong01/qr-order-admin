@@ -1,16 +1,17 @@
 import styles from '@/style/swiper/order/OrderListSlide.module.css';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
+import { AllOrderList } from '../../../types/common';
 import ListSlideBottom from './ListSlideBottom';
 import ListSlideOption from './ListSlideOption';
 import OrderMiddleBox from './OrderMiddleBox';
 
-export default function OrderListSlide({ list }) {
+export default function OrderListSlide({ list }: { list: AllOrderList }) {
   // store
   const categoryId = useBoundStore((state) => state.category.id);
   const submitError = useBoundStore((state) => state.submit.isError);
   const getSelectedListId = useBoundStore((state) => state.getSelectedListId);
 
-  function onClickOpenListOption(list) {
+  function onClickOpenListOption(list: AllOrderList) {
     return () => {
       if (submitError) return;
       // "접수"일 때만 실행

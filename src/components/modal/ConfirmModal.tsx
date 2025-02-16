@@ -5,7 +5,7 @@ import ConfirmTitle from './confirm/ConfirmTitle';
 
 import { AnimatePresence, motion } from 'motion/react';
 
-export default function ConfirmModal({ title }) {
+export default function ConfirmModal({ title }: { title: string }) {
   // store
   const isModalOpen = useBoundStore((state) => state.modal.isOpen);
 

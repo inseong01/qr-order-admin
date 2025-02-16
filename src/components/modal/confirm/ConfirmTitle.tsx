@@ -1,14 +1,16 @@
 import styles from '@/style/modal/ConfirmModal.module.css';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
+import { MenuCategoryList } from '../../../types/common';
 
-export default function ConfirmTitle({ title }) {
+export default function ConfirmTitle({ title }: { title: string }) {
   // store
   const tab = useBoundStore((state) => state.tab.title);
   const selectedList = useBoundStore((state) => state.itemBox.list);
   const submitMsgType = useBoundStore((state) => state.submit.msgType);
   // variant
+  const selectedCategoreis = selectedList as MenuCategoryList[];
   const context = submitMsgType === 'delete' ? '삭제' : title === '주문' ? '완료' : '수정';
-  const subTitlte = tab === 'menu' ? selectedList.map((list) => list.title).join(', ') : '';
+  const subTitlte = tab === 'menu' ? selectedCategoreis.map((list) => list.title).join(', ') : '';
   return (
     <div className={styles.title}>
       {title}을 {context}하시겠습니까?

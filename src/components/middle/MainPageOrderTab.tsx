@@ -1,5 +1,5 @@
-import ConfirmModal from '../modal/ConfirmModal';
 import OrderSection from './order/OrderSection';
+import ConfirmModal from '../modal/ConfirmModal';
 
 export default function MainPageOrderTab() {
   return (

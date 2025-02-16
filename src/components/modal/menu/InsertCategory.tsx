@@ -1,7 +1,17 @@
 import styles from '@/style/modal/menu/InsertCategory.module.css';
+import { OnChangeInputValueEvent, OnSubmitDataEvent } from '../../../lib/hook/useModalSubmitData';
+import { ModalType } from '../../../lib/store/useModalSlice';
 import TypeCategoryInfo from './TypeCategoryInfo';
 
-export default function InsertCategory({ type, onSubmitData, onChangeInputValue }) {
+export default function InsertCategory({
+  type,
+  onSubmitData,
+  onChangeInputValue,
+}: {
+  type: ModalType;
+  onSubmitData: (e: OnSubmitDataEvent) => Promise<void>;
+  onChangeInputValue: (e: OnChangeInputValueEvent) => void;
+}) {
   return (
     <form className={`${styles.submitForm} ${styles.category}`} onSubmit={onSubmitData}>
       <div className={`${styles.sortModal}`}>

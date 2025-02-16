@@ -1,7 +1,8 @@
 import styles from '@/style/swiper/order/ListSlideSubmitBtn.module.css';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
+import { AllOrderList } from '../../../types/common';
 
-export default function ListSlideSubmitBtn({ list }) {
+export default function ListSlideSubmitBtn({ list }: { list: AllOrderList }) {
   // store
   const selectedListId = useBoundStore((state) => state.itemBox.selectedListId);
   const submitIsError = useBoundStore((state) => state.submit.isError);
@@ -9,7 +10,7 @@ export default function ListSlideSubmitBtn({ list }) {
   const changeModalState = useBoundStore((state) => state.changeModalState);
   const changeSubmitMsgType = useBoundStore((state) => state.changeSubmitMsgType);
 
-  function onClickUpdateListState(list) {
+  function onClickUpdateListState(list: AllOrderList) {
     return () => {
       // 제출 오류 있다면
       if (submitIsError) return;

@@ -1,17 +1,19 @@
 import styles from '@/style/modal/ConfirmModal.module.css';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
 
-export default function ConfirmButton({ title }) {
+type State = 'yes' | 'no';
+
+export default function ConfirmButton({ title }: { title: string }) {
   // store
   const selectedList = useBoundStore((state) => state.itemBox.list);
   const isSubmit = useBoundStore((state) => state.submit.isSubmit);
   const submitMsgType = useBoundStore((state) => state.submit.msgType);
   const changeModalState = useBoundStore((state) => state.changeModalState);
   const fetchOrderListStatus = useBoundStore((state) => state.fetchOrderListStatus);
-  const fetchFormCategoryItem = useBoundStore((state) => state.fetchFormCategoryItem);
+  // const fetchFormCategoryItem = useBoundStore((state) => state.fetchFormCategoryItem);
 
   // 카테고리 삭제, 주문 상태 완료 처리
-  function onClickChangeModalStatus(state) {
+  function onClickChangeModalStatus(state: State) {
     return () => {
       switch (state) {
         case 'no': {
@@ -24,9 +26,11 @@ export default function ConfirmButton({ title }) {
           const method = submitMsgType === 'delete' ? 'delete' : 'update';
           if (title === '주문') {
             fetchOrderListStatus({ method, data: selectedList });
-          } else if (title === '카테고리') {
-            fetchFormCategoryItem({ method, itemInfo: selectedList, table: 'category-menu' });
           }
+          // 필요 코드인지 확인요
+          // else if (title === '카테고리') {
+          //   fetchFormCategoryItem({ method, itemInfo: selectedList, table: 'category-menu' });
+          // }
         }
       }
     };

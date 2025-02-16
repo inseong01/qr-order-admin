@@ -2,11 +2,11 @@ import styles from '@/style/swiper/header/HeaderCategorySwiper.module.css';
 import { throttle } from '../../../lib/function/throttle';
 import useScroll from '../../../lib/hook/useScroll';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
+import { MenuCategoryList } from '../../../types/common';
 import HeaderCategory from './HeaderCategory';
 
 import { useQueryClient } from '@tanstack/react-query';
 import { MutableRefObject, useRef } from 'react';
-import { Tables } from '../../../../database.types';
 
 export default function HeaderCategorySwiper() {
   // useRef
@@ -17,10 +17,7 @@ export default function HeaderCategorySwiper() {
   const tab = useBoundStore((state) => state.tab.title);
   // useQueryClient
   const queryClient = useQueryClient();
-  const categoryList: Tables<'qr-order-category-menu'>[] | undefined = queryClient.getQueryData([
-    'categoryList',
-    { tab },
-  ]);
+  const categoryList: MenuCategoryList[] | undefined = queryClient.getQueryData(['categoryList', { tab }]);
 
   return (
     <ul
@@ -31,7 +28,7 @@ export default function HeaderCategorySwiper() {
       onDragEnd={onDrag}
       draggable
     >
-      {categoryList?.map((list: Tables<'qr-order-category-menu'>) => {
+      {categoryList?.map((list) => {
         return <HeaderCategory key={list.id} list={list} />;
       })}
     </ul>

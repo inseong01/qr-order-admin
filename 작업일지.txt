@@ -405,4 +405,25 @@
   - JS -> TS 마이그레이션 
     : MainPageMenuTab, Main 작업 중
 
-<--- swiper 반응형 설정: 모바일 가로로 회전 --->
+25.2.15.
+  - JS -> TS 마이그레이션 완료
+    : MainPageTableTab, MainPageOrderTab
+    1.
+      // { status: 1 } 반환 타입 오류, null 반환으로 오류 확인 임시 설정 // KonvaSection.tsx
+      // rejected 반환 조건 fetchResult === null 임시 설정 // useFetchSlice.ts
+      // fetch 함수 오류 반환 통일, fetchSlice 오류 감지 조건문 통일
+    2.
+      // ConfirmButton.tsx
+      // 필요 코드인지 확인요
+      // else if (title === '카테고리') {
+      //   fetchFormCategoryItem({ method, itemInfo: selectedList, table: 'category-menu' });
+      // }
+    수정 할 것
+      - 분류 목록: 수정/삭제 진행 안됨, 선택항목 미반영 오류
+      - 주문 완료 처리: 타임스탬프 오류로 갱신 안 됨
+      - 카테고리 창: 메뉴 생성 안 됨, 완료 처리는 뜸
+
+  - Table 탭, 테이블 창 UI 개선
+    : fallback, 스켈레톤 적용 
+
+<--- swiper 반응형 설정: 모바일 가로 회전, 배포 오류 점검/수정 --->

@@ -1,8 +1,8 @@
 import { useBoundStore } from '../../../lib/store/useBoundStore';
+import { TableList } from '../../../types/common';
 import TableEditRange from './TableEditRange';
 import TableLayer from './TableLayer';
 import { SetClientTableList, StageSize } from './KonvaSection';
-import { TableList } from '../../../types/common';
 
 import { Layer, Stage } from 'react-konva';
 import { useRef, useState } from 'react';

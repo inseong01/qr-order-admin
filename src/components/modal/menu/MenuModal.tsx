@@ -1,10 +1,10 @@
 import useModalSubmitData from '../../../lib/hook/useModalSubmitData';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
-import { Tables } from '../../../../database.types';
+import { MenuCategoryList } from '../../../types/common';
+import ConfirmModal from '../ConfirmModal';
 import CreateAndEditMenu from './CreateAndEditMenu';
 import UpdateCategory from './UpdateCategory';
 import InsertCategory from './InsertCategory';
-import ConfirmModal from '../ConfirmModal';
 
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -14,12 +14,12 @@ export default function MenuModal() {
   // store
   const tab = useBoundStore((state) => state.tab.title);
   const modalType = useBoundStore((state) => state.modal.type);
-  const selectedList = useBoundStore((state) => state.itemBox.list);
+  const selectedList = useBoundStore((state) => state.itemBox.list) as MenuCategoryList[];
   const submitMsgType = useBoundStore((state) => state.submit.msgType);
   // useQueryClient
   const queryClient = useQueryClient();
   const queryCategoryRes = queryClient.getQueryData(['categoryList', { tab }]);
-  const categoryList = queryCategoryRes ? (queryCategoryRes as Tables<'qr-order-category-menu'>[]) : [];
+  const categoryList = queryCategoryRes ? (queryCategoryRes as MenuCategoryList[]) : [];
   // variant
   const isCateogoryDelete = submitMsgType === 'delete' && selectedList.length > 0;
   const isCateogoryUpdate = submitMsgType === 'update' && selectedList.length > 0;

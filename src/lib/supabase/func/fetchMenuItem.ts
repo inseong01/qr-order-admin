@@ -1,8 +1,6 @@
-import { Tables } from '../../../../database.types';
+import { MenuList } from '../../../types/common';
 import { Method, Table } from '../../store/useFetchSlice';
 import supabase from '../supabaseConfig';
-
-type ItemInfo = Tables<'qr-order-menu'>;
 
 export default async function fetchMenuItem({
   method,
@@ -10,7 +8,7 @@ export default async function fetchMenuItem({
   table,
 }: {
   method: Method;
-  itemInfo: ItemInfo;
+  itemInfo: MenuList;
   table: Table;
 }) {
   let response;
@@ -34,7 +32,8 @@ export default async function fetchMenuItem({
     }
     default: {
       console.error(`Method: ${method.toUpperCase()} is not defined`);
-      return { status: 1 };
+      // return { status: 1 };
+      return null;
     }
   }
 

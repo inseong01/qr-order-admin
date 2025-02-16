@@ -1,4 +1,6 @@
-export default function ErrorPage({ compName }) {
+type CompName = 'MenuList' | 'MainPageTableTab' | 'MainPageOrderTab' | 'MenuModal';
+
+export default function ErrorPage({ compName }: { compName: CompName }) {
   switch (compName) {
     case 'MenuList':
     case 'MainPageTableTab':

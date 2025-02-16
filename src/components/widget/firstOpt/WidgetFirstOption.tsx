@@ -11,7 +11,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 
-function Icon() {
+function IconComponent() {
   const isEdit = useBoundStore((state) => state.widget.isEdit);
   return (
     <AnimatePresence mode="wait" initial={false}>
@@ -61,7 +61,7 @@ export default function WidgetFirstOption({
     <motion.li className={styles.listBox} key={'widgetMenu'} variants={menu}>
       <motion.div className={styles.list} key={'list'} onClick={onClickEditor(1, dataArr)}>
         <div className={styles.iconBox}>
-          <Icon />
+          <IconComponent />
         </div>
       </motion.div>
       <WidgetFirstOptionCategories />

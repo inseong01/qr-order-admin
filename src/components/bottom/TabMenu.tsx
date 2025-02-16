@@ -1,14 +1,14 @@
 import styles from '@/style/bottom/TabMenu.module.css';
-import { Tables } from '../../../database.types';
 import { useBoundStore } from '../../lib/store/useBoundStore';
+import { TabCategoryList } from '../../types/common';
+import UnderLine from '../UnderLine';
 import TabMenuTableAlert from './TabMenuTableAlert';
 import TabMenuOrderAlert from './TabMenuOrderAlert';
-import UnderLine from '../UnderLine';
 
 import { motion } from 'motion/react';
 import { ReactNode } from 'react';
 
-function TabMenuBox({ children, tab }: { children: ReactNode; tab: Tables<'qr-order-category-tab'> }) {
+function TabMenuBox({ children, tab }: { children: ReactNode; tab: TabCategoryList }) {
   // store
   const currentTabId = useBoundStore((state) => state.tab.id);
   const isModalOpen = useBoundStore((state) => state.modal.isOpen);
@@ -19,7 +19,7 @@ function TabMenuBox({ children, tab }: { children: ReactNode; tab: Tables<'qr-or
   const resetItemState = useBoundStore((state) => state.resetItemState);
   const resetSubmitState = useBoundStore((state) => state.resetSubmitState);
 
-  function onClickChangeTab({ title, id }: Tables<'qr-order-category-tab'>) {
+  function onClickChangeTab({ id }: TabCategoryList) {
     return () => {
       if (isModalOpen) return;
       if (currentTabId === id) return;
@@ -48,7 +48,7 @@ function TabMenuBox({ children, tab }: { children: ReactNode; tab: Tables<'qr-or
   );
 }
 
-export default function TabMenu({ tab }: { tab: Tables<'qr-order-category-tab'> }) {
+export default function TabMenu({ tab }: { tab: TabCategoryList }) {
   return (
     <TabMenuBox tab={tab}>
       <motion.div className={styles.title} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>

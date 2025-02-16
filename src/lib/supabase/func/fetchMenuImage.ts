@@ -45,7 +45,8 @@ export default async function fetchMenuImage({
     }
     default: {
       console.error(`Something is wrong, METHOD: ${method} FILE: ${file} IMGPath: ${imgPath}`);
-      return { error: { statusCode: 1 } };
+      // return { error: { statusCode: 1 } };
+      return null;
     }
   }
 

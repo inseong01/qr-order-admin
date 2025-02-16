@@ -1,8 +1,8 @@
-import { Tables, TablesInsert } from '../../../../database.types';
+import { InsertMenuCategoryList, MenuCategoryList } from '../../../types/common';
 import { Method, Table } from '../../store/useFetchSlice';
 import supabase from '../supabaseConfig';
 
-type ItemInfo = TablesInsert<'qr-order-category-menu'> | TablesInsert<'qr-order-category-menu'>[];
+type ItemInfo = InsertMenuCategoryList | InsertMenuCategoryList[];
 
 export default async function fetchCategoryMenu({
   method,
@@ -17,18 +17,18 @@ export default async function fetchCategoryMenu({
 
   switch (method) {
     case 'insert': {
-      const data = itemInfo as Tables<'qr-order-category-menu'>;
+      const data = itemInfo as MenuCategoryList;
       response = await supabase.from(`qr-order-${table}`).insert([data]).select();
       break;
     }
     case 'upsert': {
-      const data = itemInfo as TablesInsert<'qr-order-category-menu'>[];
+      const data = itemInfo as InsertMenuCategoryList[];
       // 선택한 카테고리 업데이트
       response = await supabase.from(`qr-order-${table}`).upsert(data, { ignoreDuplicates: false }).select();
       break;
     }
     case 'delete': {
-      const data = itemInfo as Tables<'qr-order-category-menu'>[];
+      const data = itemInfo as MenuCategoryList[];
       // itemInfo type: 카테고리 -> 배열
       const idArr = [...data].map((item) => item.id);
       response = await supabase.from(`qr-order-${table}`).delete().in('id', idArr);
@@ -36,7 +36,8 @@ export default async function fetchCategoryMenu({
     }
     default: {
       console.error(`Method: ${method.toUpperCase()} is not defined`);
-      return { status: 1 };
+      // return { status: 1 };
+      return null;
     }
   }
 

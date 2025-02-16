@@ -3,17 +3,17 @@ import { debounce } from '../../../lib/function/debounce';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
 import useQueryTableList from '../../../lib/hook/useQuery/useQueryTableList';
 import createKonvaInitTable from '../../../lib/function/createKonvaInitTable';
-import TableDraw from './TableDraw';
 import { TableList } from '../../../types/common';
+import TableDraw from './TableDraw';
 
-import { Dispatch, useEffect, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
 
 export type StageSize = {
   stageWidth: number;
   stageHeight: number;
 };
-export type SetClientTableList = Dispatch<React.SetStateAction<TableList[]>>;
+export type SetClientTableList = Dispatch<SetStateAction<TableList[]>>;
 
 export default function KonvaSection() {
   // store
@@ -81,7 +81,9 @@ export default function KonvaSection() {
     // konva 열기
     setOpenKonva(true);
     // konva 좌석 정보 할당
-    setClientTableList(data.data ?? []);
+    // { status: 1 } 반환 타입 오류, null 반환으로 오류 확인 임시 설정
+    const tableArrData = data.data as TableList[];
+    setClientTableList(tableArrData ?? []);
   }, [tableBoxRef, data, isFetching]);
 
   // konva 편집 유형 "create", 좌석 생성

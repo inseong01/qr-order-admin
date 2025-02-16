@@ -1,10 +1,10 @@
-import { TablesUpdate } from '../../../../database.types';
+import { UpdateAllOrderList } from '../../../types/common';
 import { Method } from '../../store/useFetchSlice';
 import supabase from '../supabaseConfig';
 
 export default async function fetchOrderList(
   method: Method,
-  data: TablesUpdate<'qr-order-allOrderList'> | undefined = undefined
+  data: UpdateAllOrderList | undefined = undefined
 ) {
   let response;
 

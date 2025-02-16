@@ -10,6 +10,8 @@ export type SubmitType =
   | 'upsert-category'
   | 'table'
   | 'menu-insert/update';
+export type OnChangeInputValueEvent = ChangeEvent<HTMLInputElement | HTMLSelectElement>;
+export type OnSubmitDataEvent = SyntheticEvent<HTMLFormElement, SubmitEvent>;
 
 export default function useModalSubmitData() {
   // store
@@ -50,7 +52,7 @@ export default function useModalSubmitData() {
   }, [submitStatus]);
 
   // 입력 함수
-  function onChangeInputValue(e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+  function onChangeInputValue(e: OnChangeInputValueEvent) {
     const target = e.target.name;
     const value = e.target.value;
     setValue((prev) => ({ ...prev, [target]: value }));
@@ -58,7 +60,7 @@ export default function useModalSubmitData() {
 
   // 폼 제출
   function onSubmitData(submitType: SubmitType) {
-    return async (e: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
+    return async (e: OnSubmitDataEvent) => {
       e.preventDefault();
       // 연속 제출 제한
       if (isSubmit) return;

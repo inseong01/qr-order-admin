@@ -1,19 +1,19 @@
 import { Tables } from '../../../database.types';
+import { AllOrderList, MenuCategoryList, TableList } from '../../types/common';
 
 import { v4 as uuidv4 } from 'uuid';
 import { StateCreator } from 'zustand';
 
 export type Item = Tables<'qr-order-menu'>;
-export type CategotyOrderList = Tables<'qr-order-allOrderList'>[] | DOMStringMap[];
-export type SelectedTable = Tables<'qr-order-table-list'>;
+export type CategoryAndOrderList = AllOrderList[] | DOMStringMap[] | MenuCategoryList[] | AllOrderList;
 
 type InitialState = {
   itemBox: {
     item: Item;
-    list: CategotyOrderList;
-    selectedTable: SelectedTable;
-    selectedListId: SelectedTable['id'];
-    clientTableList: Tables<'qr-order-table-list'>[];
+    list: CategoryAndOrderList;
+    selectedTable: TableList;
+    selectedListId: TableList['id'];
+    clientTableList: TableList[];
   };
 };
 
@@ -43,17 +43,17 @@ const initialState: InitialState = {
 export interface UseItemSlice {
   itemBox: {
     item: Item;
-    list: CategotyOrderList;
-    selectedTable: SelectedTable;
-    selectedListId: SelectedTable['id'];
-    clientTableList: Tables<'qr-order-table-list'>[];
+    list: CategoryAndOrderList;
+    selectedTable: TableList;
+    selectedListId: TableList['id'];
+    clientTableList: TableList[];
   };
   resetItemState: () => void;
   getItemInfo: ({ item, sortId }: { item: Item; sortId: number }) => void;
-  getListInfo: ({ list }: { list: CategotyOrderList }) => void;
+  getListInfo: ({ list }: { list: CategoryAndOrderList }) => void;
   getSelectedListId: ({ selectedListId }: { selectedListId: string }) => void;
-  getClientTableList: ({ clientTableList }: { clientTableList: Tables<'qr-order-table-list'>[] }) => void;
-  selectTable: ({ selectedTable }: { selectedTable: SelectedTable }) => void;
+  getClientTableList: ({ clientTableList }: { clientTableList: TableList[] }) => void;
+  selectTable: ({ selectedTable }: { selectedTable: TableList }) => void;
 }
 
 export const useItemSlice: StateCreator<UseItemSlice, [['zustand/devtools', never]], [], UseItemSlice> =

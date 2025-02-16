@@ -1,8 +1,9 @@
 import styles from '@/style/swiper/order/ListSlideBottom.module.css';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
+import { AllOrderList } from '../../../types/common';
 import ListSlideSubmitBtn from './ListSlideSubmitBtn';
 
-export default function ListSlideBottom({ list }) {
+export default function ListSlideBottom({ list }: { list: AllOrderList }) {
   // store
   const categoryId = useBoundStore((state) => state.category.id);
   // variant

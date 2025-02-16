@@ -1,5 +1,5 @@
 import styles from '@/style/swiper/header/HeaderCategorySwiper.module.css';
-import { Tables } from '../../../../database.types';
+import { MenuCategoryList } from '../../../types/common';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
 import UnderLine from '../../UnderLine';
 
@@ -10,7 +10,7 @@ export default function HeaderCategoryBox({
   list,
   children,
 }: {
-  list: Tables<'qr-order-category-menu'>;
+  list: MenuCategoryList;
   children: ReactNode;
 }) {
   // useQueryClient
@@ -20,7 +20,7 @@ export default function HeaderCategoryBox({
   const isModalOpen = useBoundStore((state) => state.modal.isOpen);
   const changeCategory = useBoundStore((state) => state.changeCategory);
 
-  function onClickChangeTabCategory({ id, title }: Tables<'qr-order-category-menu'>) {
+  function onClickChangeTabCategory({ id, title }: MenuCategoryList) {
     return async () => {
       if (isModalOpen) return;
       if (categoryId == id) return;

@@ -1,12 +1,10 @@
 import { Method } from '../../store/useFetchSlice';
-import { Tables } from '../../../../database.types';
 import supabase from '../supabaseConfig';
+import { TableList } from '../../../types/common';
 
-export type DataArr<T> = T extends 'delete'
-  ? Tables<'qr-order-table-list'>['id'][]
-  : Tables<'qr-order-table-list'>[];
+export type DataArr<T> = T extends 'delete' ? TableList['id'][] : TableList[];
 
-export default async function fetchTableList(method: Method, dataArr: DataArr<Method>) {
+export default async function fetchTableList(method: Method, dataArr?: DataArr<Method>) {
   let response;
 
   switch (method) {
@@ -18,13 +16,15 @@ export default async function fetchTableList(method: Method, dataArr: DataArr<Me
       break;
     }
     case 'create': {
-      const idx = dataArr.length - 1;
-      const data = dataArr[idx] as Tables<'qr-order-table-list'>;
-      response = await supabase.from('qr-order-table-list').insert(data).select();
+      if (dataArr) {
+        const idx = dataArr.length - 1;
+        const data = dataArr[idx] as TableList;
+        response = await supabase.from('qr-order-table-list').insert(data).select();
+      }
       break;
     }
     case 'update': {
-      const data = dataArr as Tables<'qr-order-table-list'>[];
+      const data = dataArr as TableList[];
       response = await supabase
         .from('qr-order-table-list')
         .upsert(data, { ignoreDuplicates: false })
@@ -32,18 +32,19 @@ export default async function fetchTableList(method: Method, dataArr: DataArr<Me
       break;
     }
     case 'delete': {
-      const data = dataArr as Tables<'qr-order-table-list'>['id'][];
+      const data = dataArr as TableList['id'][];
       response = await supabase.from('qr-order-table-list').delete().in('id', data).select();
       break;
     }
     default: {
       console.error(`"${method.toUpperCase()}": Method is not defined`);
-      return { status: 1 };
+      // return { status: 1 };
+      return null;
     }
   }
 
-  if (response.error) {
-    console.error(response.error.message ?? `${method.toUpperCase()} error`);
+  if (response?.error) {
+    console.error(response?.error.message ?? `${method.toUpperCase()} error`);
   }
 
   return response;

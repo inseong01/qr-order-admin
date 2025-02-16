@@ -1,6 +1,7 @@
 import styles from '@/style/swiper/order/OrderMiddleBox.module.css';
+import { Order } from '../../../types/common';
 
-export default function OrderMiddleBox({ orderList }) {
+export default function OrderMiddleBox({ orderList }: { orderList: Order['orderList'] }) {
   return (
     <div className={styles.middleBox}>
       <ul className={styles.middle}>

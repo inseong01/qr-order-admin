@@ -1,7 +1,9 @@
+import styles from '@/style/modal/ModalFormState.module.css';
 import MenuModal from './menu/MenuModal';
 import { useBoundStore } from '../../lib/store/useBoundStore';
 
 import { lazy, Suspense } from 'react';
+import Loader from '../Loader';
 
 const LazyTableModal = lazy(() => import('./table/TableModal'));
 
@@ -15,9 +17,11 @@ export default function ModalFormState() {
     }
     case 'table': {
       return (
-        <Suspense>
-          <LazyTableModal />
-        </Suspense>
+        <div className={styles.formSize}>
+          <Suspense fallback={<Loader />}>
+            <LazyTableModal />
+          </Suspense>
+        </div>
       );
     }
   }

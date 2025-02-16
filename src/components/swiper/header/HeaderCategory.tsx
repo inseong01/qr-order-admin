@@ -1,11 +1,11 @@
 import styles from '@/style/swiper/header/HeaderCategorySwiper.module.css';
-import { Tables } from '../../../../database.types';
-import HeaderCategoryBox from './HeaderCategoryBox';
+import { MenuCategoryList } from '../../../types/common';
 import OrderCategoryAlert from '../../top/OrderCategoryAlert';
+import HeaderCategoryBox from './HeaderCategoryBox';
 
 import { motion } from 'motion/react';
 
-function TitleBox({ list }: { list: Tables<'qr-order-category-menu'> }) {
+function TitleBoxComponent({ list }: { list: MenuCategoryList }) {
   return (
     <>
       <motion.div className={styles.title} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
@@ -16,10 +16,10 @@ function TitleBox({ list }: { list: Tables<'qr-order-category-menu'> }) {
   );
 }
 
-export default function HeaderCategory({ list }: { list: Tables<'qr-order-category-menu'> }) {
+export default function HeaderCategory({ list }: { list: MenuCategoryList }) {
   return (
     <HeaderCategoryBox list={list}>
-      <TitleBox list={list} />
+      <TitleBoxComponent list={list} />
     </HeaderCategoryBox>
   );
 }

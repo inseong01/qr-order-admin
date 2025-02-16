@@ -1,5 +1,5 @@
 import styles from '../style/UnderLine.module.css';
-import { Tables } from '../../database.types';
+import { MenuCategoryList } from '../types/common';
 
 import { motion } from 'motion/react';
 
@@ -8,7 +8,7 @@ export default function UnderLine({
   selectedId,
   position,
 }: {
-  tab: Tables<'qr-order-category-menu'>;
+  tab: MenuCategoryList;
   selectedId: number;
   position: string;
 }) {
