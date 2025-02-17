@@ -1,5 +1,5 @@
-import { Tables } from '../../../database.types';
-import { AdminId, FileBody, Method } from '../store/useFetchSlice';
+import { AdminId, MenuList } from '../../types/common';
+import { FileBody, Method } from '../store/useFetchSlice';
 
 export default function createImgPath({
   method,
@@ -9,7 +9,7 @@ export default function createImgPath({
 }: {
   method: Method;
   file?: FileBody;
-  itemInfo: Tables<'qr-order-menu'>;
+  itemInfo: MenuList;
   adminId: AdminId;
 }) {
   let imgPath = '';

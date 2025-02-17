@@ -2,7 +2,7 @@ import { InsertMenuCategoryList, MenuCategoryList } from '../../../types/common'
 import { Method, Table } from '../../store/useFetchSlice';
 import supabase from '../supabaseConfig';
 
-type ItemInfo = InsertMenuCategoryList | InsertMenuCategoryList[];
+type ItemInfo = MenuCategoryList | InsertMenuCategoryList | MenuCategoryList[];
 
 export default async function fetchCategoryMenu({
   method,
@@ -17,12 +17,12 @@ export default async function fetchCategoryMenu({
 
   switch (method) {
     case 'insert': {
-      const data = itemInfo as MenuCategoryList;
+      const data = itemInfo as InsertMenuCategoryList;
       response = await supabase.from(`qr-order-${table}`).insert([data]).select();
       break;
     }
     case 'upsert': {
-      const data = itemInfo as InsertMenuCategoryList[];
+      const data = itemInfo as MenuCategoryList[];
       // 선택한 카테고리 업데이트
       response = await supabase.from(`qr-order-${table}`).upsert(data, { ignoreDuplicates: false }).select();
       break;
@@ -36,13 +36,13 @@ export default async function fetchCategoryMenu({
     }
     default: {
       console.error(`Method: ${method.toUpperCase()} is not defined`);
-      // return { status: 1 };
       return null;
     }
   }
 
   if (response.error) {
     console.error(response.error.message ?? `${method.toUpperCase()} error`);
+    return null;
   }
 
   return response;

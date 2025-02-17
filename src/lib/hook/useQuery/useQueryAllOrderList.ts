@@ -1,11 +1,11 @@
-import fetchOrderList from '../../supabase/func/fetchOrderList';
+import getOrderList from '../../supabase/func/getOrderList';
 
 import { useQuery } from '@tanstack/react-query';
 
 export default function useQueryAllOrderList() {
   const allOrderList = useQuery({
     queryKey: ['allOrderList'],
-    queryFn: () => fetchOrderList('select'),
+    queryFn: () => getOrderList(),
     staleTime: Infinity,
   });
 

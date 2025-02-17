@@ -2,6 +2,7 @@ import useQueryMenuList from '../../../lib/hook/useQuery/useQueryMenuList';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
 import { ModalType } from '../../../lib/store/useModalSlice';
 import { MenuList } from '../../../types/common';
+import Loader from '../../Loader';
 import AddMenu from './AddMenu';
 import Menu from './Menu';
 
@@ -9,7 +10,7 @@ import { useEffect } from 'react';
 
 export default function MenuLi() {
   // hook
-  const { data, isFetched, refetch } = useQueryMenuList();
+  const { data, isFetched, refetch, isLoading } = useQueryMenuList();
   // store
   const tab = useBoundStore((state) => state.tab.title);
   const submitStatus = useBoundStore((state) => state.submit.status);
@@ -17,6 +18,7 @@ export default function MenuLi() {
   const selectedCategory = useBoundStore((state) => state.category);
   const changeModalState = useBoundStore((state) => state.changeModalState);
   const getItemInfo = useBoundStore((state) => state.getItemInfo);
+  const resetItemState = useBoundStore((state) => state.resetItemState);
 
   // 메뉴 리패치
   useEffect(() => {
@@ -38,27 +40,30 @@ export default function MenuLi() {
   function onClickOpenModal(modalType: ModalType, list?: MenuList) {
     return () => {
       if (submitError) return;
+      const item = list as MenuList;
+
+      resetItemState();
       changeModalState({ type: modalType, isOpen: true });
-      // list 공백 방지
-      if (!list) return;
-      // 상품 추가
+
       if (modalType === 'insert') {
-        // 전체메뉴 카테고리일 때 분류 미지정 할당, 에러 발생
-        // const sortId = selectedCategory.id === 0 ? null : selectedCategory.id;
-        // sortId 타입 숫자만 허용, 모달창에서 전체메뉴로 카테고리 지정되는 오류 추후 확인요
+        // 상품 추가
         const sortId = selectedCategory.id;
-        getItemInfo({ item: list, sortId });
+        getItemInfo({ item, sortId });
         return;
       } else if (modalType === 'update') {
         // 상품 수정
-        getItemInfo({ item: list, sortId: list.sortId });
+        getItemInfo({ item, sortId: item.sortId });
       }
     };
   }
 
+  if (isLoading) return <Loader />;
+
   return (
     <>
-      {data && (
+      {!data ? (
+        <li>표시할 메뉴가 없습니다.</li>
+      ) : (
         <>
           {data.map((list: MenuList, idx: number) => {
             return <Menu key={idx} onClickOpenModal={onClickOpenModal} list={list} />;

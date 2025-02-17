@@ -1,15 +1,18 @@
-import { Tables } from '../../../database.types';
-import { AllOrderList, MenuCategoryList, TableList } from '../../types/common';
+import { AllOrderList, MenuCategoryList, MenuList, TableList } from '../../types/common';
 
 import { v4 as uuidv4 } from 'uuid';
 import { StateCreator } from 'zustand';
 
-export type Item = Tables<'qr-order-menu'>;
-export type CategoryAndOrderList = AllOrderList[] | DOMStringMap[] | MenuCategoryList[] | AllOrderList;
+export type CategoryAndOrderList =
+  | AllOrderList[]
+  | DOMStringMap[]
+  | MenuCategoryList[]
+  | MenuCategoryList
+  | AllOrderList;
 
 type InitialState = {
   itemBox: {
-    item: Item;
+    item: MenuList;
     list: CategoryAndOrderList;
     selectedTable: TableList;
     selectedListId: TableList['id'];
@@ -42,14 +45,14 @@ const initialState: InitialState = {
 
 export interface UseItemSlice {
   itemBox: {
-    item: Item;
+    item: MenuList;
     list: CategoryAndOrderList;
     selectedTable: TableList;
     selectedListId: TableList['id'];
     clientTableList: TableList[];
   };
   resetItemState: () => void;
-  getItemInfo: ({ item, sortId }: { item: Item; sortId: number }) => void;
+  getItemInfo: ({ item, sortId }: { item: MenuList; sortId: number }) => void;
   getListInfo: ({ list }: { list: CategoryAndOrderList }) => void;
   getSelectedListId: ({ selectedListId }: { selectedListId: string }) => void;
   getClientTableList: ({ clientTableList }: { clientTableList: TableList[] }) => void;
@@ -64,9 +67,9 @@ export const useItemSlice: StateCreator<UseItemSlice, [['zustand/devtools', neve
         getItemInfo: ({ item, sortId }) =>
           set(
             (state) => {
-              // item 없는 상품 추가 경우
+              // 상품 추가 경우
               if (!item) {
-                // 사진 이름 저장으로 uuid 사용
+                // 사진 이름이 고유해야 돼서 id로 만듦, id: uuid 적용
                 const id = uuidv4();
                 return {
                   itemBox: {

@@ -8,11 +8,13 @@ import { motion, AnimatePresence } from 'motion/react';
 export default function WidgetMenuFirstCategory() {
   // store
   const firstOption = useBoundStore((state) => state.widget.openOptionList[1]);
+  const submitError = useBoundStore((state) => state.submit.isError);
   const changeModalState = useBoundStore((state) => state.changeModalState);
   const resetSubmitState = useBoundStore((state) => state.resetSubmitState);
 
   function onClickOpenEditor(modalType: ModalType) {
     return () => {
+      if (submitError) return;
       resetSubmitState();
       changeModalState({ type: modalType, isOpen: true });
     };

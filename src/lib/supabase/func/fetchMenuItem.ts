@@ -32,13 +32,13 @@ export default async function fetchMenuItem({
     }
     default: {
       console.error(`Method: ${method.toUpperCase()} is not defined`);
-      // return { status: 1 };
       return null;
     }
   }
 
   if (response.error) {
     console.error(response.error.message ?? `${method.toUpperCase()} error`);
+    return null;
   }
 
   return response;

@@ -1,6 +1,6 @@
 import { StateCreator } from 'zustand';
 
-export type EditType = 'create' | 'update' | 'delete' | '';
+export type EditType = 'insert' | 'update' | 'delete' | '';
 
 type InitialState = {
   konva: {
@@ -56,7 +56,7 @@ export const useKonvaSlice: StateCreator<UseKonvaSlice, [['zustand/devtools', ne
                   ...initialState.konva,
                   type: editType,
                   isAble: true,
-                  isEditing: editType === 'create' && true,
+                  isEditing: editType === 'insert' && true,
                 },
               };
             },
@@ -104,7 +104,7 @@ export const useKonvaSlice: StateCreator<UseKonvaSlice, [['zustand/devtools', ne
                 ...initialState.konva,
                 type: editType,
                 isAble: true,
-                isEditing: editType === 'create' && true,
+                isEditing: editType === 'insert' && true,
               },
             };
           }),

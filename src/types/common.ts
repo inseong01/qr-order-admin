@@ -1,5 +1,9 @@
 import { Tables, TablesInsert, TablesUpdate } from '../../database.types';
 
+// variant
+export type ConfirmModalTitle = '주문' | '카테고리';
+export type AdminId = 'store_1';
+
 // supabase
 export type AllOrderList = Tables<'qr-order-allOrderList'>;
 export type UpdateAllOrderList = TablesUpdate<'qr-order-allOrderList'>;

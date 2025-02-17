@@ -405,25 +405,52 @@
   - JS -> TS 마이그레이션 
     : MainPageMenuTab, Main 작업 중
 
-25.2.15.
+25.2.16.
   - JS -> TS 마이그레이션 완료
     : MainPageTableTab, MainPageOrderTab
     1.
       // { status: 1 } 반환 타입 오류, null 반환으로 오류 확인 임시 설정 // KonvaSection.tsx
       // rejected 반환 조건 fetchResult === null 임시 설정 // useFetchSlice.ts
       // fetch 함수 오류 반환 통일, fetchSlice 오류 감지 조건문 통일
-    2.
+    2. 
       // ConfirmButton.tsx
-      // 필요 코드인지 확인요
+      // 필요 코드인지 확인요 (확인)
       // else if (title === '카테고리') {
       //   fetchFormCategoryItem({ method, itemInfo: selectedList, table: 'category-menu' });
       // }
     수정 할 것
-      - 분류 목록: 수정/삭제 진행 안됨, 선택항목 미반영 오류
-      - 주문 완료 처리: 타임스탬프 오류로 갱신 안 됨
+      - 분류 목록: 수정/삭제 진행 안됨, 선택항목 미반영 오류 v: Array -> Array.from() 적용
+      - 주문 완료 처리: 타임스탬프 오류로 갱신 안 됨 v: updated_at 타입 문제, string -> Date 변환
       - 카테고리 창: 메뉴 생성 안 됨, 완료 처리는 뜸
 
   - Table 탭, 테이블 창 UI 개선
     : fallback, 스켈레톤 적용 
 
+25.2.17.
+  - TS 전환 이후 오류 수정
+    - 분류 목록: 수정/삭제 진행 안됨, 선택항목 미반영 오류 해결
+    : Array -> Array.from() 적용
+    - 주문 완료 처리: 타임스탬프 오류로 갱신 안 됨 해결
+    : updated_at 타입 문제, string -> Date 타입 적용, .toString() 삭제
+    - 카테고리 메뉴 창: 메뉴 생성 안 됨, 완료 처리는 뜸
+    : getItemInfo, !item 조건 해당되도록 onClickOpenModal 변수/타입 재설정
+    - 메뉴 모달 창: 초기 카테고리 설정 오류 수정
+    : 전체메뉴 값 미할당 적용 
+    - 주문 처리 메시지 알림 내용 수정
+    : fetchOrderListStatus, set에서 msgType: method 적용 코드 삭제
+    - 메뉴 생성 시 sort 값 '전체메뉴' 고정 이유
+    : onChangeInputValue로 이전에 sort -> sortId 변경해 sortId 할당 중, sort는 SQL 트리거로 할당하고 있음 
+
+  - Table, Order 탭 UX 개선
+  : fallback 적용
+
+  - 패치 오류 null 반환 처리 점검
+    - 메뉴 카테고리: 생성 v, 수정 v, 삭제 v
+    - 메뉴: 불러오기 v, 생성 v, 수정 v, 삭제 v
+    - 좌석: 생성 v, 수정 v, 삭제 v
+    - 주문: 불러오기 v, 완료 v, 삭제 v
+
 <--- swiper 반응형 설정: 모바일 가로 회전, 배포 오류 점검/수정 --->
+  - 패치 오류 null 반환 처리 점검
+    - 요청 목록 불러오기
+    : 카테고리, 탭, 요청목록, 좌석 불러오기

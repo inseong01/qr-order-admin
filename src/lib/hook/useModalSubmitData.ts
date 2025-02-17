@@ -1,6 +1,7 @@
+import { AdminId, InsertMenuCategoryList } from '../../types/common';
 import { onSubmitDataInfo } from '../function/modal/onSubmitDataInfo';
 import { useBoundStore } from '../store/useBoundStore';
-import { AdminId, FileBody, Method } from '../store/useFetchSlice';
+import { FileBody, Method } from '../store/useFetchSlice';
 
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
 
@@ -77,21 +78,28 @@ export default function useModalSubmitData() {
           const title = inputElement.value;
           const table = 'category-menu';
           // ----------------------------
-          const itemInfo = { title };
+          const itemInfo = { title } as InsertMenuCategoryList;
           fetchFormCategoryItem({ method, itemInfo, table });
           // ----------------------------
           break;
         }
         case 'update-category': {
           const target = e.target as HTMLFormElement;
-          const inputElement = target.elements as HTMLFormControlsCollection;
-          const checkElement = inputElement.namedItem('check') as HTMLInputElement;
+          const inputElements = target.elements as HTMLFormControlsCollection;
+          const checkElements = inputElements.namedItem('check') as RadioNodeList;
           // ----------------------------
-          const checkedInputArr = Array(checkElement).filter((inputList) => inputList?.checked);
+          const checkedElementArr = Array.from(checkElements).filter((inputList) => {
+            const input = inputList as HTMLInputElement;
+            return input.checked;
+          });
           // 이후 코드 실행 제한 조건 알림
-          if (checkedInputArr.length <= 0) return alert('하나 이상은 선택해야 합니다');
+          if (checkedElementArr.length <= 0) return alert('하나 이상은 선택해야 합니다');
           // DOMStringMap 직렬화
-          const selectedCategoryData = checkedInputArr.map((list) => Object.assign({}, list.dataset));
+          const selectedCategoryData = checkedElementArr.map((list) => {
+            const data = list as HTMLInputElement;
+            const dataSet = data.dataset as DOMStringMap;
+            return Object.assign({}, dataSet);
+          });
           // 카테고리 정보 저장
           getListInfo({ list: selectedCategoryData });
           // msgType 할당하면 다음 모달로 전환

@@ -12,6 +12,7 @@ export default function OrderListSwiper({
   orderList: AllOrderList[];
   isDone?: boolean;
 }) {
+  console.log(orderList);
   return (
     <motion.ul
       className={`${styles.orderList} ${isDone ? styles.done : ''}`}
@@ -19,9 +20,13 @@ export default function OrderListSwiper({
       initial={'notActive'}
       animate={'active'}
     >
-      {orderList.map((list, idx) => {
-        return <OrderListSlide key={idx} list={list} />;
-      })}
+      {orderList.length === 0 ? (
+        <li>표시할 주문이 없습니다.</li>
+      ) : (
+        orderList.map((list, idx) => {
+          return <OrderListSlide key={idx} list={list} />;
+        })
+      )}
     </motion.ul>
   );
 }

@@ -8,19 +8,12 @@ export default async function fetchTableList(method: Method, dataArr?: DataArr<M
   let response;
 
   switch (method) {
-    case 'select': {
-      response = await supabase
-        .from('qr-order-table-list')
-        .select('*')
-        .order('tableNum', { ascending: true });
-      break;
-    }
-    case 'create': {
-      if (dataArr) {
-        const idx = dataArr.length - 1;
-        const data = dataArr[idx] as TableList;
-        response = await supabase.from('qr-order-table-list').insert(data).select();
-      }
+    case 'insert': {
+      const dataList = dataArr as TableList[];
+      console.log(dataArr);
+      const idx = dataList.length - 1;
+      const data = dataList[idx];
+      response = await supabase.from('qr-order-table-list').insert(data).select();
       break;
     }
     case 'update': {
@@ -38,13 +31,13 @@ export default async function fetchTableList(method: Method, dataArr?: DataArr<M
     }
     default: {
       console.error(`"${method.toUpperCase()}": Method is not defined`);
-      // return { status: 1 };
       return null;
     }
   }
 
-  if (response?.error) {
+  if (response.error) {
     console.error(response?.error.message ?? `${method.toUpperCase()} error`);
+    return null;
   }
 
   return response;

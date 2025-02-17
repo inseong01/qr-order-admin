@@ -1,10 +1,10 @@
 import styles from '@/style/Widget.module.css';
 import { OptNum } from '../../../lib/store/useWidgetSlice';
-import { Tables } from '../../../../database.types';
 import { DataArr } from '../../../lib/supabase/func/fetchTableList';
 import { Method } from '../../../lib/store/useFetchSlice';
 import { menu } from '../../../lib/motion/motion_widgetMenu';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
+import { TableList } from '../../../types/common';
 import WidgetFirstOptionCategories from './WidgetFirstOptionCategories';
 
 import { motion, AnimatePresence } from 'motion/react';
@@ -53,9 +53,7 @@ export default function WidgetFirstOption({
   const tableIdArr = useBoundStore((state) => state.konva.target.id);
   // variant
   const dataArr =
-    editTableType === 'delete'
-      ? (tableIdArr as Tables<'qr-order-table-list'>['id'][])
-      : (tableListData as Tables<'qr-order-table-list'>[]);
+    editTableType === 'delete' ? (tableIdArr as TableList['id'][]) : (tableListData as TableList[]);
 
   return (
     <motion.li className={styles.listBox} key={'widgetMenu'} variants={menu}>

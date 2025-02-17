@@ -36,6 +36,11 @@ export default function KonvaSection() {
   });
   const [clientTableList, setClientTableList] = useState<TableList[]>([]);
   const [openKonva, setOpenKonva] = useState(false);
+  const [isFirstLoad, setFirstLoad] = useState(true);
+  console.log(data);
+  useEffect(() => {
+    setFirstLoad(false);
+  }, []);
 
   // konva Stage 크기 설정
   useEffect(() => {
@@ -70,7 +75,7 @@ export default function KonvaSection() {
       konvaEditIsEditing 의존성 추가하면 
       이전 데이터 적용 후 최신 데이터 적용됨
     */
-    // 초기 데이터가 undefined이면면
+    // 초기 데이터가 undefined이면
     if (!data) return;
     // 새로운 데이터 받아오는 중이면
     if (isFetching) return;
@@ -81,15 +86,13 @@ export default function KonvaSection() {
     // konva 열기
     setOpenKonva(true);
     // konva 좌석 정보 할당
-    // { status: 1 } 반환 타입 오류, null 반환으로 오류 확인 임시 설정
-    const tableArrData = data.data as TableList[];
-    setClientTableList(tableArrData ?? []);
+    setClientTableList(data ?? []);
   }, [tableBoxRef, data, isFetching]);
 
-  // konva 편집 유형 "create", 좌석 생성
+  // konva 편집 유형 "insert", 좌석 생성
   useEffect(() => {
     /* 필요 인자들 Widget으로 전달하기 어려워 useEffect 사용 */
-    if (konvaEditType === 'create') {
+    if (konvaEditType === 'insert') {
       const newTable = createKonvaInitTable({ stageSize, clientTableList });
       setClientTableList((prev) => [...prev, newTable]);
       getEditKonvaTableId({ id: [newTable.id] });
@@ -119,11 +122,12 @@ export default function KonvaSection() {
         클라이언트, 마지막 선택마다 좌석 정보 최신화/상태 저장 
         
         "konvaIsEditEnd" 의존성 추가하면 최신화 이전 값 저장됨 
-      */
+    */
     if (konvaIsEditEnd) {
       // 수정/추가된 테이블 배열 전달
       getClientTableList({ clientTableList });
     }
+    if (isFirstLoad) return;
     setKonvaEditEnd({ isEditEnd: false });
   }, [clientTableList]);
 

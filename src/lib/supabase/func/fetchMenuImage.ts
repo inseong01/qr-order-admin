@@ -31,7 +31,7 @@ export default async function fetchMenuImage({
       // 타입 가드
       if (!file) {
         console.error(`File is empty, METHOD: ${method} FILE: ${file} IMGPath: ${imgPath}`);
-        return { error: { statusCode: 1 } };
+        return null;
       }
       response = await supabase.storage.from('qr-order-img').upload(imgPath, file, { upsert: true });
       break;
@@ -45,13 +45,13 @@ export default async function fetchMenuImage({
     }
     default: {
       console.error(`Something is wrong, METHOD: ${method} FILE: ${file} IMGPath: ${imgPath}`);
-      // return { error: { statusCode: 1 } };
       return null;
     }
   }
 
   if (response.error) {
     console.error(response.error.message ?? `Storage ${method.toUpperCase()} error`);
+    return null;
   }
 
   return response;

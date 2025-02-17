@@ -9,10 +9,12 @@ export default function WidgetTableCategory() {
   const firstOption = useBoundStore((state) => state.widget.openOptionList[1]);
   const editTableType = useBoundStore((state) => state.konva.type);
   const editTableisEditing = useBoundStore((state) => state.konva.isEditing);
+  const submitError = useBoundStore((state) => state.submit.isError);
   const changeKonvaEditState = useBoundStore((state) => state.changeKonvaEditState);
 
   function onClickEnableEditTable(editType: EditType) {
     return () => {
+      if (submitError) return;
       if (editTableType !== editType && editTableisEditing) {
         // 편집 중에 다른 editType으로 변환 제한
         return alert('편집 중에 변경할 수 없습니다.');
@@ -34,10 +36,10 @@ export default function WidgetTableCategory() {
         >
           <motion.li
             className={`${styles.option} ${
-              firstOption && editTableType === 'create' ? styles.currentOpt : ''
+              firstOption && editTableType === 'insert' ? styles.currentOpt : ''
             }`}
             variants={option}
-            onClick={onClickEnableEditTable('create')}
+            onClick={onClickEnableEditTable('insert')}
           >
             <span className={styles.iconBox}>
               <span className={styles.textBox}>생성</span>

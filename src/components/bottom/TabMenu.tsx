@@ -8,7 +8,7 @@ import TabMenuOrderAlert from './TabMenuOrderAlert';
 import { motion } from 'motion/react';
 import { ReactNode } from 'react';
 
-function TabMenuBox({ children, tab }: { children: ReactNode; tab: TabCategoryList }) {
+function TabMenuBoxComponent({ children, tab }: { children: ReactNode; tab: TabCategoryList }) {
   // store
   const currentTabId = useBoundStore((state) => state.tab.id);
   const isModalOpen = useBoundStore((state) => state.modal.isOpen);
@@ -50,12 +50,12 @@ function TabMenuBox({ children, tab }: { children: ReactNode; tab: TabCategoryLi
 
 export default function TabMenu({ tab }: { tab: TabCategoryList }) {
   return (
-    <TabMenuBox tab={tab}>
+    <TabMenuBoxComponent tab={tab}>
       <motion.div className={styles.title} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
         {tab.title}
         <TabMenuTableAlert tab={tab} />
         <TabMenuOrderAlert tab={tab} />
       </motion.div>
-    </TabMenuBox>
+    </TabMenuBoxComponent>
   );
 }

@@ -1,5 +1,6 @@
-import MainPageMenuTab from './MainPageMenuTab';
 import { useBoundStore } from '../../lib/store/useBoundStore';
+import Loader from '../Loader';
+import MainPageMenuTab from './MainPageMenuTab';
 
 import { lazy, Suspense, useEffect } from 'react';
 
@@ -26,14 +27,14 @@ export default function MainPageList() {
     }
     case 'table': {
       return (
-        <Suspense>
+        <Suspense fallback={<Loader />}>
           <LazyMainPageTableTab />
         </Suspense>
       );
     }
     case 'order': {
       return (
-        <Suspense>
+        <Suspense fallback={<Loader />}>
           <LazyMainPageOrderTab />
         </Suspense>
       );

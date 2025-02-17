@@ -1,8 +1,7 @@
 import styles from '@/style/modal/menu/CreateAndEditMenu.module.css';
 import { OnChangeInputValueEvent, OnSubmitDataEvent } from '../../../lib/hook/useModalSubmitData';
-import { Item } from '../../../lib/store/useItemSlice';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
-import { MenuCategoryList } from '../../../types/common';
+import { MenuCategoryList, MenuList } from '../../../types/common';
 
 import { ChangeEvent, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -17,7 +16,7 @@ export default function CreateAndEditMenu({
   onSubmitData: (e: OnSubmitDataEvent) => Promise<void>;
   onChangeInputValue: (e: OnChangeInputValueEvent) => void;
   categoryList: MenuCategoryList[] | [];
-  value: Item;
+  value: MenuList;
 }) {
   // store
   const categoryId = useBoundStore((state) => state.category.id);

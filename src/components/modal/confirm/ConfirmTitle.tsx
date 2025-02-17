@@ -1,8 +1,8 @@
 import styles from '@/style/modal/ConfirmModal.module.css';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
-import { MenuCategoryList } from '../../../types/common';
+import { ConfirmModalTitle, MenuCategoryList } from '../../../types/common';
 
-export default function ConfirmTitle({ title }: { title: string }) {
+export default function ConfirmTitle({ title }: { title: ConfirmModalTitle }) {
   // store
   const tab = useBoundStore((state) => state.tab.title);
   const selectedList = useBoundStore((state) => state.itemBox.list);

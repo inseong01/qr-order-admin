@@ -15,7 +15,7 @@ export default function TabMenuOrderAlert({ tab }: { tab: TabCategoryList }) {
     if (!data) return;
     if (tab.title !== '주문') return;
     // 완료 되지 않은 주문 여부
-    const isUnDoneOrderList = data.data ? data.data.some((list) => !list.isDone) : false;
+    const isUnDoneOrderList = data ? data.some((list) => !list.isDone) : false;
     setUndDoneList(isUnDoneOrderList);
   }, [data, tab]);
 

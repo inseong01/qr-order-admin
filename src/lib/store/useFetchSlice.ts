@@ -5,17 +5,22 @@ import fetchOrderList from '../supabase/func/fetchOrderList';
 import fetchTableList, { DataArr } from '../supabase/func/fetchTableList';
 import fetchTableRequestList from '../supabase/func/fetchTableRequestList';
 import fetchCategoryMenu from '../supabase/func/fetchCategoryMenu';
-import { Item } from './useItemSlice';
+import {
+  AdminId,
+  AllOrderList,
+  InsertMenuCategoryList,
+  MenuCategoryList,
+  MenuList,
+} from '../../types/common';
 import { MsgType } from './useSubmitSlice';
 import { UseBoundStore } from './useBoundStore';
-import { TablesInsert } from '../../../database.types';
 
 import { StateCreator } from 'zustand';
 
 // select는 orderList 조회할 때 사용, 알림에서 사용되지 않는 문자열 타입
-export type Method = 'select' | 'update' | 'delete' | 'upsert' | 'insert' | 'create' | '';
+export type Method = 'select' | 'update' | 'delete' | 'upsert' | 'insert' | '';
 export type Table = 'category-menu' | 'menu';
-export type AdminId = 'store_1';
+
 export type FileBody = File | undefined;
 
 export interface UseFetchSlice {
@@ -25,7 +30,7 @@ export interface UseFetchSlice {
     table,
   }: {
     method: Method;
-    itemInfo: TablesInsert<'qr-order-category-menu'> | TablesInsert<'qr-order-category-menu'>[];
+    itemInfo: MenuCategoryList | InsertMenuCategoryList | MenuCategoryList[];
     table: Table;
   }) => Promise<void>;
   fetchFormMenuItem: ({
@@ -36,12 +41,12 @@ export interface UseFetchSlice {
     adminId,
   }: {
     method: Method;
-    itemInfo: Item;
+    itemInfo: MenuList;
     table: Table;
     file: FileBody;
     adminId: AdminId;
   }) => Promise<void>;
-  fetchOrderListStatus: ({ method, data }: { method: Method; data: object }) => Promise<void>;
+  fetchOrderListStatus: ({ method, data }: { method: Method; data: AllOrderList }) => Promise<void>;
   fetchTableListData: ({ method, dataArr }: { method: Method; dataArr: DataArr<Method> }) => Promise<void>;
   fetchUpdateAlertMsg: ({ method, id }: { method: Method; id: string }) => Promise<void>;
 }
@@ -52,24 +57,26 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
         // 메뉴 카테고리 생성/수정/삭제
         fetchFormCategoryItem: async ({ method, itemInfo, table }) => {
           // pending
-          set((state) => {
-            const msgType: MsgType = method === 'upsert' ? 'update' : method;
-            return {
-              submit: {
-                ...state.submit,
-                status: 'pending',
-                isSubmit: true,
-                alertType: 'category',
-                msgType,
-              },
-            };
-          });
+          set(
+            (state) => {
+              const msgType: MsgType = method === 'upsert' ? 'update' : method;
+              return {
+                submit: {
+                  ...state.submit,
+                  status: 'pending',
+                  isSubmit: true,
+                  alertType: 'category',
+                  msgType,
+                },
+              };
+            },
+            undefined,
+            'fetchFormCategoryItem/pending'
+          );
           // fetching
           const fetchResult = await fetchCategoryMenu({ method, itemInfo, table });
-          // rejected 추후 함수 처리
-          // 오류 발생 시 null 반환 임시 적용, 확인요
+          // 오류 발생 시 null 반환
           if (fetchResult === null) {
-            // if (!fetchResult.status.toString().startsWith('2')) {
             set(
               (state) => {
                 const callCount = state.submit.callCount + 1;
@@ -105,7 +112,6 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
         },
         // 메뉴 생성/수정/삭제
         fetchFormMenuItem: async ({ method, itemInfo, table, file, adminId }) => {
-          console.log(itemInfo);
           // pending
           set(
             (state) => ({
@@ -126,9 +132,7 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
           const imgResult = await fetchMenuImage({ method, file, imgPath });
           // 메뉴 정보 전송
           const fetchResult = await fetchMenuItem({ method, itemInfo, table });
-          // rejected 추후 함수 처리
-          if (imgResult?.error || fetchResult === null) {
-            // if (imgResult?.error || !fetchResult.status.toString().startsWith('2')) {
+          if (imgResult === null || fetchResult === null) {
             set(
               (state) => {
                 const callCount = state.submit.callCount + 1;
@@ -172,16 +176,13 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
                 status: 'pending',
                 isSubmit: true,
                 alertType: 'list',
-                msgType: method,
               },
             }),
             undefined,
             'fetchOrderListStatus/pending'
           );
           const fetchResult = await fetchOrderList(method, data);
-          // rejected 추후 함수 처리
-          if (!fetchResult.data) {
-            // if (!fetchResult.status.toString().startsWith('2')) {
+          if (fetchResult === null) {
             set(
               (state) => {
                 const callCount = state.submit.callCount + 1;
@@ -233,9 +234,8 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
           );
           const fetchResult = await fetchTableList(method, dataArr);
           // rejected 추후 함수 처리
-          // 오류 발생 시 null 반환 임시 적용, 확인요요
-          if (typeof fetchResult === null) {
-            // if (!fetchResult.status.toString().startsWith('2')) {
+          // 오류 발생 시 null 반환 임시 적용, 확인요
+          if (fetchResult === null) {
             set(
               (state) => {
                 const callCount = state.submit.callCount + 1;
@@ -313,35 +313,42 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
         },
       })
     : (set) => ({
+        // 메뉴 카테고리 생성/수정/삭제
         fetchFormCategoryItem: async ({ method, itemInfo, table }) => {
           // pending
-          set((state) => ({
-            submit: {
-              ...state.submit,
-              status: 'pending',
-              isSubmit: true,
-              alertType: 'category',
-              msgType: method === 'upsert' ? 'update' : method,
-            },
-          }));
+          set((state) => {
+            const msgType: MsgType = method === 'upsert' ? 'update' : method;
+            return {
+              submit: {
+                ...state.submit,
+                status: 'pending',
+                isSubmit: true,
+                alertType: 'category',
+                msgType,
+              },
+            };
+          });
           // fetching
           const fetchResult = await fetchCategoryMenu({ method, itemInfo, table });
-          // rejected 추후 함수 처리
+          // 오류 발생 시 null 반환
           if (fetchResult === null) {
-            // if (!fetchResult.status.toString().startsWith('2')) {
-            set((state) => {
-              const callCount = state.submit.callCount + 1;
-              const preventSubmit = callCount >= 5 ? true : false;
-              return {
-                submit: {
-                  ...state.submit,
-                  isSubmit: false,
-                  status: 'rejected',
-                  isError: preventSubmit,
-                  callCount,
-                },
-              };
-            });
+            set(
+              (state) => {
+                const callCount = state.submit.callCount + 1;
+                const preventSubmit = callCount >= 5 ? true : false;
+                return {
+                  submit: {
+                    ...state.submit,
+                    isSubmit: false,
+                    status: 'rejected',
+                    isError: preventSubmit,
+                    callCount,
+                  },
+                };
+              },
+              undefined,
+              'fetchFormCategoryItem/rejected'
+            );
             return;
           }
           // fulfilled
@@ -354,6 +361,7 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
             },
           }));
         },
+        // 메뉴 생성/수정/삭제
         fetchFormMenuItem: async ({ method, itemInfo, table, file, adminId }) => {
           // pending
           set((state) => ({
@@ -371,9 +379,7 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
           const imgResult = await fetchMenuImage({ method, file, imgPath });
           // 메뉴 정보 전송
           const fetchResult = await fetchMenuItem({ method, itemInfo, table });
-          // rejected 추후 함수 처리
-          if (imgResult?.error || !fetchResult === null) {
-            // if (imgResult?.error || !fetchResult.status.toString().startsWith('2')) {
+          if (imgResult === null || fetchResult === null) {
             set((state) => {
               const callCount = state.submit.callCount + 1;
               const preventSubmit = callCount >= 5 ? true : false;
@@ -399,6 +405,7 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
             },
           }));
         },
+        // 주문 목록 삭제/완료 처리
         fetchOrderListStatus: async ({ method, data }) => {
           // pending
           set((state) => ({
@@ -407,13 +414,10 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
               status: 'pending',
               isSubmit: true,
               alertType: 'list',
-              msgType: method,
             },
           }));
           const fetchResult = await fetchOrderList(method, data);
-          // rejected 추후 함수 처리
-          if (!fetchResult.data) {
-            // if (!fetchResult.status.toString().startsWith('2')) {
+          if (fetchResult === null) {
             set((state) => {
               const callCount = state.submit.callCount + 1;
               const preventSubmit = callCount >= 5 ? true : false;
@@ -439,6 +443,7 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
             },
           }));
         },
+        // 좌석 생성/형태 수정/삭제 처리
         fetchTableListData: async ({ method, dataArr }) => {
           // pending
           set((state) => ({
@@ -452,8 +457,8 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
           }));
           const fetchResult = await fetchTableList(method, dataArr);
           // rejected 추후 함수 처리
-          if (typeof fetchResult === null) {
-            // if (!fetchResult.status.toString().startsWith('2')) {
+          // 오류 발생 시 null 반환 임시 적용, 확인요
+          if (fetchResult === null) {
             set((state) => {
               const callCount = state.submit.callCount + 1;
               const preventSubmit = callCount >= 5 ? true : false;
@@ -479,6 +484,7 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
             },
           }));
         },
+        // 좌석 요청 알림 읽음 처리
         fetchUpdateAlertMsg: async ({ method, id }) => {
           // pending
           set((state) => ({
@@ -493,8 +499,8 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
           // fetching
           const fetchResult = await fetchTableRequestList(method, id);
           // rejected 추후 함수 처리
-          // if (!fetchResult.status.toString().startsWith('2')) {
           if (fetchResult === null) {
+            // if (!fetchResult.status.toString().startsWith('2')) {
             set((state) => {
               const callCount = state.submit.callCount + 1;
               const preventSubmit = callCount >= 5 ? true : false;

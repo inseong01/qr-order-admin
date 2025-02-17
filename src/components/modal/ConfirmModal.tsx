@@ -1,11 +1,12 @@
 import styles from '@/style/modal/ConfirmModal.module.css';
 import { useBoundStore } from '../../lib/store/useBoundStore';
+import { ConfirmModalTitle } from '../../types/common';
 import ConfirmButton from './confirm/ConfirmButton';
 import ConfirmTitle from './confirm/ConfirmTitle';
 
 import { AnimatePresence, motion } from 'motion/react';
 
-export default function ConfirmModal({ title }: { title: string }) {
+export default function ConfirmModal({ title }: { title: ConfirmModalTitle }) {
   // store
   const isModalOpen = useBoundStore((state) => state.modal.isOpen);
 
