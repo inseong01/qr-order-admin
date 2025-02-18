@@ -2,12 +2,15 @@ import useQueryAllOrderList from '../../../lib/hook/useQuery/useQueryAllOrderLis
 import { useBoundStore } from '../../../lib/store/useBoundStore';
 import OrderListSwiper from '../../swiper/order/OrderListSwiper';
 import Loader from '../../Loader';
+import { useEffect } from 'react';
 
 export default function OrderSection() {
   // store
+  const tab = useBoundStore((state) => state.tab.title);
+  const submitStatus = useBoundStore((state) => state.submit.status);
   const selectedCategory = useBoundStore((state) => state.category);
   // hook
-  const { data, isLoading } = useQueryAllOrderList();
+  const { data, refetch } = useQueryAllOrderList();
   // variant
   const doneOrderList = data ? data.filter((arr) => arr.isDone) : [];
   const notDoneOrderList = data ? data.filter((arr) => !arr.isDone) : [];
@@ -16,7 +19,15 @@ export default function OrderSection() {
     (a, b) => new Date(b.updated_at as Date).getTime() - new Date(a.updated_at as Date).getTime()
   );
 
-  if (isLoading) return <Loader />;
+  useEffect(() => {
+    if (tab !== 'order') return;
+    if (submitStatus === 'fulfilled') {
+      refetch();
+      console.log(2, data);
+    }
+  }, [submitStatus]);
+  console.log(1, data);
+  // if (isLoading) return <Loader />;
 
   return (
     <>

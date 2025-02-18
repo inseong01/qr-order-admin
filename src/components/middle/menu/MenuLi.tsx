@@ -6,11 +6,12 @@ import Loader from '../../Loader';
 import AddMenu from './AddMenu';
 import Menu from './Menu';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function MenuLi() {
   // hook
-  const { data, isFetched, refetch, isLoading } = useQueryMenuList();
+  const { data, refetch } = useQueryMenuList();
+
   // store
   const tab = useBoundStore((state) => state.tab.title);
   const submitStatus = useBoundStore((state) => state.submit.status);
@@ -28,13 +29,13 @@ export default function MenuLi() {
         : "pending", "fulfilled", "rejected" 상태 변화로 최신화 데이터 정확하게 못 받음
       - useQueryMenuList는 초기 상태 선언 필요로 useFetchSlice.js에서 리패치 선언 불가
     */
-    //  refetch 제한
+    //  해당 tab에서만 실행되도록 제한
     if (tab !== 'menu') return;
     // 메뉴 생성/수정 시 메뉴 리패치
-    if (isFetched && submitStatus === 'fulfilled') {
+    if (submitStatus === 'fulfilled') {
       refetch();
     }
-  }, [tab, submitStatus, isFetched]);
+  }, [tab, submitStatus]);
 
   // 모달창 열기
   function onClickOpenModal(modalType: ModalType, list?: MenuList) {
@@ -57,20 +58,15 @@ export default function MenuLi() {
     };
   }
 
-  if (isLoading) return <Loader />;
+  // if (isLoading) return <Loader />;
 
   return (
     <>
-      {!data ? (
-        <li>표시할 메뉴가 없습니다.</li>
-      ) : (
-        <>
-          {data.map((list: MenuList, idx: number) => {
-            return <Menu key={idx} onClickOpenModal={onClickOpenModal} list={list} />;
-          })}
-          <AddMenu onClickOpenModal={onClickOpenModal} />
-        </>
-      )}
+      {data &&
+        data.map((list: MenuList, idx: number) => {
+          return <Menu key={idx} onClickOpenModal={onClickOpenModal} list={list} />;
+        })}
+      <AddMenu onClickOpenModal={onClickOpenModal} />
     </>
   );
 }

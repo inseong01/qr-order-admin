@@ -1,9 +1,13 @@
 import supabase from '../supabase/supabaseConfig';
-import useQueryRequestList from './useQuery/useQueryRequestList';
-import useQueryAllOrderList from './useQuery/useQueryAllOrderList';
+import fetchTableRequestList from '../supabase/func/fetchTableRequestList';
+import getOrderList from '../supabase/func/getOrderList';
+import getTabCategory from '../supabase/func/getTabCategory';
+import getMenuList from '../supabase/func/getMenuList';
+import { useBoundStore } from '../store/useBoundStore';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { REALTIME_LISTEN_TYPES, REALTIME_POSTGRES_CHANGES_LISTEN_EVENT } from '@supabase/supabase-js';
+import { useQueries } from '@tanstack/react-query';
 
 // Supabase Table Realtime 구독 커스텀훅
 
@@ -18,11 +22,61 @@ import { REALTIME_LISTEN_TYPES, REALTIME_POSTGRES_CHANGES_LISTEN_EVENT } from '@
 // - useQuery 커스텀훅 "staleTime: Infinity"로 매번 리렌더링 방지
 
 export function useSubscribeDBTable(method: REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.ALL) {
-  const requestList = useQueryRequestList();
-  const allOrderList = useQueryAllOrderList();
-
+  // state
+  const [isFirstLoad, setLoaded] = useState(true);
+  // store
+  const tab = useBoundStore((state) => state.tab.title);
+  const selectedCategory = useBoundStore((state) => state.category);
+  // useQueries
+  const queries = useQueries({
+    queries: [
+      {
+        queryKey: ['requestList'],
+        queryFn: () => fetchTableRequestList('select'),
+        staleTime: Infinity,
+        retry: 1,
+      },
+      {
+        queryKey: ['allOrderList'],
+        queryFn: () => getOrderList(),
+        staleTime: Infinity,
+        retry: 1,
+      },
+      {
+        queryKey: ['tabMenu'],
+        queryFn: () => getTabCategory('tab'),
+        staleTime: Infinity,
+        retry: 1,
+      },
+      {
+        queryKey: ['categoryList', { tab }],
+        queryFn: () => getTabCategory(tab),
+        refetchOnWindowFocus: false,
+        retry: 1,
+      },
+      {
+        queryKey: ['menuList', selectedCategory.id],
+        queryFn: () => getMenuList(selectedCategory),
+        retry: 1,
+      },
+    ],
+    combine: (result) => {
+      return {
+        requestList: result[0],
+        allOrderList: result[1],
+        tabMenu: result[2],
+        categoryList: result[3],
+        isError: result.some((data) => data.isError),
+        // isLoading, 초기에 탭 변경할 때마다 이뤄지는 게 문제: alertMsg 메뉴 카테고리 변경하면 한 번 더 뜨는 원인
+        isLoading: result.some((data) => data.isLoading) && false,
+        isFetched: result.every((data) => data.isFetching),
+      };
+    },
+  });
   // realtime 활성화 모든 테이블 이벤트 감지
   useEffect(() => {
+    if (!isFirstLoad) return;
+
     const changes = supabase
       .channel('qr-order-orderList-realtime')
       .on(
@@ -30,7 +84,7 @@ export function useSubscribeDBTable(method: REALTIME_POSTGRES_CHANGES_LISTEN_EVE
         { schema: 'public', event: method, table: 'qr-order-allOrderList' },
         async () => {
           // 주문 요청 시 allOrderList 쿼리 리패치
-          allOrderList.refetch();
+          queries.allOrderList.refetch();
         }
       )
       .on(
@@ -38,15 +92,17 @@ export function useSubscribeDBTable(method: REALTIME_POSTGRES_CHANGES_LISTEN_EVE
         { schema: 'public', event: method, table: 'qr-order-request-list' },
         async () => {
           // 요청 알림마다 requestList 쿼리 리패치
-          requestList.refetch();
+          queries.requestList.refetch();
         }
       )
       .subscribe();
+
+    setLoaded(false);
 
     return () => {
       changes.unsubscribe();
     };
   }, []);
 
-  return;
+  return queries;
 }

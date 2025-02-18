@@ -1,13 +1,9 @@
-import fetchTableRequestList from "../../supabase/func/fetchTableRequestList";
-
-import { useQuery } from "@tanstack/react-query";
+import { useIsFetching, useQueryClient } from '@tanstack/react-query';
 
 export default function useQueryRequestList() {
-  const requestList = useQuery({
-    queryKey: ['requestList'],
-    queryFn: () => fetchTableRequestList('select'),
-    staleTime: Infinity,
-  });
+  const queryClient = useQueryClient();
+  const data = queryClient.getQueryData(['requestList']);
+  const isFetching = useIsFetching();
 
-  return requestList
+  return { data, isFetching };
 }

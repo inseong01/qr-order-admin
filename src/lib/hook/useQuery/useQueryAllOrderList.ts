@@ -1,13 +1,12 @@
-import getOrderList from '../../supabase/func/getOrderList';
+import { AllOrderList } from '../../../types/common';
 
-import { useQuery } from '@tanstack/react-query';
+import { useIsFetching, useQueryClient } from '@tanstack/react-query';
 
 export default function useQueryAllOrderList() {
-  const allOrderList = useQuery({
-    queryKey: ['allOrderList'],
-    queryFn: () => getOrderList(),
-    staleTime: Infinity,
-  });
+  const queryClient = useQueryClient();
+  const data = queryClient.getQueryData(['allOrderList']) as AllOrderList[];
+  const refetch = async () => await queryClient.refetchQueries({ queryKey: ['allOrderList'] });
+  const isFetching = useIsFetching();
 
-  return allOrderList;
+  return { data, isLoading: 0, isFetching, refetch };
 }

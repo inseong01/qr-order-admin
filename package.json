@@ -16,6 +16,7 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@supabase/supabase-js": "^2.46.2",
     "@tanstack/react-query": "^5.61.5",
+    "@tanstack/react-query-devtools": "^5.66.5",
     "@types/qrcode": "^1.5.5",
     "dotenv": "^16.4.5",
     "konva": "8.0.1",

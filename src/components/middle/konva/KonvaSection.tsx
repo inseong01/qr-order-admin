@@ -37,7 +37,7 @@ export default function KonvaSection() {
   const [clientTableList, setClientTableList] = useState<TableList[]>([]);
   const [openKonva, setOpenKonva] = useState(false);
   const [isFirstLoad, setFirstLoad] = useState(true);
-  console.log(data);
+
   useEffect(() => {
     setFirstLoad(false);
   }, []);

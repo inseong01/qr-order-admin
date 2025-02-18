@@ -450,7 +450,21 @@
     - 좌석: 생성 v, 수정 v, 삭제 v
     - 주문: 불러오기 v, 완료 v, 삭제 v
 
-<--- swiper 반응형 설정: 모바일 가로 회전, 배포 오류 점검/수정 --->
+25.2.18.
   - 패치 오류 null 반환 처리 점검
     - 요청 목록 불러오기
-    : 카테고리, 탭, 요청목록, 좌석 불러오기
+    : 카테고리, 탭, 요청목록, 좌석
+    -> 카테고리 불러오기 오류는 ErrorPage 적용, 이외는 예외처리
+
+    - 훅 개선
+    : 옵저버 수 1개 유지, 데이터 패치, 리패치 적용 
+      - useQueryTabMenu 
+      - useQueryCategoryList
+      - useQueryMenuList 
+      - useQueryRequestList
+      - useQueryAllOrderList
+
+<--- swiper 반응형 설정: 모바일 가로 회전, 
+  combine의 isLoading 문제 해결, 타입 정의, 
+  정상동작 확인, 
+  requestList/tableList/orderList 예외처리 어떻게 할 건지 계획(오류 탭 별 처리 또는 전체 처리) 및 적용 --->

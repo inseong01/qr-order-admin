@@ -27,7 +27,7 @@ export default function AlertMsg() {
       clearTimeout(timer);
     };
   }, [submitStatus]);
-
+  console.log('submitStatus', submitStatus);
   // fulfilled 때 alertMsg 사라지는 현상 방지
   if (submitStatus === 'pending') return;
 

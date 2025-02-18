@@ -7,6 +7,9 @@ export default async function getTabCategory(type: TableType) {
     .from(`qr-order-category-${type}`)
     .select('*')
     .order('id', { ascending: true });
-  if (response.error) throw new Error(response.error.message);
+  if (response.error) {
+    console.error(response.error.message);
+    throw new Error(response.error.message);
+  }
   return response.data;
 }

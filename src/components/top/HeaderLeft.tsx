@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 
 export default function HeaderLeft() {
   // hook
-  const categoryList = useQueryCategoryList();
+  const { refetch } = useQueryCategoryList();
   // store
   const tab = useBoundStore((state) => state.tab.title);
   const alertType = useBoundStore((state) => state.submit.alertType);
@@ -32,14 +32,10 @@ export default function HeaderLeft() {
     setAbleRefetch(true);
 
     if (isAbleRefetch && submitStatus === 'fulfilled') {
-      categoryList.refetch();
+      refetch();
       setAbleRefetch(false);
     }
   }, [submitStatus]);
-
-  if (categoryList.isFetching) {
-    return <div className={styles.left}></div>;
-  }
 
   return (
     <div className={styles.left}>

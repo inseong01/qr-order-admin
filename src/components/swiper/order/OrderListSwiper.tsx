@@ -12,7 +12,6 @@ export default function OrderListSwiper({
   orderList: AllOrderList[];
   isDone?: boolean;
 }) {
-  console.log(orderList);
   return (
     <motion.ul
       className={`${styles.orderList} ${isDone ? styles.done : ''}`}
