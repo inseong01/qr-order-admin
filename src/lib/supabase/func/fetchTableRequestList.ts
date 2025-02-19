@@ -5,30 +5,24 @@ export default async function fetchTableRequestList(method: Method, id: string |
   let response;
 
   switch (method) {
-    case 'select': {
-      response = await supabase
-        .from('qr-order-request-list')
-        .select('*')
-        .order('created_at', { ascending: true });
-      break;
-    }
     case 'update': {
       if (!id) {
         console.error(`"${id}" : ID is not defined`);
-        return { data: [], status: 1 };
+        return null;
       }
       response = await supabase.from('qr-order-request-list').update({ isRead: true }).eq('id', id).select();
       break;
     }
     default: {
       console.error(`"${method.toUpperCase()}" : Method is not defined`);
-      return { data: [], status: 1 };
+      return null;
     }
   }
 
   if (response.error) {
     console.error(response.error.message ?? `${method.toUpperCase()} error`);
+    return null;
   }
 
-  return response;
+  return response.data;
 }

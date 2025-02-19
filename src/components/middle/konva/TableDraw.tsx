@@ -53,7 +53,7 @@ export default function TableDraw({
       onDblClick={backToInitPos}
       onDblTap={backToInitPos}
       onDragEnd={getLastPos}
-      draggable
+      draggable={!konvaEditIsAble}
     >
       <TableEditRange stageSize={stageSize} />
       <Layer>

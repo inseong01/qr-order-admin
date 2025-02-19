@@ -1,18 +1,20 @@
 import styles from '@/style/top/HeaderLeft.module.css';
-import useQueryCategoryList from '../../lib/hook/useQuery/useQueryCategoryList';
 import { useBoundStore } from '../../lib/store/useBoundStore';
 import HeaderCategorySwiper from '../swiper/header/HeaderCategorySwiper';
 import AddCategoryBox from './AddCategoryBox';
 
 import { useEffect, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function HeaderLeft() {
-  // hook
-  const { refetch } = useQueryCategoryList();
   // store
   const tab = useBoundStore((state) => state.tab.title);
   const alertType = useBoundStore((state) => state.submit.alertType);
   const submitStatus = useBoundStore((state) => state.submit.status);
+  // query
+  const query = useQueryClient();
+  const queryState = query.getQueryState(['categoryList', { tab }]);
+  const refetch = () => query.refetchQueries({ queryKey: ['categoryList', { tab }] });
   // useState
   const [isAbleRefetch, setAbleRefetch] = useState(true);
 
@@ -32,10 +34,16 @@ export default function HeaderLeft() {
     setAbleRefetch(true);
 
     if (isAbleRefetch && submitStatus === 'fulfilled') {
+      console.log('refetch');
       refetch();
       setAbleRefetch(false);
     }
   }, [submitStatus]);
+
+  // 패치되면 리렌더링 발생 트리거
+  if (queryState?.fetchStatus === 'fetching') {
+    return <div className={styles.left}></div>;
+  }
 
   return (
     <div className={styles.left}>

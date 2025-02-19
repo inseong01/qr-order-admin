@@ -1,5 +1,5 @@
 import './App.css';
-import PageWrap from './components/PageWrap';
+import FirstLoad from './components/FirstLoad';
 
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -8,7 +8,7 @@ function App() {
   const queryClient = new QueryClient();
   return (
     <QueryClientProvider client={queryClient}>
-      <PageWrap />
+      <FirstLoad />
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );

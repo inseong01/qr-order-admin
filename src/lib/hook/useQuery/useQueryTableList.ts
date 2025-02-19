@@ -6,6 +6,7 @@ export default function useQueryTableList() {
   const tableList = useQuery({
     queryKey: ['tableList'],
     queryFn: () => getTableList(),
+    staleTime: Infinity,
     throwOnError: true,
   });
 

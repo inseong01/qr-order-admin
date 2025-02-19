@@ -4,6 +4,7 @@ import { useBoundStore } from '../../../lib/store/useBoundStore';
 import useQueryTableList from '../../../lib/hook/useQuery/useQueryTableList';
 import createKonvaInitTable from '../../../lib/function/createKonvaInitTable';
 import { TableList } from '../../../types/common';
+import Loader from '../../Loader';
 import TableDraw from './TableDraw';
 
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';

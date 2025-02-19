@@ -2,6 +2,7 @@ import useQueryAllOrderList from '../../../lib/hook/useQuery/useQueryAllOrderLis
 import { useBoundStore } from '../../../lib/store/useBoundStore';
 import OrderListSwiper from '../../swiper/order/OrderListSwiper';
 import Loader from '../../Loader';
+
 import { useEffect } from 'react';
 
 export default function OrderSection() {
@@ -23,11 +24,8 @@ export default function OrderSection() {
     if (tab !== 'order') return;
     if (submitStatus === 'fulfilled') {
       refetch();
-      console.log(2, data);
     }
   }, [submitStatus]);
-  console.log(1, data);
-  // if (isLoading) return <Loader />;
 
   return (
     <>

@@ -6,12 +6,11 @@ import Loader from '../../Loader';
 import AddMenu from './AddMenu';
 import Menu from './Menu';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 export default function MenuLi() {
   // hook
   const { data, refetch } = useQueryMenuList();
-
   // store
   const tab = useBoundStore((state) => state.tab.title);
   const submitStatus = useBoundStore((state) => state.submit.status);
@@ -20,6 +19,9 @@ export default function MenuLi() {
   const changeModalState = useBoundStore((state) => state.changeModalState);
   const getItemInfo = useBoundStore((state) => state.getItemInfo);
   const resetItemState = useBoundStore((state) => state.resetItemState);
+  // variant
+  const currentMenuList =
+    selectedCategory.id === 0 ? data : data?.filter((list) => list.sortId === selectedCategory.id);
 
   // 메뉴 리패치
   useEffect(() => {
@@ -58,12 +60,10 @@ export default function MenuLi() {
     };
   }
 
-  // if (isLoading) return <Loader />;
-
   return (
     <>
       {data &&
-        data.map((list: MenuList, idx: number) => {
+        currentMenuList?.map((list: MenuList, idx: number) => {
           return <Menu key={idx} onClickOpenModal={onClickOpenModal} list={list} />;
         })}
       <AddMenu onClickOpenModal={onClickOpenModal} />

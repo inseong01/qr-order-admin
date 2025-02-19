@@ -25,9 +25,8 @@ export default function TableAlertMsg() {
   const reqeustMsgRef = useRef(null);
   // useQuery
   const { data, isFetching } = useQueryRequestList();
-  const requestList = data?.data as RequestList[];
   // variant
-  const extraMsg = requestList ? requestList.filter((list) => !list.isRead).slice(4) : [];
+  const extraMsg = data ? data.filter((list) => !list.isRead).slice(4) : [];
 
   // 읽지 않은 이전 요청 불러오기
   useEffect(() => {
@@ -36,7 +35,7 @@ export default function TableAlertMsg() {
       - 요청이 없다면 [] 할당하여 오류 발생 방지
     */
     if (isFetching) return;
-    const notReadMsg = requestList ? requestList.filter((list) => !list.isRead).slice(0, 4) : [];
+    const notReadMsg = data ? data.filter((list) => !list.isRead).slice(0, 4) : [];
     setRequestAlertList(notReadMsg);
   }, [data, isFetching]);
 

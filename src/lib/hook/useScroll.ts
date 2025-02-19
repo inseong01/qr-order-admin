@@ -1,7 +1,8 @@
-import { DragEvent, MutableRefObject, useState } from 'react';
 import { measureCallbackCount } from '../function/measureCallbackCount';
 
-export default function useScroll(ref: MutableRefObject<HTMLUListElement | null>) {
+import { DragEvent, RefObject, useState } from 'react';
+
+export default function useScroll(ref: RefObject<HTMLUListElement | null>) {
   const [scrollStart, geScrollX] = useState({ x: 0, scrollX: 0 });
 
   // 카테고리 드래그 이동
