@@ -16,14 +16,18 @@ export default function AlertMsg() {
     let timer: ReturnType<typeof setTimeout>;
     if (submitStatus === 'fulfilled' || submitStatus === 'rejected') {
       setIsAlert(true);
-      // 오류 발생 4번 제한
+      // 오류 발생 5번 이후 사라짐 제한
       if (callCount < 5) {
         timer = setTimeout(() => {
           setIsAlert(false);
         }, 1700);
+        console.log(1, submitStatus);
       }
     }
     return () => {
+      // menu 탭에서 useEffect 연속 발생 제한
+      if (timer && submitStatus === 'fulfilled') return;
+      console.log(2, submitStatus);
       clearTimeout(timer);
     };
   }, [submitStatus]);

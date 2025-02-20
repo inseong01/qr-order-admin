@@ -1,7 +1,6 @@
 import useQueryAllOrderList from '../../../lib/hook/useQuery/useQueryAllOrderList';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
 import OrderListSwiper from '../../swiper/order/OrderListSwiper';
-import Loader from '../../Loader';
 
 import { useEffect } from 'react';
 

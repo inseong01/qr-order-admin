@@ -33,7 +33,7 @@ export default function PageWrap({
     if (isLoading) return;
     // 초기 UI 반복 마운트 방지
     if (isMounted) return;
-    // 데이터 패치되었다면 페이지 보여주는 트리거 설정
+    // 데이터 패치되었다면 페이지 보여주는 트리거
     setMount(true);
   }, [isLoading]);
 

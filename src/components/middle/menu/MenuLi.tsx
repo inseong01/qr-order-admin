@@ -2,7 +2,6 @@ import useQueryMenuList from '../../../lib/hook/useQuery/useQueryMenuList';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
 import { ModalType } from '../../../lib/store/useModalSlice';
 import { MenuList } from '../../../types/common';
-import Loader from '../../Loader';
 import AddMenu from './AddMenu';
 import Menu from './Menu';
 
@@ -19,6 +18,7 @@ export default function MenuLi() {
   const changeModalState = useBoundStore((state) => state.changeModalState);
   const getItemInfo = useBoundStore((state) => state.getItemInfo);
   const resetItemState = useBoundStore((state) => state.resetItemState);
+  const setInitSubmitStatus = useBoundStore((state) => state.setInitSubmitStatus);
   // variant
   const currentMenuList =
     selectedCategory.id === 0 ? data : data?.filter((list) => list.sortId === selectedCategory.id);
@@ -36,6 +36,8 @@ export default function MenuLi() {
     // 메뉴 생성/수정 시 메뉴 리패치
     if (submitStatus === 'fulfilled') {
       refetch();
+      // fulfilled 상태서 클릭 시 리패치 되는 상황 방지
+      setInitSubmitStatus();
     }
   }, [tab, submitStatus]);
 

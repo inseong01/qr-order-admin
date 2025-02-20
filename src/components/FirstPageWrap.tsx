@@ -1,8 +1,8 @@
-import { lazy, Suspense, useState } from 'react';
 import { useSubscribeDBTable } from '../lib/hook/useSubscribeDBTable';
-import { REALTIME_POSTGRES_CHANGES_LISTEN_EVENT } from '@supabase/supabase-js';
-import ErrorPage from './ErrorPage';
 import FirstLoading from './FirstLoading';
+
+import { lazy, Suspense, useState } from 'react';
+import { REALTIME_POSTGRES_CHANGES_LISTEN_EVENT } from '@supabase/supabase-js';
 
 const LazyPageWrap = lazy(() => import('./PageWrap'));
 

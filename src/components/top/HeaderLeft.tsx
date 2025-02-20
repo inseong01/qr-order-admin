@@ -11,6 +11,7 @@ export default function HeaderLeft() {
   const tab = useBoundStore((state) => state.tab.title);
   const alertType = useBoundStore((state) => state.submit.alertType);
   const submitStatus = useBoundStore((state) => state.submit.status);
+  const setInitSubmitStatus = useBoundStore((state) => state.setInitSubmitStatus);
   // query
   const query = useQueryClient();
   const queryState = query.getQueryState(['categoryList', { tab }]);
@@ -22,10 +23,10 @@ export default function HeaderLeft() {
   useEffect(() => {
     /*
       메뉴 카테고리 리패치, useEffect 사용 이유
-      - useModalSubmitData.js에서 폼 제출 이후 리패치는 새로운 데이터를 받아오지 못함
-        : 제출 상태 변화로 불가능
-      - 무한 리패치
-        : flag 세워서 한 번만 되도록 설정, 불필요 의존성 제외  
+        - useModalSubmitData.js에서 폼 제출 이후 리패치는 새로운 데이터를 받아오지 못함
+          : 제출 상태 변화로 불가능
+        - 무한 리패치
+          : flag 세워서 한 번만 되도록 설정, 불필요 의존성 제외  
     */
     // 카테고리 관련일 때 리패치
     if (tab !== 'menu') return;
@@ -34,9 +35,10 @@ export default function HeaderLeft() {
     setAbleRefetch(true);
 
     if (isAbleRefetch && submitStatus === 'fulfilled') {
-      console.log('refetch');
       refetch();
       setAbleRefetch(false);
+      // fulfilled 상태서 클릭 시 리패치 되는 상황 방지
+      setInitSubmitStatus();
     }
   }, [submitStatus]);
 

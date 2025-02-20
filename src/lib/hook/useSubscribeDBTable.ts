@@ -24,7 +24,7 @@ import { useQueries } from '@tanstack/react-query';
 
 export type QueryKeys = 'requestList' | 'allOrderList' | 'tabMenu' | 'categoryList' | 'menuList';
 export type Status = 'success' | 'pending' | 'error';
-export type initDataLoadStatus = {
+export type InitDataLoadStatus = {
   [key in QueryKeys]?: Status;
 };
 
@@ -70,7 +70,7 @@ export function useSubscribeDBTable(method: REALTIME_POSTGRES_CHANGES_LISTEN_EVE
       const isLoading = result.some((data) => data.isLoading);
       const isFetched = result.every((data) => data.isFetched);
       let initialLoadstatus: Status = 'pending';
-      let initDataLoadStatus: initDataLoadStatus = {};
+      let initDataLoadStatus: InitDataLoadStatus = {};
 
       // query 별 데이터 패치 상태 객체 생성
       for (let i = 0; i < result.length; i++) {

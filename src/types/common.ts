@@ -14,6 +14,8 @@ export type RequestList = Tables<'qr-order-request-list'>;
 export type MenuCategoryList = Tables<'qr-order-category-menu'>;
 export type InsertMenuCategoryList = TablesInsert<'qr-order-category-menu'>;
 export type TabCategoryList = Tables<'qr-order-category-tab'>;
+export type TableCategoryList = Tables<'qr-order-category-table'>;
+export type OrderCategoryList = Tables<'qr-order-category-order'>;
 
 // qr-order-allOrderList
 export type Order = {

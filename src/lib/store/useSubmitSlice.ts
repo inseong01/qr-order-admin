@@ -28,6 +28,7 @@ export interface UseSubmitSlice {
   };
   resetSubmitState: () => void;
   changeSubmitMsgType: ({ msgType }: { msgType: MsgType }) => void;
+  setInitSubmitStatus: () => void;
 }
 
 export const initialState: InitialState = {
@@ -59,6 +60,19 @@ export const useSubmitSlice: StateCreator<UseSubmitSlice, [['zustand/devtools', 
             undefined,
             'submit/changeSubmitMsgType'
           ),
+        setInitSubmitStatus: () =>
+          set(
+            (state) => {
+              return {
+                submit: {
+                  ...state.submit,
+                  status: '',
+                },
+              };
+            },
+            undefined,
+            'submit/setInitSubmitStatus'
+          ),
       })
     : (set) => ({
         ...initialState,
@@ -69,6 +83,15 @@ export const useSubmitSlice: StateCreator<UseSubmitSlice, [['zustand/devtools', 
               submit: {
                 ...state.submit,
                 msgType,
+              },
+            };
+          }),
+        setInitSubmitStatus: () =>
+          set((state) => {
+            return {
+              submit: {
+                ...state.submit,
+                status: '',
               },
             };
           }),

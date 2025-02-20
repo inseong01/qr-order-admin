@@ -489,6 +489,7 @@
   -> PageWrap Lazy 적용하여 지연로드, 접속 UI 컴포넌트 마운트 우선
 
   useQueryClient 타입 정의
+  -> 참고: https://highjoon-dev.vercel.app/blogs/6-react-query-and-typescript
 
   categoryList, tableList, orderList 리로드 방지 
   -> staleTime: infinity 설정으로 자동 리패치 발생 X, refetch() 사용으로 수동 최신화
@@ -502,11 +503,14 @@
     요청 알림 읽음 처리 연속 클릭 제한 (해결)
     -> 플래그 설정
 
-  - 수정 할 것
-    - 버튼 클릭 시 반응 신속하게(UI 보여주고 처리하기)
-    : useOptimistic
+    음식 생성 후 카테고리 생성 시 스와이퍼 초기로 돌아감 (해결)
+    -> 'fulfilled', status useEffect 조건 해당돼 문제 발생, resetSubmitState 적용하여 status 초기값 할당
 
-    - useQuery 타입 정의
-      참고: https://highjoon-dev.vercel.app/blogs/6-react-query-and-typescript
-      
-<--- swiper 반응형 설정: 모바일 가로 회전,  --->
+    메뉴 카테고리 수정 후 이전 카테고리 삭제 시 수정한 메뉴 사라짐 (해결)
+    -> DB에서 sort 같이 변경되지 않음, 업데이트 전용 트리거 추가
+
+
+<--- swiper 반응형 설정: 모바일 가로 회전, 검사 후 main 레포지토리 병합/배포 --->
+  - 수정 할 것
+    버튼 클릭 시 반응 신속하게(UI 보여주고 처리하기)
+    : useOptimistic 사용하려면 fetch 함수에서 post 분리 필요

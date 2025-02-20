@@ -313,7 +313,6 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
         },
       })
     : (set) => ({
-        // 메뉴 카테고리 생성/수정/삭제
         fetchFormCategoryItem: async ({ method, itemInfo, table }) => {
           // pending
           set((state) => {
@@ -332,23 +331,19 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
           const fetchResult = await fetchCategoryMenu({ method, itemInfo, table });
           // 오류 발생 시 null 반환
           if (fetchResult === null) {
-            set(
-              (state) => {
-                const callCount = state.submit.callCount + 1;
-                const preventSubmit = callCount >= 5 ? true : false;
-                return {
-                  submit: {
-                    ...state.submit,
-                    isSubmit: false,
-                    status: 'rejected',
-                    isError: preventSubmit,
-                    callCount,
-                  },
-                };
-              },
-              undefined,
-              'fetchFormCategoryItem/rejected'
-            );
+            set((state) => {
+              const callCount = state.submit.callCount + 1;
+              const preventSubmit = callCount >= 5 ? true : false;
+              return {
+                submit: {
+                  ...state.submit,
+                  isSubmit: false,
+                  status: 'rejected',
+                  isError: preventSubmit,
+                  callCount,
+                },
+              };
+            });
             return;
           }
           // fulfilled
@@ -361,7 +356,6 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
             },
           }));
         },
-        // 메뉴 생성/수정/삭제
         fetchFormMenuItem: async ({ method, itemInfo, table, file, adminId }) => {
           // pending
           set((state) => ({
@@ -405,7 +399,6 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
             },
           }));
         },
-        // 주문 목록 삭제/완료 처리
         fetchOrderListStatus: async ({ method, data }) => {
           // pending
           set((state) => ({
@@ -443,7 +436,6 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
             },
           }));
         },
-        // 좌석 생성/형태 수정/삭제 처리
         fetchTableListData: async ({ method, dataArr }) => {
           // pending
           set((state) => ({
@@ -484,7 +476,6 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
             },
           }));
         },
-        // 좌석 요청 알림 읽음 처리
         fetchUpdateAlertMsg: async ({ method, id }) => {
           // pending
           set((state) => ({
