@@ -21,6 +21,13 @@ import { useQueries } from '@tanstack/react-query';
   - 업데이트 되면 데이터 갱신되도록, 원본 캐시 useQuery 위치 중요
   - "staleTime: Infinity"로 리렌더링 방지 
 */
+
+export type QueryKeys = 'requestList' | 'allOrderList' | 'tabMenu' | 'categoryList' | 'menuList';
+export type Status = 'success' | 'pending' | 'error';
+export type initDataLoadStatus = {
+  [key in QueryKeys]?: Status;
+};
+
 export function useSubscribeDBTable(method: REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.ALL) {
   // store
   const tab = useBoundStore((state) => state.tab.title);
@@ -59,15 +66,40 @@ export function useSubscribeDBTable(method: REALTIME_POSTGRES_CHANGES_LISTEN_EVE
       },
     ],
     combine: (result) => {
+      const isError = result.some((data) => data.isError);
+      const isLoading = result.some((data) => data.isLoading);
+      const isFetched = result.every((data) => data.isFetched);
+      let initialLoadstatus: Status = 'pending';
+      let initDataLoadStatus: initDataLoadStatus = {};
+
+      // query 별 데이터 패치 상태 객체 생성
+      for (let i = 0; i < result.length; i++) {
+        // query 추가 시 query 순서에 맞춰 queryKeys에 queryKey 삽입
+        let queryKeys: QueryKeys[] = ['requestList', 'allOrderList', 'tabMenu', 'categoryList', 'menuList'];
+        initDataLoadStatus = {
+          ...initDataLoadStatus,
+          [queryKeys[i]]: result[i].status,
+        };
+      }
+
+      // 모든 데이터 패치 실시간 상태 결과
+      if (isError) {
+        initialLoadstatus = 'error';
+      } else if (isFetched) {
+        initialLoadstatus = 'success';
+      }
+
       return {
         requestList: result[0],
         allOrderList: result[1],
         tabMenu: result[2],
         categoryList: result[3],
         menuList: result[4],
-        isError: result.some((data) => data.isError),
-        isLoading: result.some((data) => data.isLoading),
-        isFetched: result.every((data) => data.isFetching),
+        isError,
+        isLoading,
+        isFetched,
+        initialLoadstatus,
+        initDataLoadStatus,
       };
     },
   });

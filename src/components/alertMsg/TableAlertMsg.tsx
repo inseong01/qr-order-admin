@@ -13,6 +13,7 @@ export default function TableAlertMsg() {
   const [requestAlertList, setRequestAlertList] = useState<RequestList[]>([]);
   const [id, selectId] = useState('');
   const [alertOn, setAlertOn] = useState(false);
+  const [isClicked, setClick] = useState(false);
   // store
   const submitStatus = useBoundStore((state) => state.submit.status);
   const submitIsError = useBoundStore((state) => state.submit.isError);
@@ -37,6 +38,7 @@ export default function TableAlertMsg() {
     if (isFetching) return;
     const notReadMsg = data ? data.filter((list) => !list.isRead).slice(0, 4) : [];
     setRequestAlertList(notReadMsg);
+    setClick(false);
   }, [data, isFetching]);
 
   // 읽은 알림 안 읽은 목록에서 제외하기
@@ -63,10 +65,13 @@ export default function TableAlertMsg() {
   // 클릭 시 알림 읽음 처리 (DB)
   function onClickReadMsg(list: RequestList) {
     return () => {
+      // 연속 클릭 제한
+      if (isClicked) return;
       // 오류 발생 시 읽음 처리 제한
       if (submitIsError) return;
       fetchUpdateAlertMsg({ method: 'update', id: list.id });
       selectId(list.id);
+      setClick(true);
     };
   }
 

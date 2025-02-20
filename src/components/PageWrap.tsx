@@ -1,26 +1,10 @@
-import Header from './Header';
 import Footer from './Footer';
 import Main from './Main';
-import { Dispatch, useEffect } from 'react';
+import Header from './Header';
 
-export default function PageWrap({
-  isCompleted,
-  setLoadComplete,
-  isLoading,
-}: {
-  isCompleted: boolean;
-  setLoadComplete: Dispatch<React.SetStateAction<boolean>>;
-  isLoading: boolean;
-}) {
-  useEffect(() => {
-    // 로딩 중이면 반환
-    if (isLoading) return;
-    // 초기 UI 반복 마운트 방지
-    if (isCompleted) return;
-    // 데이터 패치되었다면 페이지 보여주는 트리거 설정
-    setLoadComplete(true);
-  }, [isLoading]);
+import { Dispatch, SetStateAction, useEffect } from 'react';
 
+function SuccessComponent() {
   return (
     <>
       <Header />
@@ -28,4 +12,30 @@ export default function PageWrap({
       <Footer />
     </>
   );
+}
+function ErrorComponent() {
+  return <></>;
+}
+
+export default function PageWrap({
+  isLoading,
+  isMounted,
+  isError,
+  setMount,
+}: {
+  isLoading: boolean;
+  isMounted: boolean;
+  isError: boolean;
+  setMount: Dispatch<SetStateAction<boolean>>;
+}) {
+  useEffect(() => {
+    // 로딩 중이면 반환
+    if (isLoading) return;
+    // 초기 UI 반복 마운트 방지
+    if (isMounted) return;
+    // 데이터 패치되었다면 페이지 보여주는 트리거 설정
+    setMount(true);
+  }, [isLoading]);
+
+  return <>{!isError ? <SuccessComponent /> : <ErrorComponent />}</>;
 }

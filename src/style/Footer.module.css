@@ -10,4 +10,15 @@
   position: relative;
   padding: 0 40px;
   z-index: 9999;
+
+  animation: BottomUp 0.5s both ease-out 1.5s;
+}
+
+@keyframes BottomUp {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
