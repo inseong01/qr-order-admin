@@ -21,7 +21,7 @@ export default function KonvaSection() {
   const submitStatus = useBoundStore((state) => state.submit.status);
   const konvaEditType = useBoundStore((state) => state.konva.type);
   const konvaEditIsEditing = useBoundStore((state) => state.konva.isEditing);
-  const konvaIsEditEnd = useBoundStore((state) => state.konva.isEditEnd);
+  // const konvaIsEditEnd = useBoundStore((state) => state.konva.isEditEnd);
   const getEditKonvaTableId = useBoundStore((state) => state.getEditKonvaTableId);
   const getClientTableList = useBoundStore((state) => state.getClientTableList);
   const setKonvaEditEnd = useBoundStore((state) => state.setKonvaEditEnd);
@@ -98,7 +98,6 @@ export default function KonvaSection() {
       getEditKonvaTableId({ id: [newTable.id] });
     }
   }, [konvaEditType]);
-
   // konva 좌석 데이터 리패치 조건
   useEffect(() => {
     /*
@@ -117,17 +116,10 @@ export default function KonvaSection() {
 
   // 좌석 정보 갱신, 패치 요청
   useEffect(() => {
-    /*
-        konvaIsEditEnd true일 때 패치 요청  
-        클라이언트, 마지막 선택마다 좌석 정보 최신화/상태 저장 
-        
-        "konvaIsEditEnd" 의존성 추가하면 최신화 이전 값 저장됨 
-    */
-    if (konvaIsEditEnd) {
-      // 수정/추가된 테이블 배열 전달
-      getClientTableList({ clientTableList });
-    }
+    // 수정/추가된 테이블 배열 전달
+    getClientTableList({ clientTableList });
     if (isFirstLoad) return;
+    // konvaIsEditEnd 삭제로, isEditEnd 필요 없을 수 있음 (추후 삭제)
     setKonvaEditEnd({ isEditEnd: false });
   }, [clientTableList]);
 

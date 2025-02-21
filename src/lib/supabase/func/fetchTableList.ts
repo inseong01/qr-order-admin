@@ -10,7 +10,6 @@ export default async function fetchTableList(method: Method, dataArr?: DataArr<M
   switch (method) {
     case 'insert': {
       const dataList = dataArr as TableList[];
-      console.log(dataArr);
       const idx = dataList.length - 1;
       const data = dataList[idx];
       response = await supabase.from('qr-order-table-list').insert(data).select();

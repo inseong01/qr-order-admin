@@ -4,7 +4,6 @@ import { DataArr } from '../../../lib/supabase/func/fetchTableList';
 import { Method } from '../../../lib/store/useFetchSlice';
 import { menu } from '../../../lib/motion/motion_widgetMenu';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
-import { TableList } from '../../../types/common';
 import WidgetFirstOptionCategories from './WidgetFirstOptionCategories';
 
 import { motion, AnimatePresence } from 'motion/react';
@@ -52,8 +51,7 @@ export default function WidgetFirstOption({
   const editTableType = useBoundStore((state) => state.konva.type);
   const tableIdArr = useBoundStore((state) => state.konva.target.id);
   // variant
-  const dataArr =
-    editTableType === 'delete' ? (tableIdArr as TableList['id'][]) : (tableListData as TableList[]);
+  const dataArr = editTableType === 'delete' ? tableIdArr : tableListData;
 
   return (
     <motion.li className={styles.listBox} key={'widgetMenu'} variants={menu}>

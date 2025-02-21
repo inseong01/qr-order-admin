@@ -8,6 +8,7 @@ import {
 import { useBoundStore } from '../../lib/store/useBoundStore';
 
 import { motion } from 'motion/react';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function WidgetBtn() {
   const isWidgetOpen = useBoundStore((state) => state.widget.isOpen);
@@ -19,6 +20,9 @@ export default function WidgetBtn() {
   const resetItemState = useBoundStore((state) => state.resetItemState);
   const resetKonvaState = useBoundStore((state) => state.resetKonvaState);
 
+  const queryClient = useQueryClient();
+  const refetch = async () => await queryClient.refetchQueries({ queryKey: ['tableList'] });
+
   // 위젯 열기/닫기
   function onClickOpenWidgetList() {
     if (submitIsError) return;
@@ -28,6 +32,8 @@ export default function WidgetBtn() {
       resetItemState();
       resetKonvaState();
       setWidgetEditState(false);
+      // 원본 데이터 다시 불러오기
+      refetch();
       return;
     }
     openCloseWidget();

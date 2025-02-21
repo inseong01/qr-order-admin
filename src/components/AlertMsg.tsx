@@ -1,5 +1,5 @@
-import CommonMsgType from './alertMsg/CommonMsgType';
 import { useBoundStore } from '../lib/store/useBoundStore';
+import CommonMsgType from './alertMsg/CommonMsgType';
 
 import { useEffect, useState } from 'react';
 
@@ -21,13 +21,11 @@ export default function AlertMsg() {
         timer = setTimeout(() => {
           setIsAlert(false);
         }, 1700);
-        console.log(1, submitStatus);
       }
     }
     return () => {
-      // menu 탭에서 useEffect 연속 발생 제한
+      // menu 탭에서 메시지 사라지지 않는 현상 방지
       if (timer && submitStatus === 'fulfilled') return;
-      console.log(2, submitStatus);
       clearTimeout(timer);
     };
   }, [submitStatus]);
