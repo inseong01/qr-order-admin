@@ -30,7 +30,7 @@
   4. 실시간 요청 수신
 
 ### 기술 스택
-`React` `Tanstack React Query` `Zustand` `Supabase` `Konva`
+`React` `TypeScript` `Tanstack React Query` `Zustand` `Supabase` `Konva`
 
 ## 미리보기
 <details>
