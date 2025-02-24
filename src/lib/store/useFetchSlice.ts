@@ -271,20 +271,6 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
         },
         // 좌석 요청 알림 읽음 처리
         fetchUpdateAlertMsg: async ({ method, id }) => {
-          // pending
-          set(
-            (state) => ({
-              submit: {
-                ...state.submit,
-                status: 'pending',
-                isSubmit: true,
-                alertType: 'list',
-                msgType: method,
-              },
-            }),
-            undefined,
-            'fetchUpdateAlertMsg/pending'
-          );
           // fetching
           const fetchResult = await fetchTableRequestList(method, id);
           // rejected 추후 함수 처리
@@ -309,7 +295,6 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
             );
             return;
           }
-          // fulfilled 처리 제외, 처리 완료 메시지 없어도 됨
         },
       })
     : (set) => ({
@@ -477,16 +462,6 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
           }));
         },
         fetchUpdateAlertMsg: async ({ method, id }) => {
-          // pending
-          set((state) => ({
-            submit: {
-              ...state.submit,
-              status: 'pending',
-              isSubmit: true,
-              alertType: 'list',
-              msgType: method,
-            },
-          }));
           // fetching
           const fetchResult = await fetchTableRequestList(method, id);
           // rejected 추후 함수 처리
@@ -507,6 +482,5 @@ export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', ne
             });
             return;
           }
-          // fulfilled 처리 제외, 처리 완료 메시지 없어도 됨
         },
       });

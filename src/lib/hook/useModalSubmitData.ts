@@ -28,6 +28,7 @@ export default function useModalSubmitData() {
   const fetchFormCategoryItem = useBoundStore((state) => state.fetchFormCategoryItem);
   const fetchFormMenuItem = useBoundStore((state) => state.fetchFormMenuItem);
   const getListInfo = useBoundStore((state) => state.getListInfo);
+  const changeModalState = useBoundStore((state) => state.changeModalState);
   // useState
   const [value, setValue] = useState(item);
 
@@ -36,8 +37,12 @@ export default function useModalSubmitData() {
     setValue(item);
   }, [item]);
 
-  // 제출 후 상태 초기화
+  // 제출 상태
   useEffect(() => {
+    if (submitStatus === 'pending') {
+      // 제출 시 모달 닫음
+      changeModalState({ isOpen: false });
+    }
     if (submitStatus !== 'fulfilled') return;
     // 주문 삭제/완료 처리 되었다면
     if (tab === 'order') {

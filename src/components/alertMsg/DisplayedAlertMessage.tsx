@@ -12,10 +12,12 @@ export default function DisplayedAlertMessage({
   requestAlertList: RequestList[];
   onClickReadMsg: (list: RequestList) => () => void;
 }) {
+  const msgList = [...requestAlertList].slice(0, 4);
+  console.log(requestAlertList, msgList);
   return (
     <motion.ul className={`${styles.reqeustMsg}`}>
       <AnimatePresence mode="popLayout">
-        {requestAlertList.map((list) => {
+        {msgList.map((list) => {
           const { id, tableNum, requestList } = list;
           return (
             <motion.li

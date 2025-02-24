@@ -9,13 +9,19 @@ export default function WidgetMenuFirstCategory() {
   // store
   const firstOption = useBoundStore((state) => state.widget.openOptionList[1]);
   const submitError = useBoundStore((state) => state.submit.isError);
+  const isSubmit = useBoundStore((state) => state.submit.isSubmit);
   const changeModalState = useBoundStore((state) => state.changeModalState);
-  const resetSubmitState = useBoundStore((state) => state.resetSubmitState);
+  const resetItemState = useBoundStore((state) => state.resetItemState);
+  // const resetSubmitState = useBoundStore((state) => state.resetSubmitState);
 
   function onClickOpenEditor(modalType: ModalType) {
     return () => {
+      // 바로 닫히기 때문에 처리 중 반환하여 연속 제출 제한
+      if (isSubmit) return;
       if (submitError) return;
-      resetSubmitState();
+      // resetSubmitState();
+      // 위젯 아이템 초기화
+      resetItemState();
       changeModalState({ type: modalType, isOpen: true });
     };
   }

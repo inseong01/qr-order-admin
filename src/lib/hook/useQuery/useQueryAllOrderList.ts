@@ -6,7 +6,7 @@ export default function useQueryAllOrderList() {
   const queryClient = useQueryClient();
   const data = queryClient.getQueryData<AllOrderList[]>(['allOrderList']);
   const refetch = async () => await queryClient.refetchQueries({ queryKey: ['allOrderList'] });
-  const isFetching = useIsFetching({ queryKey: ['allOrderList'] });
+  const fetchAmount = useIsFetching({ queryKey: ['allOrderList'] });
 
-  return { data, isFetching, refetch };
+  return { data, fetchAmount, refetch };
 }

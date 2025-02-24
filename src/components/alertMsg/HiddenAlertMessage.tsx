@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'motion/react';
 
 export default function HiddenAlertMessage({ extraMsg }: { extraMsg: RequestList[] }) {
   const hasExtraMsg = extraMsg.length > 0;
-  const limitExtraMsg = hasExtraMsg ? extraMsg.slice(0, 4) : extraMsg;
+  const limitExtraMsg = hasExtraMsg ? extraMsg.slice(4) : extraMsg;
   return (
     hasExtraMsg && (
       <ul className={`${styles.reqeustMsg} ${styles.hidden}`}>

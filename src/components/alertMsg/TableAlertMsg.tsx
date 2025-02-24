@@ -9,8 +9,12 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 
 export default function TableAlertMsg() {
+  // useQuery
+  const { data, isFetching } = useQueryRequestList();
+  // variant
+  const requestList = data ? data : [];
   // useState
-  const [requestAlertList, setRequestAlertList] = useState<RequestList[]>([]);
+  const [requestAlertList, setRequestAlertList] = useState<RequestList[]>(requestList);
   const [id, selectId] = useState('');
   const [alertOn, setAlertOn] = useState(false);
   const [isClicked, setClick] = useState(false);
@@ -24,27 +28,31 @@ export default function TableAlertMsg() {
   const fetchUpdateAlertMsg = useBoundStore((state) => state.fetchUpdateAlertMsg);
   // useRef
   const reqeustMsgRef = useRef(null);
-  // useQuery
-  const { data, isFetching } = useQueryRequestList();
-  // variant
-  const extraMsg = data ? data.filter((list) => !list.isRead).slice(4) : [];
 
-  // 읽지 않은 이전 요청 불러오기
+  // 알림 메시지 업데이트
   useEffect(() => {
-    /*
-      - 내용 표시 요청 개수 4개로 제한
-      - 요청이 없다면 [] 할당하여 오류 발생 방지
-    */
+    if (!data) return;
     if (isFetching) return;
-    const notReadMsg = data ? data.filter((list) => !list.isRead).slice(0, 4) : [];
-    setRequestAlertList(notReadMsg);
+    setRequestAlertList(data);
     setClick(false);
   }, [data, isFetching]);
 
   // 읽은 알림 안 읽은 목록에서 제외하기
   useEffect(() => {
-    if (id && submitStatus === 'fulfilled') {
+    /*
+      19 버전
+      : useOptimistic 사용 가능
+
+      18 버전 (현재)
+      : 성공 예상하여 처리, rejected 상태는 이전 데이터 부여
+      요청 알림 query가 실패할 때 어떻게 되는 지 알아야 함
+    */
+    const prevData = [...requestAlertList];
+    if (id) {
       setRequestAlertList((prev) => prev.filter((msg) => msg.id !== id));
+    }
+    if (id && submitStatus === 'rejected') {
+      setRequestAlertList(prevData);
     }
   }, [id, submitStatus]);
 
@@ -86,7 +94,7 @@ export default function TableAlertMsg() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          <HiddenAlertMessage extraMsg={extraMsg} />
+          <HiddenAlertMessage extraMsg={requestAlertList} />
           <DisplayedAlertMessage requestAlertList={requestAlertList} onClickReadMsg={onClickReadMsg} />
         </motion.div>
       )}
