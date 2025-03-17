@@ -1,5 +1,6 @@
 import styles from '@/style/FirstLoading.module.css';
 import { Status } from '../lib/hook/useSubscribeDBTable';
+import { InitLoadState } from '../types/common';
 import Loader from './Loader';
 
 import { Dispatch, SetStateAction, useEffect } from 'react';
@@ -10,25 +11,27 @@ function ErrorTitleComponent() {
 }
 
 function SuccessTitleComponent() {
-  return <div className={`${styles.title}`}>환영합니다!</div>;
+  const title = '환영합니다!';
+
+  return <div className={styles.title}>{title}</div>;
 }
 
 function MountedComponent({ initialLoadstatus }: { initialLoadstatus: Status }) {
-  return <>{initialLoadstatus === 'success' ? <SuccessTitleComponent /> : <ErrorTitleComponent />}</>;
+  return (
+    <>{initialLoadstatus === 'success' ? <SuccessTitleComponent /> : <ErrorTitleComponent />}</>
+  );
 }
 
 export default function FirstLoading({
-  isMounted,
-  isCompleted,
+  state,
   setLoadComplete,
-  initialLoadstatus,
 }: {
-  isMounted: boolean;
-  isCompleted: boolean;
+  state: InitLoadState;
   setLoadComplete: Dispatch<SetStateAction<boolean>>;
-  initialLoadstatus: Status;
 }) {
-  // 문구 등장
+  const { isMounted, initialLoadstatus, isCompleted } = state;
+
+  // DB 데이터 패치 상태
   useEffect(() => {
     if (!isMounted) return;
 

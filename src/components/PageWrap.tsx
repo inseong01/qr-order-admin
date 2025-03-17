@@ -1,3 +1,4 @@
+import { InitLoadState } from '../types/common';
 import Footer from './Footer';
 import Main from './Main';
 import Header from './Header';
@@ -18,16 +19,14 @@ function ErrorComponent() {
 }
 
 export default function PageWrap({
-  isLoading,
-  isMounted,
-  isError,
+  state,
   setMount,
 }: {
-  isLoading: boolean;
-  isMounted: boolean;
-  isError: boolean;
+  state: InitLoadState;
   setMount: Dispatch<SetStateAction<boolean>>;
 }) {
+  const { isCompleted, isLoading, isMounted, isError } = state;
+
   useEffect(() => {
     // 로딩 중이면 반환
     if (isLoading) return;
@@ -37,5 +36,5 @@ export default function PageWrap({
     setMount(true);
   }, [isLoading]);
 
-  return <>{!isError ? <SuccessComponent /> : <ErrorComponent />}</>;
+  return <>{!isError && isCompleted ? <SuccessComponent /> : <ErrorComponent />}</>;
 }
