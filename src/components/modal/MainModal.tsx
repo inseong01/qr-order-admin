@@ -34,7 +34,7 @@ export default function MainModal() {
           >
             <ModalFormState />
             <div className={styles.closeBtn} onClick={onClickCloseModal}>
-              <FontAwesomeIcon icon={faXmark} size="xl" />
+              <FontAwesomeIcon icon={faXmark} size="lg" />
             </div>
           </motion.dialog>
           <motion.div

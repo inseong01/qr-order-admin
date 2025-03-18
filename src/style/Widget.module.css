@@ -1,7 +1,7 @@
 .widgetWrap {
   position: fixed;
   right: 15px;
-  bottom: 95px;
+  bottom: 85px;
   z-index: 99;
 
   display: flex;
@@ -22,8 +22,8 @@
 
 .widget,
 .list {
-  width: 55px;
-  height: 55px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   background-color: white;
   border: 1px solid #99d2fd;
@@ -57,8 +57,11 @@
   gap: 10px;
 }
 .icon {
+  width: 20px;
   height: 20px;
   display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* WidgetBtn */
@@ -81,4 +84,10 @@
   flex-direction: column;
   gap: 5px;
   z-index: -1;
+}
+
+@media (max-width: 720px) {
+  .widgetWrap {
+    bottom: 65px;
+  }
 }

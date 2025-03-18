@@ -9,6 +9,8 @@
   flex-direction: column;
   justify-content: space-between;
   cursor: pointer;
+
+  padding: 12px 16px;
 }
 
 .top,
@@ -20,16 +22,10 @@
 
 .top {
   font-size: 1.1rem;
-  padding: 12px 16px;
-}
-@media (max-width: 800px) {
-  .top {
-    font-size: 1rem;
-  }
 }
 
 .bottomBox {
-  padding: 12px 16px;
+  margin-top: 10px;
 }
 .bottom {
   width: 100%;
@@ -43,20 +39,22 @@
 
 /* 추가 버튼 */
 .addBtn {
-  color: #222;
-  border: 2px solid #222;
-  background-color: transparent;
-  font-weight: 600;
+  color: #8d8d8d;
+  background-color: white;
 
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   gap: 5px;
 }
 .iconBox {
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 @media (max-width: 1600px) {
@@ -79,13 +77,18 @@
     width: calc(100% / 4 - 10px);
   }
 }
-@media (max-width: 800px) {
+@media (max-width: 720px) {
   .list {
-    width: calc(100% / 3 - 10px);
+    width: 100%;
+    height: auto;
   }
-}
-@media (max-width: 600px) {
-  .list {
-    width: calc(100% / 2 - 10px);
+
+  .addBtn {
+    height: 50px;
+  }
+
+  .iconBox {
+    width: 16px;
+    height: 16px;
   }
 }

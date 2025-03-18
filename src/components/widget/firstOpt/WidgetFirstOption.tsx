@@ -23,7 +23,7 @@ function IconComponent() {
           exit={{ x: -20 }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
         >
-          <FontAwesomeIcon icon={faPenToSquare} size="lg" />
+          <FontAwesomeIcon icon={faPenToSquare} size="1x" />
         </motion.div>
       ) : (
         <motion.div
@@ -34,7 +34,7 @@ function IconComponent() {
           exit={{ x: -20 }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
         >
-          <FontAwesomeIcon icon={faCheck} size="lg" />
+          <FontAwesomeIcon icon={faCheck} size="1x" />
         </motion.div>
       )}
     </AnimatePresence>

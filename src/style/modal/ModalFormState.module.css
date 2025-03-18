@@ -13,3 +13,10 @@
   align-items: center;
   gap: 20px;
 }
+
+@media (max-width: 720px) {
+  .formSize {
+    width: 100%;
+    height: auto;
+  }
+}

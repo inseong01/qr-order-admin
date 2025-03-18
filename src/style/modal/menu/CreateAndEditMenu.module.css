@@ -1,11 +1,21 @@
 .submitForm {
   width: 495px;
   height: 215px;
-  padding: 16px;
+  padding: 10px 16px 16px;
   border: 1px solid #d8d8d8;
   border-radius: 15px;
   background-color: white;
   overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.options {
+  width: 100%;
+  height: 100%;
 
   display: flex;
   justify-content: space-between;
@@ -24,13 +34,14 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   position: relative;
 
   cursor: pointer;
 }
 
 .right {
+  width: 100%;
   height: 100%;
   flex: 1;
 
@@ -120,4 +131,27 @@
 }
 .btn:hover {
   background-color: #80c8fc;
+}
+
+@media (max-width: 720px) {
+  .submitForm {
+    width: 100%;
+    height: auto;
+    padding: 18px;
+  }
+
+  .options {
+    flex-direction: column;
+  }
+
+  .left {
+    width: 100%;
+    flex-direction: row;
+    padding: 24px;
+  }
+
+  .right {
+    width: 100%;
+    gap: 20px;
+  }
 }

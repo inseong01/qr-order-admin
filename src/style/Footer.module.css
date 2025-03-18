@@ -3,10 +3,10 @@
   height: 65px;
   color: #b4b4b4;
   background-color: white;
-  font-size: 23px;
+  font-size: 1.2rem;
 
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   position: relative;
   padding: 0 40px;
   z-index: 9999;
@@ -20,5 +20,14 @@
   }
   100% {
     transform: translateY(0);
+  }
+}
+
+@media (max-width: 720px) {
+  .footer {
+    height: 45px;
+    position: fixed;
+    bottom: 0;
+    padding: 0 18px;
   }
 }

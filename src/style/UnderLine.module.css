@@ -15,3 +15,9 @@
 .top {
   top: 0;
 }
+
+@media (max-width: 720px) {
+  .line {
+    height: 2px;
+  }
+}

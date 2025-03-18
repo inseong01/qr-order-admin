@@ -24,8 +24,8 @@
   padding: 4px 12px;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 720px) {
   .right {
-    font-size: 0.7rem;
+    display: none;
   }
 }

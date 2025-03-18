@@ -27,6 +27,7 @@ export default function Widget() {
       const isNodePath = target.tagName === 'path' || target.tagName === 'svg';
       if (isNodePath) return;
       const isWindowClicked = target.offsetParent !== widgetRef.current; // offsetParent = widgetWrap
+      // 카테고리 delete 모달에서 버튼 선택 시 하단 조건 적용됨
       if (isWidgetOpen && isWindowClicked && !isTableEditAble) {
         resetWidgetState();
       }

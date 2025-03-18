@@ -21,7 +21,7 @@
   color: #b4b4b4;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 720px) {
   .listBox {
     font-size: 0.9rem;
   }

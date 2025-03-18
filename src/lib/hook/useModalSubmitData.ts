@@ -1,16 +1,9 @@
 import { AdminId, InsertMenuCategoryList } from '../../types/common';
-import { onSubmitDataInfo } from '../function/modal/onSubmitDataInfo';
 import { useBoundStore } from '../store/useBoundStore';
 import { FileBody, Method } from '../store/useFetchSlice';
 
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
 
-export type SubmitType =
-  | 'insert-category'
-  | 'update-category'
-  | 'upsert-category'
-  | 'table'
-  | 'menu-insert/update';
 export type OnChangeInputValueEvent = ChangeEvent<HTMLInputElement | HTMLSelectElement>;
 export type OnSubmitDataEvent = SyntheticEvent<HTMLFormElement, SubmitEvent>;
 
@@ -29,6 +22,7 @@ export default function useModalSubmitData() {
   const fetchFormMenuItem = useBoundStore((state) => state.fetchFormMenuItem);
   const getListInfo = useBoundStore((state) => state.getListInfo);
   const changeModalState = useBoundStore((state) => state.changeModalState);
+  const resetWidgetState = useBoundStore((state) => state.resetWidgetState);
   // useState
   const [value, setValue] = useState(item);
 
@@ -65,92 +59,135 @@ export default function useModalSubmitData() {
   }
 
   // 폼 제출
-  function onSubmitData(submitType: SubmitType) {
-    return async (e: OnSubmitDataEvent) => {
-      e.preventDefault();
-      // 연속 제출 제한
-      if (isSubmit) return;
-      // 오류 발생 시 제출 제한
-      if (submitIsError) return;
-      const submitter = e.nativeEvent.submitter as HTMLButtonElement;
-      // method 선언
-      const method = submitter.name as Method;
-      // 모달 제출 형식 분류
-      switch (submitType) {
-        case 'insert-category': {
-          const target = e.target as HTMLFormElement;
-          const inputElement = target.elements[0] as HTMLInputElement;
-          const title = inputElement.value;
-          const table = 'category-menu';
-          // ----------------------------
-          const itemInfo = { title } as InsertMenuCategoryList;
-          fetchFormCategoryItem({ method, itemInfo, table });
-          // ----------------------------
-          break;
-        }
-        case 'update-category': {
-          const target = e.target as HTMLFormElement;
-          const inputElements = target.elements as HTMLFormControlsCollection;
-          const checkElements = inputElements.namedItem('check') as RadioNodeList;
-          // ----------------------------
-          const checkedElementArr = Array.from(checkElements).filter((inputList) => {
-            const input = inputList as HTMLInputElement;
-            return input.checked;
-          });
-          // 이후 코드 실행 제한 조건 알림
-          if (checkedElementArr.length <= 0) return alert('하나 이상은 선택해야 합니다');
-          // DOMStringMap 직렬화
-          const selectedCategoryData = checkedElementArr.map((list) => {
-            const data = list as HTMLInputElement;
-            const dataSet = data.dataset as DOMStringMap;
-            return Object.assign({}, dataSet);
-          });
-          // 카테고리 정보 저장
-          getListInfo({ list: selectedCategoryData });
-          // msgType 할당하면 다음 모달로 전환
-          changeSubmitMsgType({ msgType: method });
-          // ----------------------------
-          // 조건 이후 msgType 코드 실행 제한 되도록 반환
-          return;
-        }
-        case 'upsert-category': {
-          const target = e.target as HTMLFormElement;
-          // 이미 update-category에서 msgType 선언된 상태
-          const table = 'category-menu';
-          const assignedInputs = Array.from(target.elements) as HTMLInputElement[];
-          // ----------------------------
-          const categoryArrData = assignedInputs
-            .slice(0, -1)
-            .map((input) => ({ id: Number(input.dataset.id), title: input.value }));
-          fetchFormCategoryItem({ method: 'upsert', itemInfo: categoryArrData, table });
-          // ----------------------------
-          return;
-        }
-        case 'table': {
-          // table 탭 모달 버튼 처리
-          onSubmitDataInfo({ method });
-          break;
-        }
-        case 'menu-insert/update': {
-          const target = e.target as HTMLFormElement;
-          // insert/update, 메뉴 관련 처리
-          const fileObj = target[0] as HTMLInputElement;
-          const fileData = fileObj.files?.[0] ?? (undefined as FileBody);
-          const table = 'menu';
-          // ----------------------------
-          // 임시 admin id 지정
-          const adminId: AdminId = 'store_1';
-          // value readonly 형태, 복사해서 전달
-          const itemInfo = { ...value };
-          // 메뉴, 사진 정보 전달
-          fetchFormMenuItem({ method, itemInfo, table, file: fileData, adminId });
-          // ----------------------------
-          break;
-        }
-        default:
+  async function onCategorySubmitData(e: OnSubmitDataEvent) {
+    e.preventDefault();
+
+    // 연속 제출 제한
+    if (isSubmit) return;
+
+    // 오류 발생 시 제출 제한
+    if (submitIsError) return;
+
+    // method 선언
+    const submitter = e.nativeEvent.submitter as HTMLButtonElement;
+    const method = submitter.name as Method;
+
+    // 모달 제출 형식 분류
+    switch (method) {
+      /*
+        'delete', 'update'
+        데이터 선택 과정 거쳐 다음 모달로 이어짐
+
+        'insert', 'upsert'
+        데이터 삽입, 변경 담당
+
+      */
+      case 'insert': {
+        const target = e.target as HTMLFormElement;
+        const inputElement = target.elements[0] as HTMLInputElement;
+        const title = inputElement.value;
+        const table = 'category-menu';
+        const itemInfo = { title } as InsertMenuCategoryList;
+        fetchFormCategoryItem({ method, itemInfo, table });
+        resetWidgetState();
+        break;
       }
-    };
+      case 'delete':
+      case 'update': {
+        const target = e.target as HTMLFormElement;
+        const inputElements = target.elements as HTMLFormControlsCollection;
+        const checkElements = inputElements.namedItem('check') as RadioNodeList;
+        const checkedElementArr = Array.from(checkElements).filter((inputList) => {
+          const input = inputList as HTMLInputElement;
+          return input.checked;
+        });
+
+        if (checkedElementArr.length <= 0) return alert('하나 이상은 선택해야 합니다');
+
+        // DOMStringMap 직렬화
+        const selectedCategoryData = checkedElementArr.map((list) => {
+          const data = list as HTMLInputElement;
+          const dataSet = data.dataset as DOMStringMap;
+          return Object.assign({}, dataSet);
+        });
+
+        // 카테고리 정보 저장
+        getListInfo({ list: selectedCategoryData });
+
+        // 다음 모달로 전환
+        changeSubmitMsgType({ msgType: method });
+
+        return;
+      }
+      case 'upsert': {
+        const target = e.target as HTMLFormElement;
+        const table = 'category-menu';
+        const assignedInputs = Array.from(target.elements) as HTMLInputElement[];
+        const categoryArrData = assignedInputs
+          .slice(0, -1)
+          .map((input) => ({ id: Number(input.dataset.id), title: input.value }));
+        fetchFormCategoryItem({ method: 'upsert', itemInfo: categoryArrData, table });
+        resetWidgetState();
+        return;
+      }
+      default:
+    }
   }
 
-  return { onChangeInputValue, onSubmitData, value };
+  async function onMenuSubmitData(e: OnSubmitDataEvent) {
+    e.preventDefault();
+    // 연속 제출 제한
+    if (isSubmit) return;
+    // 오류 발생 시 제출 제한
+    if (submitIsError) return;
+    const submitter = e.nativeEvent.submitter as HTMLButtonElement;
+    // method 선언
+    const method = submitter.name as Method;
+    // 모달 제출 형식 분류
+    switch (method) {
+      case 'insert':
+      case 'update': {
+        const target = e.target as HTMLFormElement;
+        // insert/update, 메뉴 관련 처리
+        const fileObj = target[0] as HTMLInputElement;
+        const fileData = fileObj.files?.[0] ?? (undefined as FileBody);
+        const table = 'menu';
+        // ----------------------------
+        // 임시 admin id 지정
+        const adminId: AdminId = 'store_1';
+        // value readonly 형태, 복사해서 전달
+        const itemInfo = { ...value };
+        // 메뉴, 사진 정보 전달
+        fetchFormMenuItem({ method, itemInfo, table, file: fileData, adminId });
+        // ----------------------------
+        break;
+      }
+      default:
+    }
+  }
+
+  async function onTableSubmitData(e: OnSubmitDataEvent) {
+    e.preventDefault();
+    // 연속 제출 제한
+    if (isSubmit) return;
+    // 오류 발생 시 제출 제한
+    if (submitIsError) return;
+    const submitter = e.nativeEvent.submitter as HTMLButtonElement;
+    // method 선언
+    const method = submitter.name as Method;
+    // 모달 제출 형식 분류
+    switch (method) {
+      case 'update': {
+        alert('결제를 시작합니다.');
+        break;
+      }
+      case 'select': {
+        alert('QR코드 확인');
+        break;
+      }
+      default:
+    }
+  }
+
+  return { onChangeInputValue, onMenuSubmitData, onTableSubmitData, onCategorySubmitData, value };
 }

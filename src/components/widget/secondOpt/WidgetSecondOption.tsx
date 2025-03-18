@@ -19,7 +19,7 @@ export default function WidgetSecondOption({
       <motion.div className={styles.list} key={'list'} onClick={onClickEditor(2)}>
         <div className={styles.iconBox}>
           <div className={styles.icon}>
-            <FontAwesomeIcon icon={faBell} size="lg" />
+            <FontAwesomeIcon icon={faBell} size="1x" />
           </div>
         </div>
       </motion.div>

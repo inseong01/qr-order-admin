@@ -1,7 +1,6 @@
 import styles from '@/style/top/HeaderLeft.module.css';
 import { useBoundStore } from '../../lib/store/useBoundStore';
 import HeaderCategorySwiper from '../swiper/header/HeaderCategorySwiper';
-import AddCategoryBox from './AddCategoryBox';
 
 import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
@@ -50,7 +49,6 @@ export default function HeaderLeft() {
   return (
     <div className={styles.left}>
       <HeaderCategorySwiper />
-      <AddCategoryBox />
     </div>
   );
 }

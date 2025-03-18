@@ -4,7 +4,7 @@
   top: 50%;
   left: 50%;
   background-color: transparent;
-  padding: 22px;
+  padding: 18px;
   z-index: 99999;
 }
 .backdrop {
@@ -27,4 +27,23 @@
   cursor: pointer;
 
   color: white;
+}
+
+@media (max-width: 720px) {
+  .dialog {
+    width: 100%;
+    padding: 18px;
+  }
+
+  .closeBtn {
+    width: auto;
+    height: auto;
+    position: absolute;
+    top: 22px;
+    right: 24px;
+    cursor: pointer;
+    padding: 4px;
+
+    color: #8d8d8d;
+  }
 }

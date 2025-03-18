@@ -12,6 +12,7 @@ export default function AddMenu({
 }: {
   onClickOpenModal: (modalType: ModalType, list?: MenuList) => () => void;
 }) {
+  const isMobileSize = window.innerWidth <= 720;
   return (
     <motion.li
       className={`${styles.list} ${styles.addBtn}`}
@@ -19,7 +20,7 @@ export default function AddMenu({
       variants={list_motion}
     >
       <div className={styles.iconBox}>
-        <FontAwesomeIcon icon={faPlus} size="2xl" />
+        <FontAwesomeIcon icon={faPlus} size={isMobileSize ? 'sm' : '1x'} />
       </div>
       <div className="title">상품 추가</div>
     </motion.li>
