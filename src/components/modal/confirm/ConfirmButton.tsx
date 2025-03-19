@@ -23,18 +23,28 @@ export default function ConfirmButton({ title }: { title: ConfirmModalTitle }) {
           return;
         }
         case 'yes': {
+          const method = submitMsgType === 'delete' ? 'delete' : 'update';
+
           // 오류 시 제출 제한
           if (submitError) return;
+
           // 반복 제출 방지
           if (isSubmit) return;
-          const method = submitMsgType === 'delete' ? 'delete' : 'update';
-          if (title === '주문') {
-            const data = selectedList as AllOrderList;
-            fetchOrderListStatus({ method, data });
-          } else if (title === '카테고리') {
-            const itemInfo = selectedList as MenuCategoryList;
-            fetchFormCategoryItem({ method, itemInfo, table: 'category-menu' });
+
+          switch (title) {
+            case '주문': {
+              const data = selectedList as AllOrderList;
+              fetchOrderListStatus({ method, data });
+              break;
+            }
+            case '카테고리': {
+              const itemInfo = selectedList as MenuCategoryList;
+              fetchFormCategoryItem({ method, itemInfo, table: 'category-menu' });
+              break;
+            }
           }
+
+          // 모달 닫기
           changeModalState({ isOpen: false });
         }
       }

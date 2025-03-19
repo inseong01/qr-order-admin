@@ -1,4 +1,4 @@
-import styles from '@/style/swiper/order/ListSlideOption.module.css';
+import styles from '@/style/swiper/order/OrderSlideOption.module.css';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
 import { AllOrderList } from '../../../types/common';
 
@@ -7,10 +7,12 @@ import { AnimatePresence, motion } from 'motion/react';
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export default function ListSlideOption({ list }: { list: AllOrderList }) {
+export default function OrderSlideOption({ list }: { list: AllOrderList }) {
   // store
   const selectedListId = useBoundStore((state) => state.itemBox.selectedListId);
   const getSelectedListId = useBoundStore((state) => state.getSelectedListId);
+  // variant
+  const isSelectedList = selectedListId === list.id;
 
   function onClickCloseListOption(e: MouseEvent<HTMLLIElement>) {
     e.stopPropagation();
@@ -19,7 +21,7 @@ export default function ListSlideOption({ list }: { list: AllOrderList }) {
 
   return (
     <AnimatePresence>
-      {selectedListId === list.id && (
+      {isSelectedList && (
         <motion.ul
           className={styles.listOptionBox}
           initial={{ scale: 0 }}

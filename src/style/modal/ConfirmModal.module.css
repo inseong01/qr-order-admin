@@ -85,3 +85,9 @@
   background-color: rgba(0, 0, 0, 0.2);
   z-index: 999;
 }
+
+@media (max-width: 720px) {
+  .dialog {
+    width: calc(100% - 36px);
+  }
+}

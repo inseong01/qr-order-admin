@@ -9,7 +9,7 @@
   justify-content: space-between;
   position: relative;
   padding: 0 40px;
-  z-index: 9999;
+  z-index: 99999;
 
   animation: BottomUp 0.5s both ease-out 1.5s;
 }

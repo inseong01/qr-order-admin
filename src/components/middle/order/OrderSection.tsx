@@ -12,10 +12,11 @@ export default function OrderSection() {
   // hook
   const { data, refetch } = useQueryAllOrderList();
   // variant
+  const isOrderToBeProcessed = selectedCategory.id === 0;
   const doneOrderList = data ? data.filter((arr) => arr.isDone) : [];
   const notDoneOrderList = data ? data.filter((arr) => !arr.isDone) : [];
-  const ascNotDoneList = [...notDoneOrderList].sort((a, b) => a.orderNum - b.orderNum);
-  const descDoneList = [...doneOrderList].sort(
+  const notDoneListAsc = [...notDoneOrderList].sort((a, b) => a.orderNum - b.orderNum);
+  const doneListDesc = [...doneOrderList].sort(
     (a, b) => new Date(b.updated_at as Date).getTime() - new Date(a.updated_at as Date).getTime()
   );
 
@@ -28,10 +29,10 @@ export default function OrderSection() {
 
   return (
     <>
-      {selectedCategory.id === 0 ? (
-        <OrderListSwiper orderList={ascNotDoneList} />
+      {isOrderToBeProcessed ? (
+        <OrderListSwiper orderList={notDoneListAsc} />
       ) : (
-        <OrderListSwiper orderList={descDoneList} />
+        <OrderListSwiper orderList={doneListDesc} />
       )}
     </>
   );
