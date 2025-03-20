@@ -16,22 +16,18 @@ function TableTabComponent() {
 }
 
 export default function MainPageTableTab() {
+  // variant
+  const isMobile = detectMobile();
+  const isAbleToshowOnPC = isMobile === true ? false : true;
   // state
-  const [enableMount, setMount] = useState(false);
+  const [enableMount, setMount] = useState(isAbleToshowOnPC);
   // ref
   const prevWidthRef = useRef(window.innerWidth);
 
   // resize 이벤트 설정
   useEffect(() => {
     function detectViewportOnWindow(e: Event) {
-      const isMobile = detectMobile();
       const isViewportLandscape = detectLandscapeViewport();
-
-      // 모바일 전용
-      if (!isMobile) {
-        setMount(true);
-        return;
-      }
 
       // width 감지
       const target = e.target as Window;

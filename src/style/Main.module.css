@@ -15,3 +15,9 @@
     padding: 74px 18px 72px;
   }
 }
+
+@media (max-width: 720px) and (orientation: landscape) {
+  .main {
+    padding: 16px;
+  }
+}

@@ -45,8 +45,10 @@ export default function KonvaSection() {
   // konva Stage 크기 설정
   useEffect(() => {
     if (tab !== 'table') return;
+
     const tableRef = tableBoxRef?.current;
     if (!tableRef) return;
+
     // 너비 높이 할당
     setStageSize(() => {
       return {
@@ -54,6 +56,7 @@ export default function KonvaSection() {
         stageHeight: tableRef.clientHeight,
       };
     });
+
     // Konva 화면 리사이즈
     function onResizeStageSize() {
       if (tableRef) {
@@ -62,7 +65,9 @@ export default function KonvaSection() {
           stageHeight: tableRef.clientHeight,
         }));
       }
+      console.log('resize');
     }
+
     window.addEventListener('resize', debounce(onResizeStageSize, 200));
     return () => {
       window.removeEventListener('resize', debounce(onResizeStageSize, 200));
@@ -124,7 +129,10 @@ export default function KonvaSection() {
   }, [clientTableList]);
 
   return (
-    <div className={`${styles.listBox} ${tab === 'table' ? styles.tableBox : ''}`} ref={tableBoxRef}>
+    <div
+      className={`${styles.listBox} ${tab === 'table' ? styles.tableBox : ''}`}
+      ref={tableBoxRef}
+    >
       {openKonva && (
         <motion.div className={styles.table} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
           {clientTableList.length === 0 ? (

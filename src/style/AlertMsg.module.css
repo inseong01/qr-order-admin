@@ -136,3 +136,9 @@
     border-radius: 0;
   }
 }
+
+@media (max-width: 720px) and (orientation: landscape) {
+  .reqeustMsgWrap {
+    display: none;
+  }
+}
