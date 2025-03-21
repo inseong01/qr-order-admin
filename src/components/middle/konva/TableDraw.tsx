@@ -5,7 +5,7 @@ import TableLayer from './TableLayer';
 import { SetClientTableList, StageSize } from './KonvaSection';
 
 import { Layer, Stage } from 'react-konva';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import Konva from 'konva';
 
 export default function TableDraw({
@@ -27,8 +27,8 @@ export default function TableDraw({
     y: 0,
   });
   const stageScale = useMemo(() => {
-    const isMobileSize = window.innerWidth <= 720;
-    return isMobileSize ? 0.5 : 1;
+    const isMobileSize = window.innerWidth <= 720 || window.innerHeight <= 720;
+    return isMobileSize ? 0.49 : 1;
   }, [stageSize]);
 
   // 초기 위치 화면 이동

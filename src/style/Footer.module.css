@@ -32,8 +32,11 @@
   }
 }
 
-@media (max-width: 720px) and (orientation: landscape) {
+@media (max-height: 720px) and (orientation: landscape) {
   .footer {
+    height: 45px;
+    position: fixed;
     bottom: -45px;
+    padding: 0 18px;
   }
 }

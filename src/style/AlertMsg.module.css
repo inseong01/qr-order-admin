@@ -137,7 +137,7 @@
   }
 }
 
-@media (max-width: 720px) and (orientation: landscape) {
+@media (max-height: 720px) and (orientation: landscape) {
   .reqeustMsgWrap {
     display: none;
   }

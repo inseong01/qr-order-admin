@@ -13,7 +13,7 @@ export default function DisplayedAlertMessage({
   onClickReadMsg: (list: RequestList) => () => void;
 }) {
   const msgList = [...requestAlertList].slice(0, 4);
-  console.log(requestAlertList, msgList);
+
   return (
     <motion.ul className={`${styles.reqeustMsg}`}>
       <AnimatePresence mode="popLayout">

@@ -35,8 +35,13 @@
   }
 }
 
-@media (max-width: 720px) and (orientation: landscape) {
+@media (max-height: 720px) and (orientation: landscape) {
   .header {
+    height: 50px;
+    font-size: 16px;
+    padding: 0 18px;
+
+    position: fixed;
     top: -50px;
   }
 }

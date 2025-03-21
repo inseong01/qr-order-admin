@@ -4,6 +4,7 @@ import Main from './Main';
 import Header from './Header';
 
 import { Dispatch, SetStateAction, useEffect } from 'react';
+import { useBoundStore } from '../lib/store/useBoundStore';
 
 function SuccessComponent() {
   return (
@@ -26,6 +27,20 @@ export default function PageWrap({
   setMount: Dispatch<SetStateAction<boolean>>;
 }) {
   const { isCompleted, isLoading, isMounted, isError } = state;
+  const detectViewportMode = useBoundStore((state) => state.detectViewportMode);
+
+  // 화면 감지
+  useEffect(() => {
+    function detectViewportOnWindow() {
+      detectViewportMode();
+    }
+
+    window.addEventListener('resize', detectViewportOnWindow);
+
+    return () => {
+      window.removeEventListener('resize', detectViewportOnWindow);
+    };
+  }, []);
 
   useEffect(() => {
     // 로딩 중이면 반환

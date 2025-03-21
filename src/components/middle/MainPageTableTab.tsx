@@ -1,9 +1,9 @@
-import { detectLandscapeViewport, detectMobile } from '../../lib/function/checkDevice';
+import { useBoundStore } from '../../lib/store/useBoundStore';
 import TableAlertMsg from '../alertMsg/TableAlertMsg';
 import MainModal from '../modal/MainModal';
 import KonvaSection from './konva/KonvaSection';
 
-import { useEffect, useRef, useState } from 'react';
+import { useMemo } from 'react';
 
 function TableTabComponent() {
   return (
@@ -16,42 +16,14 @@ function TableTabComponent() {
 }
 
 export default function MainPageTableTab() {
-  // variant
-  const isMobile = detectMobile();
-  const isAbleToshowOnPC = isMobile === true ? false : true;
+  // store
+  const isMobile = useBoundStore((state) => state.windowState.isMobile);
+  const viewportMode = useBoundStore((state) => state.windowState.viewportMode);
   // state
-  const [enableMount, setMount] = useState(isAbleToshowOnPC);
-  // ref
-  const prevWidthRef = useRef(window.innerWidth);
-
-  // resize 이벤트 설정
-  useEffect(() => {
-    function detectViewportOnWindow(e: Event) {
-      const isViewportLandscape = detectLandscapeViewport();
-
-      // width 감지
-      const target = e.target as Window;
-      if (target) {
-        const currentWidth = target.innerWidth;
-        if (prevWidthRef.current === currentWidth) return;
-      }
-
-      // 화면 감지
-      if (isViewportLandscape) {
-        setMount(true);
-      } else {
-        setMount(false);
-      }
-
-      prevWidthRef.current = target.innerWidth;
-    }
-
-    window.addEventListener('resize', detectViewportOnWindow);
-
-    return () => {
-      window.removeEventListener('resize', detectViewportOnWindow);
-    };
-  }, []);
+  const enableMount = useMemo(
+    () => isMobile && viewportMode === 'landscape',
+    [isMobile, viewportMode]
+  );
 
   return <>{enableMount ? <TableTabComponent /> : '화면을 돌려주세요'}</>;
 }

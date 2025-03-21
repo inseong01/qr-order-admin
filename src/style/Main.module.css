@@ -16,7 +16,7 @@
   }
 }
 
-@media (max-width: 720px) and (orientation: landscape) {
+@media (max-height: 720px) and (orientation: landscape) {
   .main {
     padding: 16px;
   }

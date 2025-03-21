@@ -92,3 +92,18 @@
     height: 16px;
   }
 }
+@media (max-height: 720px) and (orientation: landscape) {
+  .list {
+    width: 100%;
+    height: auto;
+  }
+
+  .addBtn {
+    height: 50px;
+  }
+
+  .iconBox {
+    width: 16px;
+    height: 16px;
+  }
+}
