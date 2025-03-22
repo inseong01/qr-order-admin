@@ -136,33 +136,41 @@ export default function useModalSubmitData() {
 
   async function onMenuSubmitData(e: OnSubmitDataEvent) {
     e.preventDefault();
+
     // 연속 제출 제한
     if (isSubmit) return;
+
     // 오류 발생 시 제출 제한
     if (submitIsError) return;
-    const submitter = e.nativeEvent.submitter as HTMLButtonElement;
+
     // method 선언
+    const submitter = e.nativeEvent.submitter as HTMLButtonElement;
     const method = submitter.name as Method;
+
     // 모달 제출 형식 분류
     switch (method) {
       case 'insert':
+      case 'delete':
       case 'update': {
-        const target = e.target as HTMLFormElement;
         // insert/update, 메뉴 관련 처리
+        const target = e.target as HTMLFormElement;
         const fileObj = target[0] as HTMLInputElement;
         const fileData = fileObj.files?.[0] ?? (undefined as FileBody);
         const table = 'menu';
-        // ----------------------------
+
         // 임시 admin id 지정
         const adminId: AdminId = 'store_1';
+
         // value readonly 형태, 복사해서 전달
         const itemInfo = { ...value };
+
         // 메뉴, 사진 정보 전달
         fetchFormMenuItem({ method, itemInfo, table, file: fileData, adminId });
-        // ----------------------------
         break;
       }
-      default:
+      default: {
+        console.log('Default, method: ', method);
+      }
     }
   }
 

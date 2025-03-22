@@ -123,9 +123,6 @@ export default function KonvaSection() {
   useEffect(() => {
     // 수정/추가된 테이블 배열 전달
     getClientTableList({ clientTableList });
-    if (isFirstLoad) return;
-    // konvaIsEditEnd 삭제로, isEditEnd 필요 없을 수 있음 (추후 삭제)
-    setKonvaEditEnd({ isEditEnd: false });
   }, [clientTableList]);
 
   return (

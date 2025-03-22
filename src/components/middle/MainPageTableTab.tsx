@@ -20,10 +20,7 @@ export default function MainPageTableTab() {
   const isMobile = useBoundStore((state) => state.windowState.isMobile);
   const viewportMode = useBoundStore((state) => state.windowState.viewportMode);
   // state
-  const enableMount = useMemo(
-    () => isMobile && viewportMode === 'landscape',
-    [isMobile, viewportMode]
-  );
+  const enableMount = !isMobile || viewportMode === 'landscape';
 
   return <>{enableMount ? <TableTabComponent /> : '화면을 돌려주세요'}</>;
 }

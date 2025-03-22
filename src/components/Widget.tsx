@@ -1,10 +1,9 @@
 import styles from '@/style/Widget.module.css';
 import { useBoundStore } from '../lib/store/useBoundStore';
-import { detectLandscapeViewport } from '../lib/function/checkDevice';
 import WidgetMenuWrap from './widget/WidgetOptionWrap';
 import WidgetBtn from './widget/WidgetBtn';
 
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 
 export default function Widget() {
@@ -15,6 +14,7 @@ export default function Widget() {
   const isModalOpen = useBoundStore((state) => state.modal.isOpen);
   const isWidgetOpen = useBoundStore((state) => state.widget.isOpen);
   const isTableEditAble = useBoundStore((state) => state.konva.isAble);
+  const isMobile = useBoundStore((state) => state.windowState.isMobile);
   const viewportMode = useBoundStore((state) => state.windowState.viewportMode);
   const resetWidgetState = useBoundStore((state) => state.resetWidgetState);
 
@@ -50,7 +50,7 @@ export default function Widget() {
 
   return (
     <AnimatePresence>
-      {viewportMode === 'portrait' && (
+      {(!isMobile || viewportMode === 'portrait') && (
         <motion.div
           className={styles.widgetWrap}
           ref={widgetRef}

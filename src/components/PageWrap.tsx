@@ -31,6 +31,9 @@ export default function PageWrap({
 
   // 화면 감지
   useEffect(() => {
+    // 초기 뷰포트 모드 상태 할당
+    detectViewportMode();
+
     function detectViewportOnWindow() {
       detectViewportMode();
     }

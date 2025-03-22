@@ -1,7 +1,7 @@
 export function detectMobile() {
   const userAgent = navigator.userAgent;
-  const isMobile = /android|iPhone|iPad|CrOS/i.test(userAgent);
-  console.log('userAgent: ', userAgent, 'isMobile: ', isMobile);
+  const isMobile = /Android|iPhone|iPad|CrOS/i.test(userAgent);
+  console.log('userAgent: ', userAgent);
   return isMobile;
 }
 
