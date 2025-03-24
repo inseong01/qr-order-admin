@@ -24,7 +24,7 @@ export default function KonvaSection() {
   // const konvaIsEditEnd = useBoundStore((state) => state.konva.isEditEnd);
   const getEditKonvaTableId = useBoundStore((state) => state.getEditKonvaTableId);
   const getClientTableList = useBoundStore((state) => state.getClientTableList);
-  const setKonvaEditEnd = useBoundStore((state) => state.setKonvaEditEnd);
+  // const setKonvaEditEnd = useBoundStore((state) => state.setKonvaEditEnd);
   // useQuery
   const { data, isFetching, refetch } = useQueryTableList();
   // useRef
@@ -36,11 +36,6 @@ export default function KonvaSection() {
   });
   const [clientTableList, setClientTableList] = useState<TableList[]>([]);
   const [openKonva, setOpenKonva] = useState(false);
-  const [isFirstLoad, setFirstLoad] = useState(true);
-
-  useEffect(() => {
-    setFirstLoad(false);
-  }, []);
 
   // konva Stage 크기 설정
   useEffect(() => {
@@ -65,7 +60,6 @@ export default function KonvaSection() {
           stageHeight: tableRef.clientHeight,
         }));
       }
-      console.log('resize');
     }
 
     window.addEventListener('resize', debounce(onResizeStageSize, 200));

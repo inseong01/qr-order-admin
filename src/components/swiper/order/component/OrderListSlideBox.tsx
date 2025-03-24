@@ -20,6 +20,7 @@ export default function OrderListSlideBox({
   const categoryId = useBoundStore((state) => state.category.id);
   const submitIsError = useBoundStore((state) => state.submit.isError);
   const isSubmit = useBoundStore((state) => state.submit.isSubmit);
+  const isMobile = useBoundStore((state) => state.windowState.isMobile);
   const getListInfo = useBoundStore((state) => state.getListInfo);
   const changeModalState = useBoundStore((state) => state.changeModalState);
   const changeSubmitMsgType = useBoundStore((state) => state.changeSubmitMsgType);
@@ -62,7 +63,7 @@ export default function OrderListSlideBox({
   return (
     <motion.li
       className={styles.slide}
-      drag="x"
+      drag={isMobile ? 'x' : false}
       transition={{ duration: 0.5 }}
       dragConstraints={{ left: 0, right: 0 }}
       onDragStart={onDragStart}

@@ -3,8 +3,6 @@ import TableAlertMsg from '../alertMsg/TableAlertMsg';
 import MainModal from '../modal/MainModal';
 import KonvaSection from './konva/KonvaSection';
 
-import { useMemo } from 'react';
-
 function TableTabComponent() {
   return (
     <>

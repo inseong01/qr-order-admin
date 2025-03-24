@@ -48,9 +48,10 @@ export const useWindowSlice: StateCreator<
     : (set) => ({
         ...initialState,
         detectViewportMode: () => {
+          const isMobile = detectMobile();
           const viewportMode = detectViewportMode().includes('landscape')
             ? 'landscape'
             : 'portrait';
-          set({ windowState: { ...initialState.windowState, viewportMode } });
+          set({ windowState: { isMobile, viewportMode } });
         },
       });

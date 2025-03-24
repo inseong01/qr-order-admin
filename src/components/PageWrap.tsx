@@ -1,10 +1,10 @@
+import { useBoundStore } from '../lib/store/useBoundStore';
 import { InitLoadState } from '../types/common';
 import Footer from './Footer';
 import Main from './Main';
 import Header from './Header';
 
 import { Dispatch, SetStateAction, useEffect } from 'react';
-import { useBoundStore } from '../lib/store/useBoundStore';
 
 function SuccessComponent() {
   return (
