@@ -1,6 +1,12 @@
 import { StateCreator } from 'zustand';
 
-export type ModalType = 'info' | 'insert' | 'update' | 'update-category' | 'insert-category';
+export type ModalType =
+  | 'info'
+  | 'insert'
+  | 'update'
+  | 'upsert'
+  | 'update-category'
+  | 'insert-category';
 
 type InitialState = {
   modal: {
@@ -24,7 +30,12 @@ export interface UseModalSlice {
   changeModalState: ({ type, isOpen }: { type?: ModalType; isOpen: boolean }) => void;
 }
 
-export const useModalSlice: StateCreator<UseModalSlice, [['zustand/devtools', never]], [], UseModalSlice> =
+export const useModalSlice: StateCreator<
+  UseModalSlice,
+  [['zustand/devtools', never]],
+  [],
+  UseModalSlice
+> =
   import.meta.env.MODE === 'development'
     ? (set) => ({
         ...initialState,

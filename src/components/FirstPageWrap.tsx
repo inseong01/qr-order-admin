@@ -14,17 +14,20 @@ export default function FirstPageWrap() {
   const { initialLoadstatus, isLoading, isError } = useSubscribeDBTable(
     REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.ALL
   );
+  // variant
+  const state = {
+    isCompleted,
+    isError,
+    isLoading,
+    isMounted,
+    initialLoadstatus,
+  };
 
   return (
     <>
-      <FirstLoading
-        isMounted={isMounted}
-        isCompleted={isCompleted}
-        setLoadComplete={setLoadComplete}
-        initialLoadstatus={initialLoadstatus}
-      />
+      <FirstLoading state={state} setLoadComplete={setLoadComplete} />
       <Suspense>
-        <LazyPageWrap isError={isError} isLoading={isLoading} isMounted={isMounted} setMount={setMount} />
+        <LazyPageWrap state={state} setMount={setMount} />
       </Suspense>
     </>
   );

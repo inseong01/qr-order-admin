@@ -9,6 +9,7 @@ import { AnimatePresence, motion } from 'motion/react';
 export default function ConfirmModal({ title }: { title: ConfirmModalTitle }) {
   // store
   const isModalOpen = useBoundStore((state) => state.modal.isOpen);
+  const tab = useBoundStore((state) => state.tab.title);
 
   return (
     <AnimatePresence>
@@ -25,12 +26,14 @@ export default function ConfirmModal({ title }: { title: ConfirmModalTitle }) {
             <ConfirmTitle title={title} />
             <ConfirmButton title={title} />
           </motion.dialog>
-          <motion.div
-            className={styles.backdrop}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          ></motion.div>
+          {tab !== 'menu' && (
+            <motion.div
+              className={styles.backdrop}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            ></motion.div>
+          )}
         </>
       )}
     </AnimatePresence>

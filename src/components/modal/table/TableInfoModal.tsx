@@ -3,9 +3,9 @@ import useModalSubmitData from '../../../lib/hook/useModalSubmitData';
 import TableInfo from './TableInfo';
 
 export default function TableInfoModal() {
-  const { onSubmitData } = useModalSubmitData();
+  const { onTableSubmitData } = useModalSubmitData();
   return (
-    <form className={styles.submitForm} onSubmit={onSubmitData('table')}>
+    <form className={styles.submitForm} onSubmit={onTableSubmitData}>
       <div className={styles.wrap}>
         <TableInfo />
       </div>

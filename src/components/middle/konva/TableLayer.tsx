@@ -3,9 +3,9 @@ import useEditTable from '../../../lib/hook/tableTab/useEditTable';
 import useOnMouseChangeCursor from '../../../lib/hook/tableTab/useOnMouseChangeCursor';
 import useSetTable from '../../../lib/hook/tableTab/useSetTable';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
+import { Order, TableInit, TableList } from '../../../types/common';
 import TableName from './TableName';
 import TableBillPrice from './TableBillPrice';
-import { Order, TableInit, TableList } from '../../../types/common';
 import { SetClientTableList } from './KonvaSection';
 
 import { RefObject, useEffect, useRef, useState } from 'react';
@@ -29,7 +29,6 @@ export default function TableLayer({
   const konvaEditType = useBoundStore((state) => state.konva.type);
   const konvaEditIsEditing = useBoundStore((state) => state.konva.isEditing);
   const changeKonvaIsEditingState = useBoundStore((state) => state.changeKonvaIsEditingState);
-  const setKonvaEditEnd = useBoundStore((state) => state.setKonvaEditEnd);
   // variant
   const { init, order, tableNum, id } = table;
   const currentTableOrder = order as Order[];
@@ -44,8 +43,15 @@ export default function TableLayer({
   // hook
   const { onClickOpenTableInfo } = useOpenTableInfo();
   const { onClickEditTable } = useEditTable();
-  const { onMouseLeaveChangePointer, onMouseEnterChangePointer } = useOnMouseChangeCursor(stageRef, table);
-  const { changeTablePosition, onDragTransform } = useSetTable(stageRef, shapeRef, setClientTableList);
+  const { onMouseLeaveChangePointer, onMouseEnterChangePointer } = useOnMouseChangeCursor(
+    stageRef,
+    table
+  );
+  const { changeTablePosition, onDragTransform } = useSetTable(
+    stageRef,
+    shapeRef,
+    setClientTableList
+  );
 
   // 편집 유형 '생성/수정', 선택 좌석 transformer 적용
   useEffect(() => {
@@ -127,8 +133,6 @@ export default function TableLayer({
           break;
         }
       }
-      // 공통 부분
-      setKonvaEditEnd({ isEditEnd: true });
       // Konva 편집 중
       if (konvaEditIsEditing) return;
       changeKonvaIsEditingState({ isEditing: true });
@@ -194,7 +198,11 @@ export default function TableLayer({
             />
           )}
           <TableName tableNum={tableNum} width={tableInit.tableText.width} />
-          <TableBillPrice order={currentTableOrder} bottom={tableInit.bottom} isDragging={isDragging} />
+          <TableBillPrice
+            order={currentTableOrder}
+            bottom={tableInit.bottom}
+            isDragging={isDragging}
+          />
         </Group>
       </Group>
     </>

@@ -25,7 +25,7 @@ export default function InsertCategory({
             type="submit"
             className={styles.btn}
             value={type === 'insert' ? '추가하기' : '수정하기'}
-            name={'insert'}
+            name={type === 'insert' ? 'insert' : 'upsert'}
           />
         </div>
       </div>

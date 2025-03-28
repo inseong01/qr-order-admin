@@ -1,0 +1,59 @@
+name: Check work log
+
+run-name: ${{github.repository}} is running
+
+on:
+  push:
+    branches:
+      - '**' # all branches
+
+jobs:
+  check-work-log-file:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run current-date-time@v1
+        id: t1
+        uses: Kaven-Universe/github-action-current-date-time@v1
+        with:
+          format: 'YYYY.MM.DD.'
+          timezone-offset: -540
+
+      - name: Setup current date
+        run: |
+          YEAR_SHORT=$(echo "${{ steps.t1.outputs.year }}" | cut -c3-4)
+          MONTH=$(expr ${{ steps.t1.outputs.month }} + 0)
+          DAY=$(expr ${{ steps.t1.outputs.day }} + 0)
+
+          echo "CURRENT_DATE=$YEAR_SHORT.$MONTH.$DAY." >> $GITHUB_ENV
+          echo "CURRENT_DATE: $YEAR_SHORT.$MONTH.$DAY."
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Find work log txt file
+        run: |
+          FILE_PATH=$(find . -type f -name "작업일지.txt" | head -n 1)
+          COMMIT_HASH=$(git log -n 1 --pretty=format:"%H" "$FILE_PATH")
+
+          echo "WORK_LOG_FILE: $FILE_PATH"
+          echo "COMMIT_HASH: $COMMIT_HASH"
+
+          if [ -f "$FILE_PATH" ]; then
+            echo "WORK_LOG_FILE=$FILE_PATH" >> $GITHUB_ENV
+            echo "WORK_LOG_FILE was found."
+          else
+            echo "Error: Could not find WORK_LOG_FILE."
+            exit 1
+          fi
+
+      - name: Check current date work log
+        run: |
+          if grep -q "$CURRENT_DATE" "$WORK_LOG_FILE"; then
+            echo "Work log was written."
+          else 
+            echo "Error: Work log was not written."
+            echo "Check the work log from 작업일지.txt"
+            echo "CURRENT_DATE is $CURRENT_DATE"
+            exit 1
+          fi

@@ -8,6 +8,7 @@ import { UseModalSlice, useModalSlice } from './useModalSlice';
 import { UseTabSlice, useTabSlice } from './useTabSlice';
 import { UseSubmitSlice, useSubmitSlice } from './useSubmitSlice';
 import { UseFetchSlice, useFetchSlice } from './useFetchSlice';
+import { UseWindowSlice, useWindowSlice } from './useWindowSlice';
 
 import { create } from 'zustand';
 
@@ -19,7 +20,8 @@ export type UseBoundStore = UseWidgetSlice &
   UseModalSlice &
   UseTabSlice &
   UseSubmitSlice &
-  UseFetchSlice;
+  UseFetchSlice &
+  UseWindowSlice;
 
 export const useBoundStore =
   import.meta.env.MODE === 'development'
@@ -34,6 +36,7 @@ export const useBoundStore =
           ...useKonvaSlice(...a),
           ...useSubmitSlice(...a),
           ...useFetchSlice(...a),
+          ...useWindowSlice(...a),
         }))
       )
     : create<UseBoundStore>((...a) => ({
@@ -46,4 +49,5 @@ export const useBoundStore =
         ...useKonvaSlice(...a),
         ...useSubmitSlice(...a),
         ...useFetchSlice(...a),
+        ...useWindowSlice(...a),
       }));

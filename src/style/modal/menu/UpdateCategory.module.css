@@ -70,6 +70,9 @@
 .btn:hover {
   background-color: #dfdfdf;
 }
+.create {
+  flex-basis: 720px;
+}
 
 .left {
   height: 100%;
@@ -110,6 +113,8 @@
   justify-content: space-between;
   align-items: center;
   gap: 10px;
+
+  flex-wrap: wrap;
 }
 
 .list {
@@ -122,4 +127,10 @@
 }
 .list label {
   width: 100%;
+}
+
+@media (max-width: 720px) {
+  .submitInfo {
+    width: 100%;
+  }
 }

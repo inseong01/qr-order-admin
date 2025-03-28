@@ -1,3 +1,5 @@
+import { useBoundStore } from '../lib/store/useBoundStore';
+import { InitLoadState } from '../types/common';
 import Footer from './Footer';
 import Main from './Main';
 import Header from './Header';
@@ -18,16 +20,31 @@ function ErrorComponent() {
 }
 
 export default function PageWrap({
-  isLoading,
-  isMounted,
-  isError,
+  state,
   setMount,
 }: {
-  isLoading: boolean;
-  isMounted: boolean;
-  isError: boolean;
+  state: InitLoadState;
   setMount: Dispatch<SetStateAction<boolean>>;
 }) {
+  const { isCompleted, isLoading, isMounted, isError } = state;
+  const detectViewportMode = useBoundStore((state) => state.detectViewportMode);
+
+  // 화면 감지
+  useEffect(() => {
+    // 초기 뷰포트 모드 상태 할당
+    detectViewportMode();
+
+    function detectViewportOnWindow() {
+      detectViewportMode();
+    }
+
+    window.addEventListener('resize', detectViewportOnWindow);
+
+    return () => {
+      window.removeEventListener('resize', detectViewportOnWindow);
+    };
+  }, []);
+
   useEffect(() => {
     // 로딩 중이면 반환
     if (isLoading) return;
@@ -37,5 +54,5 @@ export default function PageWrap({
     setMount(true);
   }, [isLoading]);
 
-  return <>{!isError ? <SuccessComponent /> : <ErrorComponent />}</>;
+  return <>{!isError && isCompleted ? <SuccessComponent /> : <ErrorComponent />}</>;
 }

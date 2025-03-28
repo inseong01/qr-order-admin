@@ -30,7 +30,12 @@ export default function TableEditRange({ stageSize }: { stageSize: StageSize }) 
   return (
     <Layer ref={tableRangeRef} opacity={0}>
       <Group>
-        <Rect width={stageSize.stageWidth} height={stageSize.stageHeight} cornerRadius={15} fill="#b4b4b4" />
+        <Rect
+          width={stageSize.stageWidth}
+          height={stageSize.stageHeight}
+          cornerRadius={15}
+          fill="#b4b4b4"
+        />
         <Text
           text="배경 내에서 좌석을 수정할 수 있습니다"
           width={stageSize.stageWidth}

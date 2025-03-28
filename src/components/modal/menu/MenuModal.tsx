@@ -10,7 +10,8 @@ import { useQueryClient } from '@tanstack/react-query';
 
 export default function MenuModal() {
   // hook
-  const { onChangeInputValue, onSubmitData, value } = useModalSubmitData();
+  const { onChangeInputValue, onCategorySubmitData, onMenuSubmitData, value } =
+    useModalSubmitData();
   // store
   const tab = useBoundStore((state) => state.tab.title);
   const modalType = useBoundStore((state) => state.modal.type);
@@ -29,7 +30,7 @@ export default function MenuModal() {
     case 'update': {
       return (
         <CreateAndEditMenu
-          onSubmitData={onSubmitData('menu-insert/update')}
+          onSubmitData={onMenuSubmitData}
           onChangeInputValue={onChangeInputValue}
           categoryList={categoryList}
           value={value}
@@ -40,7 +41,7 @@ export default function MenuModal() {
       return (
         <InsertCategory
           type={'insert'}
-          onSubmitData={onSubmitData('insert-category')}
+          onSubmitData={onCategorySubmitData}
           onChangeInputValue={onChangeInputValue}
         />
       );
@@ -51,11 +52,11 @@ export default function MenuModal() {
         return (
           <InsertCategory
             type={'update'}
-            onSubmitData={onSubmitData('upsert-category')}
+            onSubmitData={onCategorySubmitData}
             onChangeInputValue={onChangeInputValue}
           />
         );
-      return <UpdateCategory onSubmitData={onSubmitData('update-category')} categoryList={categoryList} />;
+      return <UpdateCategory onSubmitData={onCategorySubmitData} categoryList={categoryList} />;
     }
   }
 }

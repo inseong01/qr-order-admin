@@ -5,7 +5,7 @@ import TableLayer from './TableLayer';
 import { SetClientTableList, StageSize } from './KonvaSection';
 
 import { Layer, Stage } from 'react-konva';
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import Konva from 'konva';
 
 export default function TableDraw({
@@ -26,6 +26,10 @@ export default function TableDraw({
     x: 0,
     y: 0,
   });
+  const stageScale = useMemo(() => {
+    const isMobileSize = window.innerWidth <= 720 || window.innerHeight <= 720;
+    return isMobileSize ? 0.49 : 1;
+  }, [stageSize]);
 
   // 초기 위치 화면 이동
   function backToInitPos() {
@@ -54,6 +58,8 @@ export default function TableDraw({
       onDblTap={backToInitPos}
       onDragEnd={getLastPos}
       draggable={!konvaEditIsAble}
+      scaleX={stageScale}
+      scaleY={stageScale}
     >
       <TableEditRange stageSize={stageSize} />
       <Layer>

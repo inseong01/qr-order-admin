@@ -13,7 +13,8 @@ function OrderComponent({ menu }: { menu: AllMenuObj }) {
         <div className={styles.name}>{name}</div>
       </div>
       <div className={styles.priceBox}>
-        <div className={styles.amount}>{amount}</div>x<div className={styles.price}>{priceToString}원</div>
+        <div className={styles.amount}>{amount}</div>x
+        <div className={styles.price}>{priceToString}원</div>
       </div>
     </li>
   );

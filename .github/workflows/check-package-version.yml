@@ -1,0 +1,75 @@
+name: Check package version
+
+run-name: ${{github.repository}} is running
+
+on:
+  pull_request:
+    branches:
+      - 'main'
+
+jobs:
+  check-package-version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Get file in Head branch
+        run: |
+          FILE_PATH=$(find . -type f -name "package.json")
+
+          FILE_COMMIT_HASH=$(git log -n 1 --pretty=format:%H -- "$FILE_PATH")
+
+          cat "$FILE_PATH"
+
+          echo "FILE_PATH: $FILE_PATH"
+          echo "FILE_COMMIT_HASH: $FILE_COMMIT_HASH"
+          echo "CUR_VERSION=$(jq -r '.version' $FILE_PATH)" >> $GITHUB_ENV 
+          echo "Succeeded"
+
+      - name: Checkout Base
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.base_ref }}
+
+      - name: Get file in Base branch
+        run: |
+          FILE_PATH=$(find . -type f -name "package.json" | head -n 1)
+
+          if [ -n "$FILE_PATH" ]; then
+            FILE_COMMIT_HASH=$(git log -n 1 --pretty=format:%H -- "$FILE_PATH")
+            cat "$FILE_PATH"
+          else
+            echo "package.json file doesn't exist"
+          fi
+
+          echo "FILE_PATH: $FILE_PATH"
+          echo "FILE_COMMIT_HASH: $FILE_COMMIT_HASH"
+          echo "PREV_VERSION=$(jq -r '.version' $FILE_PATH)" >> $GITHUB_ENV
+          echo "Succeeded"
+
+      - name: Compare file version
+        run: |
+          echo "CUR_VERSION: $CUR_VERSION"
+          echo "PREV_VERSION: $PREV_VERSION"
+
+          if [ -z "$PREV_VERSION" ]; then
+            echo 'This project might be initialized'
+            exit 0
+          fi
+
+          if [[ "$CUR_VERSION" == "$PREV_VERSION" ]]; then
+            echo "Error: Current package.json version is the same as the previous version"
+            exit 1
+          fi
+
+          if  [[ "$(printf '%s\n%s' "$PREV_VERSION" "$CUR_VERSION" | sort -V | head -n 1 )" == "$CUR_VERSION" ]]; then
+            echo "Error: Check current package.json version"
+            echo "Current version is not greater than previous version"
+            exit 1
+          fi
+
+          echo "Succeeded"

@@ -16,7 +16,12 @@ export default function Menu({
   const menuPrice = price.toLocaleString();
 
   return (
-    <motion.li className={styles.list} onClick={onClickOpenModal('update', list)} variants={list_motion}>
+    <motion.li
+      className={styles.list}
+      onClick={onClickOpenModal('update', list)}
+      variants={list_motion}
+      exit={{ opacity: 0 }}
+    >
       <div className={styles.topBox}>
         <div className={styles.top}>
           <div className={styles.title}>{name}</div>

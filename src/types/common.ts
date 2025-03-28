@@ -1,8 +1,16 @@
 import { Tables, TablesInsert, TablesUpdate } from '../../database.types';
+import { Status } from '../lib/hook/useSubscribeDBTable';
 
 // variant
 export type ConfirmModalTitle = '주문' | '카테고리';
 export type AdminId = 'store_1';
+export type InitLoadState = {
+  isCompleted: boolean;
+  isLoading: boolean;
+  isMounted: boolean;
+  isError: boolean;
+  initialLoadstatus: Status;
+};
 
 // supabase
 export type AllOrderList = Tables<'qr-order-allOrderList'>;

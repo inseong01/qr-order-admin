@@ -40,10 +40,14 @@ export interface UseKonvaSlice {
   changeKonvaEditState: ({ editType }: { editType: EditType }) => void;
   getEditKonvaTableId: ({ id }: { id: Array<string> }) => void;
   changeKonvaIsEditingState: ({ isEditing }: { isEditing: boolean }) => void;
-  setKonvaEditEnd: ({ isEditEnd }: { isEditEnd: boolean }) => void;
 }
 
-export const useKonvaSlice: StateCreator<UseKonvaSlice, [['zustand/devtools', never]], [], UseKonvaSlice> =
+export const useKonvaSlice: StateCreator<
+  UseKonvaSlice,
+  [['zustand/devtools', never]],
+  [],
+  UseKonvaSlice
+> =
   import.meta.env.MODE === 'development'
     ? (set) => ({
         ...initialState,
@@ -91,8 +95,6 @@ export const useKonvaSlice: StateCreator<UseKonvaSlice, [['zustand/devtools', ne
             undefined,
             'konva/changeKonvaIsEditingState'
           ),
-        setKonvaEditEnd: ({ isEditEnd }) =>
-          set((state) => ({ konva: { ...state.konva, isEditEnd } }), undefined, 'konva/setKonvaEditEnd'),
       })
     : (set) => ({
         ...initialState,
@@ -128,5 +130,4 @@ export const useKonvaSlice: StateCreator<UseKonvaSlice, [['zustand/devtools', ne
               },
             };
           }),
-        setKonvaEditEnd: ({ isEditEnd }) => set((state) => ({ konva: { ...state.konva, isEditEnd } })),
       });

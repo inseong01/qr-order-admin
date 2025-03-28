@@ -38,9 +38,23 @@
 /* 접수/숫자 간격 */
 .title {
   display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 24px;
   gap: 5px;
 }
 
 .clicked {
   color: #4caff8;
+}
+
+@media (max-width: 720px) {
+  .swiper {
+    width: 100%;
+    max-width: none;
+  }
+
+  .categorySlide {
+    min-width: 110px;
+  }
 }

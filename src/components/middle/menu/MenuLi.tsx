@@ -1,3 +1,4 @@
+import { AnimatePresence } from 'motion/react';
 import useQueryMenuList from '../../../lib/hook/useQuery/useQueryMenuList';
 import { useBoundStore } from '../../../lib/store/useBoundStore';
 import { ModalType } from '../../../lib/store/useModalSlice';
@@ -64,11 +65,12 @@ export default function MenuLi() {
 
   return (
     <>
-      {data &&
-        currentMenuList?.map((list: MenuList, idx: number) => {
+      <AddMenu onClickOpenModal={onClickOpenModal} />
+      <AnimatePresence>
+        {currentMenuList?.map((list: MenuList, idx: number) => {
           return <Menu key={idx} onClickOpenModal={onClickOpenModal} list={list} />;
         })}
-      <AddMenu onClickOpenModal={onClickOpenModal} />
+      </AnimatePresence>
     </>
   );
 }

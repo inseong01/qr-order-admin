@@ -24,7 +24,7 @@ export default function KonvaSection() {
   // const konvaIsEditEnd = useBoundStore((state) => state.konva.isEditEnd);
   const getEditKonvaTableId = useBoundStore((state) => state.getEditKonvaTableId);
   const getClientTableList = useBoundStore((state) => state.getClientTableList);
-  const setKonvaEditEnd = useBoundStore((state) => state.setKonvaEditEnd);
+  // const setKonvaEditEnd = useBoundStore((state) => state.setKonvaEditEnd);
   // useQuery
   const { data, isFetching, refetch } = useQueryTableList();
   // useRef
@@ -36,17 +36,14 @@ export default function KonvaSection() {
   });
   const [clientTableList, setClientTableList] = useState<TableList[]>([]);
   const [openKonva, setOpenKonva] = useState(false);
-  const [isFirstLoad, setFirstLoad] = useState(true);
-
-  useEffect(() => {
-    setFirstLoad(false);
-  }, []);
 
   // konva Stage 크기 설정
   useEffect(() => {
     if (tab !== 'table') return;
+
     const tableRef = tableBoxRef?.current;
     if (!tableRef) return;
+
     // 너비 높이 할당
     setStageSize(() => {
       return {
@@ -54,6 +51,7 @@ export default function KonvaSection() {
         stageHeight: tableRef.clientHeight,
       };
     });
+
     // Konva 화면 리사이즈
     function onResizeStageSize() {
       if (tableRef) {
@@ -63,6 +61,7 @@ export default function KonvaSection() {
         }));
       }
     }
+
     window.addEventListener('resize', debounce(onResizeStageSize, 200));
     return () => {
       window.removeEventListener('resize', debounce(onResizeStageSize, 200));
@@ -118,13 +117,13 @@ export default function KonvaSection() {
   useEffect(() => {
     // 수정/추가된 테이블 배열 전달
     getClientTableList({ clientTableList });
-    if (isFirstLoad) return;
-    // konvaIsEditEnd 삭제로, isEditEnd 필요 없을 수 있음 (추후 삭제)
-    setKonvaEditEnd({ isEditEnd: false });
   }, [clientTableList]);
 
   return (
-    <div className={`${styles.listBox} ${tab === 'table' ? styles.tableBox : ''}`} ref={tableBoxRef}>
+    <div
+      className={`${styles.listBox} ${tab === 'table' ? styles.tableBox : ''}`}
+      ref={tableBoxRef}
+    >
       {openKonva && (
         <motion.div className={styles.table} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
           {clientTableList.length === 0 ? (
