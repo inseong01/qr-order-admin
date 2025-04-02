@@ -27,7 +27,7 @@ export default async function fetchMenuItem({
     case 'delete': {
       // itemInfo type:  메뉴 -> 객체
       const idArr = [itemInfo].map((item) => item.id);
-      response = await supabase.from(`qr-order-${table}`).delete().in('id', idArr);
+      response = await supabase.from(`qr-order-${table}`).delete().in('id', idArr).select();
       break;
     }
     default: {
@@ -36,8 +36,13 @@ export default async function fetchMenuItem({
     }
   }
 
-  if (response.error) {
-    console.error(response.error.message ?? `${method.toUpperCase()} error`);
+  const isNoneData = response.data?.length === 0;
+
+  if (response.error || isNoneData) {
+    const deleteDenyMsg = isNoneData && ': The request for deletion has been denied';
+
+    console.error(response.error?.message ?? `${method.toUpperCase()} Error ${deleteDenyMsg}`);
+
     return null;
   }
 

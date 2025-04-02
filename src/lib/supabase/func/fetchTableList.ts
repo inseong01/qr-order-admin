@@ -34,8 +34,13 @@ export default async function fetchTableList(method: Method, dataArr?: DataArr<M
     }
   }
 
-  if (response.error) {
-    console.error(response?.error.message ?? `${method.toUpperCase()} error`);
+  const isNoneData = response.data?.length === 0;
+
+  if (response.error || isNoneData) {
+    const deleteDenyMsg = isNoneData && ': The request for deletion has been denied';
+
+    console.error(response.error?.message ?? `${method.toUpperCase()} Error ${deleteDenyMsg}`);
+
     return null;
   }
 

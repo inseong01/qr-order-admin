@@ -47,11 +47,22 @@ export interface UseFetchSlice {
     adminId: AdminId;
   }) => Promise<void>;
   fetchOrderListStatus: ({ method, data }: { method: Method; data: AllOrderList }) => Promise<void>;
-  fetchTableListData: ({ method, dataArr }: { method: Method; dataArr: DataArr<Method> }) => Promise<void>;
+  fetchTableListData: ({
+    method,
+    dataArr,
+  }: {
+    method: Method;
+    dataArr: DataArr<Method>;
+  }) => Promise<void>;
   fetchUpdateAlertMsg: ({ method, id }: { method: Method; id: string }) => Promise<void>;
 }
 
-export const useFetchSlice: StateCreator<UseBoundStore, [['zustand/devtools', never]], [], UseFetchSlice> =
+export const useFetchSlice: StateCreator<
+  UseBoundStore,
+  [['zustand/devtools', never]],
+  [],
+  UseFetchSlice
+> =
   import.meta.env.MODE === 'development'
     ? (set) => ({
         // 메뉴 카테고리 생성/수정/삭제
