@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "analyze": "npx vite-bundle-visualizer"
+    "analyze": "npx vite-bundle-visualizer",
+    "commit": "bash ./auto/bash/commit-work-log.sh"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
@@ -30,6 +31,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",
+    "@google/genai": "^0.13.0",
     "@tanstack/eslint-plugin-query": "^5.61.4",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",

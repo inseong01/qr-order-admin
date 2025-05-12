@@ -618,10 +618,36 @@
 
   - git actions supabase key 적용
 
-<--- --->
-    리팩토링 할 것: 메뉴, 좌석, 주문-모달, 알림, 위젯 
+25.5.12.
+feat: 자동 커밋 및 AI 분석 기능 추가
 
-    Head 정보 설정: helmet 라이브러리 사용 또는 React 19 API 사용(현 18) 
 
-    메뉴 탭에서 작업 후 테이블 생성 시 요청 가끔 안 됨
-    : 원인미상
+- .gitignore 업데이트
+  - diff-files.txt, file-status.txt 추가
+
+- 자동 커밋 bash 스크립트 생성
+  - commit-work-log.sh 추가
+
+- AI 작업 로그 분석 js 파일 생성
+  - ai-analyze-work-log.js 추가
+
+- 과거 작업 로그 js 파일 생성
+  - past-work-log.js 추가
+
+- 작업 로그 요약 js 파일 생성
+  - summary-work-log.js 추가
+
+- eslint 설정 변경
+  - globals에 node, browser 추가
+
+- package.json 및 package-lock.json 업데이트
+  - @google/genai 등 개발 의존성 추가
+
+- QRcodeBox 링크 변경
+  - tableNum이 아닌 주소로 접근 제한
+
+- tsconfig.app.json 수정
+  - auto 폴더 include
+
+- vite.config.ts 수정
+  - alias 절대 경로로 변경
