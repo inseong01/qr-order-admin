@@ -1,5 +1,6 @@
-import { Tables, TablesInsert, TablesUpdate } from '../../database.types';
-import { Status } from '../lib/hook/useSubscribeDBTable';
+import { LoadStatus } from '../hook/use-subscribe-table';
+
+import { Tables, TablesInsert, TablesUpdate } from '../lib/supabase/database.types';
 
 // variant
 export type ConfirmModalTitle = '주문' | '카테고리';
@@ -9,7 +10,7 @@ export type InitLoadState = {
   isLoading: boolean;
   isMounted: boolean;
   isError: boolean;
-  initialLoadstatus: Status;
+  initialLoadstatus: LoadStatus;
 };
 
 // supabase
