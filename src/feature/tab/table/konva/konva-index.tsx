@@ -4,7 +4,7 @@ import { motion } from 'motion/react';
 import { debounce } from '../../../../util/function/optimize';
 import { useBoundStore } from '../../../../lib/store/use-bound-store';
 
-import { useQueryTableList } from '../../../../hook/use-query';
+import { useQueryTableList } from '../../../../hook/use-query/query';
 
 import { TableList } from '../../../../types/common';
 

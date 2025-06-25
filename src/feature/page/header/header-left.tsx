@@ -5,7 +5,7 @@ import { motion } from 'motion/react';
 import { useBoundStore } from '../../../lib/store/use-bound-store';
 import { throttle } from '../../../util/function/optimize';
 
-import { useQueryAllOrderList } from '../../../hook/use-query';
+import { useQueryAllOrderList } from '../../../hook/use-query/query';
 
 import { AllOrderList, MenuCategoryList } from '../../../types/common';
 

@@ -6,7 +6,7 @@ import { ModalType } from '../../../lib/store/slices/modal-slice';
 
 import { MenuList } from '../../../types/common';
 
-import { useQueryMenuList } from '../../../hook/use-query';
+import { useQueryMenuList } from '../../../hook/use-query/query';
 
 import styles from './../tab-main.module.css';
 

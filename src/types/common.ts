@@ -1,4 +1,4 @@
-import { LoadStatus } from '../hook/use-subscribe-table';
+import { LoadStatus } from '../hook/use-query/query-client';
 
 import { Tables, TablesInsert, TablesUpdate } from '../lib/supabase/database.types';
 

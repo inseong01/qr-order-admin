@@ -11,17 +11,24 @@
 
   color: #8d8d8d;
   border-top: 1px solid #b4b4b4;
+
   padding-top: 12px;
 }
-/* 완료 */
-.bottom.done {
-  justify-content: center;
+
+.btn {
+  min-width: 40px;
+
+  color: #616161;
+  font-weight: bold;
+
+  border-radius: 8px;
+  border: none;
+
+  cursor: pointer;
+
+  padding: 4px 8px;
 }
 
-.bottom span {
-  color: #2bbada;
-}
-/* 완료 */
-.bottom.done span {
-  color: #8d8d8d;
+.btn.delete {
+  color: #fb2c2c;
 }

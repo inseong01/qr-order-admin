@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import { useBoundStore } from '../../../lib/store/use-bound-store';
 
-import { useQueryAllOrderList } from '../../../hook/use-query';
+import { useQueryAllOrderList } from '../../../hook/use-query/query';
 
 import ConfirmModal from '../../modal/confirm/confirm-modal';
 
@@ -15,13 +15,13 @@ export default function MainPageOrderTab() {
 
   const { data, refetch } = useQueryAllOrderList();
 
-  const isOrderToBeProcessed = selectedCategory.id === 0;
-  const doneOrderList = data ? data.filter((arr) => arr.isDone) : [];
-  const notDoneOrderList = data ? data.filter((arr) => !arr.isDone) : [];
-  const notDoneListAsc = [...notDoneOrderList].sort((a, b) => a.orderNum - b.orderNum);
-  const doneListDesc = [...doneOrderList].sort(
-    (a, b) => new Date(b.updated_at as Date).getTime() - new Date(a.updated_at as Date).getTime()
-  );
+  const isAcceptedOrderCategory = selectedCategory.id === 0;
+  const doneOrderList = data
+    .filter((arr) => arr.isDone)
+    .sort((a, b) => new Date(b.updated_at as Date).getTime() - new Date(a.updated_at as Date).getTime());
+  const notDoneOrderList = data
+    .filter((arr) => !arr.isDone)
+    .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
 
   useEffect(() => {
     if (tab !== 'order') return;
@@ -33,10 +33,10 @@ export default function MainPageOrderTab() {
   return (
     <>
       {/* 주문목록 탭 */}
-      {isOrderToBeProcessed ? (
-        <OrderListSwiper orderList={notDoneListAsc} />
+      {isAcceptedOrderCategory ? (
+        <OrderListSwiper orderList={notDoneOrderList} />
       ) : (
-        <OrderListSwiper orderList={doneListDesc} />
+        <OrderListSwiper orderList={doneOrderList} />
       )}
 
       {/* 모달 */}

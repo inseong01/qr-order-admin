@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 
-import { LoadStatus } from '../../../hook/use-subscribe-table';
+import { LoadStatus } from '../../../hook/use-query/query-client';
 
 import { InitLoadState } from '../../../types/common';
 

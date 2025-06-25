@@ -1,8 +1,8 @@
 import { useIsFetching, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { getTableList } from '../lib/supabase/function/get-list';
+import { getTableList } from '../../lib/supabase/function/get-list';
 
-import { AllOrderList, MenuList, RequestList, TabCategoryList } from '../types/common';
+import { AllOrderList, MenuList, RequestList, TabCategoryList } from '../../types/common';
 
 export function useQueryTableList() {
   const tableList = useQuery({
@@ -10,6 +10,7 @@ export function useQueryTableList() {
     queryFn: () => getTableList(),
     staleTime: Infinity,
     throwOnError: true,
+    refetchOnWindowFocus: false,
   });
 
   return tableList;
@@ -46,7 +47,7 @@ export function useQueryMenuList() {
 
 export function useQueryAllOrderList() {
   const queryClient = useQueryClient();
-  const data = queryClient.getQueryData<AllOrderList[]>(['allOrderList']);
+  const data = queryClient.getQueryData<AllOrderList[]>(['allOrderList']) ?? [];
   const refetch = async () => await queryClient.refetchQueries({ queryKey: ['allOrderList'] });
   const fetchAmount = useIsFetching({ queryKey: ['allOrderList'] });
 

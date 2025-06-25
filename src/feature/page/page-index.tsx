@@ -43,7 +43,7 @@ export default function PageWrap({
     setMount(true); // 데이터 패치되었다면 페이지 보여주는 트리거
   }, [isLoading]);
 
-  return <>{!isError && isCompleted ? <SuccessComponent /> : <ErrorComponent />}</>;
+  return <>{isCompleted ? <SuccessComponent /> : isError ? <ErrorComponent /> : <></>}</>;
 }
 
 function SuccessComponent() {
@@ -63,5 +63,5 @@ function SuccessComponent() {
   );
 }
 function ErrorComponent() {
-  return <></>;
+  return <>오류가 발생했습니다.</>;
 }

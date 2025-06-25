@@ -1,7 +1,7 @@
 import { lazy, Suspense, useState } from 'react';
 import { REALTIME_POSTGRES_CHANGES_LISTEN_EVENT } from '@supabase/supabase-js';
 
-import { useSubscribeTable } from '../../hook/use-subscribe-table';
+import { useQueryClientTable } from '../../hook/use-query/query-client';
 
 import StartUpScreen from '../load/start/start-up-screen';
 
@@ -11,7 +11,7 @@ export default function LoadPage() {
   const [isCompleted, setLoadComplete] = useState(false);
   const [isMounted, setMount] = useState(false);
 
-  const { initialLoadstatus, isLoading, isError } = useSubscribeTable(REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.ALL);
+  const { initialLoadstatus, isLoading, isError } = useQueryClientTable(REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.ALL);
 
   const state = {
     isCompleted,

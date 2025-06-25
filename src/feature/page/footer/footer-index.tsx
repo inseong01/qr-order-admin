@@ -5,7 +5,7 @@ import { useBoundStore } from '../../../lib/store/use-bound-store';
 
 import { TabCategoryList } from '../../../types/common';
 
-import { useQueryAllOrderList, useQueryRequestList, useQueryTabMenu } from '../../../hook/use-query';
+import { useQueryAllOrderList, useQueryRequestList, useQueryTabMenu } from '../../../hook/use-query/query';
 
 import UnderLine from '../../../components/styles/under-line/line-index';
 

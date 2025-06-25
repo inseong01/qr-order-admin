@@ -1,4 +1,4 @@
-import { Dispatch, ReactNode, SetStateAction, useState } from 'react';
+import { Dispatch, ReactNode, SetStateAction, useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 
 import { useBoundStore } from '../../../../../lib/store/use-bound-store';
@@ -10,46 +10,39 @@ import styles from './slide-index.module.css';
 import OrderListSlideDesktop from './devices/slide-pc';
 import OrderListSlideMobile from './devices/slide-mobile';
 
-export default function OrderListSlide({
-  list,
-  clickedArr,
-  setClickedArr,
-}: {
-  list: AllOrderList;
-  clickedArr: string[];
-  setClickedArr: Dispatch<SetStateAction<string[]>>;
-}) {
+export default function OrderListSlide({ list }: { list: AllOrderList }) {
   const categoryId = useBoundStore((state) => state.category.id);
   const submitError = useBoundStore((state) => state.submit.isError);
+  const submitStatus = useBoundStore((state) => state.submit.status);
   const getSelectedListId = useBoundStore((state) => state.getSelectedListId);
 
-  const manageDragging = useState(false);
+  const [isDragging, setDragState] = useState(false);
+  const [isSlideClicked, clickSlide] = useState(false);
 
-  const isIdExist = clickedArr.includes(list.id);
   const isMobileSize = window.innerWidth <= 720;
 
-  function onClickOrderList(list: AllOrderList) {
-    return () => {
-      if (manageDragging[0]) return;
-      if (submitError) return;
-      if (categoryId === 0) {
-        getSelectedListId({ selectedListId: list.id });
-      }
+  // 슬라이드 상태 초기화
+  useEffect(() => {
+    if (submitStatus === 'fulfilled' || submitStatus === 'rejected') {
+      clickSlide(false);
+    }
+  }, [submitStatus]);
 
-      // 선택한 주문 목록 확인
-      setClickedArr((prev) => {
-        if (isIdExist) {
-          return prev.filter((arg) => arg !== list.id);
-        }
-        return [...prev, list.id];
-      });
-    };
+  function selectSlide() {
+    if (!isMobileSize) return;
+    if (isDragging) return;
+    if (submitError) return;
+    if (categoryId === 0) {
+      getSelectedListId({ selectedListId: list.id });
+    }
+
+    clickSlide((prev) => !prev);
   }
 
   return (
-    <OrderListSlideBox list={list} clickedArr={clickedArr} manageDragging={manageDragging}>
+    <OrderListSlideBox list={list} setDragState={setDragState}>
       {/* 상단 제목 */}
-      <div className={`${styles.topBox} ${categoryId === 1 ? styles.done : ''}`} onClick={onClickOrderList(list)}>
+      <div className={`${styles.topBox} ${categoryId === 1 ? styles.done : ''}`} onClick={selectSlide}>
         <div className={styles.top}>
           <div className={styles.title}>#{list.orderNum}</div>
           <div className={styles.right}>
@@ -62,7 +55,7 @@ export default function OrderListSlide({
       {!isMobileSize ? (
         <OrderListSlideDesktop list={list} />
       ) : (
-        <OrderListSlideMobile isIdExist={isIdExist} list={list} />
+        <OrderListSlideMobile isSlideClicked={isSlideClicked} list={list} />
       )}
     </OrderListSlideBox>
   );
@@ -71,13 +64,11 @@ export default function OrderListSlide({
 function OrderListSlideBox({
   children,
   list,
-  clickedArr,
-  manageDragging,
+  setDragState,
 }: {
   children: ReactNode;
   list: AllOrderList;
-  clickedArr: string[];
-  manageDragging: [boolean, Dispatch<SetStateAction<boolean>>];
+  setDragState: Dispatch<SetStateAction<boolean>>;
 }) {
   const categoryId = useBoundStore((state) => state.category.id);
   const submitIsError = useBoundStore((state) => state.submit.isError);
@@ -88,13 +79,12 @@ function OrderListSlideBox({
   const changeSubmitMsgType = useBoundStore((state) => state.changeSubmitMsgType);
 
   let dragStartPosition = 0;
-  const [_, setDragging] = manageDragging;
 
   function onDragStart(e: PointerEvent) {
     const startPosition = e.x;
 
     dragStartPosition = startPosition;
-    setDragging(true);
+    setDragState(true);
   }
 
   function onDragEnd(e: PointerEvent) {
@@ -102,13 +92,11 @@ function OrderListSlideBox({
     const dragEndPosition = e.x;
     const dragAmount = dragEndPosition - dragStartPosition;
     const isEnableToModify = Math.abs(dragAmount) >= 150;
-    const isOpenedList = clickedArr.includes(list.id);
     const isEnableModifyCategory = categoryId === 0;
     const modifyType = Math.sign(dragAmount) === -1 ? 'delete' : 'complete';
 
     if (isSubmit) return;
     if (submitIsError) return;
-    if (!isOpenedList) return;
     if (!isEnableToModify) return;
     if (!isEnableModifyCategory) return;
 
@@ -118,7 +106,7 @@ function OrderListSlideBox({
   }
 
   function onDragTransitionEnd() {
-    setDragging(false);
+    setDragState(false);
   }
 
   return (

@@ -2,9 +2,9 @@ import { useEffect } from 'react';
 import { useQueries } from '@tanstack/react-query';
 import { REALTIME_LISTEN_TYPES, REALTIME_POSTGRES_CHANGES_LISTEN_EVENT } from '@supabase/supabase-js';
 
-import supabase from '../lib/supabase/supabase-config';
-import { useBoundStore } from '../lib/store/use-bound-store';
-import { getMenuList, getOrderList, getRequestList, getTabCategory } from '../lib/supabase/function/get-list';
+import supabase from '../../lib/supabase/supabase-config';
+import { useBoundStore } from '../../lib/store/use-bound-store';
+import { getMenuList, getOrderList, getRequestList, getTabCategory } from '../../lib/supabase/function/get-list';
 
 /*
   Supabase Table Realtime 구독 커스텀훅
@@ -25,7 +25,7 @@ export type InitDataLoadStatus = {
   [key in QueryKeys]?: LoadStatus;
 };
 
-export function useSubscribeTable(method: REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.ALL) {
+export function useQueryClientTable(method: REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.ALL) {
   // store
   const tab = useBoundStore((state) => state.tab.title);
   // useQueries
@@ -35,18 +35,21 @@ export function useSubscribeTable(method: REALTIME_POSTGRES_CHANGES_LISTEN_EVENT
         queryKey: ['requestList'],
         queryFn: getRequestList,
         staleTime: Infinity,
+        refetchOnWindowFocus: false,
         retry: 2,
       },
       {
         queryKey: ['allOrderList'],
         queryFn: getOrderList,
         staleTime: Infinity,
+        refetchOnWindowFocus: false,
         retry: 2,
       },
       {
         queryKey: ['tabMenu'],
         queryFn: () => getTabCategory('tab'),
         staleTime: Infinity,
+        refetchOnWindowFocus: false,
         retry: 2,
       },
       {
@@ -59,6 +62,7 @@ export function useSubscribeTable(method: REALTIME_POSTGRES_CHANGES_LISTEN_EVENT
       {
         queryKey: ['menuList'],
         queryFn: getMenuList,
+        refetchOnWindowFocus: false,
         retry: 2,
       },
     ],

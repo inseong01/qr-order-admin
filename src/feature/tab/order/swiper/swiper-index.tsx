@@ -1,7 +1,4 @@
-import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-
-import { useBoundStore } from '../../../../lib/store/use-bound-store';
 
 import { AllOrderList } from '../../../../types/common';
 
@@ -12,16 +9,8 @@ import { swiper_motion } from './motion/variants';
 import OrderListSlide from './slide/slide-index';
 
 export default function OrderListSwiper({ orderList, isDone }: { orderList: AllOrderList[]; isDone?: boolean }) {
-  const [clickedArr, setClickedArr] = useState(['']);
-
-  const selectedCategory = useBoundStore((state) => state.category);
-
   const isExistData = orderList.length === 0;
-
-  useEffect(() => {
-    setClickedArr(['']);
-  }, [selectedCategory.id]);
-
+  console.log('orderList: ', orderList);
   return (
     <motion.ul
       className={`${styles.orderList} ${isDone ? styles.done : ''}`}
@@ -34,7 +23,7 @@ export default function OrderListSwiper({ orderList, isDone }: { orderList: AllO
       ) : (
         <>
           {orderList.map((list, idx) => {
-            return <OrderListSlide key={idx} list={list} clickedArr={clickedArr} setClickedArr={setClickedArr} />;
+            return <OrderListSlide key={idx} list={list} />;
           })}
         </>
       )}
