@@ -1,10 +1,11 @@
 import { motion } from 'motion/react';
 import { useQueryClient } from '@tanstack/react-query';
 
-import { useBoundStore } from '../../lib/store/use-bound-store';
+import { useBoundStore } from '../../../../lib/store/use-bound-store';
 
-import styles from './widget-index.module.css';
-import { widgetBox, topSpanBar, middleSpanBar, bottomSpanBar } from './motion/variants';
+import styles from './button.module.css';
+
+import { widgetBox, topSpanBar, middleSpanBar, bottomSpanBar } from '../../motion/variants';
 
 export default function WidgetIconButton() {
   const isWidgetOpen = useBoundStore((state) => state.widget.isOpen);

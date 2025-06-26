@@ -3,19 +3,28 @@ import { AnimatePresence, motion } from 'motion/react';
 
 import { useBoundStore } from '../../lib/store/use-bound-store';
 
-import styles from './widget-index.module.css';
-import WidgetIconButton from './widget-button';
-import WidgetCategoryPortal from './categories/categories-index';
+import styles from './widget.module.css';
+
+import WidgetIconButton from './components/button';
+import MenuWidget from './tab/menu';
+import TableWidget from './tab/table';
 
 export default function Widget() {
   const widgetRef = useRef(null);
-  const tab = useBoundStore((state) => state.tab.id);
+  const tab = useBoundStore((state) => state.tab.title);
   const isModalOpen = useBoundStore((state) => state.modal.isOpen);
   const isWidgetOpen = useBoundStore((state) => state.widget.isOpen);
   const isTableEditAble = useBoundStore((state) => state.konva.isAble);
   const isMobile = useBoundStore((state) => state.windowState.isMobile);
   const viewportMode = useBoundStore((state) => state.windowState.viewportMode);
   const resetWidgetState = useBoundStore((state) => state.resetWidgetState);
+
+  const components = {
+    menu: MenuWidget,
+    table: TableWidget,
+    order: null,
+  };
+  const WidgetComponent = components[tab];
 
   // 외부 선택으로 위젯 닫기
   useEffect(() => {
@@ -49,10 +58,10 @@ export default function Widget() {
 
   return (
     <AnimatePresence>
-      {(!isMobile || viewportMode === 'portrait') && (
+      {WidgetComponent && (!isMobile || viewportMode === 'portrait') && (
         <motion.div
-          className={styles.widgetWrap}
           ref={widgetRef}
+          className={styles.widgetWrap}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -61,7 +70,7 @@ export default function Widget() {
           <WidgetIconButton />
 
           {/* 위젯 목록 */}
-          <WidgetCategoryPortal />
+          <AnimatePresence>{isWidgetOpen ? <WidgetComponent /> : null}</AnimatePresence>
         </motion.div>
       )}
     </AnimatePresence>

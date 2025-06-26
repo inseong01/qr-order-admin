@@ -10,7 +10,7 @@ import OrderListSlide from './slide/slide-index';
 
 export default function OrderListSwiper({ orderList, isDone }: { orderList: AllOrderList[]; isDone?: boolean }) {
   const isExistData = orderList.length === 0;
-  console.log('orderList: ', orderList);
+
   return (
     <motion.ul
       className={`${styles.orderList} ${isDone ? styles.done : ''}`}

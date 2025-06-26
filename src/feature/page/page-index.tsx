@@ -5,10 +5,10 @@ import { useBoundStore } from '../../lib/store/use-bound-store';
 import { InitLoadState } from '../../types/common';
 
 import AlertTableMessage from '../alert/popup/alert-index';
-import Widget from './../widget/widget-index';
 import Header from './header/header-index';
 import Footer from './footer/footer-index';
 import Main from './main/main-index';
+import Widget from '../widget';
 
 export default function PageWrap({
   state,
