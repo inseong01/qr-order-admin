@@ -10,7 +10,6 @@ type InitialState = {
       1: boolean;
       2: boolean;
     };
-    isEdit: boolean;
   };
 };
 
@@ -22,8 +21,6 @@ const initialState: InitialState = {
       1: false,
       2: false,
     },
-    // 아이콘 변경
-    isEdit: false,
   },
 };
 
@@ -34,11 +31,9 @@ export interface UseWidgetSlice {
       1: boolean;
       2: boolean;
     };
-    isEdit: boolean;
   };
   resetWidgetState: () => void;
   openCloseWidget: () => void;
-  setWidgetEditState: (isEdit: boolean) => void;
   setWidgetOptionListState: ({ optNum }: { optNum: OptionNumList }) => void;
 }
 
@@ -56,8 +51,6 @@ export const useWidgetSlice: StateCreator<UseWidgetSlice, [['zustand/devtools', 
             undefined,
             'widget/openCloseWidget'
           ),
-        setWidgetEditState: (isEdit) =>
-          set((state) => ({ widget: { ...state.widget, isEdit } }), undefined, 'widget/setWidgetEditState'),
         setWidgetOptionListState: ({ optNum }) =>
           set(
             (state) => {
@@ -79,7 +72,6 @@ export const useWidgetSlice: StateCreator<UseWidgetSlice, [['zustand/devtools', 
             const isOpen = !state.widget.isOpen;
             return { widget: { ...initialState.widget, isOpen } };
           }),
-        setWidgetEditState: (isEdit) => set((state) => ({ widget: { ...state.widget, isEdit } })),
         setWidgetOptionListState: ({ optNum }) =>
           set((state) => {
             const openOptionList = {

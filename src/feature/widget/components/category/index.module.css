@@ -1,3 +1,10 @@
+.listBox {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 10px;
+}
+
 .categories {
   display: flex;
   flex-direction: column;

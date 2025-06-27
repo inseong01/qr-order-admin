@@ -13,7 +13,6 @@ export default function WidgetIconButton() {
   const isModalOpen = useBoundStore((state) => state.modal.isOpen);
   const submitIsError = useBoundStore((state) => state.submit.isError);
   const openCloseWidget = useBoundStore((state) => state.openCloseWidget);
-  const setWidgetEditState = useBoundStore((state) => state.setWidgetEditState);
   const resetItemState = useBoundStore((state) => state.resetItemState);
   const resetKonvaState = useBoundStore((state) => state.resetKonvaState);
 
@@ -28,9 +27,7 @@ export default function WidgetIconButton() {
     if (editTableType) {
       resetItemState();
       resetKonvaState();
-      setWidgetEditState(false);
-      // 원본 데이터 다시 불러오기
-      refetch();
+      refetch(); // 원본 데이터 다시 불러오기
       return;
     }
     openCloseWidget();

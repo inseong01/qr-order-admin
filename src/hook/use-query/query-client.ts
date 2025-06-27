@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useQueries } from '@tanstack/react-query';
-import { REALTIME_LISTEN_TYPES, REALTIME_POSTGRES_CHANGES_LISTEN_EVENT } from '@supabase/supabase-js';
+import { REALTIME_LISTEN_TYPES, REALTIME_POSTGRES_CHANGES_LISTEN_EVENT } from '@supabase/realtime-js';
 
 import supabase from '../../lib/supabase/supabase-config';
 import { useBoundStore } from '../../lib/store/use-bound-store';

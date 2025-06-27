@@ -1,5 +1,5 @@
 import { lazy, Suspense, useState } from 'react';
-import { REALTIME_POSTGRES_CHANGES_LISTEN_EVENT } from '@supabase/supabase-js';
+import { REALTIME_POSTGRES_CHANGES_LISTEN_EVENT } from '@supabase/realtime-js';
 
 import { useQueryClientTable } from '../../hook/use-query/query-client';
 

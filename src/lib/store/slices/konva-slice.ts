@@ -7,7 +7,6 @@ type InitialState = {
     type: KonvaEditType;
     isAble: boolean;
     isEditing: boolean;
-    isEditEnd: boolean;
     target: {
       id: Array<string>;
     };
@@ -19,7 +18,6 @@ const initialState: InitialState = {
     type: '',
     isAble: false,
     isEditing: false,
-    isEditEnd: false,
     target: {
       id: [],
     },
@@ -31,7 +29,6 @@ export interface UseKonvaSlice {
     type: KonvaEditType;
     isAble: boolean;
     isEditing: boolean;
-    isEditEnd: boolean;
     target: {
       id: Array<string>;
     };

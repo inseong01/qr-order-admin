@@ -1,4 +1,6 @@
 import { AnimatePresence } from 'motion/react';
+import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useBoundStore } from '../../../../lib/store/use-bound-store';
 import { OptionNumList } from '../../../../lib/store/slices/widget-slice';
@@ -7,7 +9,7 @@ import { FetchMethod } from '../../../../lib/store/slices/fetch-slice';
 import { ModalType } from '../../../../lib/store/slices/modal-slice';
 
 import Category from '../../components/category';
-import EditIconAnimation from '../../components/icon/edit-icon-animation';
+import IconWrap from '../../components/icon';
 import CategoryIcon from '../../components/icon/category-icon';
 import Option from '../../components/option';
 import TextBox from '../../components/option/text-box';
@@ -45,7 +47,9 @@ export default function MenuFirstCategory({
     <Category>
       {/* 아이콘 */}
       <CategoryIcon clickEditor={onClickEditor(1, dataArr)}>
-        <EditIconAnimation />
+        <IconWrap>
+          <FontAwesomeIcon icon={faPenToSquare} size='1x' />
+        </IconWrap>
       </CategoryIcon>
 
       {/* 카테고리 목록 */}

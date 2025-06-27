@@ -3,11 +3,11 @@ import { motion } from 'motion/react';
 
 import styles from './icon.module.css';
 
-export default function EditAnimationIconBox({ children, key }: { children: ReactNode; key: string }) {
+export default function EditAnimationIconBox({ children, iconKey }: { children: ReactNode; iconKey: string }) {
   return (
     <motion.div
       className={styles.icon}
-      key={key}
+      key={iconKey}
       initial={{ x: 20 }}
       animate={{ x: 0 }}
       exit={{ x: -20 }}

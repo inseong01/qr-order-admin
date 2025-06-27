@@ -15,7 +15,6 @@ export default function TableWidget() {
   const editTableisEditing = useBoundStore((state) => state.konva.isEditing);
   const resetItemState = useBoundStore((state) => state.resetItemState);
   const resetKonvaState = useBoundStore((state) => state.resetKonvaState);
-  const setWidgetEditState = useBoundStore((state) => state.setWidgetEditState);
   const setWidgetOptionListState = useBoundStore((state) => state.setWidgetOptionListState);
   const fetchTableListData = useBoundStore((state) => state.fetchTableListData);
 
@@ -30,11 +29,9 @@ export default function TableWidget() {
           return;
         }
         const data = dataArr as TableDataArr<FetchMethod>;
-        // 편집 저장, db 전송
-        fetchTableListData({ method: editTableType, dataArr: data });
+        fetchTableListData({ method: editTableType, dataArr: data }); // 편집 저장, db 전송
         resetItemState();
         resetKonvaState();
-        setWidgetEditState(false);
         return;
       }
       // 위젯 옵션 여닫기
