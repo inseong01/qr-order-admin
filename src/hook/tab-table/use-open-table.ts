@@ -1,6 +1,5 @@
-import { useBoundStore } from '../../../../../lib/store/use-bound-store';
-
-import { TableList } from '../../../../../types/common';
+import { useBoundStore } from '@/lib/store/use-bound-store';
+import { TableList } from '@/types/common';
 
 export default function useOpenTableInfo() {
   const konvaEditType = useBoundStore((state) => state.konva.type);

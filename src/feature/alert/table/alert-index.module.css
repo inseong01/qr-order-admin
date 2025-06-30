@@ -135,6 +135,10 @@
     bottom: 45px;
     border-radius: 0;
   }
+
+  .reqeustMsgWrap {
+    bottom: 65px;
+  }
 }
 
 @media (max-height: 720px) and (orientation: landscape) {

@@ -3,9 +3,9 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import { useBoundStore } from '../../../../lib/store/use-bound-store';
 
-import styles from './button.module.css';
-
 import { widgetBox, topSpanBar, middleSpanBar, bottomSpanBar } from '../../motion/variants';
+
+import styles from './button.module.css';
 
 export default function WidgetIconButton() {
   const isWidgetOpen = useBoundStore((state) => state.widget.isOpen);
@@ -20,7 +20,7 @@ export default function WidgetIconButton() {
   const refetch = async () => await queryClient.refetchQueries({ queryKey: ['tableList'] });
 
   // 위젯 열기/닫기
-  function onClickOpenWidgetList() {
+  function openWidget() {
     if (submitIsError) return;
     if (isModalOpen) return;
     // 수정 중 취소하기
@@ -34,7 +34,7 @@ export default function WidgetIconButton() {
   }
 
   return (
-    <div className={styles.widget} onClick={onClickOpenWidgetList}>
+    <div className={styles.widget} onClick={openWidget}>
       <motion.div
         className={styles.iconBox}
         variants={widgetBox}

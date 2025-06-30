@@ -26,9 +26,8 @@ export type InitDataLoadStatus = {
 };
 
 export function useQueryClientTable(method: REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.ALL) {
-  // store
   const tab = useBoundStore((state) => state.tab.title);
-  // useQueries
+
   const queries = useQueries({
     queries: [
       {

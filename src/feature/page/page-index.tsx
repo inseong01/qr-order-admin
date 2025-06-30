@@ -54,7 +54,7 @@ function SuccessComponent() {
       <Main />
       <Footer />
 
-      {/* 테이블 알림 */}
+      {/* 알림 */}
       <AlertTableMessage />
 
       {/* 위젯 */}

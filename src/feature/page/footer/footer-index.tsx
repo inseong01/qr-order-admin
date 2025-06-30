@@ -78,6 +78,7 @@ function TabMenuBoxComponent({ children, tab }: { children: ReactNode; tab: TabC
   const resetCategoryState = useBoundStore((state) => state.resetCategoryState);
   const resetItemState = useBoundStore((state) => state.resetItemState);
   const resetSubmitState = useBoundStore((state) => state.resetSubmitState);
+  const resetWidgetState = useBoundStore((state) => state.resetWidgetState);
 
   function onClickChangeTab({ id }: TabCategoryList) {
     return () => {
@@ -92,6 +93,7 @@ function TabMenuBoxComponent({ children, tab }: { children: ReactNode; tab: TabC
       changeTabState({ tabId: id });
       resetCategoryState();
       resetItemState();
+      resetWidgetState();
 
       if (submitIsError) return; // 탭 변경마다 제출 상태 초기화, 에러 상황 예외
 

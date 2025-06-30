@@ -1,7 +1,7 @@
 import Konva from 'konva';
 import { RefObject } from 'react';
 
-import { useBoundStore } from '../../../../../lib/store/use-bound-store';
+import { useBoundStore } from '@/lib/store/use-bound-store';
 
 export default function useEditTable() {
   const konvaEditType = useBoundStore((state) => state.konva.type);

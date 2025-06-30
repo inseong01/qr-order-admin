@@ -51,11 +51,6 @@ export default function Widget() {
     return () => window.removeEventListener('click', onClickWindowToCloseWidget);
   }, [isWidgetOpen, isTableEditAble, isModalOpen]);
 
-  // tab 전환될 때
-  useEffect(() => {
-    resetWidgetState();
-  }, [tab]);
-
   return (
     <AnimatePresence>
       {WidgetComponent && (!isMobile || viewportMode === 'portrait') && (

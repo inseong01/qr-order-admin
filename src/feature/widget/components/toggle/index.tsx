@@ -9,8 +9,6 @@ export default function RequestMsgToggle() {
 
   return (
     <div className={styles.toggle}>
-      <div>알림</div>
-
       <AnimatePresence mode='wait' initial={false}>
         {!tableRequestAlertOn ? (
           <motion.div
@@ -20,7 +18,7 @@ export default function RequestMsgToggle() {
             animate={{ y: 0 }}
             exit={{ y: -15 }}
           >
-            표시
+            켜기
           </motion.div>
         ) : (
           <motion.div

@@ -1,13 +1,10 @@
 import Konva from 'konva';
 import { RefObject } from 'react';
 
-import { useBoundStore } from '../../../../../lib/store/use-bound-store';
-
-import { TableInit } from '../../../../../types/common';
-
-import { OnDrageEndEvent } from '../layer-index';
-
-import { SetClientTableList } from '../konva-index';
+import { SetClientTableList } from '@/feature/tab/table/konva/konva-index';
+import { OnDrageEndEvent } from '@/feature/tab/table/konva/layer-index';
+import { useBoundStore } from '@/lib/store/use-bound-store';
+import { TableInit } from '@/types/common';
 
 export default function useSetTable(
   stageRef: RefObject<Konva.Stage>,

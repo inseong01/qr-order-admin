@@ -15,9 +15,9 @@ import OptionGroup from '../../components/option/option-group';
 import RequestMsgToggle from '../../components/toggle';
 
 export default function TableSecondCategory({
-  onClickEditor,
+  clickEditor,
 }: {
-  onClickEditor: (optNum: OptionNumList, dataArr?: TableDataArr<FetchMethod>) => () => void;
+  clickEditor: (optNum: OptionNumList, dataArr?: TableDataArr<FetchMethod>) => () => void;
 }) {
   const secondOption = useBoundStore((state) => state.widget.openOptionList[2]);
   const toggleRequestAlert = useBoundStore((state) => state.toggleRequestAlert);
@@ -29,7 +29,7 @@ export default function TableSecondCategory({
   return (
     <Category>
       {/* 아이콘 */}
-      <CategoryIcon clickEditor={onClickEditor(2)}>
+      <CategoryIcon clickEditor={clickEditor(2)}>
         <IconWrap>
           <FontAwesomeIcon icon={faBell} size='1x' />
         </IconWrap>

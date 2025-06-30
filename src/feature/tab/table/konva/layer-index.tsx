@@ -6,10 +6,10 @@ import { useBoundStore } from '../../../../lib/store/use-bound-store';
 
 import { Order, TableInit, TableList } from '../../../../types/common';
 
-import useOpenTableInfo from './hook/use-open-table';
-import useEditTable from './hook/use-edit-table';
-import useOnMouseChangeCursor from './hook/use-change-cursor';
-import useSetTable from './hook/use-set-table';
+import useOpenTableInfo from '@/hook/tab-table/use-open-table';
+import useEditTable from '@/hook/tab-table/use-edit-table';
+import useOnMouseChangeCursor from '@/hook/tab-table/use-change-cursor';
+import useSetTable from '@/hook/tab-table/use-set-table';
 
 import { SetClientTableList } from './konva-index';
 

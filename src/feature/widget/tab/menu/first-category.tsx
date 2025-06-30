@@ -16,9 +16,9 @@ import TextBox from '../../components/option/text-box';
 import OptionGroup from '../../components/option/option-group';
 
 export default function MenuFirstCategory({
-  onClickEditor,
+  clickEditor,
 }: {
-  onClickEditor: (optNum: OptionNumList, dataArr: TableDataArr<FetchMethod>) => () => void;
+  clickEditor: (optNum: OptionNumList, dataArr: TableDataArr<FetchMethod>) => () => void;
 }) {
   const tableListData = useBoundStore((state) => state.itemBox.clientTableList);
   const editTableType = useBoundStore((state) => state.konva.type);
@@ -46,7 +46,7 @@ export default function MenuFirstCategory({
   return (
     <Category>
       {/* 아이콘 */}
-      <CategoryIcon clickEditor={onClickEditor(1, dataArr)}>
+      <CategoryIcon clickEditor={clickEditor(1, dataArr)}>
         <IconWrap>
           <FontAwesomeIcon icon={faPenToSquare} size='1x' />
         </IconWrap>
