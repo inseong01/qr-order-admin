@@ -1,0 +1,34 @@
+.fg {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  background-color: #e7e8eb;
+  z-index: 99999;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: default;
+}
+
+.box {
+  width: 260px;
+  word-break: keep-all;
+  color: #4caff8;
+  font-size: 2rem;
+  letter-spacing: 3px;
+}
+
+.title {
+  animation: fadeIn 1.5s both;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

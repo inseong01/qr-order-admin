@@ -23,7 +23,7 @@ export default function useModalSubmitData() {
   const fetchFormMenuItem = useBoundStore((state) => state.fetchFormMenuItem);
   const getListInfo = useBoundStore((state) => state.getListInfo);
   const changeModalState = useBoundStore((state) => state.changeModalState);
-  const resetWidgetState = useBoundStore((state) => state.resetWidgetState);
+  // const resetWidgetState = useBoundStore((state) => state.resetWidgetState);
   // useState
   const [value, setValue] = useState(item);
 

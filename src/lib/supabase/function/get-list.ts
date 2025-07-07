@@ -49,9 +49,9 @@ export async function getTableList() {
   return response.data;
 }
 
-type TableType = 'menu' | 'order' | 'request' | 'tab' | 'table';
-
-export async function getTabCategory(type: TableType) {
+type TableType = 'menu' | 'order' | 'table';
+// 'request' | 'tab'
+export async function getHeaderCategory(type: TableType) {
   let response = await supabase.from(`qr-order-category-${type}`).select('*').order('id', { ascending: true });
 
   if (response.error) {

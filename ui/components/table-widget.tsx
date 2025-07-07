@@ -8,30 +8,32 @@ const TableWidget = () => {
 
   return (
     <div className="tableWidget">
-      <button className="closeButton" onClick={handleClose}>
+      <button className="close" onClick={handleClose}>
         <div>
-          <img alt="close icon" />
+          <img src="" alt="icon" />
         </div>
         <span>닫기</span>
       </button>
-      <div className="category" onClick={handleCreateTable}>
-        <div>
-          <img alt="category icon" />
-        </div>
-        <span>좌석 생성</span>
-      </div>
-      <div className="category" onClick={handleEditTable}>
-        <div>
-          <img alt="category icon" />
-        </div>
-        <span>좌석 수정</span>
-      </div>
-      <div className="category" onClick={handleDeleteTable}>
-        <div>
-          <img alt="category icon" />
-        </div>
-        <span>좌석 삭제</span>
-      </div>
+      <ul>
+        <li onClick={handleCreateTable}>
+          <div>
+            <img src="" alt="icon" />
+          </div>
+          <span>좌석 생성</span>
+        </li>
+        <li onClick={handleEditTable}>
+          <div>
+            <img src="" alt="icon" />
+          </div>
+          <span>좌석 수정</span>
+        </li>
+        <li onClick={handleDeleteTable}>
+          <div>
+            <img src="" alt="icon" />
+          </div>
+          <span>좌석 삭제</span>
+        </li>
+      </ul>
     </div>
   );
 };

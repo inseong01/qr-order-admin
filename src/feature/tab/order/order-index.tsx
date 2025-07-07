@@ -9,7 +9,7 @@ import ConfirmModal from '../../modal/confirm/confirm-modal';
 import OrderListSwiper from './swiper/swiper-index';
 
 export default function MainPageOrderTab() {
-  const tab = useBoundStore((state) => state.tab.title);
+  // const tab = useBoundStore((state) => state.tab.title);
   const submitStatus = useBoundStore((state) => state.submit.status);
   const selectedCategory = useBoundStore((state) => state.category);
 
@@ -24,7 +24,7 @@ export default function MainPageOrderTab() {
     .sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
 
   useEffect(() => {
-    if (tab !== 'order') return;
+    // if (tab !== 'order') return;
     if (submitStatus === 'fulfilled') {
       refetch();
     }

@@ -1,90 +1,87 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-type WidgetProps = {
-  type: 'menu' | 'table';
+const ClosedWidget = () => {
+  const handleClick = () => {};
+
+  return (
+    <div className="closedWidget">
+      <button onClick={handleClick}>
+        <div>
+          <img src="" alt="icon" />
+        </div>
+        <span>열기</span>
+      </button>
+    </div>
+  );
 };
 
-const Widget = ({ type }: WidgetProps) => {
-  const [isOpen, setIsOpen] = useState(true);
-
-  const handleClose = () => setIsOpen(false);
-  const handleOpen = () => setIsOpen(true);
-
+const MenuWidget = () => {
+  const handleClose = () => {};
   const handleAddCategory = () => {};
   const handleEditCategory = () => {};
 
+  return (
+    <div className="menuWidget">
+      <button className="close" onClick={handleClose}>
+        <div>
+          <img src="" alt="icon" />
+        </div>
+        <span>닫기</span>
+      </button>
+      <ul>
+        <li onClick={handleAddCategory}>
+          <div>
+            <img src="" alt="icon" />
+          </div>
+          <span>분류 추가</span>
+        </li>
+        <li onClick={handleEditCategory}>
+          <div>
+            <img src="" alt="icon" />
+          </div>
+          <span>분류 수정</span>
+        </li>
+      </ul>
+    </div>
+  );
+};
+
+const TableWidget = () => {
+  const handleClose = () => {};
   const handleCreateTable = () => {};
   const handleEditTable = () => {};
   const handleDeleteTable = () => {};
 
-  if (!isOpen) {
-    return (
-      <button className="closedWidget" onClick={handleOpen}>
-        <span>열기</span>
+  return (
+    <div className="tableWidget">
+      <button className="close" onClick={handleClose}>
         <div>
-          <img alt="open icon" />
+          <img src="" alt="icon" />
         </div>
+        <span>닫기</span>
       </button>
-    );
-  }
-
-  if (type === 'menu') {
-    return (
-      <div className="menuWidget">
-        <button className="closeButton" onClick={handleClose}>
+      <ul>
+        <li onClick={handleCreateTable}>
           <div>
-            <img alt="close icon" />
-          </div>
-          <span>닫기</span>
-        </button>
-        <div className="category" onClick={handleAddCategory}>
-          <div>
-            <img alt="category icon" />
-          </div>
-          <span>분류 추가</span>
-        </div>
-        <div className="category" onClick={handleEditCategory}>
-          <div>
-            <img alt="category icon" />
-          </div>
-          <span>분류 수정</span>
-        </div>
-      </div>
-    );
-  }
-
-  if (type === 'table') {
-    return (
-      <div className="tableWidget">
-        <button className="closeButton" onClick={handleClose}>
-          <div>
-            <img alt="close icon" />
-          </div>
-          <span>닫기</span>
-        </button>
-        <div className="category" onClick={handleCreateTable}>
-          <div>
-            <img alt="category icon" />
+            <img src="" alt="icon" />
           </div>
           <span>좌석 생성</span>
-        </div>
-        <div className="category" onClick={handleEditTable}>
+        </li>
+        <li onClick={handleEditTable}>
           <div>
-            <img alt="category icon" />
+            <img src="" alt="icon" />
           </div>
           <span>좌석 수정</span>
-        </div>
-        <div className="category" onClick={handleDeleteTable}>
+        </li>
+        <li onClick={handleDeleteTable}>
           <div>
-            <img alt="category icon" />
+            <img src="" alt="icon" />
           </div>
-          <span>좌석 삭제</span>
-        </div>
-      </div>
-    );
-  }
-
-  return null;
+          <span>좌석 삭��</span>
+        </li>
+      </ul>
+    </div>
+  );
 };
 
-export default Widget;
+export { ClosedWidget, MenuWidget, TableWidget };

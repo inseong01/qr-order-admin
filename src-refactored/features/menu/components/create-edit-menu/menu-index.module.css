@@ -1,0 +1,157 @@
+.submitForm {
+  width: 495px;
+  height: 215px;
+  padding: 10px 16px 16px;
+  border: 1px solid #d8d8d8;
+  border-radius: 15px;
+  background-color: white;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.options {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.left {
+  width: 140px;
+  height: 100%;
+  border: 1px solid #d8d8d8;
+  border-radius: 7px;
+  color: #8d8d8d;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+
+  cursor: pointer;
+}
+
+.right {
+  width: 100%;
+  height: 100%;
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.right > div {
+  font-size: 1.1rem;
+  font-weight: 600;
+  /* color: #4caff8; */
+  text-align: center;
+}
+
+.submitInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  font-size: 13px;
+}
+
+.iconBox {
+  width: 25px;
+  height: 25px;
+}
+.prevImgBox {
+  padding: 8px;
+}
+
+/* 항목 입력 input */
+.submitInfo input,
+.submitInfo select {
+  width: 75%;
+  border: none;
+  border-bottom: 1px solid #d8d8d8;
+  padding: 4px;
+}
+.submitInfo input:focus,
+.submitInfo select {
+  outline: none;
+}
+.category input[placeholder] {
+  text-align: center;
+}
+
+.info {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* 제출 버튼 */
+.submitBtn {
+  width: 100%;
+  height: auto;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.submitBtn input {
+  border: none;
+}
+
+.btn {
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 5px;
+  line-height: 19px;
+
+  flex: 1;
+  padding: 4px;
+
+  cursor: pointer;
+
+  color: white;
+  font-weight: 600;
+  background-color: #4caff8;
+}
+.btn.delete {
+  color: #f30000;
+  background-color: #f0f0f0;
+}
+.btn.delete:hover {
+  background-color: #dfdfdf;
+}
+.btn:hover {
+  background-color: #80c8fc;
+}
+
+@media (max-width: 720px) {
+  .submitForm {
+    width: 100%;
+    height: auto;
+    padding: 18px;
+  }
+
+  .options {
+    flex-direction: column;
+  }
+
+  .left {
+    width: 100%;
+    flex-direction: row;
+    padding: 24px;
+  }
+
+  .right {
+    width: 100%;
+    gap: 20px;
+  }
+}

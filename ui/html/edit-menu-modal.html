@@ -1,26 +1,32 @@
 <form class="editMenuModal">
-  <h1>음식 수정</h1>
-  <button type="button" class="closeButton">X</button>
+  <h2>음식 수정</h2>
+  <button type="button" class="close">X</button>
   <div>
-    <label for="edit-menu-thumbnail">사진 첨부</label>
-    <input type="file" id="edit-menu-thumbnail" />
+    <label for="thumbnail">사진 첨부</label>
+    <input type="file" id="thumbnail" />
   </div>
   <div>
-    <label for="edit-menu-title">음식명</label>
-    <input type="text" id="edit-menu-title" placeholder="음식명 1" />
+    <label for="foodName">음식명</label>
+    <input type="text" id="foodName" value="음식명 1" />
   </div>
   <div>
-    <label for="edit-menu-category">분류</label>
-    <input type="text" id="edit-menu-category" placeholder="분류 1" />
+    <label for="category">분류</label>
+    <select id="category">
+      <option>분류 1</option>
+    </select>
   </div>
   <div>
-    <label for="edit-menu-price">가격</label>
-    <input type="text" id="edit-menu-price" placeholder="가격" />
+    <label for="price">가격</label>
+    <input type="text" id="price" value="가격" />
   </div>
   <div>
-    <label for="edit-menu-status">판매 상태</label>
-    <input type="text" id="edit-menu-status" placeholder="신규/인기/품절" />
+    <label for="status">판매 상태</label>
+    <select id="status">
+      <option>신규</option>
+      <option>인기</option>
+      <option>품절</option>
+    </select>
   </div>
-  <button type="submit" class="deleteButton">삭제하기</button>
-  <button type="submit" class="updateButton">수정하기</button>
+  <button type="button">삭제하기</button>
+  <button type="submit">수정하기</button>
 </form>

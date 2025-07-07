@@ -1,0 +1,136 @@
+.submitForm {
+  width: auto;
+  height: auto;
+  padding: 16px;
+  border: 1px solid #d8d8d8;
+  border-radius: 15px;
+  background-color: white;
+  overflow: hidden;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.sortModal {
+  height: 100%;
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  gap: 20px;
+}
+
+.title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* 분류 목록 가로/세로 크기 */
+.submitInfo {
+  width: 250px;
+  height: 205px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  font-size: 13px;
+  overflow-y: auto;
+}
+
+.btn {
+  width: auto;
+
+  font-size: 13px;
+  font-weight: 600;
+  background-color: #f0f0f0;
+
+  border: none;
+  border-radius: 5px;
+  line-height: 19px;
+
+  flex: 1;
+  padding: 4px;
+  cursor: pointer;
+}
+.delete {
+  color: #f30000;
+}
+.btn:focus {
+  outline: none;
+}
+.category input[placeholder] {
+  text-align: center;
+}
+.btn:hover {
+  background-color: #dfdfdf;
+}
+.create {
+  flex-basis: 720px;
+}
+
+.left {
+  height: 100%;
+  border-radius: 7px;
+  color: #8d8d8d;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: start;
+  gap: 5px;
+
+  position: relative;
+  cursor: pointer;
+  padding: 4px;
+}
+.right {
+  height: 100%;
+  flex: none;
+  gap: 20px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.info {
+  display: flex;
+  justify-content: center;
+}
+
+/* 제출 버튼 */
+.submitBtn {
+  width: 100%;
+  height: auto;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+
+  flex-wrap: wrap;
+}
+
+.list {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  font-size: 1rem;
+}
+.list label {
+  width: 100%;
+}
+
+@media (max-width: 720px) {
+  .submitInfo {
+    width: 100%;
+  }
+}

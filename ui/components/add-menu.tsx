@@ -7,7 +7,7 @@ const AddMenu = () => {
     <div className="addMenu" onClick={handleClick}>
       <span>상품 추가</span>
       <div>
-        <img alt="add icon" />
+        <img src="" alt="icon" />
       </div>
     </div>
   );

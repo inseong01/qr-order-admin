@@ -5,8 +5,10 @@ import { useBoundStore } from '../../lib/store/use-bound-store';
 import { InitLoadState } from '../../types/common';
 
 import AlertTableMessage from '../alert/popup/alert-index';
-import Header from './header/header-index';
-import Footer from './footer/footer-index';
+import Header from './header';
+// import Header from './header/header-index';
+import Footer from './footer';
+// import Footer from './footer-index';
 import Main from './main/main-index';
 import Widget from '../widget';
 

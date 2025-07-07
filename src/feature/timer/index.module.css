@@ -1,0 +1,53 @@
+.timer {
+  display: flex;
+  gap: 15px;
+
+  font-size: var(--modal-fz-title);
+
+  cursor: default;
+}
+
+.now {
+  width: auto;
+  height: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 0 10px;
+}
+
+.statusBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.status {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+  border-radius: 5px;
+  overflow: hidden;
+
+  background-color: var(--key-color);
+
+  padding: 4px 12px;
+}
+.title {
+  color: white;
+
+  line-height: 29px;
+
+  font-size: var(--list-fz-title);
+  font-weight: var(--list-fw-title-bold);
+}
+.icon {
+  width: 10px;
+  height: 10px;
+
+  border-radius: 50%;
+  background-color: #00e522; /* 상태 별 색상 변경 */
+}

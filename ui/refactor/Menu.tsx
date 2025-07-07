@@ -1,33 +1,63 @@
 import React from 'react';
 
-type MenuProps = {
-  type: 'add' | 'list';
-};
-
-const Menu = ({ type }: MenuProps) => {
+const AddMenu = () => {
   const handleClick = () => {};
 
-  if (type === 'add') {
-    return (
-      <div className="addMenu" onClick={handleClick}>
-        <span>상품 추가</span>
-        <div>
-          <img alt="add icon" />
-        </div>
+  return (
+    <div className="addMenu" onClick={handleClick}>
+      <span>상품 추가</span>
+      <div>
+        <img src="" alt="icon" />
       </div>
-    );
-  }
-
-  if (type === 'list') {
-    return (
-      <div className="listMenu" onClick={handleClick}>
-        <span>음식 1</span>
-        <span className="price">10,000원</span>
-      </div>
-    );
-  }
-
-  return null;
+    </div>
+  );
 };
 
-export default Menu;
+const ListMenu = () => {
+  return (
+    <div className="listMenu">
+      <span>음식 1</span>
+      <span className="price">10,000원</span>
+    </div>
+  );
+};
+
+const OrderCard = () => {
+  const handleComplete = () => {};
+
+  return (
+    <div className="orderCard">
+      <div className="header">
+        <span className="orderNumber"># 3</span>
+        <span className="time">00:00</span>
+        <span className="elapsed">00분 경과</span>
+        <span className="table">테이블 1</span>
+      </div>
+      <div className="main">
+        <ul>
+          <li>
+            <span>메뉴 1</span>
+            <span>x 1</span>
+          </li>
+          <li>
+            <span>메뉴 1</span>
+            <span>x 1</span>
+          </li>
+          <li>
+            <span>메뉴 1</span>
+            <span>x 1</span>
+          </li>
+          <li>
+            <span>메뉴 1</span>
+            <span>x 1</span>
+          </li>
+        </ul>
+      </div>
+      <div className="footer">
+        <button onClick={handleComplete}>조리완료</button>
+      </div>
+    </div>
+  );
+};
+
+export { AddMenu, ListMenu, OrderCard };

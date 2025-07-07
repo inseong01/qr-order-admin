@@ -7,24 +7,26 @@ const MenuWidget = () => {
 
   return (
     <div className="menuWidget">
-      <button className="closeButton" onClick={handleClose}>
+      <button className="close" onClick={handleClose}>
         <div>
-          <img alt="close icon" />
+          <img src="" alt="icon" />
         </div>
         <span>닫기</span>
       </button>
-      <div className="category" onClick={handleAddCategory}>
-        <div>
-          <img alt="category icon" />
-        </div>
-        <span>분류 추가</span>
-      </div>
-      <div className="category" onClick={handleEditCategory}>
-        <div>
-          <img alt="category icon" />
-        </div>
-        <span>분류 수정</span>
-      </div>
+      <ul>
+        <li onClick={handleAddCategory}>
+          <div>
+            <img src="" alt="icon" />
+          </div>
+          <span>분류 추가</span>
+        </li>
+        <li onClick={handleEditCategory}>
+          <div>
+            <img src="" alt="icon" />
+          </div>
+          <span>분류 수정</span>
+        </li>
+      </ul>
     </div>
   );
 };

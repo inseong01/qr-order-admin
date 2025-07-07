@@ -21,7 +21,7 @@ export type StageSize = {
 export type SetClientTableList = Dispatch<SetStateAction<TableList[]>>;
 
 export default function KonvaSection() {
-  const tab = useBoundStore((state) => state.tab.title);
+  // const tab = useBoundStore((state) => state.tab.title);
   const submitStatus = useBoundStore((state) => state.submit.status);
   const konvaEditType = useBoundStore((state) => state.konva.type);
   const konvaEditIsEditing = useBoundStore((state) => state.konva.isEditing);
@@ -41,7 +41,7 @@ export default function KonvaSection() {
 
   // konva Stage 크기 설정
   useEffect(() => {
-    if (tab !== 'table') return;
+    // if (tab !== 'table') return;
 
     const tableRef = tableBoxRef?.current;
     if (!tableRef) return;
@@ -68,7 +68,8 @@ export default function KonvaSection() {
     return () => {
       window.removeEventListener('resize', debounce(onResizeStageSize, 200));
     };
-  }, [tab, tableBoxRef]);
+  }, [tableBoxRef]);
+  // }, [tab, tableBoxRef]);
 
   // konva 좌석 데이터 패치
   useEffect(() => {
@@ -118,7 +119,8 @@ export default function KonvaSection() {
   }, [clientTableList]);
 
   return (
-    <div className={`${styles.listBox} ${tab === 'table' ? styles.tableBox : ''}`} ref={tableBoxRef}>
+    // <div className={`${styles.listBox} ${tab === 'table' ? styles.tableBox : ''}`} ref={tableBoxRef}>
+    <div className={`${styles.listBox} ${styles.tableBox}`} ref={tableBoxRef}>
       {openKonva && (
         <motion.div className={styles.table} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
           {clientTableList.length === 0 ? (

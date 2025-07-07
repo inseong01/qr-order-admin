@@ -1,15 +1,19 @@
 import React from 'react';
 
 const TabTableFooter = () => {
-  const handleMenuClick = () => {};
-  const handleTableClick = () => {};
-  const handleOrderClick = () => {};
+  const handleTabClick = (tab: string) => {};
 
   return (
     <footer className="tabTableFooter">
-      <button onClick={handleMenuClick}>메뉴</button>
-      <button onClick={handleTableClick}>좌석</button>
-      <button onClick={handleOrderClick}>주문내역</button>
+      <nav>
+        <ul>
+          <li onClick={() => handleTabClick('menu')}>메뉴</li>
+          <li className="active" onClick={() => handleTabClick('table')}>
+            좌석
+          </li>
+          <li onClick={() => handleTabClick('order')}>주문</li>
+        </ul>
+      </nav>
     </footer>
   );
 };

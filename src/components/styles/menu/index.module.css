@@ -1,0 +1,51 @@
+.list {
+  width: 170px;
+  height: 130px;
+
+  background-color: white;
+  border-radius: 8px;
+
+  font-size: var(--list-fz-large);
+
+  padding: 20px;
+
+  cursor: pointer;
+}
+
+.title {
+  text-align: start;
+  color: var(--font-main-color);
+}
+
+.price {
+  text-align: end;
+  color: var(--font-sub-color);
+}
+
+.iconBox {
+  width: 20px;
+  height: 20px;
+
+  display: flex;
+}
+
+/* 메뉴 항목 */
+.listMenu {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* 메뉴 추가 */
+.menuAdd {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+  font-size: var(--list-fz-regular);
+  color: var(--font-sub-color);
+}

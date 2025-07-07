@@ -22,7 +22,7 @@ export default function TableAlertMsg() {
 
   const submitStatus = useBoundStore((state) => state.submit.status);
   const submitIsError = useBoundStore((state) => state.submit.isError);
-  const tab = useBoundStore((state) => state.tab.title);
+  // const tab = useBoundStore((state) => state.tab.title);
   const requestAlertOn = useBoundStore((state) => state.alert.isOn);
   const tableEditIsAble = useBoundStore((state) => state.konva.isAble);
   const fetchUpdateAlertMsg = useBoundStore((state) => state.fetchUpdateAlertMsg);
@@ -60,16 +60,17 @@ export default function TableAlertMsg() {
   // 알림 On/Off
   useEffect(() => {
     // 좌석 탭 아니면 반환
-    if (tab !== 'table') {
-      return setAlertOn(false);
-    }
+    // if (tab !== 'table') {
+    //   return setAlertOn(false);
+    // }
     // 편집 중이면
     if (tableEditIsAble) {
       return setAlertOn(false);
     }
     // 토글 여부에 따라 On/Off
     return setAlertOn(requestAlertOn);
-  }, [tab, requestAlertList, requestAlertOn, tableEditIsAble]);
+  }, [requestAlertList, requestAlertOn, tableEditIsAble]);
+  // }, [tab, requestAlertList, requestAlertOn, tableEditIsAble]);
 
   // 클릭 시 알림 읽음 처리 (DB)
   function onClickReadMsg(list: RequestList) {

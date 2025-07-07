@@ -1,9 +1,12 @@
 import { useRef } from 'react';
+import { useAtomValue } from 'jotai';
 import { AnimatePresence, motion } from 'motion/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 import { useBoundStore } from '../../lib/store/use-bound-store';
+
+import { footerAtom } from '../page/footer';
 
 import styles from './modal-main.module.css';
 
@@ -13,7 +16,7 @@ import TableModalRouter from './table/table-modal';
 export default function MainModal() {
   const modalRef = useRef<HTMLDialogElement>(null);
 
-  const tab = useBoundStore((state) => state.tab.title);
+  const tab = useAtomValue(footerAtom) ?? 'menu';
   const isModalOpen = useBoundStore((state) => state.modal.isOpen);
   const changeModalState = useBoundStore((state) => state.changeModalState);
 

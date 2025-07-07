@@ -1,23 +1,25 @@
+import { useAtomValue, useSetAtom } from 'jotai';
 import { useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 
 import { useBoundStore } from '../../lib/store/use-bound-store';
 
+import { footerAtom } from '../page/footer';
+
 import styles from './widget.module.css';
 
-import WidgetIconButton from './components/button';
-import MenuWidget from './tab/menu';
-import TableWidget from './tab/table';
+import { MenuWidget, TableWidget, WidgetIconButton, widgetOpenAtom } from './components';
 
 export default function Widget() {
+  const tab = useAtomValue(footerAtom);
+  const isWidgetOpen = useAtomValue(widgetOpenAtom);
+  const setWidgetOpenStatus = useSetAtom(widgetOpenAtom);
+
   const widgetRef = useRef(null);
-  const tab = useBoundStore((state) => state.tab.title);
   const isModalOpen = useBoundStore((state) => state.modal.isOpen);
-  const isWidgetOpen = useBoundStore((state) => state.widget.isOpen);
   const isTableEditAble = useBoundStore((state) => state.konva.isAble);
   const isMobile = useBoundStore((state) => state.windowState.isMobile);
   const viewportMode = useBoundStore((state) => state.windowState.viewportMode);
-  const resetWidgetState = useBoundStore((state) => state.resetWidgetState);
 
   const components = {
     menu: MenuWidget,
@@ -43,7 +45,7 @@ export default function Widget() {
 
       // 카테고리 delete 모달에서 버튼 선택 시 하단 조건 적용됨
       if (isWidgetOpen && isWindowClicked && !isTableEditAble) {
-        resetWidgetState();
+        setWidgetOpenStatus(false);
       }
     }
     window.addEventListener('click', onClickWindowToCloseWidget);
@@ -57,9 +59,17 @@ export default function Widget() {
         <motion.div
           ref={widgetRef}
           className={styles.widgetWrap}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          initial={'notClicked'}
+          animate={'clicked'}
+          exit={'notClicked'}
+          variants={{
+            clicked: {
+              opacity: 1,
+            },
+            notClicked: {
+              opacity: 0,
+            },
+          }}
         >
           {/* 위젯 버튼 */}
           <WidgetIconButton />

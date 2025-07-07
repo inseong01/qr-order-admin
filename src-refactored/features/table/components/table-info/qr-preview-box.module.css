@@ -1,0 +1,26 @@
+.qrcodeBox {
+  width: 100%;
+  height: 350px;
+
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.imgBox {
+  width: 100%;
+  height: 50%;
+  flex: 1;
+
+  cursor: pointer;
+}
+.imgBox img {
+  object-fit: contain;
+}
+
+.subscript {
+  color: #b4b4b4;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}

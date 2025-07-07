@@ -33,7 +33,6 @@ export interface UseWidgetSlice {
     };
   };
   resetWidgetState: () => void;
-  openCloseWidget: () => void;
   setWidgetOptionListState: ({ optNum }: { optNum: OptionNumList }) => void;
 }
 
@@ -42,15 +41,6 @@ export const useWidgetSlice: StateCreator<UseWidgetSlice, [['zustand/devtools', 
     ? (set) => ({
         ...initialState,
         resetWidgetState: () => set(initialState, undefined, 'widget/resetWidgetState'),
-        openCloseWidget: () =>
-          set(
-            (state) => {
-              const isOpen = !state.widget.isOpen;
-              return { widget: { ...initialState.widget, isOpen } };
-            },
-            undefined,
-            'widget/openCloseWidget'
-          ),
         setWidgetOptionListState: ({ optNum }) =>
           set(
             (state) => {
@@ -67,11 +57,6 @@ export const useWidgetSlice: StateCreator<UseWidgetSlice, [['zustand/devtools', 
     : (set) => ({
         ...initialState,
         resetWidgetState: () => set(initialState),
-        openCloseWidget: () =>
-          set((state) => {
-            const isOpen = !state.widget.isOpen;
-            return { widget: { ...initialState.widget, isOpen } };
-          }),
         setWidgetOptionListState: ({ optNum }) =>
           set((state) => {
             const openOptionList = {

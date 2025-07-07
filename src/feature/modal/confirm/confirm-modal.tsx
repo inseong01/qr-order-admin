@@ -7,7 +7,7 @@ import { AllOrderList, ConfirmModalTitle, MenuCategoryList } from '../../../type
 import styles from './confirm-modal.module.css';
 
 export default function ConfirmModal({ title }: { title: ConfirmModalTitle }) {
-  const tab = useBoundStore((state) => state.tab.title);
+  // const tab = useBoundStore((state) => state.tab.title);
   const isModalOpen = useBoundStore((state) => state.modal.isOpen);
   const selectedList = useBoundStore((state) => state.itemBox.list);
   const submitMsgType = useBoundStore((state) => state.submit.msgType);
@@ -19,7 +19,8 @@ export default function ConfirmModal({ title }: { title: ConfirmModalTitle }) {
 
   const selectedCategoreis = selectedList as MenuCategoryList[];
   const context = submitMsgType === 'delete' ? '삭제' : title === '주문' ? '완료' : '수정';
-  const subTitlte = tab === 'menu' ? selectedCategoreis.map((list) => list.title).join(', ') : '';
+  const subTitlte = selectedCategoreis.map((list) => list.title).join(', ');
+  // const subTitlte = tab === 'menu' ? selectedCategoreis.map((list) => list.title).join(', ') : '';
 
   // 카테고리 삭제/주문 상태 처리
   function changeModalStatus(state: 'yes' | 'no') {
@@ -96,14 +97,20 @@ export default function ConfirmModal({ title }: { title: ConfirmModalTitle }) {
           </motion.dialog>
 
           {/* 배경 */}
-          {tab !== 'menu' && (
+          <motion.div
+            className={styles.backdrop}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          ></motion.div>
+          {/* {tab !== 'menu' && (
             <motion.div
               className={styles.backdrop}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             ></motion.div>
-          )}
+          )} */}
         </>
       )}
     </AnimatePresence>

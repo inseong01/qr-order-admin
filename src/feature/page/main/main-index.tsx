@@ -1,16 +1,17 @@
 import { Suspense } from 'react';
-
-import { useBoundStore } from '../../../lib/store/use-bound-store';
-
-import styles from './main-index.module.css';
+import { useAtomValue } from 'jotai';
 
 import LoadingSpinner from '../../load/spinner/spinner-index';
-import MainPageMenuTab from '../../tab/menu/menu-index';
+import MainPageMenuTab from '../../tab/menu';
 import MainPageOrderTab from '../../tab/order/order-index';
 import MainPageTableTab from '../../tab/table/table-index';
 
+import { footerAtom } from '../footer';
+
+import styles from './main-index.module.css';
+
 export default function Main() {
-  const tab = useBoundStore((state) => state.tab.title);
+  const tab = useAtomValue(footerAtom) ?? 'menu';
 
   const component = {
     menu: MainPageMenuTab,

@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
+import { useAtomValue } from 'jotai';
 import { useQueries } from '@tanstack/react-query';
 import { REALTIME_LISTEN_TYPES, REALTIME_POSTGRES_CHANGES_LISTEN_EVENT } from '@supabase/realtime-js';
 
-import supabase from '../../lib/supabase/supabase-config';
-import { useBoundStore } from '../../lib/store/use-bound-store';
-import { getMenuList, getOrderList, getRequestList, getTabCategory } from '../../lib/supabase/function/get-list';
+import supabase from '@/lib/supabase/supabase-config';
+import { getHeaderCategory, getMenuList, getOrderList, getRequestList } from '@/lib/supabase/function/get-list';
+
+import { footerAtom } from '@/feature/page/footer';
 
 /*
   Supabase Table Realtime 구독 커스텀훅
@@ -26,7 +28,7 @@ export type InitDataLoadStatus = {
 };
 
 export function useQueryClientTable(method: REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.ALL) {
-  const tab = useBoundStore((state) => state.tab.title);
+  const tab = useAtomValue(footerAtom) ?? 'menu';
 
   const queries = useQueries({
     queries: [
@@ -45,15 +47,8 @@ export function useQueryClientTable(method: REALTIME_POSTGRES_CHANGES_LISTEN_EVE
         retry: 2,
       },
       {
-        queryKey: ['tabMenu'],
-        queryFn: () => getTabCategory('tab'),
-        staleTime: Infinity,
-        refetchOnWindowFocus: false,
-        retry: 2,
-      },
-      {
         queryKey: ['categoryList', { tab }],
-        queryFn: () => getTabCategory(tab),
+        queryFn: () => getHeaderCategory(tab),
         staleTime: Infinity,
         refetchOnWindowFocus: false,
         retry: 2,
@@ -75,7 +70,7 @@ export function useQueryClientTable(method: REALTIME_POSTGRES_CHANGES_LISTEN_EVE
       // query 별 데이터 패치 상태 객체 생성
       for (let i = 0; i < result.length; i++) {
         // query 추가 시 query 순서에 맞춰 queryKeys에 queryKey 삽입
-        let queryKeys: QueryKeys[] = ['requestList', 'allOrderList', 'tabMenu', 'categoryList', 'menuList'];
+        let queryKeys: QueryKeys[] = ['requestList', 'allOrderList', 'categoryList', 'menuList'];
         initDataLoadStatus = {
           ...initDataLoadStatus,
           [queryKeys[i]]: result[i].status,
@@ -92,9 +87,8 @@ export function useQueryClientTable(method: REALTIME_POSTGRES_CHANGES_LISTEN_EVE
       return {
         requestList: result[0],
         allOrderList: result[1],
-        tabMenu: result[2],
-        categoryList: result[3],
-        menuList: result[4],
+        categoryList: result[2],
+        menuList: result[3],
         isError,
         isLoading,
         isFetched,

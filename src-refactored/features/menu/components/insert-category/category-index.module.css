@@ -1,0 +1,113 @@
+.submitForm {
+  width: 495px;
+  height: auto;
+  padding: 16px;
+  border: 1px solid #d8d8d8;
+  border-radius: 15px;
+  background-color: white;
+  overflow: hidden;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.submitForm.category {
+  width: 315px;
+}
+
+.sortModal {
+  width: 100%;
+  height: 100%;
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+  cursor: default;
+}
+
+.submitInfo {
+  max-height: 154px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  font-size: 13px;
+  overflow-y: auto;
+}
+/* 항목 입력 input */
+.submitInfo input {
+  width: 75%;
+  border: none;
+  border-bottom: 1px solid #d8d8d8;
+  padding: 4px;
+}
+.submitInfo input:focus {
+  outline: none;
+}
+.category input[placeholder] {
+  text-align: center;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+
+  cursor: default;
+}
+.subtitle {
+  width: 80%;
+  overflow: hidden;
+  word-break: keep-all;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+/* 제출 버튼 */
+.submitBtn {
+  width: 100%;
+  height: auto;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn {
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 5px;
+  line-height: 19px;
+
+  flex: 1;
+  padding: 4px;
+
+  cursor: pointer;
+
+  color: white;
+  font-weight: 600;
+  background-color: #4caff8;
+  border: none;
+}
+.btn:hover {
+  background-color: #80c8fc;
+}
+
+@media (max-width: 720px) {
+  .submitForm.category {
+    width: 100%;
+  }
+}

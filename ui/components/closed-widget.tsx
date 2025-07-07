@@ -4,12 +4,14 @@ const ClosedWidget = () => {
   const handleClick = () => {};
 
   return (
-    <button className="closedWidget" onClick={handleClick}>
-      <span>열기</span>
-      <div>
-        <img alt="open icon" />
-      </div>
-    </button>
+    <div className="closedWidget">
+      <button onClick={handleClick}>
+        <div>
+          <img src="" alt="icon" />
+        </div>
+        <span>열기</span>
+      </button>
+    </div>
   );
 };
 

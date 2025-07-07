@@ -1,34 +1,57 @@
 import React from 'react';
 
-type FooterProps = {
-  activeTab: 'menu' | 'table' | 'order';
-};
-
-const Footer = ({ activeTab }: FooterProps) => {
-  const handleMenuClick = () => {};
-  const handleTableClick = () => {};
-  const handleOrderClick = () => {};
-
-  const getClassName = () => {
-    switch (activeTab) {
-      case 'menu':
-        return 'tabMenuFooter';
-      case 'table':
-        return 'tabTableFooter';
-      case 'order':
-        return 'tabOrderFooter';
-      default:
-        return '';
-    }
-  };
+const TabMenuFooter = () => {
+  const handleTabClick = (tab: string) => {};
 
   return (
-    <footer className={getClassName()}>
-      <button onClick={handleMenuClick}>메뉴</button>
-      <button onClick={handleTableClick}>좌석</button>
-      <button onClick={handleOrderClick}>주문내역</button>
+    <footer className="tabMenuFooter">
+      <nav>
+        <ul>
+          <li className="active" onClick={() => handleTabClick('menu')}>
+            메뉴
+          </li>
+          <li onClick={() => handleTabClick('table')}>좌석</li>
+          <li onClick={() => handleTabClick('order')}>주문</li>
+        </ul>
+      </nav>
     </footer>
   );
 };
 
-export default Footer;
+const TabOrderFooter = () => {
+  const handleTabClick = (tab: string) => {};
+
+  return (
+    <footer className="tabOrderFooter">
+      <nav>
+        <ul>
+          <li onClick={() => handleTabClick('menu')}>메뉴</li>
+          <li onClick={() => handleTabClick('table')}>좌석</li>
+          <li className="active" onClick={() => handleTabClick('order')}>
+            주문
+          </li>
+        </ul>
+      </nav>
+    </footer>
+  );
+};
+
+const TabTableFooter = () => {
+  const handleTabClick = (tab: string) => {};
+
+  return (
+    <footer className="tabTableFooter">
+      <nav>
+        <ul>
+          <li onClick={() => handleTabClick('menu')}>메뉴</li>
+          <li className="active" onClick={() => handleTabClick('table')}>
+            좌석
+          </li>
+          <li onClick={() => handleTabClick('order')}>주문</li>
+        </ul>
+      </nav>
+    </footer>
+  );
+};
+
+export { TabMenuFooter, TabOrderFooter, TabTableFooter };

@@ -1,25 +1,20 @@
 import React from 'react';
 
 const TabMenuHeader = () => {
-  const handleMainMenuClick = () => {};
-  const handleSideMenuClick = () => {};
-  const handleBeverageMenuClick = () => {};
+  const handleCategoryClick = (category: string) => {};
 
   return (
     <header className="tabMenuHeader">
       <nav>
-        <a onClick={handleMainMenuClick}>메인 메뉴</a>
-        <a onClick={handleSideMenuClick}>사이드</a>
-        <a onClick={handleBeverageMenuClick}>음료</a>
+        <ul>
+          <li onClick={() => handleCategoryClick('main')}>메인 메뉴</li>
+          <li onClick={() => handleCategoryClick('side')}>사이드</li>
+          <li onClick={() => handleCategoryClick('drink')}>음료</li>
+        </ul>
       </nav>
       <div className="status">
         <span>2024.11.22. 오후 17:38</span>
-        <div className="network">
-          <span>접속 상태</span>
-          <div>
-            <img alt="network icon" />
-          </div>
-        </div>
+        <span>접속 상태</span>
       </div>
     </header>
   );

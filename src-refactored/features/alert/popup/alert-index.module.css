@@ -1,0 +1,144 @@
+.alertMsg {
+  width: 440px; /* 임의 */
+  color: white;
+  border: 1px solid #4caff8;
+  border-radius: 10px;
+  background-color: #4caff8;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: fixed;
+  left: 50%;
+  bottom: 95px;
+
+  cursor: default;
+  z-index: 9999;
+}
+.alertMsg.error {
+  background-color: #f30000;
+  border-color: #f30000;
+}
+
+.title {
+  line-height: 19px;
+  padding: 4px 0;
+}
+
+.closeBtn {
+  width: 17px;
+  height: 17px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+}
+
+/* 요청 메시지 */
+.reqeustMsgWrap {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+
+  z-index: 99;
+}
+
+.reqeustMsg {
+  width: 275px;
+
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-start;
+  gap: 10px;
+
+  border: 2px solid;
+  border-color: transparent;
+
+  cursor: default;
+}
+
+.reqeustMsg.moreAlert {
+  border-color: #f84c4c;
+  animation: blink 2s step-start infinite;
+}
+@keyframes blink {
+  0%,
+  100% {
+    border-color: transparent;
+  }
+  50% {
+    border-color: #f84c4c;
+  }
+}
+
+/* hidden */
+.reqeustMsg.hidden {
+  gap: 2px;
+}
+
+.msg {
+  font-size: 0.95rem;
+  border-radius: 5px;
+  box-shadow: rgba(100, 100, 111, 0.25) 0px 7px 29px 0px;
+  overflow: hidden;
+}
+
+.top {
+  width: 100%;
+  color: white;
+  background-color: #4caff8;
+  padding: 2px;
+  padding-left: 16px;
+  padding-right: 8px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bottom {
+  width: 100%;
+  padding: 8px 16px;
+  background-color: white;
+
+  word-break: keep-all;
+  line-height: 23px;
+  text-align: left;
+  font-size: 0.85rem;
+
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.cate {
+  color: white;
+  font-size: 13px;
+  padding: 0 8px;
+  border: 1px solid #4caff8;
+  color: #4caff8;
+  border-radius: 5px;
+  font-weight: 600;
+
+  display: block;
+  height: auto;
+  width: max-content;
+}
+
+@media (max-width: 720px) {
+  .alertMsg {
+    width: 100%;
+    bottom: 45px;
+    border-radius: 0;
+  }
+}
+
+@media (max-height: 720px) and (orientation: landscape) {
+  .reqeustMsgWrap {
+    display: none;
+  }
+}

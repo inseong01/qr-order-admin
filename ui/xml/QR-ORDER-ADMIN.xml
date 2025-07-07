@@ -1,11 +1,5 @@
 <figma file="QR-ORDER-ADMIN">
 <Page name="Page 1" imageid="0:1">
-  <Frame name="components" imageid="1:162">
-  <Frame name="menu" imageid="1:163">
-    <TextNode>
-      <base>Menu</base>
-      <string page="Page 1" frame="menu" nodeid="1:164" transform="1,0,60,0,1,33">Menu</string>
-    </TextNode>
   <Component name="list-menu" description="제목과 가격으로 2개 태그로 구성">
     <TextNode>
       <base>음식 1</base>
@@ -31,7 +25,7 @@
       <string page="Page 1" frame="modal" nodeid="1:178" transform="1,0,60,0,1,288">Modal</string>
     </TextNode>
   <Frame name="item" imageid="1:179">
-  <Component name="add-menu-modal" description="제목, 닫는 버튼, 입력 태그 5개, 제출 버튼으로 폼 형태 구성">
+  <Component name="add-menu-modal" description="제목, 닫는 버튼, 입력 태그 3개, 분류와 판매 상태는 선택 입력 태크, 제출 버튼으로 구성. 폼 형식.">
   <Frame name="info-list" imageid="1:181">
     <TextNode>
       <base>음식 추가</base>
@@ -101,7 +95,7 @@
     </TextNode>
   </Frame>
   </Component>
-  <Component name="edit-menu-modal" description="제목, 닫는 버튼, 입력 태그 5개, 제출 버튼 2개로 폼 형태 구성">
+  <Component name="edit-menu-modal" description="제목, 닫는 버튼, 입력 태그 3개, 분류와 판매 상태는 선택 입력 태크, 제출 버튼 2개로 구성. 폼 형식.">
   <Frame name="info-list" imageid="1:212">
     <TextNode>
       <base>음식 수정</base>
@@ -193,7 +187,7 @@
       <string page="Page 1" frame="item" nodeid="1:249" transform="1,0,120,0,1,1100">추가되었습니다.</string>
     </TextNode>
   </Component>
-  <Component name="table-alert" description="테이블 요청 알림, 자세한 테이블 알림과 요약된 알림으로 구성">
+  <Component name="table-alert" description="테이블 요청 알림, 자세한 테이블 알림과 요약된 알림으로 구">
   <Frame name="list 1" imageid="1:272">
   <Frame name="top" imageid="1:273">
     <TextNode>
@@ -209,24 +203,24 @@
   </Frame>
   </Frame>
   </Component>
-  <Component name="confirm-alert" description="확인 여부 알림으로 제목 1개, 여부 버튼 2개로 구성">
+  <Component name="confirm-alert" description="확인 여부 알림으로 제목 1개, 여부 버튼 2개로 구">
   <Frame name="top" imageid="1:281">
     <TextNode>
       <base>삭제하시겠습니까?</base>
-      <string page="Page 1" frame="top" nodeid="1:282" transform="1,0,728,0,1,1079">삭제하시겠습니까?</string>
+      <string page="Page 1" frame="top" nodeid="1:282" transform="1,0,728,0,1,1076.5">삭제하시겠습니까?</string>
     </TextNode>
   </Frame>
   <Frame name="bottom" imageid="1:283">
   <Frame name="left" imageid="1:284">
     <TextNode>
       <base>아니요</base>
-      <string page="Page 1" frame="left" nodeid="1:285" transform="1,0,709.5,0,1,1141">아니요</string>
+      <string page="Page 1" frame="left" nodeid="1:285" transform="1,0,712.5,0,1,1140">아니요</string>
     </TextNode>
   </Frame>
   <Frame name="right" imageid="1:286">
     <TextNode>
       <base>예</base>
-      <string page="Page 1" frame="right" nodeid="1:287" transform="1,0,879.5,0,1,1141">예</string>
+      <string page="Page 1" frame="right" nodeid="1:287" transform="1,0,880.5,0,1,1140">예</string>
     </TextNode>
   </Frame>
   </Frame>
@@ -244,7 +238,7 @@
   <Frame name="Frame 42" imageid="1:293">
     <TextNode>
       <base>분류 추가</base>
-      <string page="Page 1" frame="Frame 42" nodeid="1:297" transform="1,0,68,0,1,1454">분류 추가</string>
+      <string page="Page 1" frame="Frame 42" nodeid="1:297" transform="1,0,68,0,1,1455">분류 추가</string>
     </TextNode>
   </Frame>
   </Frame>
@@ -252,23 +246,23 @@
   <Frame name="Frame 42" imageid="1:299">
     <TextNode>
       <base>분류 수정</base>
-      <string page="Page 1" frame="Frame 42" nodeid="1:303" transform="1,0,68,0,1,1518">분류 수정</string>
+      <string page="Page 1" frame="Frame 42" nodeid="1:303" transform="1,0,68,0,1,1520">분류 수정</string>
     </TextNode>
   </Frame>
   </Frame>
   <Frame name="icon" imageid="1:304">
     <TextNode>
       <base>닫기</base>
-      <string page="Page 1" frame="icon" nodeid="1:305" transform="1,0,74.5,0,1,1558">닫기</string>
+      <string page="Page 1" frame="icon" nodeid="1:305" transform="1,0,75.5,0,1,1561">닫기</string>
     </TextNode>
   </Frame>
   </Component>
-  <Component name="table-widget" description="좌석 위젯으로 닫기 버튼과 카테고리로 구성되어 있으며 카테고리는 아이콘과 카테고리명을 포함">
+  <Component name="table-widget" description="좌 위젯으로 닫기 버튼과 카테고리로 구성되어 있으며 카테고리는 아이콘과 카테고리명을 포함">
   <Frame name="list 1" imageid="1:311">
   <Frame name="Frame 42" imageid="1:312">
     <TextNode>
       <base>좌석 생성</base>
-      <string page="Page 1" frame="Frame 42" nodeid="1:316" transform="1,0,177,0,1,1390">좌석 생성</string>
+      <string page="Page 1" frame="Frame 42" nodeid="1:316" transform="1,0,181,0,1,1390">좌석 생성</string>
     </TextNode>
   </Frame>
   </Frame>
@@ -276,7 +270,7 @@
   <Frame name="Frame 42" imageid="1:318">
     <TextNode>
       <base>좌석 수정</base>
-      <string page="Page 1" frame="Frame 42" nodeid="1:322" transform="1,0,177,0,1,1454">좌석 수정</string>
+      <string page="Page 1" frame="Frame 42" nodeid="1:322" transform="1,0,181,0,1,1455">좌석 수정</string>
     </TextNode>
   </Frame>
   </Frame>
@@ -284,14 +278,14 @@
   <Frame name="Frame 42" imageid="1:324">
     <TextNode>
       <base>좌석 삭제</base>
-      <string page="Page 1" frame="Frame 42" nodeid="1:328" transform="1,0,177,0,1,1518">좌석 삭제</string>
+      <string page="Page 1" frame="Frame 42" nodeid="1:328" transform="1,0,181,0,1,1520">좌석 삭제</string>
     </TextNode>
   </Frame>
   </Frame>
   <Frame name="icon" imageid="1:329">
     <TextNode>
       <base>닫기</base>
-      <string page="Page 1" frame="icon" nodeid="1:330" transform="1,0,183.5,0,1,1558">닫기</string>
+      <string page="Page 1" frame="icon" nodeid="1:330" transform="1,0,188.5,0,1,1561">닫기</string>
     </TextNode>
   </Frame>
   </Component>
@@ -299,51 +293,50 @@
   <Frame name="icon" imageid="1:342">
     <TextNode>
       <base>열기</base>
-      <string page="Page 1" frame="icon" nodeid="1:343" transform="1,0,290,0,1,1558">열기</string>
+      <string page="Page 1" frame="icon" nodeid="1:343" transform="1,0,297,0,1,1561">열기</string>
     </TextNode>
   </Frame>
   </Component>
   </Frame>
   </Frame>
-  <Frame name="header" imageid="1:348">
+  <Frame name="header-comp" imageid="1:348">
     <TextNode>
       <base>Header</base>
-      <string page="Page 1" frame="header" nodeid="1:349" transform="1,0,60,0,1,1638">Header</string>
+      <string page="Page 1" frame="header-comp" nodeid="1:349" transform="1,0,60,0,1,1638">Header</string>
     </TextNode>
-  <Frame name="item" imageid="1:350">
-  <Component name="tab-menu-header" description="메뉴 탭 메인 헤더로 카테고리 항목과 날짜 유틸 컴포넌트로 구성">
-  <Frame name="items" imageid="1:352">
-  <Frame name="list 1" imageid="1:353">
+  <Component name="tab-header" description="메인 페이지 헤더로 카테고리와 시간, 접속 상태 유틸 컴포넌트로 구성. 푸터 탭 항목에 따라 헤더 카테고리 목록 달라짐">
+  <Frame name="items" imageid="25:888">
+  <Frame name="list 1" imageid="25:889">
     <TextNode>
       <base>메인 메뉴</base>
-      <string page="Page 1" frame="list 1" nodeid="1:354" transform="1,0,117,0,1,1725">메인 메뉴</string>
+      <string page="Page 1" frame="list 1" nodeid="25:890" transform="1,0,117,0,1,1725">메인 메뉴</string>
     </TextNode>
   </Frame>
-  <Frame name="list 2" imageid="1:356">
+  <Frame name="list 2" imageid="25:892">
     <TextNode>
       <base>사이드</base>
-      <string page="Page 1" frame="list 2" nodeid="1:357" transform="1,0,293,0,1,1725">사이드</string>
+      <string page="Page 1" frame="list 2" nodeid="25:893" transform="1,0,293,0,1,1725">사이드</string>
     </TextNode>
   </Frame>
-  <Frame name="list 3" imageid="1:359">
+  <Frame name="list 3" imageid="25:895">
     <TextNode>
       <base>음료</base>
-      <string page="Page 1" frame="list 3" nodeid="1:360" transform="1,0,465,0,1,1725">음료</string>
+      <string page="Page 1" frame="list 3" nodeid="25:896" transform="1,0,465,0,1,1725">음료</string>
     </TextNode>
   </Frame>
   </Frame>
-  <Frame name="status" imageid="1:361">
+  <Frame name="status" imageid="25:897">
   <Instance name="timer" description="undefined">
-  <Frame name="status" imageid="I1:362;1:407">
-  <Frame name="Frame 18" imageid="I1:362;1:408">
+  <Frame name="status" imageid="I25:898;1:407">
+  <Frame name="Frame 18" imageid="I25:898;1:408">
     <TextNode>
       <base>2024.11.22. 오후 17:38</base>
-      <string page="Page 1" frame="Frame 18" nodeid="I1:362;1:410" transform="1,0,954,0,1,1728.5">2024.11.22. 오후 17:38</string>
+      <string page="Page 1" frame="Frame 18" nodeid="I25:898;1:410" transform="1,0,954,0,1,1728.5">2024.11.22. 오후 17:38</string>
     </TextNode>
-  <Frame name="network" imageid="I1:362;1:411">
+  <Frame name="network" imageid="I25:898;1:411">
     <TextNode>
       <base>접속 상태</base>
-      <string page="Page 1" frame="network" nodeid="I1:362;1:412" transform="1,0,1218,0,1,1730.5">접속 상태</string>
+      <string page="Page 1" frame="network" nodeid="I25:898;1:412" transform="1,0,1218,0,1,1730.5">접속 상태</string>
     </TextNode>
   </Frame>
   </Frame>
@@ -351,137 +344,30 @@
   </Instance>
   </Frame>
   </Component>
-  <Component name="tab-table-header" description="좌석 탭 메인 헤더로 카테고리 항목과 날짜 유틸 컴포넌트로 구성">
-  <Frame name="table position" imageid="1:364">
-  <Frame name="list 1" imageid="1:365">
-    <TextNode>
-      <base>기본 구역</base>
-      <string page="Page 1" frame="list 1" nodeid="1:366" transform="1,0,117,0,1,1850">기본 구역</string>
-    </TextNode>
-  </Frame>
-  </Frame>
-  <Frame name="status" imageid="1:367">
-  <Instance name="timer" description="undefined">
-  <Frame name="status" imageid="I1:368;1:407">
-  <Frame name="Frame 18" imageid="I1:368;1:408">
-    <TextNode>
-      <base>2024.11.22. 오후 17:38</base>
-      <string page="Page 1" frame="Frame 18" nodeid="I1:368;1:410" transform="1,0,954,0,1,1853.5">2024.11.22. 오후 17:38</string>
-    </TextNode>
-  <Frame name="network" imageid="I1:368;1:411">
-    <TextNode>
-      <base>접속 상태</base>
-      <string page="Page 1" frame="network" nodeid="I1:368;1:412" transform="1,0,1218,0,1,1855.5">접속 상태</string>
-    </TextNode>
-  </Frame>
-  </Frame>
-  </Frame>
-  </Instance>
-  </Frame>
-  </Component>
-  <Component name="tab-order-header" description="주 탭 메인 헤더로 카테고리 항목과 날짜 유틸 컴포넌트로 구성">
-  <Frame name="table position" imageid="1:370">
-  <Frame name="list 1" imageid="1:371">
-    <TextNode>
-      <base>접수 0</base>
-      <string page="Page 1" frame="list 1" nodeid="1:372" transform="1,0,132.5,0,1,1975">접수 0</string>
-    </TextNode>
-  </Frame>
-  <Frame name="list 2" imageid="1:374">
-    <TextNode>
-      <base>완료 0</base>
-      <string page="Page 1" frame="list 2" nodeid="1:375" transform="1,0,292.5,0,1,1975">완료 0</string>
-    </TextNode>
-  </Frame>
-  </Frame>
-  <Frame name="status" imageid="1:376">
-  <Instance name="timer" description="undefined">
-  <Frame name="status" imageid="I1:377;1:407">
-  <Frame name="Frame 18" imageid="I1:377;1:408">
-    <TextNode>
-      <base>2024.11.22. 오후 17:38</base>
-      <string page="Page 1" frame="Frame 18" nodeid="I1:377;1:410" transform="1,0,954,0,1,1978.5">2024.11.22. 오후 17:38</string>
-    </TextNode>
-  <Frame name="network" imageid="I1:377;1:411">
-    <TextNode>
-      <base>접속 상태</base>
-      <string page="Page 1" frame="network" nodeid="I1:377;1:412" transform="1,0,1218,0,1,1980.5">접속 상태</string>
-    </TextNode>
-  </Frame>
-  </Frame>
-  </Frame>
-  </Instance>
-  </Frame>
-  </Component>
-  </Frame>
   </Frame>
   <Frame name="footer" imageid="1:378">
     <TextNode>
       <base>Footer</base>
-      <string page="Page 1" frame="footer" nodeid="1:379" transform="1,0,60,0,1,2153">Footer</string>
+      <string page="Page 1" frame="footer" nodeid="1:379" transform="1,0,60,0,1,1903">Footer</string>
     </TextNode>
-  <Component name="tab-menu-footer" description="페이지 메인 푸터로 탭 항목으로 구성">
+  <Component name="tab-footer" description="페이지 메인 푸터로 탭 항목 아이템으로 구성">
   <Frame name="bottom" imageid="1:381">
   <Frame name="category 1" imageid="1:382">
     <TextNode>
       <base>메뉴</base>
-      <string page="Page 1" frame="category 1" nodeid="1:383" transform="1,0,275,0,1,2240">메뉴</string>
+      <string page="Page 1" frame="category 1" nodeid="1:383" transform="1,0,275,0,1,1990">메뉴</string>
     </TextNode>
   </Frame>
   <Frame name="category 2" imageid="1:384">
     <TextNode>
       <base>좌석</base>
-      <string page="Page 1" frame="category 2" nodeid="1:385" transform="1,0,675,0,1,2240">좌석</string>
+      <string page="Page 1" frame="category 2" nodeid="1:385" transform="1,0,675,0,1,1990">좌석</string>
     </TextNode>
   </Frame>
   <Frame name="category 3" imageid="1:386">
     <TextNode>
-      <base>주문내역</base>
-      <string page="Page 1" frame="category 3" nodeid="1:387" transform="1,0,1050.5,0,1,2240">주문내역</string>
-    </TextNode>
-  </Frame>
-  </Frame>
-  </Component>
-  <Component name="tab-table-footer" description="페이지 메인 푸터로 탭 항목으로 구성">
-  <Frame name="bottom" imageid="1:389">
-  <Frame name="category 1" imageid="1:390">
-    <TextNode>
-      <base>메뉴</base>
-      <string page="Page 1" frame="category 1" nodeid="1:391" transform="1,0,275,0,1,2360">메뉴</string>
-    </TextNode>
-  </Frame>
-  <Frame name="category 2" imageid="1:392">
-    <TextNode>
-      <base>좌석</base>
-      <string page="Page 1" frame="category 2" nodeid="1:393" transform="1,0,675,0,1,2360">좌석</string>
-    </TextNode>
-  </Frame>
-  <Frame name="category 3" imageid="1:394">
-    <TextNode>
-      <base>주문내역</base>
-      <string page="Page 1" frame="category 3" nodeid="1:395" transform="1,0,1050.5,0,1,2360">주문내역</string>
-    </TextNode>
-  </Frame>
-  </Frame>
-  </Component>
-  <Component name="tab-order-footer" description="페이지 메인 푸터로 탭 항목으로 구성">
-  <Frame name="bottom" imageid="1:397">
-  <Frame name="category 1" imageid="1:398">
-    <TextNode>
-      <base>메뉴</base>
-      <string page="Page 1" frame="category 1" nodeid="1:399" transform="1,0,275,0,1,2480">메뉴</string>
-    </TextNode>
-  </Frame>
-  <Frame name="category 2" imageid="1:400">
-    <TextNode>
-      <base>좌석</base>
-      <string page="Page 1" frame="category 2" nodeid="1:401" transform="1,0,675,0,1,2480">좌석</string>
-    </TextNode>
-  </Frame>
-  <Frame name="category 3" imageid="1:402">
-    <TextNode>
-      <base>주문내역</base>
-      <string page="Page 1" frame="category 3" nodeid="1:403" transform="1,0,1050.5,0,1,2480">주문내역</string>
+      <base>주문</base>
+      <string page="Page 1" frame="category 3" nodeid="1:387" transform="1,0,1075,0,1,1990">주문</string>
     </TextNode>
   </Frame>
   </Frame>
@@ -490,25 +376,105 @@
   <Frame name="util" imageid="1:404">
     <TextNode>
       <base>Util</base>
-      <string page="Page 1" frame="util" nodeid="1:405" transform="1,0,60,0,1,2595">Util</string>
+      <string page="Page 1" frame="util" nodeid="1:405" transform="1,0,60,0,1,2168">Util</string>
     </TextNode>
   <Component name="timer" description="날짜, 시간, 접속 상태 아이콘으로 구성">
   <Frame name="status" imageid="1:407">
   <Frame name="Frame 18" imageid="1:408">
     <TextNode>
       <base>2024.11.22. 오후 17:38</base>
-      <string page="Page 1" frame="Frame 18" nodeid="1:410" transform="1,0,85,0,1,2685">2024.11.22. 오후 17:38</string>
+      <string page="Page 1" frame="Frame 18" nodeid="1:410" transform="1,0,85,0,1,2233">2024.11.22. 오후 17:38</string>
     </TextNode>
   <Frame name="network" imageid="1:411">
     <TextNode>
       <base>접속 상태</base>
-      <string page="Page 1" frame="network" nodeid="1:412" transform="1,0,349,0,1,2687">접속 상태</string>
+      <string page="Page 1" frame="network" nodeid="1:412" transform="1,0,349,0,1,2235">접속 상태</string>
     </TextNode>
   </Frame>
   </Frame>
   </Frame>
   </Component>
   </Frame>
+  <Frame name="util" imageid="25:1526">
+    <TextNode>
+      <base>Card</base>
+      <string page="Page 1" frame="util" nodeid="25:1527" transform="1,0,804,0,1,2168">Card</string>
+    </TextNode>
+  <Component name="Card " description="주문 접수 카드로 헤더, 메인, 푸터로 구성. 헤더에는 순번, 접수 시간, 경과 시간, 주문 테이블 정보를 담음. 메인은 주문 접수된 메뉴 목록으로 메뉴명, 수량과 하단 분리선으로 구성. 푸터는 제출 버튼으로 구">
+  <Frame name="head" imageid="25:1497">
+  <Frame name="title" imageid="25:1498">
+    <TextNode>
+      <base># 3</base>
+      <string page="Page 1" frame="title" nodeid="25:1499" transform="1,0,836,0,1,2272"># 3</string>
+    </TextNode>
+  <Frame name="timer" imageid="25:1500">
+    <TextNode>
+      <base>00:00</base>
+      <string page="Page 1" frame="timer" nodeid="25:1501" transform="1,0,926.3333740234375,0,1,2274">00:00</string>
+    </TextNode>
+  <Frame name="elapsed" imageid="25:1502">
+    <TextNode>
+      <base>00분 경과</base>
+      <string page="Page 1" frame="elapsed" nodeid="25:1503" transform="1,0,989.3333740234375,0,1,2274">00분 경과</string>
+    </TextNode>
   </Frame>
+  </Frame>
+  </Frame>
+  <Frame name="table" imageid="25:1504">
+    <TextNode>
+      <base>테이블 1</base>
+      <string page="Page 1" frame="table" nodeid="25:1505" transform="1,0,836,0,1,2308">테이블 1</string>
+    </TextNode>
+  </Frame>
+  </Frame>
+  <Frame name="menu-list" imageid="25:1506">
+  <Frame name="menu 1" imageid="25:1507">
+    <TextNode>
+      <base>메뉴 1</base>
+      <string page="Page 1" frame="menu 1" nodeid="25:1508" transform="1,0,820,0,1,2401.5">메뉴 1</string>
+    </TextNode>
+    <TextNode>
+      <base>x 1</base>
+      <string page="Page 1" frame="menu 1" nodeid="25:1509" transform="1,0,1058.3333740234375,0,1,2401.5">x 1</string>
+    </TextNode>
+  </Frame>
+  <Frame name="menu 2" imageid="25:1511">
+    <TextNode>
+      <base>메뉴 1</base>
+      <string page="Page 1" frame="menu 2" nodeid="25:1512" transform="1,0,820,0,1,2474.5">메뉴 1</string>
+    </TextNode>
+    <TextNode>
+      <base>x 1</base>
+      <string page="Page 1" frame="menu 2" nodeid="25:1513" transform="1,0,1058.3333740234375,0,1,2474.5">x 1</string>
+    </TextNode>
+  </Frame>
+  <Frame name="menu 3" imageid="25:1515">
+    <TextNode>
+      <base>메뉴 1</base>
+      <string page="Page 1" frame="menu 3" nodeid="25:1516" transform="1,0,820,0,1,2547.5">메뉴 1</string>
+    </TextNode>
+    <TextNode>
+      <base>x 1</base>
+      <string page="Page 1" frame="menu 3" nodeid="25:1517" transform="1,0,1058.3333740234375,0,1,2547.5">x 1</string>
+    </TextNode>
+  </Frame>
+  <Frame name="menu 4" imageid="25:1519">
+    <TextNode>
+      <base>메뉴 1</base>
+      <string page="Page 1" frame="menu 4" nodeid="25:1520" transform="1,0,820,0,1,2620.5">메뉴 1</string>
+    </TextNode>
+    <TextNode>
+      <base>x 1</base>
+      <string page="Page 1" frame="menu 4" nodeid="25:1521" transform="1,0,1058.3333740234375,0,1,2620.5">x 1</string>
+    </TextNode>
+  </Frame>
+  </Frame>
+  <Frame name="button" imageid="25:1523">
+    <TextNode>
+      <base>조리완료</base>
+      <string page="Page 1" frame="button" nodeid="25:1524" transform="1,0,836.1666870117188,0,1,2744">조리완료</string>
+    </TextNode>
+  </Frame>
+  </Component>
 </Page>
 </figma>

@@ -1,0 +1,23 @@
+/* 선 */
+.line {
+  width: 100%;
+  height: 3px;
+  position: absolute;
+  left: 0;
+  padding: 0 10px;
+  background-color: #4caff8;
+  border-radius: 5px;
+}
+
+.bottom {
+  bottom: 0;
+}
+.top {
+  top: 0;
+}
+
+@media (max-width: 720px) {
+  .line {
+    height: 2px;
+  }
+}
