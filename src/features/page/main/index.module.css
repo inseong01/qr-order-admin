@@ -1,0 +1,26 @@
+.main {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex: 1;
+
+  background-color: #f3f3f3;
+  overflow: hidden;
+
+  position: relative;
+
+  padding: 35px;
+}
+
+@media (max-width: 720px) {
+  .main {
+    padding: 74px 18px 72px;
+  }
+}
+
+@media (max-height: 720px) and (orientation: landscape) {
+  .main {
+    padding: 16px;
+  }
+}

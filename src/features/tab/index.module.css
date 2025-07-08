@@ -1,0 +1,55 @@
+.leftBox {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  overflow: auto;
+
+  font-size: var(--list-fz-large);
+  position: relative;
+}
+
+/* 메뉴 탭 */
+.rightBox {
+  height: 100%;
+  position: relative;
+}
+
+.display {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.category {
+  text-align: start;
+}
+
+.menu {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 10px;
+}
+
+/* 좌석 탭 */
+.listBox.tableBox {
+  height: 100%;
+  align-items: center;
+}
+.table {
+  width: 100%;
+  text-align: center;
+}
+.title {
+  color: var(--font-main-color);
+}
+
+@media (max-width: 720px) {
+  .listBox {
+    font-size: 0.9rem;
+  }
+}

@@ -1,205 +1,225 @@
-import { Order, TableInit } from '../../types/common';
-
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
-export interface Database {
+export type Database = {
+  // Allows to automatically instanciate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: '12.2.3 (519615d)';
+  };
   public: {
     Tables: {
-      'qr-order-allOrderList': {
+      menu: {
         Row: {
-          created_at: string;
+          category_id: string;
           id: string;
-          isDone: boolean;
-          orderList: Order['orderList'];
-          orderNum: number;
-          tableNum: number;
-          updated_at: Date | null;
-        };
-        Insert: {
-          created_at?: string;
-          id?: string;
-          isDone?: boolean;
-          orderList: Order['orderList'];
-          orderNum?: number;
-          tableNum: number;
-          updated_at?: Date | null;
-        };
-        Update: {
-          created_at?: string;
-          id?: string;
-          isDone?: boolean;
-          orderList?: Order['orderList'];
-          orderNum?: number;
-          tableNum?: number;
-          updated_at?: Date | null;
-        };
-        Relationships: [];
-      };
-      'qr-order-category-menu': {
-        Row: {
-          id: number;
-          title: string;
-        };
-        Insert: {
-          id?: number;
-          title: string;
-        };
-        Update: {
-          id?: number;
-          title?: string;
-        };
-        Relationships: [];
-      };
-      'qr-order-category-order': {
-        Row: {
-          alertCount: number | null;
-          id: number;
-          title: string;
-        };
-        Insert: {
-          alertCount?: number | null;
-          id?: number;
-          title: string;
-        };
-        Update: {
-          alertCount?: number | null;
-          id?: number;
-          title?: string;
-        };
-        Relationships: [];
-      };
-      'qr-order-category-request': {
-        Row: {
-          id: number;
-          title: string;
-        };
-        Insert: {
-          id?: number;
-          title?: string;
-        };
-        Update: {
-          id?: number;
-          title?: string;
-        };
-        Relationships: [];
-      };
-      'qr-order-category-tab': {
-        Row: {
-          id: number;
-          title: string;
-        };
-        Insert: {
-          id?: number;
-          title?: string;
-        };
-        Update: {
-          id?: number;
-          title?: string;
-        };
-        Relationships: [];
-      };
-      'qr-order-category-table': {
-        Row: {
-          id: number;
-          title: string;
-        };
-        Insert: {
-          id?: number;
-          title: string;
-        };
-        Update: {
-          id?: number;
-          title?: string;
-        };
-        Relationships: [];
-      };
-      'qr-order-menu': {
-        Row: {
-          id: string;
+          img_url: string;
           name: string;
           price: number;
-          sort: string | null;
-          sortId: number;
           tag: string;
-          url: string;
         };
         Insert: {
+          category_id?: string;
           id?: string;
+          img_url?: string;
           name?: string;
           price: number;
-          sort?: string | null;
-          sortId?: number;
           tag?: string;
-          url?: string | null;
         };
         Update: {
+          category_id?: string;
           id?: string;
+          img_url?: string;
           name?: string;
           price?: number;
-          sort?: string | null;
-          sortId?: number;
           tag?: string;
-          url?: string | null;
         };
         Relationships: [
           {
-            foreignKeyName: 'qr-order-menu_sort_fkey';
-            columns: ['sort'];
+            foreignKeyName: 'menu_category_id_fkey';
+            columns: ['category_id'];
             isOneToOne: false;
-            referencedRelation: 'qr-order-category-menu';
-            referencedColumns: ['title'];
-          },
-          {
-            foreignKeyName: 'qr-order-menu_sortId_fkey';
-            columns: ['sortId'];
-            isOneToOne: false;
-            referencedRelation: 'qr-order-category-menu';
+            referencedRelation: 'menu_category';
             referencedColumns: ['id'];
-          }
+          },
         ];
       };
-      'qr-order-request-list': {
+      menu_category: {
         Row: {
-          created_at: string;
           id: string;
-          isRead: boolean;
-          requestList: string;
-          tableNum: number;
+          title: string;
         };
         Insert: {
-          created_at?: string;
           id?: string;
-          isRead?: boolean;
-          requestList?: string;
-          tableNum: number;
+          title?: string;
         };
         Update: {
-          created_at?: string;
           id?: string;
-          isRead?: boolean;
-          requestList?: string;
-          tableNum?: number;
+          title?: string;
         };
         Relationships: [];
       };
-      'qr-order-table-list': {
+      order: {
+        Row: {
+          created_at: string;
+          id: string;
+          is_done: boolean;
+          order_number: number;
+          table_id: number;
+          updated_at: string | null;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          is_done?: boolean;
+          order_number: number;
+          table_id: number;
+          updated_at?: string | null;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          is_done?: boolean;
+          order_number?: number;
+          table_id?: number;
+          updated_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'order_table_id_fkey';
+            columns: ['table_id'];
+            isOneToOne: false;
+            referencedRelation: 'table';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      order_item: {
         Row: {
           id: string;
-          init: Json | null | TableInit;
-          order: Json[] | null | Order[];
-          tableNum: number;
+          menu_id: string;
+          order_id: string;
+          quantity: number;
         };
         Insert: {
           id?: string;
-          init?: Json | null | TableInit;
-          order?: Json[] | null | Order[];
-          tableNum: number;
+          menu_id: string;
+          order_id: string;
+          quantity: number;
         };
         Update: {
           id?: string;
-          init?: Json | null | TableInit;
-          order?: Json[] | null | Order[];
-          tableNum?: number;
+          menu_id?: string;
+          order_id?: string;
+          quantity?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'order_item_menu_id_fkey';
+            columns: ['menu_id'];
+            isOneToOne: false;
+            referencedRelation: 'menu';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'order_item_order_id_fkey';
+            columns: ['order_id'];
+            isOneToOne: false;
+            referencedRelation: 'order';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      request: {
+        Row: {
+          content: Json;
+          created_at: string;
+          id: string;
+          is_read: boolean | null;
+          table_id: number | null;
+        };
+        Insert: {
+          content: Json;
+          created_at?: string;
+          id?: string;
+          is_read?: boolean | null;
+          table_id?: number | null;
+        };
+        Update: {
+          content?: Json;
+          created_at?: string;
+          id?: string;
+          is_read?: boolean | null;
+          table_id?: number | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'request_table_id_fkey';
+            columns: ['table_id'];
+            isOneToOne: false;
+            referencedRelation: 'table';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      request_categories: {
+        Row: {
+          id: string;
+          title: string;
+        };
+        Insert: {
+          id?: string;
+          title?: string;
+        };
+        Update: {
+          id?: string;
+          title?: string;
+        };
+        Relationships: [];
+      };
+      request_item: {
+        Row: {
+          content: Json;
+          created_at: string;
+          id: string;
+          request_id: string | null;
+        };
+        Insert: {
+          content: Json;
+          created_at?: string;
+          id?: string;
+          request_id?: string | null;
+        };
+        Update: {
+          content?: Json;
+          created_at?: string;
+          id?: string;
+          request_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'request_item_request_id_fkey';
+            columns: ['request_id'];
+            isOneToOne: false;
+            referencedRelation: 'request';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      table: {
+        Row: {
+          id: number;
+          meta: Json | null;
+          number: number;
+        };
+        Insert: {
+          id?: number;
+          meta?: Json | null;
+          number: number;
+        };
+        Update: {
+          id?: number;
+          meta?: Json | null;
+          number?: number;
         };
         Relationships: [];
       };
@@ -217,89 +237,119 @@ export interface Database {
       [_ in never]: never;
     };
   };
-}
+};
 
-type PublicSchema = Database[Extract<keyof Database, 'public'>];
+type DatabaseWithoutInternals = Omit<Database, '__InternalSupabase'>;
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, 'public'>];
 
 export type Tables<
-  PublicTableNameOrOptions extends keyof (PublicSchema['Tables'] & PublicSchema['Views']) | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof (Database[PublicTableNameOrOptions['schema']]['Tables'] &
-        Database[PublicTableNameOrOptions['schema']]['Views'])
-    : never = never
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[PublicTableNameOrOptions['schema']]['Tables'] &
-      Database[PublicTableNameOrOptions['schema']]['Views'])[TableName] extends {
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
+  }
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals;
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])[TableName] extends {
       Row: infer R;
     }
     ? R
     : never
-  : PublicTableNameOrOptions extends keyof (PublicSchema['Tables'] & PublicSchema['Views'])
-  ? (PublicSchema['Tables'] & PublicSchema['Views'])[PublicTableNameOrOptions] extends {
-      Row: infer R;
-    }
-    ? R
-    : never
-  : never;
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
+    ? (DefaultSchema['Tables'] & DefaultSchema['Views'])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R;
+      }
+      ? R
+      : never
+    : never;
 
 export type TablesInsert<
-  PublicTableNameOrOptions extends keyof PublicSchema['Tables'] | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions['schema']]['Tables']
-    : never = never
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions['schema']]['Tables'][TableName] extends {
+  DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables'] | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals;
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
       Insert: infer I;
     }
     ? I
     : never
-  : PublicTableNameOrOptions extends keyof PublicSchema['Tables']
-  ? PublicSchema['Tables'][PublicTableNameOrOptions] extends {
-      Insert: infer I;
-    }
-    ? I
-    : never
-  : never;
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
+    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
+        Insert: infer I;
+      }
+      ? I
+      : never
+    : never;
 
 export type TablesUpdate<
-  PublicTableNameOrOptions extends keyof PublicSchema['Tables'] | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions['schema']]['Tables']
-    : never = never
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions['schema']]['Tables'][TableName] extends {
+  DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables'] | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals;
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
       Update: infer U;
     }
     ? U
     : never
-  : PublicTableNameOrOptions extends keyof PublicSchema['Tables']
-  ? PublicSchema['Tables'][PublicTableNameOrOptions] extends {
-      Update: infer U;
-    }
-    ? U
-    : never
-  : never;
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
+    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
+        Update: infer U;
+      }
+      ? U
+      : never
+    : never;
 
 export type Enums<
-  PublicEnumNameOrOptions extends keyof PublicSchema['Enums'] | { schema: keyof Database },
-  EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicEnumNameOrOptions['schema']]['Enums']
-    : never = never
-> = PublicEnumNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicEnumNameOrOptions['schema']]['Enums'][EnumName]
-  : PublicEnumNameOrOptions extends keyof PublicSchema['Enums']
-  ? PublicSchema['Enums'][PublicEnumNameOrOptions]
-  : never;
+  DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema['Enums'] | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals;
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums']
+    : never = never,
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals;
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums'][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema['Enums']
+    ? DefaultSchema['Enums'][DefaultSchemaEnumNameOrOptions]
+    : never;
 
 export type CompositeTypes<
-  PublicCompositeTypeNameOrOptions extends keyof PublicSchema['CompositeTypes'] | { schema: keyof Database },
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema['CompositeTypes']
+    | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
-    schema: keyof Database;
+    schema: keyof DatabaseWithoutInternals;
   }
-    ? keyof Database[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes']
-    : never = never
-> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema['CompositeTypes']
-  ? PublicSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]
-  : never;
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes']
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals;
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema['CompositeTypes']
+    ? DefaultSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]
+    : never;
+
+export const Constants = {
+  public: {
+    Enums: {},
+  },
+} as const;

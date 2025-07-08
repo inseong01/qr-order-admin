@@ -1,0 +1,120 @@
+.addMenuModal {
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 30px;
+
+  border-radius: 12px;
+  background-color: white;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+
+  cursor: default;
+
+  padding: 25px;
+}
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.header {
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
+}
+.modalTitle {
+  color: var(--font-main-color);
+  font-size: var(--modal-fz-title);
+}
+.close {
+  width: 15px;
+  height: 15px;
+
+  display: flex;
+  background-color: black; /* 임시 */
+
+  position: absolute;
+  top: 50%;
+  right: 0;
+  box-sizing: content-box;
+
+  transform: translateY(-50%);
+
+  padding: 5px;
+}
+
+.imgInput {
+  width: 300px;
+  height: 80px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+
+  color: var(--font-sub-color);
+  font-size: var(--list-fz-small);
+
+  border: 1px solid var(--font-sub-color);
+  border-radius: 8px;
+
+  cursor: pointer;
+}
+
+.iconBox {
+  width: 15px;
+  height: 15px;
+
+  display: flex;
+
+  background-color: black;
+  box-sizing: content-box;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.inputWrapper {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+}
+.inputTitle {
+  font-size: var(--list-fz-regular);
+}
+.options {
+  font-size: var(--list-fz-small);
+}
+
+.submitBox {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.submit {
+  flex: 1;
+
+  border-radius: 8px;
+  background-color: var(--key-color);
+
+  color: white;
+  font-size: var(--list-fz-regular);
+  font-weight: var(--page-fw-bold);
+
+  padding: 15px 0;
+}
