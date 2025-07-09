@@ -3,6 +3,7 @@
   height: 100%;
 
   display: flex;
+  justify-content: space-between;
   flex: 1;
 
   background-color: #f3f3f3;
@@ -11,6 +12,19 @@
   position: relative;
 
   padding: 35px;
+}
+
+.leftBox {
+  width: calc(100% - var(--tab-modal-width)); /* 탭 모달 여부에 따라 100% , 100%-var() 결정 */
+  height: 100%;
+
+  font-size: var(--list-fz-large);
+  position: relative;
+}
+
+.rightBox {
+  height: 100%;
+  position: relative;
 }
 
 @media (max-width: 720px) {

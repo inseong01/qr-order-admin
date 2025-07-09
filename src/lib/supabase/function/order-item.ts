@@ -1,8 +1,8 @@
 import supabase from '..';
-import { Tables, TablesInsert, TablesUpdate } from '../database.types';
+import { Tables } from '../database.types';
 
 // order_item table type
-type OrderItem = Tables<'order_item'>;
+export type OrderItem = Tables<'order_item'>;
 
 /**
  * 주문 아이템 목록을 가져오는 함수

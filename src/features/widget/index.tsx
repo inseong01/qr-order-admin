@@ -4,8 +4,8 @@ import { AnimatePresence, motion } from 'motion/react';
 
 import { footerAtom } from '../page/footer';
 
-import { windowStateAtom } from '../../store/atom/window-atom';
-import { modalAtom } from '../../store/atom/modal-atom';
+import { windowStateAtom } from '@/store/atom/window-atom';
+import { widgetAtom } from '@/store/atom/widget-atom';
 
 import styles from './widget.module.css';
 
@@ -14,7 +14,7 @@ import { MenuWidget, TableWidget, WidgetIconButton } from './components';
 export default function Widget() {
   const tab = useAtomValue(footerAtom);
   const _window = useAtomValue(windowStateAtom);
-  const widgetState = useAtomValue(modalAtom);
+  const { isOpen } = useAtomValue(widgetAtom);
 
   const widgetRef = useRef(null);
 
@@ -47,7 +47,7 @@ export default function Widget() {
           <WidgetIconButton />
 
           {/* 위젯 목록 */}
-          <AnimatePresence>{widgetState.isOpen ? <WidgetComponent /> : null}</AnimatePresence>
+          <AnimatePresence>{isOpen ? <WidgetComponent /> : null}</AnimatePresence>
         </motion.div>
       )}
     </AnimatePresence>

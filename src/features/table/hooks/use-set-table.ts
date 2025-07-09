@@ -1,8 +1,8 @@
 import Konva from 'konva';
 import { RefObject } from 'react';
 
-import { SetClientTableList } from '../components/konva/konva-index';
-import { OnDrageEndEvent } from '../components/konva/layer-index';
+import { SetClientTableList } from '../components/konva';
+import { OnDrageEndEvent } from '../components/konva/layer';
 import { useBoundStore } from '../../../../lib/store/use-bound-store';
 import { TableInit } from '../../../../types/common';
 

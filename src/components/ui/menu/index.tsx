@@ -7,14 +7,14 @@ import { setMenuModalState } from '@/features/modal/menu/store/atom';
 
 import { Menu } from '@/lib/supabase/function/menu';
 
-import { selectMenuIdState } from '@/store/atom/menu';
+import { selectIdState } from '@/store/atom/id-atom';
 
 /**
  * 메뉴 항목 버튼
  */
 export function ListMenu(props: Menu) {
   const setModalState = useSetAtom(setMenuModalState);
-  const selectId = useSetAtom(selectMenuIdState);
+  const selectId = useSetAtom(selectIdState);
 
   const title = props.name;
   const price = props.price.toLocaleString();

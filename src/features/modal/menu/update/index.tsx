@@ -1,10 +1,10 @@
-import { ChangeEvent, InputHTMLAttributes, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
 
 import styles from './../index.module.css';
 
 import { setMenuModalState } from '../store/atom';
-import { resetMenuIdState, selectMenuIdState } from '@/store/atom/menu';
+import { resetIdState, idAtom } from '@/store/atom/id-atom';
 
 import mockData from '@/mock/data.test.json';
 
@@ -18,9 +18,9 @@ const initInputValue = {
 export default function UpdateMenuModal() {
   const [inputValue, setInputValue] = useState(initInputValue);
 
-  const menuId = useAtomValue(selectMenuIdState);
+  const menuId = useAtomValue(idAtom);
   const setModalState = useSetAtom(setMenuModalState);
-  const resetMenuId = useSetAtom(resetMenuIdState);
+  const resetMenuId = useSetAtom(resetIdState);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

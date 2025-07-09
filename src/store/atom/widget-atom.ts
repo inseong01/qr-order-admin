@@ -23,11 +23,11 @@ export const widgetAtomWithReset = atom(
   }
 );
 
-// 위젯 옵션 리스트 상태 변경
-export const widgetOptionListAtom = atom(
+// 위젯 상태 변경
+export const setWidgetState = atom(
   (get) => get(widgetAtom).option,
-  (get, set, { option }: { option: Options }) => {
+  (get, set, { isOpen, option }: { isOpen: boolean; option?: Options }) => {
     const currentWidget = get(widgetAtom);
-    set(widgetAtom, { ...currentWidget, option });
+    set(widgetAtom, { isOpen, option: option ? option : currentWidget.option });
   }
 );

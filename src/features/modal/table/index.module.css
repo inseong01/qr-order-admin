@@ -1,27 +1,4 @@
-.addMenuModal {
-  width: var(--tab-modal-width);
-  height: 100%;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 30px;
-
-  border-radius: 12px;
-  background-color: white;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
-
-  cursor: default;
-
-  padding: 25px;
-}
-
-.wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-}
-
+/* 추가 */
 .header {
   width: 100%;
 
@@ -80,42 +57,69 @@
   box-sizing: content-box;
 }
 
-.main {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-.inputWrapper {
-  width: 100%;
+/* 기존 */
+.submitForm {
+  width: var(--tab-modal-width);
+  height: 100%;
 
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 5px;
-}
-.inputTitle {
-  font-size: var(--list-fz-regular);
-}
-.options {
-  font-size: var(--list-fz-small);
-}
+  justify-content: space-between;
+  gap: 30px;
 
-.submitBox {
-  width: 100%;
+  border-radius: 12px;
+  background-color: white;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+
+  cursor: default;
+
+  padding: 25px;
+
+  /* width: 495px; */
+  /* height: 534px; */
+
+  /* padding: 16px;
+  border: 1px solid #d8d8d8;
+  border-radius: 15px;
+  background-color: white;
+  overflow: hidden;
 
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 10px;
+  gap: 20px; */
 }
-.submit {
-  flex: 1;
 
-  border-radius: 8px;
-  background-color: var(--key-color);
+.wrap {
+  width: 100%;
+  height: 100%;
 
-  color: white;
-  font-size: var(--list-fz-regular);
-  font-weight: var(--page-fw-bold);
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 
-  padding: 15px 0;
+  cursor: default;
+}
+
+.title {
+  width: 100%;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.content {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 720px) {
+  .submitForm {
+    width: 100%;
+    height: auto;
+  }
 }

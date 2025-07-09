@@ -1,17 +1,17 @@
 import supabase from '..';
 import { Tables, TablesInsert, TablesUpdate } from '../database.types';
 
-// request_categories table type
-type RequestCategory = Tables<'request_categories'>;
-type NewRequestCategory = TablesInsert<'request_categories'>;
-type UpdateRequestCategory = TablesUpdate<'request_categories'>;
+// request_category table type
+type RequestCategory = Tables<'request_category'>;
+type NewRequestCategory = TablesInsert<'request_category'>;
+type UpdateRequestCategory = TablesUpdate<'request_category'>;
 
 /**
  * 요청 카테고리를 가져오는 함수
  * @returns 요청 카테고리 목록
  */
 export async function getRequestCategory(): Promise<RequestCategory[]> {
-  const { data, error } = await supabase.from('request_categories').select('*').order('id', { ascending: true });
+  const { data, error } = await supabase.from('request_category').select('*').order('id', { ascending: true });
 
   if (error) {
     console.error(error.message);
@@ -27,7 +27,7 @@ export async function getRequestCategory(): Promise<RequestCategory[]> {
  * @returns
  */
 export const addRequestCategory = async (newRequestCategory: NewRequestCategory) => {
-  const { error } = await supabase.from('request_categories').insert(newRequestCategory);
+  const { error } = await supabase.from('request_category').insert(newRequestCategory);
   if (error) {
     console.error(error.message);
     throw new Error(error.message);
@@ -42,7 +42,7 @@ export const addRequestCategory = async (newRequestCategory: NewRequestCategory)
  * @returns
  */
 export const updateRequestCategory = async (id: string, updatedRequestCategory: UpdateRequestCategory) => {
-  const { error } = await supabase.from('request_categories').update(updatedRequestCategory).eq('id', id);
+  const { error } = await supabase.from('request_category').update(updatedRequestCategory).eq('id', id);
   if (error) {
     console.error(error.message);
     throw new Error(error.message);
@@ -56,7 +56,7 @@ export const updateRequestCategory = async (id: string, updatedRequestCategory: 
  * @returns
  */
 export const deleteRequestCategory = async (id: string) => {
-  const { error } = await supabase.from('request_categories').delete().eq('id', id);
+  const { error } = await supabase.from('request_category').delete().eq('id', id);
   if (error) {
     console.error(error.message);
     throw new Error(error.message);

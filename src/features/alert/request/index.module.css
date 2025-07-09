@@ -4,7 +4,6 @@
   border: 1px solid #4caff8;
   border-radius: 10px;
   background-color: #4caff8;
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 
   display: flex;
   justify-content: center;
@@ -17,7 +16,7 @@
   cursor: default;
   z-index: 9999;
 }
-.alertMsg.error {
+.error {
   background-color: #f30000;
   border-color: #f30000;
 }
@@ -38,11 +37,10 @@
   cursor: pointer;
 }
 
-/* 요청 메시지 */
 .reqeustMsgWrap {
   position: absolute;
-  left: 20px;
-  bottom: 20px;
+  left: 0;
+  bottom: 0;
 
   z-index: 99;
 }
@@ -61,7 +59,7 @@
   cursor: default;
 }
 
-.reqeustMsg.moreAlert {
+.moreAlert {
   border-color: #f84c4c;
   animation: blink 2s step-start infinite;
 }
@@ -75,15 +73,15 @@
   }
 }
 
-/* hidden */
-.reqeustMsg.hidden {
+/* message-count */
+.hidden {
   gap: 2px;
 }
 
+/* message-count, message-preview */
 .msg {
   font-size: 0.95rem;
   border-radius: 5px;
-  box-shadow: rgba(100, 100, 111, 0.25) 0px 7px 29px 0px;
   overflow: hidden;
 }
 
@@ -100,6 +98,7 @@
   align-items: center;
 }
 
+/* message-preview */
 .bottom {
   width: 100%;
   padding: 8px 16px;

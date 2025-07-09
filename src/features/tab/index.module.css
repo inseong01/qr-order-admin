@@ -1,4 +1,4 @@
-.leftBox {
+.listBox {
   width: 100%;
   height: 100%;
 
@@ -7,9 +7,6 @@
   gap: 10px;
 
   overflow: auto;
-
-  font-size: var(--list-fz-large);
-  position: relative;
 }
 
 /* 메뉴 탭 */
@@ -36,20 +33,18 @@
 }
 
 /* 좌석 탭 */
-.listBox.tableBox {
-  height: 100%;
-  align-items: center;
-}
 .table {
   width: 100%;
+  height: 100%;
   text-align: center;
 }
+
 .title {
   color: var(--font-main-color);
 }
 
 @media (max-width: 720px) {
-  .listBox {
+  .leftBox {
     font-size: 0.9rem;
   }
 }

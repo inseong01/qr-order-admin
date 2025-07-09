@@ -1,43 +1,46 @@
 import { useRef } from 'react';
-import { useAtomValue } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { AnimatePresence, motion } from 'motion/react';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
-import { useBoundStore } from '../../../lib/store/use-bound-store';
+import { modalAtom, setModalState } from '@/store/atom/modal-atom';
 
-import { footerAtom } from '../page/footer';
+import { footerAtom } from '../../page/footer';
 
-import styles from './modal-main.module.css';
+import styles from './index.module.css';
+import TableInfoPannel from '../table';
 
-import MenuModalRouter from '../../features/menu/components/menu-modal';
-import TableModalRouter from '../../features/table/components/table-modal';
-
+// import MenuModalRouter from '../../features/menu/components/menu-modal';
+/* 
+  위젯 모달 전용
+*/
 export default function MainModal() {
   const modalRef = useRef<HTMLDialogElement>(null);
 
-  const tab = useAtomValue(footerAtom) ?? 'menu';
-  const isModalOpen = useBoundStore((state) => state.modal.isOpen);
-  const changeModalState = useBoundStore((state) => state.changeModalState);
+  const tab = useAtomValue(footerAtom);
+  const { isOpen } = useAtomValue(modalAtom);
+  const setModal = useSetAtom(setModalState);
 
   const component = {
-    menu: MenuModalRouter,
-    table: TableModalRouter,
+    // menu: MenuModalRouter, // 메뉴탭, 위젯 카테고리 때 필요
+    table: TableInfoPannel,
     order: null,
   };
   const ModalForm = component[tab];
 
   function onClickCloseModal() {
-    changeModalState({ isOpen: false });
+    setModal({ isOpen: false });
   }
 
   return (
     <AnimatePresence>
-      {isModalOpen && (
+      {isOpen && (
         <>
           {/* 모달창 */}
           <motion.dialog
-            open={isModalOpen}
+            open={isOpen}
             className={styles.dialog}
             ref={modalRef}
             key={'dialog'}

@@ -1,4 +1,4 @@
-import styles from './spinner-index.module.css';
+import styles from './index.module.css';
 
 export default function LoadingSpinner() {
   return (

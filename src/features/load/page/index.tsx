@@ -3,7 +3,7 @@ import { REALTIME_POSTGRES_CHANGES_LISTEN_EVENT } from '@supabase/realtime-js';
 
 import { useQueryClientTable } from '@/hooks/use-query/query-client';
 
-import LoadingSpinner from '../spinner/spinner-index';
+import LoadingSpinner from '../spinner';
 
 const LazyMainPage = lazy(() => import('../../page'));
 

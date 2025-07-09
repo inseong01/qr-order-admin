@@ -1,12 +1,12 @@
 import Konva from 'konva';
 import { RefObject } from 'react';
 
-import { useBoundStore } from '../../../../lib/store/use-bound-store';
-import { TableList } from '../../../../types/common';
+// import { useBoundStore } from '../../../../lib/store/use-bound-store';
+// import { TableList } from '../../../../types/common';
 
 export default function useOnMouseChangeCursor(stageRef: RefObject<Konva.Stage>, table: TableList) {
-  const konvaEditTableIdArr = useBoundStore((state) => state.konva.target.id);
-  const konvaEditType = useBoundStore((state) => state.konva.type);
+  // const konvaEditTableIdArr = useBoundStore((state) => state.konva.target.id);
+  // const konvaEditType = useBoundStore((state) => state.konva.type);
 
   const { id } = table;
   const isTransformerAble = id === konvaEditTableIdArr[0] && konvaEditType !== 'delete';

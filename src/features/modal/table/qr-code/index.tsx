@@ -2,13 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
 import QRcode from 'qrcode';
 
-import { TableNum } from '../../../../../types/common';
+import downloadFile from '@/utils/function/download-file';
 
-import downloadFile from '../function/download-file';
+import styles from './index.module.css';
 
-import styles from './qr-preview-box.module.css';
-
-export default function QRPreviewBox({ tableNum }: { tableNum: TableNum }) {
+export default function QRPreviewBox({ tableNumber }: { tableNumber?: number }) {
   const [url, getURL] = useState('');
 
   const qrcodeRef = useRef<HTMLImageElement>(null);
@@ -18,8 +16,8 @@ export default function QRPreviewBox({ tableNum }: { tableNum: TableNum }) {
     if (!qrcodeRef.current) return;
 
     const ref = qrcodeRef.current;
-    // 링크 진입 시 쿠키 전달하여 해당 tableNum이 아닌 주소로 주소변경 접근 제한
-    QRcode.toDataURL(`https://qr-order-client.vercel.app/table/${tableNum}`)
+    // 링크 진입 시 쿠키 전달하여 해당 tableNumber 아닌 주소로 주소변경 접근 제한
+    QRcode.toDataURL(`https://qr-order-client.vercel.app/table/${tableNumber}`)
       .then((url: string) => {
         ref.src = url;
         getURL(url);
@@ -29,7 +27,7 @@ export default function QRPreviewBox({ tableNum }: { tableNum: TableNum }) {
 
   function onClickDownloadQRcode() {
     if (!url) return;
-    downloadFile(url, tableNum);
+    downloadFile(url, tableNumber);
   }
 
   return (

@@ -2,7 +2,7 @@ import supabase from '..';
 import { Tables } from '../database.types';
 
 // request_item table type
-type RequestItem = Tables<'request_item'>;
+export type RequestItem = Tables<'request_item'>;
 
 /**
  * 요청 아이템 목록을 가져오는 함수

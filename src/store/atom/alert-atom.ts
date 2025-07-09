@@ -9,7 +9,7 @@ import { atom } from 'jotai';
 
 //- jotai
 // 알림 on/off 상태
-const alertAtom = atom(true);
+export const alertAtom = atom(true);
 
 // 알림 on/off 상태 변경
 export const alertAtomWithToggle = atom(

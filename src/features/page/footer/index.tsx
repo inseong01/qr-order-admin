@@ -4,6 +4,7 @@ import styles from './index.module.css';
 
 import { modalAtom } from '@/store/atom/modal-atom';
 import { widgetAtomWithReset } from '@/store/atom/widget-atom';
+import { resetIdState } from '@/store/atom/id-atom';
 
 import Tab from '@/components/ui/tab';
 
@@ -15,6 +16,7 @@ export default function Footer() {
   const modalState = useAtomValue(modalAtom);
   const setFooterTab = useSetAtom(footerAtom);
   const widgetReset = useSetAtom(widgetAtomWithReset);
+  const resetId = useSetAtom(resetIdState);
 
   // const isModalOpen = useBoundStore((state) => state.modal.isOpen);
   // const isTableEditAble = useBoundStore((state) => state.konva.isAble);
@@ -37,6 +39,7 @@ export default function Footer() {
     // resetCategoryState();
     // resetItemState();
     widgetReset();
+    resetId();
 
     // if (submitIsError) return; // 탭 변경마다 제출 상태 초기화, 에러 상황 예외
 

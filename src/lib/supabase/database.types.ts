@@ -1,4 +1,4 @@
-export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
+export type Json = string | number | boolean | { [key: string]: Json | undefined } | Json[];
 
 export type Database = {
   // Allows to automatically instanciate createClient with right options
@@ -64,7 +64,7 @@ export type Database = {
           id: string;
           is_done: boolean;
           order_number: number;
-          table_id: number;
+          table_id: string;
           updated_at: string | null;
         };
         Insert: {
@@ -72,7 +72,7 @@ export type Database = {
           id?: string;
           is_done?: boolean;
           order_number: number;
-          table_id: number;
+          table_id: string;
           updated_at?: string | null;
         };
         Update: {
@@ -80,7 +80,7 @@ export type Database = {
           id?: string;
           is_done?: boolean;
           order_number?: number;
-          table_id?: number;
+          table_id?: string;
           updated_at?: string | null;
         };
         Relationships: [
@@ -131,25 +131,22 @@ export type Database = {
       };
       request: {
         Row: {
-          content: Json;
           created_at: string;
           id: string;
           is_read: boolean | null;
-          table_id: number | null;
+          table_id: string | null;
         };
         Insert: {
-          content: Json;
           created_at?: string;
           id?: string;
           is_read?: boolean | null;
-          table_id?: number | null;
+          table_id?: string | null;
         };
         Update: {
-          content?: Json;
           created_at?: string;
           id?: string;
           is_read?: boolean | null;
-          table_id?: number | null;
+          table_id?: string | null;
         };
         Relationships: [
           {
@@ -161,7 +158,7 @@ export type Database = {
           },
         ];
       };
-      request_categories: {
+      request_category: {
         Row: {
           id: string;
           title: string;
@@ -178,19 +175,22 @@ export type Database = {
       };
       request_item: {
         Row: {
-          content: Json;
+          category_id: string;
+          quantity: number;
           created_at: string;
           id: string;
           request_id: string | null;
         };
         Insert: {
-          content: Json;
+          category_id: string;
+          quantity: number;
           created_at?: string;
           id?: string;
           request_id?: string | null;
         };
         Update: {
-          content?: Json;
+          category_id?: string;
+          quantity?: number;
           created_at?: string;
           id?: string;
           request_id?: string | null;
@@ -203,21 +203,28 @@ export type Database = {
             referencedRelation: 'request';
             referencedColumns: ['id'];
           },
+          {
+            foreignKeyName: 'request_item_category_id_fkey';
+            columns: ['category_id'];
+            isOneToOne: false;
+            referencedRelation: 'request_category';
+            referencedColumns: ['id'];
+          },
         ];
       };
       table: {
         Row: {
-          id: number;
-          meta: Json | null;
+          id: string;
+          meta: Json;
           number: number;
         };
         Insert: {
-          id?: number;
+          id?: string;
           meta?: Json | null;
           number: number;
         };
         Update: {
-          id?: number;
+          id?: string;
           meta?: Json | null;
           number?: number;
         };

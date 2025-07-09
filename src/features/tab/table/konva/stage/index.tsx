@@ -2,12 +2,10 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Group, Layer, Rect, Stage, Text } from 'react-konva';
 import Konva from 'konva';
 
-import { useBoundStore } from '../../../../../lib/store/use-bound-store';
+import { Table } from '@/lib/supabase/function/table';
 
-import { TableList } from '../../../../../types/common';
-
-import TableLayer from './layer-index';
-import { SetClientTableList, StageSize } from './konva-index';
+import TableLayer from '../layer';
+import { SetClientTableList, StageSize } from '..';
 
 export default function TableStage({
   stageSize,
@@ -15,10 +13,11 @@ export default function TableStage({
   setClientTableList,
 }: {
   stageSize: StageSize;
-  clientTableList: TableList[];
+  clientTableList: Table[];
   setClientTableList: SetClientTableList;
 }) {
-  const konvaEditIsAble = useBoundStore((state) => state.konva.isAble);
+  const konvaEditIsAble = false;
+  // const konvaEditIsAble = useBoundStore((state) => state.konva.isAble);
 
   const stageRef = useRef<Konva.Stage>(null);
   const tableRangeRef = useRef<Konva.Layer>(null);
@@ -31,37 +30,37 @@ export default function TableStage({
   }, [stageSize]);
 
   // 편집 범위 배경 애니메이션
-  useEffect(() => {
-    if (!tableRangeRef.current) return;
-    if (konvaEditIsAble) {
-      tableRangeRef.current.to({
-        opacity: 1,
-        duration: 0.3,
-      });
-      return;
-    }
+  // useEffect(() => {
+  //   if (!tableRangeRef.current) return;
+  //   if (konvaEditIsAble) {
+  //     tableRangeRef.current.to({
+  //       opacity: 1,
+  //       duration: 0.3,
+  //     });
+  //     return;
+  //   }
 
-    tableRangeRef.current.to({
-      opacity: 0,
-      duration: 0.3,
-    });
-  }, [tableRangeRef, konvaEditIsAble]);
+  //   tableRangeRef.current.to({
+  //     opacity: 0,
+  //     duration: 0.3,
+  //   });
+  // }, [tableRangeRef, konvaEditIsAble]);
 
   // 초기 위치 화면 이동
-  function backToInitPos() {
-    if (konvaEditIsAble) return;
-    if (currentPos.x === 0 && currentPos.y === 0) return;
-    setCurrentPos({ x: 0, y: 0 });
-  }
+  // function backToInitPos() {
+  //   if (konvaEditIsAble) return;
+  //   if (currentPos.x === 0 && currentPos.y === 0) return;
+  //   setCurrentPos({ x: 0, y: 0 });
+  // }
 
   // 드래그 위치 화면 이동
-  function getLastPos() {
-    const ref = stageRef.current;
-    if (ref) {
-      const lastPos = ref.position();
-      setCurrentPos({ x: lastPos.x, y: lastPos.y });
-    }
-  }
+  // function getLastPos() {
+  //   const ref = stageRef.current;
+  //   if (ref) {
+  //     const lastPos = ref.position();
+  //     setCurrentPos({ x: lastPos.x, y: lastPos.y });
+  //   }
+  // }
 
   return (
     <Stage
@@ -70,10 +69,11 @@ export default function TableStage({
       y={konvaEditIsAble ? 0 : currentPos.y}
       width={stageSize.stageWidth}
       height={stageSize.stageHeight}
-      onDblClick={backToInitPos}
-      onDblTap={backToInitPos}
-      onDragEnd={getLastPos}
-      draggable={!konvaEditIsAble}
+      // onDblClick={backToInitPos}
+      // onDblTap={backToInitPos}
+      // onDragEnd={getLastPos}
+      // draggable={!konvaEditIsAble}
+      draggable={true}
       scaleX={stageScale}
       scaleY={stageScale}
     >
@@ -98,12 +98,7 @@ export default function TableStage({
       <Layer>
         {clientTableList.map((table) => {
           return (
-            <TableLayer
-              key={table.tableNum}
-              table={table}
-              stageRef={stageRef}
-              setClientTableList={setClientTableList}
-            />
+            <TableLayer key={table.id} table={table} stageRef={stageRef} setClientTableList={setClientTableList} />
           );
         })}
       </Layer>

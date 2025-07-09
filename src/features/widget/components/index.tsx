@@ -3,7 +3,8 @@ import { motion } from 'motion/react';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 // import { useQueryClient } from '@tanstack/react-query';
 
-import { modalAtom, modalStateAtom } from '../../../store/atom/modal-atom';
+import { setWidgetState, widgetAtom } from '@/store/atom/widget-atom';
+import { modalAtom } from '@/store/atom/modal-atom';
 
 import styles from './index.module.css';
 import { childMotion, parentsMotion } from './motion';
@@ -12,8 +13,8 @@ import { childMotion, parentsMotion } from './motion';
  * 위젯 버튼
  */
 export function WidgetIconButton() {
-  const modalState = useAtomValue(modalAtom);
-  const setWidgetState = useSetAtom(modalStateAtom);
+  const { isOpen } = useAtomValue(widgetAtom);
+  const setWidge = useSetAtom(setWidgetState);
 
   // const editTableType = useBoundStore((state) => state.konva.type);
   // const isModalOpen = useBoundStore((state) => state.modal.isOpen);
@@ -37,15 +38,15 @@ export function WidgetIconButton() {
     //   return;
     // }
 
-    setWidgetState({ isOpen: !modalState.isOpen });
+    setWidge({ isOpen: !isOpen });
   }
 
   return (
     <ListBox key='widgetButton' onClick={handleWidgetStatus} isRow={true} isAnimate={false}>
-      <span>{modalState.isOpen ? '닫기' : '열기'}</span>
+      <span>{isOpen ? '닫기' : '열기'}</span>
 
       <div className={styles.iconBox}>
-        <img src={modalState.isOpen ? '' : ''} alt='icon' />
+        <img src={isOpen ? '' : ''} alt='icon' />
       </div>
     </ListBox>
   );

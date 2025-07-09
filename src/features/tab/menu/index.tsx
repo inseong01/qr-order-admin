@@ -74,7 +74,7 @@ export default function MainPageMenuTab() {
   return (
     <>
       {/* 메뉴 탭 */}
-      <motion.ul className={styles.leftBox} variants={listBoxMotion} initial={'notLoad'} animate={'load'}>
+      <motion.ul className={styles.listBox} variants={listBoxMotion} initial={'notLoad'} animate={'load'}>
         {/* 메뉴 항목 */}
         <AnimatePresence>
           {menuCateogoryKeys.length === 0 ? (
@@ -99,16 +99,14 @@ export default function MainPageMenuTab() {
           )}
         </AnimatePresence>
       </motion.ul>
-
-      <li className={styles.rightBox}>
-        {/* 위젯 */}
-        <Widget />
-
-        {/* 모달 */}
-        <MenuModal />
-      </li>
     </>
   );
 }
 
-/* 좌석 탭 구현 진행 */
+// <li className={styles.rightBox}>
+//   {/* 위젯 */}
+//   <Widget />
+
+//   {/* 모달 */}
+//   <MenuModal />
+// </li>
