@@ -1,12 +1,12 @@
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 
-import styles from './index.module.css';
-
 import { modalAtom } from '@/store/atom/modal-atom';
 import { widgetAtomWithReset } from '@/store/atom/widget-atom';
 import { resetIdState } from '@/store/atom/id-atom';
-
+import { setTabModalAtomState } from '@/features/modal/tab/store/atom';
 import Tab from '@/components/ui/tab';
+
+import styles from './index.module.css';
 
 type FooterTab = 'menu' | 'order' | 'table';
 export const footerAtom = atom<FooterTab>('menu');
@@ -14,6 +14,7 @@ export const footerAtom = atom<FooterTab>('menu');
 export default function Footer() {
   const tab = useAtomValue(footerAtom);
   const modalState = useAtomValue(modalAtom);
+  const setTabModalState = useSetAtom(setTabModalAtomState);
   const setFooterTab = useSetAtom(footerAtom);
   const widgetReset = useSetAtom(widgetAtomWithReset);
   const resetId = useSetAtom(resetIdState);
@@ -35,9 +36,7 @@ export default function Footer() {
     // }
 
     setFooterTab(tabTitle);
-
-    // resetCategoryState();
-    // resetItemState();
+    setTabModalState(null);
     widgetReset();
     resetId();
 

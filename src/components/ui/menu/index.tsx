@@ -1,19 +1,17 @@
 import { ReactNode } from 'react';
 import { useSetAtom } from 'jotai';
 
-import styles from './index.module.css';
-
-import { setMenuModalState } from '@/features/modal/menu/store/atom';
-
 import { Menu } from '@/lib/supabase/function/menu';
-
 import { selectIdState } from '@/store/atom/id-atom';
+import { setTabModalAtomState } from '@/features/modal/tab/store/atom';
+
+import styles from './index.module.css';
 
 /**
  * 메뉴 항목 버튼
  */
 export function ListMenu(props: Menu) {
-  const setModalState = useSetAtom(setMenuModalState);
+  const setModalState = useSetAtom(setTabModalAtomState);
   const selectId = useSetAtom(selectIdState);
 
   const title = props.name;
@@ -22,7 +20,7 @@ export function ListMenu(props: Menu) {
 
   const handleClick = () => {
     selectId(menuId);
-    setModalState({ isOpen: true, type: 'update' });
+    setModalState('menu-update');
   };
 
   return (
@@ -40,10 +38,10 @@ export function ListMenu(props: Menu) {
  * 메뉴 추가 버튼
  */
 export function ListMenuAdd() {
-  const setModalState = useSetAtom(setMenuModalState);
+  const setModalState = useSetAtom(setTabModalAtomState);
 
   const handleClick = () => {
-    setModalState({ isOpen: true, type: 'create' });
+    setModalState('menu-create');
   };
 
   return (

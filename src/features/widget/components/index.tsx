@@ -1,20 +1,18 @@
 import { ReactNode } from 'react';
 import { motion } from 'motion/react';
 import { atom, useAtomValue, useSetAtom } from 'jotai';
-// import { useQueryClient } from '@tanstack/react-query';
 
 import { setWidgetState, widgetAtom } from '@/store/atom/widget-atom';
-import { modalAtom } from '@/store/atom/modal-atom';
 
-import styles from './index.module.css';
 import { childMotion, parentsMotion } from './motion';
+import styles from './index.module.css';
 
 /**
  * 위젯 버튼
  */
 export function WidgetIconButton() {
   const { isOpen } = useAtomValue(widgetAtom);
-  const setWidge = useSetAtom(setWidgetState);
+  const setWidget = useSetAtom(setWidgetState);
 
   // const editTableType = useBoundStore((state) => state.konva.type);
   // const isModalOpen = useBoundStore((state) => state.modal.isOpen);
@@ -38,7 +36,7 @@ export function WidgetIconButton() {
     //   return;
     // }
 
-    setWidge({ isOpen: !isOpen });
+    setWidget({ isOpen: !isOpen });
   }
 
   return (
@@ -46,7 +44,7 @@ export function WidgetIconButton() {
       <span>{isOpen ? '닫기' : '열기'}</span>
 
       <div className={styles.iconBox}>
-        <img src={isOpen ? '' : ''} alt='icon' />
+        <img src={isOpen ? '' : ''} alt='widget close icon' />
       </div>
     </ListBox>
   );
@@ -56,13 +54,19 @@ export function WidgetIconButton() {
  * 메뉴 탭 위젯
  */
 export function MenuWidget() {
-  function addMenuCategory() {}
+  const setWidget = useSetAtom(setWidgetState);
 
-  function editMenuCategory() {}
+  function createMenuCategory() {
+    setWidget({ option: 'create-menu-category' });
+  }
+
+  function updateMenuCategory() {
+    setWidget({ option: 'update-menu-category' });
+  }
 
   return (
     <DetectAnimation>
-      <ListBox key='menuWidget1' onClick={addMenuCategory} isRow={false} isAnimate={true}>
+      <ListBox key='menuWidget1' onClick={createMenuCategory} isRow={false} isAnimate={true}>
         <div className={styles.iconBox}>
           <img src='' alt='icon' />
         </div>
@@ -70,7 +74,7 @@ export function MenuWidget() {
         <span>분류 추가</span>
       </ListBox>
 
-      <ListBox key='menuWidget2' onClick={editMenuCategory} isRow={false} isAnimate={true}>
+      <ListBox key='menuWidget2' onClick={updateMenuCategory} isRow={false} isAnimate={true}>
         <div className={styles.iconBox}>
           <img src='' alt='icon' />
         </div>

@@ -1,0 +1,146 @@
+[
+  {
+    "id": "order-item-001",
+    "menu_id": "menu-007",
+    "order_id": "order-001",
+    "quantity": 1
+  },
+  {
+    "id": "order-item-002",
+    "menu_id": "menu-009",
+    "order_id": "order-001",
+    "quantity": 2
+  },
+  {
+    "id": "order-item-003",
+    "menu_id": "menu-013",
+    "order_id": "order-002",
+    "quantity": 1
+  },
+  {
+    "id": "order-item-004",
+    "menu_id": "menu-010",
+    "order_id": "order-003",
+    "quantity": 1
+  },
+  {
+    "id": "order-item-005",
+    "menu_id": "menu-015",
+    "order_id": "order-004",
+    "quantity": 3
+  },
+  {
+    "id": "order-item-006",
+    "menu_id": "menu-017",
+    "order_id": "order-005",
+    "quantity": 1
+  },
+  {
+    "id": "order-item-007",
+    "menu_id": "menu-012",
+    "order_id": "order-006",
+    "quantity": 2
+  },
+  {
+    "id": "order-item-008",
+    "menu_id": "menu-021",
+    "order_id": "order-007",
+    "quantity": 1
+  },
+  {
+    "id": "order-item-009",
+    "menu_id": "menu-019",
+    "order_id": "order-008",
+    "quantity": 1
+  },
+  {
+    "id": "order-item-010",
+    "menu_id": "menu-007",
+    "order_id": "order-009",
+    "quantity": 2
+  },
+  {
+    "id": "order-item-011",
+    "menu_id": "menu-016",
+    "order_id": "order-010",
+    "quantity": 1
+  },
+  {
+    "id": "order-item-012",
+    "menu_id": "menu-018",
+    "order_id": "order-011",
+    "quantity": 1
+  },
+  {
+    "id": "order-item-013",
+    "menu_id": "menu-013",
+    "order_id": "order-012",
+    "quantity": 2
+  },
+  {
+    "id": "order-item-014",
+    "menu_id": "menu-009",
+    "order_id": "order-013",
+    "quantity": 1
+  },
+  {
+    "id": "order-item-015",
+    "menu_id": "menu-015",
+    "order_id": "order-014",
+    "quantity": 1
+  },
+  {
+    "id": "order-item-016",
+    "menu_id": "menu-010",
+    "order_id": "order-015",
+    "quantity": 2
+  },
+  {
+    "id": "order-item-017",
+    "menu_id": "menu-012",
+    "order_id": "order-016",
+    "quantity": 1
+  },
+  {
+    "id": "order-item-018",
+    "menu_id": "menu-017",
+    "order_id": "order-017",
+    "quantity": 3
+  },
+  {
+    "id": "order-item-019",
+    "menu_id": "menu-021",
+    "order_id": "order-018",
+    "quantity": 1
+  },
+  {
+    "id": "order-item-020",
+    "menu_id": "menu-019",
+    "order_id": "order-019",
+    "quantity": 2
+  },
+  {
+    "id": "order-item-021",
+    "menu_id": "menu-007",
+    "order_id": "order-020",
+    "quantity": 1
+  },
+  {
+    "id": "order-item-022",
+    "menu_id": "menu-016",
+    "order_id": "order-021",
+    "quantity": 1
+  },
+  {
+    "id": "order-item-023",
+    "menu_id": "menu-018",
+    "order_id": "order-022",
+    "quantity": 2
+  },
+  {
+    "id": "order-item-024",
+    "menu_id": "menu-013",
+    "order_id": "order-022",
+    "quantity": 1
+  }
+]

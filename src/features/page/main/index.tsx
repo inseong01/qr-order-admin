@@ -1,42 +1,42 @@
 import { Suspense } from 'react';
 import { useAtomValue } from 'jotai';
 
-// import MainPageOrderTab from '../../../features/order/components/order-index';
+import TabModalContainer from '@/features/modal/tab';
+import { tabModalAtom } from '@/features/modal/tab/store/atom';
+import { MenuTabView, OrderTabView, TableTabView } from '@/features/tab';
 import LoadingSpinner from '@/features/load/spinner';
-import MainPageMenuTab from '@/features/tab/menu';
-import MainPageTableTab from '@/features/tab/table';
-import MenuModal from '@/features/modal/menu';
 import Widget from '@/features/widget';
 
 import { footerAtom } from '../footer';
-
 import styles from './index.module.css';
-import TableInfoPannel from '@/features/modal/table';
 
 export default function Main() {
-  const tab = useAtomValue(footerAtom) ?? 'menu';
+  const tab = useAtomValue(footerAtom);
+  const isTabModalNull = useAtomValue(tabModalAtom);
 
   const component = {
-    menu: MainPageMenuTab,
-    table: MainPageTableTab,
-    // order: MainPageOrderTab,
+    menu: MenuTabView,
+    table: TableTabView,
+    order: OrderTabView,
   };
   const MainPageComponent = component[tab];
+  const calcedWidth = isTabModalNull ? 'calc(100% - 350px)' : '100%';
 
   return (
     <main className={styles.main}>
       <Suspense fallback={<LoadingSpinner />}>
         {component ? (
           <>
-            <div className={styles.leftBox}>
+            <div className={styles.leftBox} style={{ width: calcedWidth }}>
               <MainPageComponent />
             </div>
 
             <div className={styles.rightBox}>
+              {/* 위젯 */}
               <Widget />
 
-              {tab === 'menu' && <MenuModal />}
-              {tab === 'table' && <TableInfoPannel />}
+              {/* 탭 모달 */}
+              <TabModalContainer />
             </div>
           </>
         ) : (

@@ -9,7 +9,7 @@ type Widget = {
 
 const initialWidget: Widget = {
   isOpen: false,
-  option: '',
+  option: null,
 };
 
 // 위젯 상태
@@ -26,8 +26,8 @@ export const widgetAtomWithReset = atom(
 // 위젯 상태 변경
 export const setWidgetState = atom(
   (get) => get(widgetAtom).option,
-  (get, set, { isOpen, option }: { isOpen: boolean; option?: Options }) => {
+  (get, set, { isOpen, option }: { isOpen?: boolean; option?: Options }) => {
     const currentWidget = get(widgetAtom);
-    set(widgetAtom, { isOpen, option: option ? option : currentWidget.option });
+    set(widgetAtom, { isOpen: isOpen ? isOpen : currentWidget.isOpen, option: option ? option : currentWidget.option });
   }
 );

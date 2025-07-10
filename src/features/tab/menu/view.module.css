@@ -1,0 +1,24 @@
+.listBox {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: auto;
+}
+
+.display {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.category {
+  text-align: start;
+}
+
+.menu {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
