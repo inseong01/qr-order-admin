@@ -1,8 +1,12 @@
 import { ReactNode } from 'react';
 import { motion } from 'motion/react';
-import { atom, useAtomValue, useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 
-import { setWidgetState, widgetAtom } from '@/store/atom/widget-atom';
+import { setWidgetAtomState, widgetAtom } from '@/store/atom/widget-atom';
+import { createTableAtom, setTableAtom, tableAtom } from '@/features/tab/table/store/table-atom';
+import { createNewTable } from '@/features/tab/table/components/konva/function/konva';
+import { StageSize } from '@/features/tab/table/components/konva';
+import { requestAlertAtom, setRequestAlertAtom } from '@/features/alert/request/store/atom';
 
 import { childMotion, parentsMotion } from './motion';
 import styles from './index.module.css';
@@ -12,31 +16,11 @@ import styles from './index.module.css';
  */
 export function WidgetIconButton() {
   const { isOpen } = useAtomValue(widgetAtom);
-  const setWidget = useSetAtom(setWidgetState);
-
-  // const editTableType = useBoundStore((state) => state.konva.type);
-  // const isModalOpen = useBoundStore((state) => state.modal.isOpen);
-  // const submitIsError = useBoundStore((state) => state.submit.isError);
-  // const resetItemState = useBoundStore((state) => state.resetItemState);
-  // const resetKonvaState = useBoundStore((state) => state.resetKonvaState);
-
-  // const queryClient = useQueryClient();
-  // const refetch = async () => await queryClient.refetchQueries({ queryKey: ['tableList'] });
+  const setWidgetState = useSetAtom(setWidgetAtomState);
 
   // 위젯 열기/닫기
   function handleWidgetStatus() {
-    // if (submitIsError) return;
-    // if (isModalOpen) return;
-
-    // 수정 중 취소하기
-    // if (editTableType) {
-    //   resetItemState();
-    //   resetKonvaState();
-    //   refetch(); // 원본 데이터 다시 불러오기
-    //   return;
-    // }
-
-    setWidget({ isOpen: !isOpen });
+    setWidgetState({ isOpen: !isOpen });
   }
 
   return (
@@ -54,14 +38,18 @@ export function WidgetIconButton() {
  * 메뉴 탭 위젯
  */
 export function MenuWidget() {
-  const setWidget = useSetAtom(setWidgetState);
+  const setWidgetState = useSetAtom(setWidgetAtomState);
 
   function createMenuCategory() {
-    setWidget({ option: 'create-menu-category' });
+    setWidgetState({ option: 'create-menu-category' });
   }
 
   function updateMenuCategory() {
-    setWidget({ option: 'update-menu-category' });
+    setWidgetState({ option: 'update-menu-category' });
+  }
+
+  function deleteMenuCategory() {
+    setWidgetState({ option: 'delete-menu-category' });
   }
 
   return (
@@ -81,28 +69,58 @@ export function MenuWidget() {
 
         <span>분류 수정</span>
       </ListBox>
+
+      <ListBox key='menuWidget3' onClick={deleteMenuCategory} isRow={false} isAnimate={true}>
+        <div className={styles.iconBox}>
+          <img src='' alt='icon' />
+        </div>
+
+        <span>분류 삭제</span>
+      </ListBox>
     </DetectAnimation>
   );
 }
 
-export const requestAlertAtom = atom(true);
-
 /**
  * 테이블 탭 위젯
  */
+
 export function TableWidget() {
   const isAlertOn = useAtomValue(requestAlertAtom);
-  const setAlertStatus = useSetAtom(requestAlertAtom);
+  const setAlertStatus = useSetAtom(setRequestAlertAtom);
+  const { tables } = useAtomValue(tableAtom);
+  const setTableState = useSetAtom(setTableAtom);
+  const addNewTable = useSetAtom(createTableAtom);
 
   function handleAlert() {
-    setAlertStatus((prev) => !prev);
+    setAlertStatus(!isAlertOn);
   }
 
-  function deleteTable() {}
+  function deleteTable() {
+    setTableState({ editMode: 'delete' });
+    // setTableState({ isEditMode: true });
+    setAlertStatus(false);
+  }
 
-  function editTable() {}
+  function updateTable() {
+    setTableState({ editMode: 'update' });
+    // setTableState({ isEditMode: true });
+    setAlertStatus(false);
+  }
 
-  function createTable() {}
+  function createTable() {
+    // NOTE: stageSize를 직접 가져올 수 없으므로, 임시로 window 크기를 사용합니다.
+    // 이상적으로는 stageSize도 atom으로 관리하는 것이 좋습니다.
+    const pseudoStageSize: StageSize = {
+      stageWidth: window.innerWidth,
+      stageHeight: window.innerHeight,
+    };
+    const newTable = createNewTable(pseudoStageSize, tables);
+    addNewTable(newTable);
+    setTableState({ editMode: 'create' });
+    // setTableState({ isEditMode: true });
+    setAlertStatus(false);
+  }
 
   return (
     <DetectAnimation>
@@ -114,15 +132,15 @@ export function TableWidget() {
         <span>알림 {isAlertOn ? '끄기' : '켜기'}</span>
       </ListBox>
 
-      <ListBox key='tableWidget2' onClick={deleteTable} isRow={false} isAnimate={true}>
+      <ListBox key='tableWidget2' onClick={createTable} isRow={false} isAnimate={true}>
         <div className={styles.iconBox}>
           <img src='' alt='icon' />
         </div>
 
-        <span>좌석 삭제</span>
+        <span>좌석 생성</span>
       </ListBox>
 
-      <ListBox key='tableWidget3' onClick={editTable} isRow={false} isAnimate={true}>
+      <ListBox key='tableWidget3' onClick={updateTable} isRow={false} isAnimate={true}>
         <div className={styles.iconBox}>
           <img src='' alt='icon' />
         </div>
@@ -130,12 +148,12 @@ export function TableWidget() {
         <span>좌석 수정</span>
       </ListBox>
 
-      <ListBox key='tableWidget4' onClick={createTable} isRow={false} isAnimate={true}>
+      <ListBox key='tableWidget4' onClick={deleteTable} isRow={false} isAnimate={true}>
         <div className={styles.iconBox}>
           <img src='' alt='icon' />
         </div>
 
-        <span>좌석 생성</span>
+        <span>좌석 삭제</span>
       </ListBox>
     </DetectAnimation>
   );

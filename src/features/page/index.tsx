@@ -3,6 +3,7 @@ import { useSetAtom } from 'jotai';
 
 import { detectViewportModeAtom } from '../../store/atom/window-atom';
 import { openSubmissionStatusAlertAtom } from '../alert/popup/store/atom';
+import WidgetCateogryModal from '../modal/widget';
 import ConfirmModal from '../modal/confirm';
 import SubmissionStatusAlert from '../alert/popup';
 import Header from './header';
@@ -58,6 +59,7 @@ function SuccessComponent() {
       <ConfirmModal />
 
       {/* 위젯 모달 */}
+      <WidgetCateogryModal />
     </>
   );
 }

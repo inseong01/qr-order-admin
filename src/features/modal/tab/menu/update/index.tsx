@@ -33,7 +33,12 @@ export default function UpdateMenuModal() {
     const submitType = submitter.name;
     const title = submitType === 'update' ? '메뉴를 수정하겠습니까?' : '메뉴를 삭제하겠습니끼?';
     const onConfirm = () => {
+      // TODO: 실제 제출 로직 구현 (예: API 호출)
+      // delete, upsert: supabase menu 테이블로 값 전달 (id 또는 수정된 정보)
       console.log('menuId: ', menuId);
+      // 처리 완료 되면 선택 초기화 O
+      // 그렇지 않으면 선택 초기화 X
+      // 모달 창 닫으면 선택 초기화 O
     };
     showConfirmModal({ title, onConfirm });
   };

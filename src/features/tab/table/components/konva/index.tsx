@@ -1,35 +1,29 @@
-
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAtomValue } from 'jotai';
 import { motion } from 'motion/react';
 
-import { Table } from '@/lib/supabase/function/table';
 import { debounce } from '@/utils/function/optimize';
 import { footerAtom } from '@/features/page/footer';
-import mockData from '@/mock/table.test.json';
 
+import { tableAtom } from '../../store/table-atom';
 import TableStage from './stage';
 import styles from './index.module.css';
-
-// TODO: Konva 관련 로직 및 상태 관리 구현 필요
-// import { createKonvaInitTable } from './function/konva';
-// import { useQueryTableList } from '@/hooks/use-query/query';
 
 export type StageSize = {
   stageWidth: number;
   stageHeight: number;
 };
-export type SetClientTableList = Dispatch<SetStateAction<Table[]>>;
 
 export default function KonvaSection() {
   const tab = useAtomValue(footerAtom);
+  const { tables } = useAtomValue(tableAtom);
+
   const tableBoxRef = useRef<HTMLDivElement>(null);
 
   const [stageSize, setStageSize] = useState<StageSize>({
     stageWidth: window.innerWidth,
     stageHeight: window.innerHeight,
   });
-  const [clientTableList, setClientTableList] = useState<Table[]>(mockData);
 
   // 기능: Konva Stage 크기 동적 조절
   useEffect(() => {
@@ -64,10 +58,10 @@ export default function KonvaSection() {
 
   return (
     <motion.div ref={tableBoxRef} className={styles.table} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-      {clientTableList.length === 0 ? (
+      {tables.length === 0 ? (
         <div className={styles.title}>위젯에서 테이블을 생성해주세요</div>
       ) : (
-        <TableStage stageSize={stageSize} clientTableList={clientTableList} setClientTableList={setClientTableList} />
+        <TableStage stageSize={stageSize} />
       )}
     </motion.div>
   );

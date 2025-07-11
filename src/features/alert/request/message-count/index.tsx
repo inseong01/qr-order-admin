@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import styles from './../index.module.css';
 
 export default function MessageCountPannel({ count }: { count: number }) {
+  console.log(count);
   return (
     <ul className={`${styles.reqeustMsg} ${styles.hidden}`}>
       <AnimatePresence mode='popLayout'>

@@ -29,22 +29,6 @@
   color: white;
 }
 
-/* .formSize {
-  width: 495px;
-  height: 534px;
-
-  padding: 16px;
-  border: 1px solid #d8d8d8;
-  border-radius: 15px;
-  background-color: white;
-  overflow: hidden;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
-} */
-
 @media (max-width: 720px) {
   .dialog {
     width: 100%;
@@ -63,10 +47,3 @@
     color: #8d8d8d;
   }
 }
-
-/* @media (max-width: 720px) {
-  .formSize {
-    width: 100%;
-    height: auto;
-  }
-} */

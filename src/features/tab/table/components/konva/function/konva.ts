@@ -1,7 +1,8 @@
-
 import { v4 as uuidv4 } from 'uuid';
-import { StageSize } from '..';
+
 import { Table } from '@/lib/supabase/function/table';
+
+import { StageSize } from '..';
 
 /**
  * 새로운 테이블 객체를 생성합니다.
@@ -12,7 +13,7 @@ import { Table } from '@/lib/supabase/function/table';
 export function createNewTable(stageSize: StageSize, clientTableList: Table[]) {
   // 사용 중이지 않은 가장 낮은 테이블 번호를 찾습니다.
   let newTableNumber = 1;
-  const usedNumbers = new Set(clientTableList.map(t => t.number));
+  const usedNumbers = new Set(clientTableList.map((t) => t.number));
   while (usedNumbers.has(newTableNumber)) {
     newTableNumber++;
   }
@@ -20,8 +21,6 @@ export function createNewTable(stageSize: StageSize, clientTableList: Table[]) {
   const newTable: Table = {
     id: uuidv4(),
     number: newTableNumber,
-    is_active: true,
-    created_at: new Date().toISOString(),
     meta: {
       x: stageSize.stageWidth / 2,
       y: stageSize.stageHeight / 2 - 130,

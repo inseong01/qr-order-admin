@@ -4,8 +4,6 @@ import { confirmModalAtom } from '../store/atom';
 
 type ShowConfirmModalParams = {
   title: string;
-  subTitle?: string;
-  caution?: string;
   onConfirm: () => void;
 };
 
@@ -13,12 +11,10 @@ type ShowConfirmModalParams = {
 export const useConfirmModal = () => {
   const setConfirmModal = useSetAtom(confirmModalAtom);
 
-  const showConfirmModal = ({ title, subTitle, caution, onConfirm }: ShowConfirmModalParams) => {
+  const showConfirmModal = ({ title, onConfirm }: ShowConfirmModalParams) => {
     setConfirmModal({
       isOpen: true,
       title,
-      subTitle,
-      caution,
       onConfirm,
     });
   };
