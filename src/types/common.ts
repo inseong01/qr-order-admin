@@ -34,29 +34,3 @@ type MenuOrderList = {
   price: number;
   amount: number;
 };
-
-// table layout
-type Line = {
-  points: [number, number, number, number];
-};
-
-type Bottom = {
-  y: number;
-  line: Line;
-  priceText: {
-    width: number;
-  };
-};
-
-export type TableLayout = {
-  x: number;
-  y: number;
-  rec: {
-    width: number;
-    height: number;
-  };
-  tableText: {
-    width: number;
-  };
-  bottom: Bottom;
-};

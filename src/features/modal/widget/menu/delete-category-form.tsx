@@ -28,7 +28,6 @@ export default function DeleteCategoryForm() {
     const onConfirm = () => {
       // TODO: 삭제 로직 구현
       // DELETE: supabase menu-category 테이블로 id string[] 전달
-      console.log('분류 삭제:', selectedCategories);
       // 처리 완료 되면 선택 초기화 O
       // 그렇지 않으면 선택 초기화 X
       // 모달 창 닫으면 선택 초기화 O
@@ -47,8 +46,6 @@ export default function DeleteCategoryForm() {
       }
     });
   }
-
-  console.log(selectedCategories);
 
   return (
     <form className={styles.submitForm} onSubmit={handleSubmit}>

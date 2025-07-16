@@ -41,7 +41,7 @@ export const addTable = async (newTable: NewTable) => {
  * @param updatedTable - 수정할 테이블 정보
  * @returns
  */
-export const updateTable = async (id: number, updatedTable: UpdateTable) => {
+export const updateTable = async (id: string, updatedTable: UpdateTable) => {
   const { error } = await supabase.from('table').update(updatedTable).eq('id', id);
   if (error) {
     console.error(error.message);
@@ -55,7 +55,7 @@ export const updateTable = async (id: number, updatedTable: UpdateTable) => {
  * @param id - 삭제할 테이블 id
  * @returns
  */
-export const deleteTable = async (id: number) => {
+export const deleteTable = async (id: string) => {
   const { error } = await supabase.from('table').delete().eq('id', id);
   if (error) {
     console.error(error.message);

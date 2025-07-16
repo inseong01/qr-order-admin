@@ -3,10 +3,25 @@ import { motion } from 'motion/react';
 import { useAtomValue, useSetAtom } from 'jotai';
 
 import { setWidgetAtomState, widgetAtom } from '@/store/atom/widget-atom';
-import { createTableAtom, setTableAtom, tableAtom } from '@/features/tab/table/store/table-atom';
+import { windowStateAtom } from '@/store/atom/window-atom';
+import {
+  resetTablEditAtom,
+  createTableAtom,
+  setTableAtom,
+  tableAtom,
+  toggleEditModeAtom,
+  tableAtomWithReset,
+} from '@/features/tab/table/store/table-atom';
 import { createNewTable } from '@/features/tab/table/components/konva/function/konva';
-import { StageSize } from '@/features/tab/table/components/konva';
 import { requestAlertAtom, setRequestAlertAtom } from '@/features/alert/request/store/atom';
+
+import LIGHT_LIST_UP_ICON from '@/assets/icon/light-list-up.svg';
+import LIGHT_ADD_LIST_ICON from '@/assets/icon/light-add-list.svg';
+import LIGHT_DELETE_ICON from '@/assets/icon/light-delete.svg';
+import LIGHT_EDIT_ICON from '@/assets/icon/light-edit.svg';
+import LIGHT_PLUS_ICON from '@/assets/icon/light-plus.svg';
+import LIGHT_BACK_ICON from '@/assets/icon/light-back-icon.svg';
+import LIGHT_TABLE_ICON from '@/assets/icon/light-table-icon.svg';
 
 import { childMotion, parentsMotion } from './motion';
 import styles from './index.module.css';
@@ -27,8 +42,8 @@ export function WidgetIconButton() {
     <ListBox key='widgetButton' onClick={handleWidgetStatus} isRow={true} isAnimate={false}>
       <span>{isOpen ? '닫기' : '열기'}</span>
 
-      <div className={styles.iconBox}>
-        <img src={isOpen ? '' : ''} alt='widget close icon' />
+      <div className={styles.openIconBox}>
+        <img src={LIGHT_LIST_UP_ICON} alt='widget close icon' data-flip={isOpen} />
       </div>
     </ListBox>
   );
@@ -56,7 +71,7 @@ export function MenuWidget() {
     <DetectAnimation>
       <ListBox key='menuWidget1' onClick={createMenuCategory} isRow={false} isAnimate={true}>
         <div className={styles.iconBox}>
-          <img src='' alt='icon' />
+          <img src={LIGHT_ADD_LIST_ICON} alt='icon' />
         </div>
 
         <span>분류 추가</span>
@@ -64,7 +79,7 @@ export function MenuWidget() {
 
       <ListBox key='menuWidget2' onClick={updateMenuCategory} isRow={false} isAnimate={true}>
         <div className={styles.iconBox}>
-          <img src='' alt='icon' />
+          <img src={LIGHT_EDIT_ICON} alt='icon' />
         </div>
 
         <span>분류 수정</span>
@@ -72,7 +87,7 @@ export function MenuWidget() {
 
       <ListBox key='menuWidget3' onClick={deleteMenuCategory} isRow={false} isAnimate={true}>
         <div className={styles.iconBox}>
-          <img src='' alt='icon' />
+          <img src={LIGHT_DELETE_ICON} alt='icon' />
         </div>
 
         <span>분류 삭제</span>
@@ -87,73 +102,103 @@ export function MenuWidget() {
 
 export function TableWidget() {
   const isAlertOn = useAtomValue(requestAlertAtom);
+  const { mainSection } = useAtomValue(windowStateAtom);
+  const { tables, tableIds, isEditing } = useAtomValue(tableAtom);
   const setAlertStatus = useSetAtom(setRequestAlertAtom);
-  const { tables } = useAtomValue(tableAtom);
   const setTableState = useSetAtom(setTableAtom);
   const addNewTable = useSetAtom(createTableAtom);
-
-  function handleAlert() {
-    setAlertStatus(!isAlertOn);
-  }
+  const resetTableEditMode = useSetAtom(resetTablEditAtom);
+  const toggleEditMode = useSetAtom(toggleEditModeAtom);
+  const resetTableState = useSetAtom(tableAtomWithReset);
 
   function deleteTable() {
+    resetTableEditMode();
     setTableState({ editMode: 'delete' });
-    // setTableState({ isEditMode: true });
     setAlertStatus(false);
   }
 
   function updateTable() {
+    resetTableEditMode();
     setTableState({ editMode: 'update' });
-    // setTableState({ isEditMode: true });
     setAlertStatus(false);
   }
 
   function createTable() {
-    // NOTE: stageSize를 직접 가져올 수 없으므로, 임시로 window 크기를 사용합니다.
-    // 이상적으로는 stageSize도 atom으로 관리하는 것이 좋습니다.
-    const pseudoStageSize: StageSize = {
-      stageWidth: window.innerWidth,
-      stageHeight: window.innerHeight,
+    const pseudoStageSize = {
+      stageWidth: mainSection.width,
+      stageHeight: mainSection.height,
     };
     const newTable = createNewTable(pseudoStageSize, tables);
     addNewTable(newTable);
     setTableState({ editMode: 'create' });
-    // setTableState({ isEditMode: true });
     setAlertStatus(false);
+  }
+
+  function saveTableData() {
+    if (!tableIds.length) {
+      alert('저장할 데이터가 없습니다.');
+      return;
+    }
+    console.log('save!');
+
+    // editMode에 따라 데이터 전달
+  }
+
+  function handleEditMode() {
+    toggleEditMode();
+    if (isEditing) {
+      resetTableState();
+    }
   }
 
   return (
     <DetectAnimation>
-      <ListBox key='tableWidget1' onClick={handleAlert} isRow={false} isAnimate={true}>
+      {tableIds.length ? (
+        <ListBox key='tableWidget0' onClick={saveTableData} isRow={false} isAnimate={true}>
+          <div className={styles.iconBox}>
+            <img src='' alt='icon' />
+          </div>
+
+          <span>저장하기</span>
+        </ListBox>
+      ) : null}
+
+      {isEditing && (
+        <ListBox key='tableWidget1' onClick={createTable} isRow={false} isAnimate={true}>
+          <div className={styles.iconBox}>
+            <img src={LIGHT_ADD_LIST_ICON} alt='icon' />
+          </div>
+
+          <span>좌석 추가</span>
+        </ListBox>
+      )}
+
+      {isEditing && (
+        <ListBox key='tableWidget2' onClick={updateTable} isRow={false} isAnimate={true}>
+          <div className={styles.iconBox}>
+            <img src={LIGHT_EDIT_ICON} alt='icon' />
+          </div>
+
+          <span>좌석 수정</span>
+        </ListBox>
+      )}
+
+      {isEditing && (
+        <ListBox key='tableWidget3' onClick={deleteTable} isRow={false} isAnimate={true}>
+          <div className={styles.iconBox}>
+            <img src={LIGHT_DELETE_ICON} alt='icon' />
+          </div>
+
+          <span>좌석 삭제</span>
+        </ListBox>
+      )}
+
+      <ListBox key='tableWidget4' onClick={handleEditMode} isRow={false} isAnimate={true}>
         <div className={styles.iconBox}>
-          <img src='' alt='icon' />
+          <img src={!isEditing ? LIGHT_TABLE_ICON : LIGHT_BACK_ICON} alt='icon' />
         </div>
 
-        <span>알림 {isAlertOn ? '끄기' : '켜기'}</span>
-      </ListBox>
-
-      <ListBox key='tableWidget2' onClick={createTable} isRow={false} isAnimate={true}>
-        <div className={styles.iconBox}>
-          <img src='' alt='icon' />
-        </div>
-
-        <span>좌석 생성</span>
-      </ListBox>
-
-      <ListBox key='tableWidget3' onClick={updateTable} isRow={false} isAnimate={true}>
-        <div className={styles.iconBox}>
-          <img src='' alt='icon' />
-        </div>
-
-        <span>좌석 수정</span>
-      </ListBox>
-
-      <ListBox key='tableWidget4' onClick={deleteTable} isRow={false} isAnimate={true}>
-        <div className={styles.iconBox}>
-          <img src='' alt='icon' />
-        </div>
-
-        <span>좌석 삭제</span>
+        <span>{isEditing ? '편집 취소' : '좌석 편집'}</span>
       </ListBox>
     </DetectAnimation>
   );

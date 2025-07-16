@@ -42,9 +42,7 @@ function OrderCardSubmitButton({ order, type }: OrderCardSubmitButtonProps) {
       // if (isSubmit) return;
       // if (submitIsError) return;
       const title = type === 'complete' ? '주문이 완료되었습니까?' : '주문을 삭제하겠습니까?';
-      const onConfirm = () => {
-        console.log('order: ', order);
-      };
+      const onConfirm = () => {};
       showConfirmModal({ title, onConfirm });
 
       // changeSubmitMsgType({ msgType: type });

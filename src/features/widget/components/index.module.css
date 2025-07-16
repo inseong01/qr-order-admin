@@ -24,12 +24,27 @@
 }
 
 .iconBox {
-  width: 15px;
-  height: 15px;
+  width: 25px;
+  height: 25px;
 
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.openIconBox {
+  width: 10px;
+  height: 10px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.openIconBox [data-flip='true'] {
+  transform: rotateX(180deg);
+}
+.openIconBox [data-flip='false'] {
+  transform: rotateX(0);
 }
 
 .animateBox {

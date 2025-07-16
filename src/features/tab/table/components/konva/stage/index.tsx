@@ -1,44 +1,45 @@
-import { useAtom } from 'jotai';
-import { useMemo, useRef } from 'react';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { useEffect, useMemo, useRef } from 'react';
 import { Layer, Rect, Stage, Text } from 'react-konva';
 import Konva from 'konva';
 
-import { tableAtom } from '../../../store/table-atom';
-import TableLayer from '../layer';
-import { StageSize } from '..';
+import { windowStateAtom } from '@/store/atom/window-atom';
 
-export default function TableStage({ stageSize }: { stageSize: StageSize }) {
+import { setTableStageAtom, tableAtom } from '../../../store/table-atom';
+import TableLayer from '../layer';
+
+export default function TableStage() {
   const stageRef = useRef<Konva.Stage>(null);
-  const [{ editMode, tables, tableIds }, setTableState] = useAtom(tableAtom);
-  // const [{ isEditMode, tables: clientTableList }, setTableState] = useAtom(tableAtom);
+  const { editMode, tables } = useAtomValue(tableAtom);
+  const { mainSection } = useAtomValue(windowStateAtom);
+  const setTableStage = useSetAtom(setTableStageAtom);
 
   const stageScale = useMemo(() => {
     const isMobile = window.innerWidth <= 720 || window.innerHeight <= 720;
     return isMobile ? 0.49 : 1;
-  }, [stageSize]);
+  }, [mainSection]);
 
-  // 기능: 편집 모드에 따른 배경 애니메이션 (주석 처리된 원본 로직)
-  // useEffect(() => { ... });
-  console.log('tableIds ', tableIds);
+  useEffect(() => {
+    if (!stageRef.current) return;
+    setTableStage(stageRef.current);
+  }, [stageRef]);
+
   return (
     <Stage
       ref={stageRef}
-      width={stageSize.stageWidth}
-      height={stageSize.stageHeight}
+      width={mainSection.width}
+      height={mainSection.height}
       scaleX={stageScale}
       scaleY={stageScale}
       draggable={!editMode}
-      // TODO: 드래그 및 더블클릭 이벤트 핸들러 구현 필요
-      // onDragEnd={...}
-      // onDblClick={...}
     >
       {/* 편집 모드일 때 나타나는 배경 */}
       <Layer opacity={editMode ? 1 : 0}>
-        <Rect width={stageSize.stageWidth} height={stageSize.stageHeight} cornerRadius={15} fill='#b4b4b4' />
+        <Rect width={mainSection.width} height={mainSection.height} cornerRadius={12} fill='#b4b4b4' />
         <Text
           text='배경 내에서 좌석을 수정할 수 있습니다'
-          width={stageSize.stageWidth}
-          height={stageSize.stageHeight}
+          width={mainSection.width}
+          height={mainSection.height}
           align='center'
           verticalAlign='middle'
           fontSize={20}

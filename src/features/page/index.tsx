@@ -1,16 +1,20 @@
 import { useEffect } from 'react';
-import { useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 
-import { detectViewportModeAtom } from '../../store/atom/window-atom';
+import { debounce } from '@/utils/function/optimize';
+
+import { detectViewportModeAtom, resizeMainSectionAtom } from '../../store/atom/window-atom';
 import { openSubmissionStatusAlertAtom } from '../alert/popup/store/atom';
+import SubmissionStatusAlert from '../alert/popup';
 import WidgetCateogryModal from '../modal/widget';
 import ConfirmModal from '../modal/confirm';
-import SubmissionStatusAlert from '../alert/popup';
 import Header from './header';
-import Footer from './footer';
 import Main from './main';
+import Footer, { footerAtom } from './footer';
 
 export default function PageWrap({ dataState }: { dataState: string }) {
+  const tab = useAtomValue(footerAtom);
+  const resizeMainSection = useSetAtom(resizeMainSectionAtom);
   const detectViewportMode = useSetAtom(detectViewportModeAtom);
   const openSubmissionStatusAlert = useSetAtom(openSubmissionStatusAlertAtom);
 
@@ -18,16 +22,19 @@ export default function PageWrap({ dataState }: { dataState: string }) {
   useEffect(() => {
     openSubmissionStatusAlert('안녕하세요'); // 제출 처리 결과 알림
     detectViewportMode(); // 초기 뷰포트 모드 상태 할당
-
-    function detectViewportOnWindow() {
-      detectViewportMode();
-    }
-    window.addEventListener('resize', detectViewportOnWindow);
-
+    window.addEventListener('resize', detectViewportMode);
     return () => {
-      window.removeEventListener('resize', detectViewportOnWindow);
+      window.removeEventListener('resize', detectViewportMode);
     };
   }, []);
+
+  // main section 크기 동적 조절
+  useEffect(() => {
+    resizeMainSection();
+    const debouncedResize = debounce(resizeMainSection, 200);
+    window.addEventListener('resize', debouncedResize);
+    return () => window.removeEventListener('resize', debouncedResize);
+  }, [tab]);
 
   if (dataState === 'pending') {
     return <></>;

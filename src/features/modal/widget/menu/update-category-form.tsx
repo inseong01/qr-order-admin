@@ -28,7 +28,6 @@ export default function UpdateCategoryForm() {
     const onConfirm = () => {
       // TODO: 삭제 로직 구현
       // upsert: supabase menu-category 테이블로 { id, title }[] 전달
-      console.log('분류 수정:', selectedCategories);
       // 처리 완료 되면 선택 초기화 O
       // 그렇지 않으면 선택 초기화 X
       // 모달 창 닫으면 선택 초기화 O
@@ -62,7 +61,6 @@ export default function UpdateCategoryForm() {
       };
     });
   }
-  console.log(selectedCategories);
 
   return (
     <form className={styles.submitForm} onSubmit={handleSubmit}>

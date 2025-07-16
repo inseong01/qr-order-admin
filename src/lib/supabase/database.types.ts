@@ -1,3 +1,5 @@
+import { TableMeta } from '@/features/tab/table/components/konva/common/types';
+
 export type Json = string | number | boolean | { [key: string]: Json | undefined } | Json[];
 
 export type Database = {
@@ -215,17 +217,17 @@ export type Database = {
       table: {
         Row: {
           id: string;
-          meta: Json;
+          meta: TableMeta;
           number: number;
         };
         Insert: {
           id?: string;
-          meta?: Json | null;
+          meta?: TableMeta | null;
           number: number;
         };
         Update: {
           id?: string;
-          meta?: Json | null;
+          meta?: TableMeta | null;
           number?: number;
         };
         Relationships: [];

@@ -2,11 +2,10 @@ import { useRef } from 'react';
 import { useAtomValue } from 'jotai';
 import { AnimatePresence, motion } from 'motion/react';
 
-import { footerAtom } from '../page/footer';
-
 import { windowStateAtom } from '@/store/atom/window-atom';
 import { widgetAtom } from '@/store/atom/widget-atom';
 
+import { footerAtom } from '../page/footer';
 import styles from './widget.module.css';
 
 import { MenuWidget, TableWidget, WidgetIconButton } from './components';
