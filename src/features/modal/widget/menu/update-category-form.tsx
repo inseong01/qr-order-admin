@@ -1,38 +1,58 @@
 import { ChangeEvent } from 'react';
 import { atom, useAtom, useSetAtom } from 'jotai';
 
-import categoryDummy from '@/mock/menu_category.test.json';
+import { useQuery } from '@tanstack/react-query';
+
 import { setWidgetAtomState } from '@/store/atom/widget-atom';
+import { MENU_CATEGORIES_QUERY_KEY } from '@/hooks/use-query/query-client';
+import { MenuCategory, updateMenuCategory } from '@/lib/supabase/function/menu-category';
+import { openSubmissionStatusAlertAtom } from '@/features/alert/popup/store/atom';
+import validate from '@/utils/function/validate';
 
 import { useConfirmModal } from '../../confirm/hook/use-confirm-modal';
 import styles from './update-category-form.module.css';
 
 // 분류 편집 폼의 상태를 관리하는 Atoms
 const selectedCategoriesAtom = atom<Record<string, any>>({}); // 선택된 분류의 ID, title 저장
-const categoryListAtom = atom(categoryDummy);
 
 /**
  * 기존 메뉴 분류를 편집하는 컴포넌트입니다.
  * 선택된 항목에 대한 자체 상태를 관리합니다.
  */
 export default function UpdateCategoryForm() {
-  const [categoryList] = useAtom(categoryListAtom);
+  const categories = useQuery<MenuCategory[]>({ queryKey: MENU_CATEGORIES_QUERY_KEY });
   const [selectedCategories, setSelectedCategories] = useAtom(selectedCategoriesAtom);
   const { showConfirmModal } = useConfirmModal();
   const setWidgetState = useSetAtom(setWidgetAtomState);
+  const openSubmissionStatusAlert = useSetAtom(openSubmissionStatusAlertAtom);
 
+  /* 비즈니스 로직 */
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setWidgetState({ option: '' });
+
     const title = '선택한 분류를 수정하겠습니까?';
-    const onConfirm = () => {
-      // TODO: 삭제 로직 구현
-      // upsert: supabase menu-category 테이블로 { id, title }[] 전달
-      // 처리 완료 되면 선택 초기화 O
-      // 그렇지 않으면 선택 초기화 X
-      // 모달 창 닫으면 선택 초기화 O
-      setSelectedCategories([]); // 선택 초기화
+
+    const onConfirm = async () => {
+      const updatedCategories = Object.values(selectedCategories);
+      const { success, data, error } = await validate.updateCategoryValue(updatedCategories); // 값 검증
+
+      if (!success) {
+        const message = error?.issues[0].message;
+        alert(message);
+        return;
+      }
+
+      try {
+        await updateMenuCategory(data); // supabase 전달
+        openSubmissionStatusAlert('수정되었습니다'); // 데이터 처리 상태 알림
+      } catch (e) {
+        console.log(e);
+        openSubmissionStatusAlert('오류가 발생했습니다');
+      }
     };
+
+    setSelectedCategories([]);
     showConfirmModal({ title, onConfirm });
   };
 
@@ -42,7 +62,7 @@ export default function UpdateCategoryForm() {
       if (checked) {
         return {
           ...prev,
-          [id]: { title: '' },
+          [id]: { id, title: '' },
         };
       } else {
         const updated = { ...prev };
@@ -57,7 +77,7 @@ export default function UpdateCategoryForm() {
     setSelectedCategories((prev) => {
       return {
         ...prev,
-        [id]: { value },
+        [id]: { id, title: value },
       };
     });
   }
@@ -70,28 +90,28 @@ export default function UpdateCategoryForm() {
 
         {/* 목록 */}
         <ul className={styles.submitInfo}>
-          {categoryList.map((category) => (
-            <li key={category.id} className={styles.list}>
-              <label htmlFor={category.id} className={styles.left}>
-                <span>{category.title}</span>
+          {categories.data?.map(({ id, title }) => (
+            <li key={id} className={styles.list}>
+              <label htmlFor={id} className={styles.left}>
+                <span>{title}</span>
 
                 <input
                   type='checkbox'
-                  id={category.id}
+                  id={id}
                   name='check'
                   className={styles.check}
-                  checked={Object.hasOwn(selectedCategories, category.id)}
+                  checked={Object.hasOwn(selectedCategories, id)}
                   onChange={handleCheckboxChange}
                 />
               </label>
 
-              {Object.hasOwn(selectedCategories, category.id) && (
+              {Object.hasOwn(selectedCategories, id) && (
                 <input
                   type='text'
-                  id={category.id}
+                  id={id}
                   name='title'
                   className={styles.right}
-                  value={selectedCategories[category.id].value}
+                  value={selectedCategories[id]?.title ?? ''}
                   onChange={handleTyping}
                 />
               )}

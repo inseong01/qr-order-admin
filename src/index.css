@@ -90,10 +90,10 @@ select {
   border: 1px solid #ccc;
   border-radius: 8px;
 
-  background-image: url('your-arrow-icon.svg');
+  background-image: url('assets/icon/light-list-down.svg');
   background-repeat: no-repeat;
-  background-position: right 0.8em center;
-  background-size: 1em;
+  background-position: right 0.5em center;
+  background-size: 0.8em;
   padding-right: 2em;
 
   cursor: pointer;

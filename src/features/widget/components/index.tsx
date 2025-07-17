@@ -19,7 +19,6 @@ import LIGHT_LIST_UP_ICON from '@/assets/icon/light-list-up.svg';
 import LIGHT_ADD_LIST_ICON from '@/assets/icon/light-add-list.svg';
 import LIGHT_DELETE_ICON from '@/assets/icon/light-delete.svg';
 import LIGHT_EDIT_ICON from '@/assets/icon/light-edit.svg';
-import LIGHT_PLUS_ICON from '@/assets/icon/light-plus.svg';
 import LIGHT_BACK_ICON from '@/assets/icon/light-back-icon.svg';
 import LIGHT_TABLE_ICON from '@/assets/icon/light-table-icon.svg';
 
@@ -101,7 +100,6 @@ export function MenuWidget() {
  */
 
 export function TableWidget() {
-  const isAlertOn = useAtomValue(requestAlertAtom);
   const { mainSection } = useAtomValue(windowStateAtom);
   const { tables, tableIds, isEditing } = useAtomValue(tableAtom);
   const setAlertStatus = useSetAtom(setRequestAlertAtom);

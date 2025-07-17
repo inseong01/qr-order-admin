@@ -2,7 +2,7 @@ import supabase from '..';
 import { Tables, TablesInsert, TablesUpdate } from '../database.types';
 
 // menu_category table type
-type MenuCategory = Tables<'menu_category'>;
+export type MenuCategory = Tables<'menu_category'>;
 type NewMenuCategory = TablesInsert<'menu_category'>;
 type UpdateMenuCategory = TablesUpdate<'menu_category'>;
 
@@ -28,38 +28,43 @@ export async function getMenuCategory(): Promise<MenuCategory[]> {
  */
 export const addMenuCategory = async (newMenuCategory: NewMenuCategory) => {
   const { error } = await supabase.from('menu_category').insert(newMenuCategory);
+
   if (error) {
     console.error(error.message);
     throw new Error(error.message);
   }
+
   return;
 };
 
 /**
  * 메뉴 카테고리 정보를 수정하는 함수
- * @param id - 수정할 메뉴 카테고리 id
- * @param updatedMenuCategory - 수정할 메뉴 카테고리 정보
+ * @param updatedMenuCategories - 수정할 메뉴 카테고리 정보 배열
  * @returns
  */
-export const updateMenuCategory = async (id: string, updatedMenuCategory: UpdateMenuCategory) => {
-  const { error } = await supabase.from('menu_category').update(updatedMenuCategory).eq('id', id);
+export const updateMenuCategory = async (updatedMenuCategories: UpdateMenuCategory[]) => {
+  const { error } = await supabase.from('menu_category').upsert(updatedMenuCategories);
+
   if (error) {
     console.error(error.message);
     throw new Error(error.message);
   }
+
   return;
 };
 
 /**
  * 메뉴 카테고리를 삭제하는 함수
- * @param id - 삭제할 메뉴 카테고리 id
+ * @param id - 삭제할 메뉴 카테고리 id 배열
  * @returns
  */
-export const deleteMenuCategory = async (id: string) => {
-  const { error } = await supabase.from('menu_category').delete().eq('id', id);
+export const deleteMenuCategory = async (id: string[]) => {
+  const { error } = await supabase.from('menu_category').delete().in('id', id);
+
   if (error) {
     console.error(error.message);
     throw new Error(error.message);
   }
+
   return;
 };

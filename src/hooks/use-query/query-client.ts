@@ -9,6 +9,10 @@ import { getRequestList } from '../../lib/supabase/function/request';
 import { getMenuCategory } from '../../lib/supabase/function/menu-category';
 
 export type DataStatus = 'pending' | 'fulfilled' | 'rejected';
+export const REQUEST_LIST_QUERY_KEY = ['requestList'];
+export const ORDER_LIST_QUERY_KEY = ['allOrderList'];
+export const MENU_CATEGORIES_QUERY_KEY = ['menuCategoryList'];
+export const MENU_LIST_QUERY_KEY = ['menuList'];
 
 /**
  * 초기 데이터 로드 및 Supabase Realtime 구독을 처리하는 커스텀 훅
@@ -26,25 +30,25 @@ export function useQueryClientTable(method: REALTIME_POSTGRES_CHANGES_LISTEN_EVE
   const queries = useQueries({
     queries: [
       {
-        queryKey: ['requestList'],
+        queryKey: REQUEST_LIST_QUERY_KEY,
         queryFn: getRequestList,
         staleTime: Infinity,
         refetchOnWindowFocus: false,
       },
       {
-        queryKey: ['allOrderList'],
+        queryKey: ORDER_LIST_QUERY_KEY,
         queryFn: getOrderList,
         staleTime: Infinity,
         refetchOnWindowFocus: false,
       },
       {
-        queryKey: ['menuCategoryList'],
+        queryKey: MENU_CATEGORIES_QUERY_KEY,
         queryFn: getMenuCategory,
         staleTime: Infinity,
         refetchOnWindowFocus: false,
       },
       {
-        queryKey: ['menuList'],
+        queryKey: MENU_LIST_QUERY_KEY,
         queryFn: getMenuList,
         staleTime: Infinity,
         refetchOnWindowFocus: false,

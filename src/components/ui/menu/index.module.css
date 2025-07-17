@@ -44,7 +44,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 
   font-size: var(--list-fz-regular);
   color: var(--font-sub-color);

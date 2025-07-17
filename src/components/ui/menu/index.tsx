@@ -2,9 +2,11 @@ import { ReactNode } from 'react';
 import { useSetAtom } from 'jotai';
 
 import { Menu } from '@/lib/supabase/function/menu';
-import { selectIdState } from '@/store/atom/id-atom';
 import { setTabModalAtomState } from '@/features/modal/tab/store/atom';
 
+import LIGHT_PLUS_ICON from '@/assets/icon/light-plus.svg';
+
+import { selectMenuAtom } from './store/atom';
 import styles from './index.module.css';
 
 /**
@@ -12,14 +14,13 @@ import styles from './index.module.css';
  */
 export function ListMenu(props: Menu) {
   const setModalState = useSetAtom(setTabModalAtomState);
-  const selectId = useSetAtom(selectIdState);
+  const selectMenu = useSetAtom(selectMenuAtom);
 
   const title = props.name;
   const price = props.price.toLocaleString();
-  const menuId = props.id;
 
   const handleClick = () => {
-    selectId(menuId);
+    selectMenu(props);
     setModalState('menu-update');
   };
 
@@ -48,7 +49,7 @@ export function ListMenuAdd() {
     <ListBox onClick={handleClick}>
       <div className={styles.menuAdd}>
         <div className={styles.iconBox}>
-          <img src='' alt='add icon' />
+          <img src={LIGHT_PLUS_ICON} alt='add icon' />
         </div>
 
         <span className={styles.title}>상품 추가</span>

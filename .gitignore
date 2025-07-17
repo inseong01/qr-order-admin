@@ -29,3 +29,5 @@ dist-ssr
 diff-files.txt
 file-status.txt
 commit-msg.txt
+
+.vscode

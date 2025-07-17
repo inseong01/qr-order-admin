@@ -1,29 +1,29 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
 
-import mockData from '@/mock/menu.test.json';
-import { resetIdState, idAtom } from '@/store/atom/id-atom';
+import { useQuery } from '@tanstack/react-query';
+
+import { clearSelectedMenuAtom, menuAtom } from '@/components/ui/menu/store/atom';
 import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
+import { MENU_CATEGORIES_QUERY_KEY } from '@/hooks/use-query/query-client';
+import { MenuCategory } from '@/lib/supabase/function/menu-category';
+
+import LIGHT_PICTURE_ICON from '@/assets/icon/light-picture-icon.svg';
+import LIGHT_PLUS_ICON from '@/assets/icon/light-plus.svg';
 
 import { tabModalAtom } from '../../store/atom';
 import styles from './../index.module.css';
 
-const initInputValue = {
-  menuName: '',
-  menuPrice: 0,
-  menuCategory: '',
-  menuTag: '',
-};
-
 export default function UpdateMenuModal() {
-  const [inputValue, setInputValue] = useState(initInputValue);
-
-  const menuId = useAtomValue(idAtom);
+  const menu = useAtomValue(menuAtom);
+  const clearSelectedMenu = useSetAtom(clearSelectedMenuAtom);
   const setModal = useSetAtom(tabModalAtom);
-  const resetMenuId = useSetAtom(resetIdState);
-
   const { showConfirmModal } = useConfirmModal();
+  const [inputValue, setInputValue] = useState(menu!);
 
+  const categories = useQuery<MenuCategory[]>({ queryKey: MENU_CATEGORIES_QUERY_KEY });
+
+  /* 비즈니스 로직 */
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -35,10 +35,10 @@ export default function UpdateMenuModal() {
     const onConfirm = () => {
       // TODO: 실제 제출 로직 구현 (예: API 호출)
       // delete, upsert: supabase menu 테이블로 값 전달 (id 또는 수정된 정보)
-      // 처리 완료 되면 선택 초기화 O
-      // 그렇지 않으면 선택 초기화 X
-      // 모달 창 닫으면 선택 초기화 O
+      // inputValue 값 점검 완료
     };
+
+    // 초기화 로직 추가
     showConfirmModal({ title, onConfirm });
   };
 
@@ -47,30 +47,37 @@ export default function UpdateMenuModal() {
     const value = e.target.value;
 
     setInputValue((prev) => {
+      if (name === 'title') {
+        return {
+          ...prev,
+          menu_category: { title: value },
+        };
+      }
       return { ...prev, [name]: value };
     });
   };
 
   const handleClose = () => {
     setModal(null);
-    resetMenuId();
+    clearSelectedMenu();
   };
-
-  const currentMenu = mockData.find((m) => m.id === menuId);
 
   return (
     <form className={styles.addMenuModal} onSubmit={handleSubmit}>
       <div className={styles.wrap}>
         <div className={styles.header}>
+          {/* 제목 */}
           <h2 className={styles.modalTitle}>음식 수정</h2>
+
+          {/* 닫기 */}
           <button type='button' className={styles.close} onClick={handleClose}>
-            <img src='' alt='close icon' />
+            <img src={LIGHT_PLUS_ICON} alt='close icon' />
           </button>
         </div>
 
         <label className={styles.imgInput} htmlFor='thumbnail'>
-          <button type='button' className={styles.iconBox} onClick={handleClose}>
-            <img src='' alt='img input icon' />
+          <button type='button' className={styles.iconBox} onClick={() => {}}>
+            <img src={LIGHT_PICTURE_ICON} alt='img input icon' />
           </button>
 
           <span>사진 첨부</span>
@@ -85,9 +92,9 @@ export default function UpdateMenuModal() {
             <input
               type='text'
               id='foodName'
-              name='menuName'
+              name='name'
               onChange={getInputValue}
-              value={currentMenu?.name}
+              value={inputValue.name}
               placeholder='음식명을 입력해주세요.'
             />
           </label>
@@ -98,16 +105,23 @@ export default function UpdateMenuModal() {
             <select
               className={styles.options}
               id='category'
-              name='menuCategory'
+              name='title'
               onChange={getInputValue}
-              value={currentMenu?.category_id}
+              value={inputValue.menu_category.title}
             >
-              <option value={'cat-001'}>분류 1</option>
-              <option value={'cat-002'}>분류 2</option>
-              <option value={'cat-003'}>분류 3</option>
-              <option value={'cat-004'}>분류 4</option>
-              <option value={'cat-005'}>분류 5</option>
-              <option value={'cat-006'}>분류 6</option>
+              {/* 기본 옵션 */}
+              <option key={'default'} value={'default'} disabled>
+                선택해주세요
+              </option>
+
+              {/* 옵션 */}
+              {categories.data?.map(({ id, title }) => {
+                return (
+                  <option key={id} value={title}>
+                    {title}
+                  </option>
+                );
+              })}
             </select>
           </label>
 
@@ -117,23 +131,17 @@ export default function UpdateMenuModal() {
             <input
               type='text'
               id='price'
-              name='menuPrice'
-              onChange={getInputValue}
+              name='price'
               placeholder='가격을 입력해주세요.'
-              value={currentMenu?.price}
+              onChange={getInputValue}
+              value={inputValue.price}
             />
           </label>
 
           <label className={styles.inputWrapper} htmlFor='status'>
             <span className={styles.inputTitle}>판매 상태</span>
 
-            <select
-              className={styles.options}
-              id='status'
-              name='menuTag'
-              onChange={getInputValue}
-              value={currentMenu?.tag}
-            >
+            <select className={styles.options} id='status' name='tag' onChange={getInputValue} value={inputValue.tag}>
               <option value={'신규'}>신규</option>
               <option value={'인기'}>인기</option>
               <option value={'품절'}>품절</option>

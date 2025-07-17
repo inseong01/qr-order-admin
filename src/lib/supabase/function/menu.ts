@@ -1,8 +1,15 @@
 import supabase from '..';
-import { Tables, TablesInsert, TablesUpdate } from '../database.types';
+import { TablesInsert, TablesUpdate } from '../database.types';
 
 // menu table type
-export type Menu = Tables<'menu'>;
+export type Menu = {
+  menu_category: { title: string };
+  id: string;
+  img_url: string;
+  name: string;
+  price: number;
+  tag: string;
+};
 export type NewMenu = TablesInsert<'menu'>;
 export type UpdateMenu = TablesUpdate<'menu'>;
 
@@ -11,7 +18,7 @@ export type UpdateMenu = TablesUpdate<'menu'>;
  * @returns 메뉴 목록
  */
 export async function getMenuList(): Promise<Menu[]> {
-  const { data, error } = await supabase.from('menu').select('*');
+  const { data, error } = await supabase.from('menu').select(`id, img_url, name, price, tag, menu_category (id,title)`);
 
   if (error) {
     console.error(error.message);

@@ -1,6 +1,9 @@
 import { atom, useAtom, useSetAtom } from 'jotai';
 
 import { setWidgetAtomState } from '@/store/atom/widget-atom';
+import { addMenuCategory } from '@/lib/supabase/function/menu-category';
+import { openSubmissionStatusAlertAtom } from '@/features/alert/popup/store/atom';
+import validate from '@/utils/function/validate';
 
 import { useConfirmModal } from '../../confirm/hook/use-confirm-modal';
 import styles from './add-category-form.module.css';
@@ -16,19 +19,33 @@ export default function AddCategoryForm() {
   const [inputValue, setInputValue] = useAtom(addCategoryInputAtom);
   const { showConfirmModal } = useConfirmModal();
   const setWidgetState = useSetAtom(setWidgetAtomState);
+  const openSubmissionStatusAlert = useSetAtom(openSubmissionStatusAlertAtom);
 
+  /* 비즈니스 로직 */
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setWidgetState({ option: '' });
+
     const title = '새로운 분류를 추가하겠습니까?';
-    const onConfirm = () => {
-      // TODO: 실제 제출 로직 구현 (예: API 호출)
-      // supabase menu-category 테이블로 값 전달 (title로써 할당, id는 자동할당)
-      // 처리 완료 되면 선택 초기화 O
-      // 그렇지 않으면 선택 초기화 X
-      // 모달 창 닫으면 선택 초기화 O
-      setInputValue(''); // 제출 후 입력 초기화
+    const onConfirm = async () => {
+      const { success, data, error } = await validate.createCategoryValue(inputValue); // 값 검증
+
+      if (!success) {
+        const message = error?.issues[0].message;
+        alert(message);
+        return;
+      }
+
+      try {
+        await addMenuCategory({ title: data }); // supabase 전달
+        openSubmissionStatusAlert('추가되었습니다'); // 데이터 처리 상태 알림
+      } catch (e) {
+        console.log(e);
+        openSubmissionStatusAlert('오류가 발생했습니다');
+      }
     };
+
+    setInputValue('');
     showConfirmModal({ title, onConfirm });
   };
 
