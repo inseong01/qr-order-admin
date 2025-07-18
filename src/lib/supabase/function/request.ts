@@ -1,8 +1,16 @@
 import supabase from '..';
-import { Tables, TablesUpdate } from '../database.types';
+import { TablesUpdate } from '../database.types';
 
 // request table type
-export type Request = Tables<'request'>;
+export type Request = {
+  created_at: string;
+  id: string;
+  is_read: boolean;
+  table: {
+    id: string;
+    number: number;
+  };
+};
 export type UpdateRequest = TablesUpdate<'request'>;
 
 /**
@@ -12,7 +20,14 @@ export type UpdateRequest = TablesUpdate<'request'>;
 export async function getRequestList(): Promise<Request[]> {
   const { data, error } = await supabase
     .from('request')
-    .select('*')
+    .select(
+      `
+    created_at,
+    id,
+    is_read,
+    table(id, number)
+    `
+    )
     .eq('is_read', false)
     .order('created_at', { ascending: true });
 
@@ -27,28 +42,15 @@ export async function getRequestList(): Promise<Request[]> {
 /**
  * 요청 정보를 수정하는 함수
  * @param id - 수정할 요청 id
- * @param updatedRequest - 수정할 요청 정보
  * @returns
  */
-export const updateRequest = async (id: string, updatedRequest: UpdateRequest) => {
-  const { error } = await supabase.from('request').update(updatedRequest).eq('id', id);
-  if (error) {
-    console.error(error.message);
-    throw new Error(error.message);
-  }
-  return;
-};
+export const updateRequest = async (id: string) => {
+  const { error } = await supabase.from('request').update({ is_read: true }).eq('id', id);
 
-/**
- * 요청을 삭제하는 함수
- * @param id - 삭제할 요청 id
- * @returns
- */
-export const deleteRequest = async (id: string) => {
-  const { error } = await supabase.from('request').delete().eq('id', id);
   if (error) {
     console.error(error.message);
     throw new Error(error.message);
   }
+
   return;
 };

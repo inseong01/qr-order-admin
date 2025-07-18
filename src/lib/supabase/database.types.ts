@@ -135,20 +135,20 @@ export type Database = {
         Row: {
           created_at: string;
           id: string;
-          is_read: boolean | null;
-          table_id: string | null;
+          is_read: boolean;
+          table_id: string;
         };
         Insert: {
           created_at?: string;
           id?: string;
-          is_read?: boolean | null;
-          table_id?: string | null;
+          is_read?: boolean;
+          table_id?: string;
         };
         Update: {
           created_at?: string;
           id?: string;
-          is_read?: boolean | null;
-          table_id?: string | null;
+          is_read?: boolean;
+          table_id?: string;
         };
         Relationships: [
           {

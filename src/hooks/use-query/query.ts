@@ -4,6 +4,8 @@ import { getTableList, Table } from '@/lib/supabase/function/table';
 import { getRequestList, Request } from '@/lib/supabase/function/request';
 import { getMenuList, Menu } from '@/lib/supabase/function/menu';
 import { getOrderList, Order } from '@/lib/supabase/function/order';
+import { FirstRequestItem, getRequestItemList } from '@/lib/supabase/function/request-item';
+import { getOrderItemList, OrderItem } from '@/lib/supabase/function/order-item';
 
 /**
  * 테이블 목록을 가져오는 쿼리
@@ -30,7 +32,23 @@ export function useQueryRequestList() {
     refetchOnWindowFocus: false,
   });
 
-  return { data, isFetching: isFetching };
+  return { data, isFetching };
+}
+
+/**
+ * 첫번째 요청 목록을 가져오는 쿼리
+ */
+export function useQueryFirstRequest(request_id: string) {
+  const queryClient = useQueryClient();
+  const { data, isFetching } = useQuery<FirstRequestItem[]>({
+    queryKey: ['firstRequest'],
+    queryFn: () => getRequestItemList(request_id),
+    refetchOnWindowFocus: false,
+  });
+
+  const refetch = async () => await queryClient.refetchQueries({ queryKey: ['firstRequest'] });
+
+  return { data, isFetching, refetch };
 }
 
 /**
@@ -46,7 +64,7 @@ export function useQueryMenuList() {
 
   const refetch = async () => await queryClient.refetchQueries({ queryKey: ['menuList'] });
 
-  return { data, refetch, isFetching: isFetching };
+  return { data, refetch, isFetching };
 }
 
 /**
@@ -60,6 +78,21 @@ export function useQueryAllOrderList() {
   });
 
   const refetch = async () => await queryClient.refetchQueries({ queryKey: ['allOrderList'] });
+
+  return { data, fetchAmount: isFetching ? 1 : 0, refetch };
+}
+
+/**
+ * 주문 목록을 가져오는 쿼리
+ */
+export function useQueryOrderList() {
+  const queryClient = useQueryClient();
+  const { data, isFetching } = useQuery<OrderItem[]>({
+    queryKey: ['orderList'],
+    queryFn: getOrderItemList,
+  });
+
+  const refetch = async () => await queryClient.refetchQueries({ queryKey: ['orderList'] });
 
   return { data, fetchAmount: isFetching ? 1 : 0, refetch };
 }

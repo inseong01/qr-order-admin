@@ -1,8 +1,15 @@
 import supabase from '..';
-import { Tables, TablesUpdate } from '../database.types';
+import { TablesUpdate } from '../database.types';
 
 // order table type
-export type Order = Tables<'order'>;
+export type Order = {
+  created_at: string;
+  id: string;
+  is_done: boolean;
+  order_number: number;
+  table: { id: string; number: number };
+  updated_at: string | null;
+};
 export type UpdateOrder = TablesUpdate<'order'>;
 
 /**
@@ -10,7 +17,20 @@ export type UpdateOrder = TablesUpdate<'order'>;
  * @returns 주문 목록
  */
 export async function getOrderList(): Promise<Order[]> {
-  const { data, error } = await supabase.from('order').select('*').order('created_at', { ascending: true });
+  const { data, error } = await supabase
+    .from('order')
+    .select(
+      `
+    created_at,
+    id,
+    is_done,
+    order_number,
+    table(id, number),
+    updated_at
+    `
+    )
+    .order('created_at', { ascending: true });
+
   if (error) {
     console.error(error.message);
     throw new Error(error.message);
@@ -20,17 +40,18 @@ export async function getOrderList(): Promise<Order[]> {
 }
 
 /**
- * 주문 정보를 수정하는 함수
- * @param id - 수정할 주문 id
- * @param updatedOrder - 수정할 주문 정보
+ * 주문 완료 처리하는 함수
+ * @param id - 완료할 주문 id
  * @returns
  */
-export const updateOrder = async (id: string, updatedOrder: UpdateOrder) => {
-  const { error } = await supabase.from('order').update(updatedOrder).eq('id', id);
+export const completeOrder = async (id: string) => {
+  const { error } = await supabase.from('order').update({ is_done: true }).eq('id', id);
+
   if (error) {
     console.error(error.message);
     throw new Error(error.message);
   }
+
   return;
 };
 
@@ -41,9 +62,11 @@ export const updateOrder = async (id: string, updatedOrder: UpdateOrder) => {
  */
 export const deleteOrder = async (id: string) => {
   const { error } = await supabase.from('order').delete().eq('id', id);
+
   if (error) {
     console.error(error.message);
     throw new Error(error.message);
   }
+
   return;
 };

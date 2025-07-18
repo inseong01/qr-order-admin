@@ -1,12 +1,18 @@
-import { ChangeEvent, FormEvent, useState } from 'react';
-import { useAtomValue, useSetAtom } from 'jotai';
-
+import { ChangeEvent, FormEvent } from 'react';
+import { useAtom, useSetAtom } from 'jotai';
 import { useQuery } from '@tanstack/react-query';
 
-import { clearSelectedMenuAtom, menuAtom } from '@/components/ui/menu/store/atom';
+import validate from '@/utils/function/validate';
+
+import { initMenu, menuAtom } from '@/components/ui/menu/store/atom';
+
 import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
+import { openSubmissionStatusAlertAtom } from '@/features/alert/popup/store/atom';
+
 import { MENU_CATEGORIES_QUERY_KEY } from '@/hooks/use-query/query-client';
+
 import { MenuCategory } from '@/lib/supabase/function/menu-category';
+import { deleteMenu, updateMenu } from '@/lib/supabase/function/menu';
 
 import LIGHT_PICTURE_ICON from '@/assets/icon/light-picture-icon.svg';
 import LIGHT_PLUS_ICON from '@/assets/icon/light-plus.svg';
@@ -15,11 +21,10 @@ import { tabModalAtom } from '../../store/atom';
 import styles from './../index.module.css';
 
 export default function UpdateMenuModal() {
-  const menu = useAtomValue(menuAtom);
-  const clearSelectedMenu = useSetAtom(clearSelectedMenuAtom);
+  const [inputValue, setInputValue] = useAtom(menuAtom);
   const setModal = useSetAtom(tabModalAtom);
+  const openSubmissionStatusAlert = useSetAtom(openSubmissionStatusAlertAtom);
   const { showConfirmModal } = useConfirmModal();
-  const [inputValue, setInputValue] = useState(menu!);
 
   const categories = useQuery<MenuCategory[]>({ queryKey: MENU_CATEGORIES_QUERY_KEY });
 
@@ -27,21 +32,41 @@ export default function UpdateMenuModal() {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // 폼 데이터 선별 로직
-
     const submitter = (e.nativeEvent as SubmitEvent).submitter as HTMLButtonElement;
     const submitType = submitter.name;
     const title = submitType === 'update' ? '메뉴를 수정하겠습니까?' : '메뉴를 삭제하겠습니끼?';
-    const onConfirm = () => {
-      // TODO: 실제 제출 로직 구현 (예: API 호출)
-      // delete, upsert: supabase menu 테이블로 값 전달 (id 또는 수정된 정보)
-      // inputValue 값 점검 완료
+    const onConfirm = async () => {
+      const menuData = {
+        id: inputValue.id,
+        img_url: inputValue.img_url,
+        category_id: categories.data?.find((c) => c.title === inputValue.menu_category.title)?.id,
+        name: inputValue.name,
+        price: Number(inputValue.price),
+        tag: inputValue.tag,
+      };
+
+      const valid = await validate.updateMenuValue(menuData); // 값 검증
+
+      if (!valid.success) {
+        const message = valid.error.issues[0].message;
+        alert(message);
+        return;
+      }
+
+      try {
+        submitType === 'update' ? await updateMenu(menuData.id, menuData) : await deleteMenu(menuData.id);
+        openSubmissionStatusAlert(submitType === 'update' ? '수정되었습니다' : '삭제되었습니다.'); // 데이터 처리 상태 알림
+        setInputValue(initMenu); // 초기화
+      } catch (e) {
+        console.error(e);
+        openSubmissionStatusAlert('오류가 발생했습니다');
+      }
     };
 
-    // 초기화 로직 추가
     showConfirmModal({ title, onConfirm });
   };
 
+  /** 입력값 수신 */
   const getInputValue = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -53,13 +78,15 @@ export default function UpdateMenuModal() {
           menu_category: { title: value },
         };
       }
+
       return { ...prev, [name]: value };
     });
   };
 
+  /** 폼 창 닫기 */
   const handleClose = () => {
     setModal(null);
-    clearSelectedMenu();
+    setInputValue(initMenu);
   };
 
   return (
@@ -129,7 +156,8 @@ export default function UpdateMenuModal() {
             <span className={styles.inputTitle}>가격</span>
 
             <input
-              type='text'
+              type='number'
+              step={10}
               id='price'
               name='price'
               placeholder='가격을 입력해주세요.'

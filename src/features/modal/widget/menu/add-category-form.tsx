@@ -40,7 +40,7 @@ export default function AddCategoryForm() {
         await addMenuCategory({ title: data }); // supabase 전달
         openSubmissionStatusAlert('추가되었습니다'); // 데이터 처리 상태 알림
       } catch (e) {
-        console.log(e);
+        console.error(e);
         openSubmissionStatusAlert('오류가 발생했습니다');
       }
     };

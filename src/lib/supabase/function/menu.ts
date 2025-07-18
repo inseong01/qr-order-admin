@@ -35,10 +35,12 @@ export async function getMenuList(): Promise<Menu[]> {
  */
 export const addMenu = async (newMenu: NewMenu) => {
   const { error } = await supabase.from('menu').insert(newMenu);
+
   if (error) {
     console.error(error.message);
     throw new Error(error.message);
   }
+
   return;
 };
 
@@ -50,10 +52,12 @@ export const addMenu = async (newMenu: NewMenu) => {
  */
 export const updateMenu = async (id: string, updatedMenu: UpdateMenu) => {
   const { error } = await supabase.from('menu').update(updatedMenu).eq('id', id);
+
   if (error) {
     console.error(error.message);
     throw new Error(error.message);
   }
+
   return;
 };
 
@@ -64,10 +68,12 @@ export const updateMenu = async (id: string, updatedMenu: UpdateMenu) => {
  */
 export const deleteMenu = async (id: string) => {
   const { error } = await supabase.from('menu').delete().eq('id', id);
+
   if (error) {
     console.error(error.message);
     throw new Error(error.message);
   }
+
   return;
 };
 

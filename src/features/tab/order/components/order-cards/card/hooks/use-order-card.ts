@@ -1,16 +1,7 @@
-
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Order } from '@/lib/supabase/function/order';
 
-// TODO: Zustand 스토어 마이그레이션 후 아래 주석 해제
-// import { useBoundStore } from '@/store'; 
-
 export function useOrderCard(order: Order) {
-  // const categoryId = useBoundStore((state) => state.category.id);
-  // const submitError = useBoundStore((state) => state.submit.isError);
-  // const submitStatus = useBoundStore((state) => state.submit.status);
-  // const getSelectedListId = useBoundStore((state) => state.getSelectedListId);
-
   const [isDragging, setDragState] = useState(false);
   const [isSlideClicked, clickSlide] = useState(false);
 

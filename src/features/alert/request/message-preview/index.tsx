@@ -1,43 +1,25 @@
-import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { motion, AnimatePresence } from 'motion/react';
+
+import { useQueryFirstRequest } from '@/hooks/use-query/query';
+import { Request, updateRequest } from '@/lib/supabase/function/request';
 
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { Request } from '@/lib/supabase/function/request';
-import categoryDummy from '@/mock/request_category.test.json';
-import requestItemDummy from '@/mock/request_item.test.json';
-import tableDummy from '@/mock/table.test.json';
-
-import { readRequestDummyAtom } from '..';
 import styles from './../index.module.css';
 
-// requestItemDummy 상태
-const requestItemDummyAtom = atom(requestItemDummy);
-// tableDummy 상태
-const tableDummyAtom = atom(tableDummy);
+export default function MessagePreview({ request }: { request: Request }) {
+  const { data } = useQueryFirstRequest(request.id);
+  const summary =
+    data
+      ?.map(({ quantity, request_category }) => {
+        return `${request_category.title} ${quantity}개`;
+      })
+      .join(', ') ?? '';
 
-export default function MessagePreview({ notReadRequest }: { notReadRequest: Request }) {
-  const requestItems = useAtomValue(requestItemDummyAtom);
-  const tableData = useAtomValue(tableDummyAtom);
-  const readRequest = useSetAtom(readRequestDummyAtom);
-
-  // 가장 오래된 첫번째 목록 아이디로 요청 항목 여럿 가져오기 (request-item Table)
-  const firstRequest = requestItems.filter((r) => r.request_id === notReadRequest.id);
-  const table = tableData.find((t) => t.id === notReadRequest.table_id);
-
-  const categoryCountMap: Record<string, number> = {};
-  firstRequest.forEach((l) => {
-    categoryCountMap[l.category_id] = (categoryCountMap[l.category_id] || 0) + 1;
-  });
-
-  const summary = categoryDummy
-    .map((c) => {
-      const count = categoryCountMap[c.id];
-      return count ? `${c.title} ${count}개` : null;
-    })
-    .filter(Boolean)
-    .join(',');
+  async function readRequest() {
+    await updateRequest(request.id);
+  }
 
   return (
     <motion.ul className={`${styles.reqeustMsg}`}>
@@ -51,14 +33,9 @@ export default function MessagePreview({ notReadRequest }: { notReadRequest: Req
         >
           {/* 상단 */}
           <div className={styles.top}>
-            <div className={styles.title}>테이블 {table?.number}</div>
+            <div className={styles.title}>테이블 {request.table.number}</div>
 
-            <div
-              className={styles.closeBtn}
-              onClick={() => {
-                readRequest(firstRequest[0].request_id);
-              }}
-            >
+            <div className={styles.closeBtn} onClick={readRequest}>
               <FontAwesomeIcon icon={faXmark} size='lg' />
             </div>
           </div>

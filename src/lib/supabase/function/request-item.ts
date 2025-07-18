@@ -1,15 +1,47 @@
 import supabase from '..';
-import { Tables } from '../database.types';
 
-// request_item table type
-export type RequestItem = Tables<'request_item'>;
+// request_item table with relations type
+export type FirstRequestItem = {
+  id: string;
+  quantity: number;
+  created_at: string;
+  request_category: {
+    id: string;
+    title: string;
+  };
+  request: {
+    id: string;
+    is_read: boolean;
+    created_at: string;
+    table: {
+      id: string;
+      number: number;
+    };
+  } | null;
+};
 
 /**
- * 요청 아이템 목록을 가져오는 함수
- * @returns 요청 아이템 목록
+ * 첫번째 요청과 관련된 목록을 가져오는 함수
+ * @returns 첫번째 요청 목록
  */
-export async function getRequestItemList(): Promise<RequestItem[]> {
-  const { data, error } = await supabase.from('request_item').select('*').order('id', { ascending: true });
+export async function getRequestItemList(request_id: string): Promise<FirstRequestItem[]> {
+  const { data, error } = await supabase
+    .from('request_item')
+    .select(
+      `
+    id,
+    quantity,
+    created_at,
+    request_category(id, title),
+    request(
+      id,
+      is_read,
+      created_at,
+      table(id, number)
+    )
+  `
+    )
+    .eq('request_id', request_id);
 
   if (error) {
     console.error(error.message);

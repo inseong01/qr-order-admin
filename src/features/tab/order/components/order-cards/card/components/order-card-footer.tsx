@@ -1,15 +1,15 @@
-import { Order } from '@/lib/supabase/function/order';
-import styles from './order-card-footer.module.css';
+import { useSetAtom } from 'jotai';
+
+import { completeOrder, deleteOrder, Order } from '@/lib/supabase/function/order';
+
 import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
+import { openSubmissionStatusAlertAtom } from '@/features/alert/popup/store/atom';
 
-// TODO: Zustand 스토어 마이그레이션 후 아래 주석 해제
-// import { useBoundStore } from '@/store';
+import validate from '@/utils/function/validate';
 
-interface OrderCardFooterProps {
-  order: Order;
-}
+import styles from './order-card-footer.module.css';
 
-export default function OrderCardFooter({ order }: OrderCardFooterProps) {
+export default function OrderCardFooter({ order }: { order: Order }) {
   return (
     <div className={styles.bottomBox}>
       <div className={styles.bottom}>
@@ -30,32 +30,37 @@ interface OrderCardSubmitButtonProps {
 
 function OrderCardSubmitButton({ order, type }: OrderCardSubmitButtonProps) {
   const { showConfirmModal } = useConfirmModal();
-  // const submitIsError = useBoundStore((state) => state.submit.isError);
-  // const isSubmit = useBoundStore((state) => state.submit.isSubmit);
-  // const getListInfo = useBoundStore((state) => state.getListInfo);
-  // const changeModalState = useBoundStore((state) => state.changeModalState);
-  // const changeSubmitMsgType = useBoundStore((state) => state.changeSubmitMsgType);
+  const openSubmissionStatusAlert = useSetAtom(openSubmissionStatusAlertAtom);
 
-  // 기능: 주문 상태 업데이트 (삭제/완료)
-  function onClickUpdateListState(order: Order) {
-    return () => {
-      // if (isSubmit) return;
-      // if (submitIsError) return;
-      const title = type === 'complete' ? '주문이 완료되었습니까?' : '주문을 삭제하겠습니까?';
-      const onConfirm = () => {};
-      showConfirmModal({ title, onConfirm });
+  /** 비즈니스 로직 */
+  function onClickUpdateListState() {
+    const title = type === 'complete' ? '주문이 완료되었습니까?' : '주문을 삭제하겠습니까?';
+    const onConfirm = async () => {
+      const { success, error } = await validate.orderIdValue(order.id); // 값 검증
 
-      // changeSubmitMsgType({ msgType: type });
-      // changeModalState({ type: 'update', isOpen: true });
-      // getListInfo({ order });
+      if (!success) {
+        const message = error?.issues[0].message;
+        alert(message);
+        return;
+      }
+
+      try {
+        type === 'complete' ? await completeOrder(order.id) : await deleteOrder(order.id); // supabase 전달
+        openSubmissionStatusAlert(type === 'complete' ? '완료되었습니다' : '삭제되었습니다.'); // 데이터 처리 상태 알림
+      } catch (e) {
+        console.error(e);
+        openSubmissionStatusAlert('오류가 발생했습니다');
+      }
     };
+
+    showConfirmModal({ title, onConfirm });
   }
 
   return (
     <button
       type='button'
       className={`${styles.btn} ${type === 'delete' ? styles.delete : ''}`}
-      onClick={onClickUpdateListState(order)}
+      onClick={onClickUpdateListState}
     >
       {type === 'delete' ? '삭제' : '완료'}
     </button>

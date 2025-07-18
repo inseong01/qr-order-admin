@@ -7,6 +7,7 @@ import Timer from '@/features/timer';
 import Tab from '@/components/ui/tab';
 
 import { footerAtom } from '../footer';
+import { useQueryAllOrderList } from '@/hooks/use-query/query';
 
 /*
 메뉴 탭부터 리뉴얼
@@ -77,6 +78,9 @@ function HeaderTableTab() {
 function HeaderOrderTab() {
   const headerTabIdx = useAtomValue(headerTabIdxAtom);
   const setHeaderTabIdx = useSetAtom(headerTabIdxAtom);
+  const { data } = useQueryAllOrderList();
+  const processingOrders = data?.filter((o) => !o.is_done) ?? [];
+  const completeOrders = data?.filter((o) => o.is_done) ?? [];
 
   const handleTabClick = async (tabIdx: number) => {
     if (headerTabIdx === tabIdx) return;
@@ -86,8 +90,17 @@ function HeaderOrderTab() {
 
   return (
     <>
-      <Tab text={'접수 0'} isSelected={headerTabIdx === 0} handleTabClick={() => handleTabClick(0)} />
-      <Tab text={'완료 0'} isSelected={headerTabIdx === 1} handleTabClick={() => handleTabClick(1)} />
+      <Tab
+        text={`접수 ${processingOrders.length}`}
+        isSelected={headerTabIdx === 0}
+        handleTabClick={() => handleTabClick(0)}
+      />
+
+      <Tab
+        text={`완료 ${completeOrders.length}`}
+        isSelected={headerTabIdx === 1}
+        handleTabClick={() => handleTabClick(1)}
+      />
     </>
   );
 }

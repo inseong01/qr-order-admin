@@ -1,17 +1,13 @@
-import orderDummy from '@/mock/order.test.json';
 import { useAtomValue } from 'jotai';
 import { headerTabIdxAtom } from '@/features/page/header';
+import { useQueryAllOrderList } from '@/hooks/use-query/query';
 
 // TODO: Zustand 스토어 마이그레이션 후 아래 주석 해제
 // import { useBoundStore } from '@/store';
 // import { useQueryAllOrderList } from '@/hooks/use-query/query';
 
 export function useOrderTab() {
-  // const { data, refetch } = useQueryAllOrderList();
-  // const tab = useBoundStore((state) => state.tab.title);
-  // const submitStatus = useBoundStore((state) => state.submit.status);
-  // const selectedCategory = useBoundStore((state) => state.category);
-
+  const { data } = useQueryAllOrderList();
   const categoryKey = useAtomValue(headerTabIdxAtom); // 예시: selectedCategory.id
   const isDone = categoryKey === 1;
 
@@ -23,7 +19,7 @@ export function useOrderTab() {
   //   }
   // }, [submitStatus, tab]);
 
-  const orders = isDone ? orderDummy.filter((o) => o.is_done) : orderDummy.filter((o) => !o.is_done);
+  const orders = isDone ? (data?.filter((o) => o.is_done) ?? []) : (data?.filter((o) => !o.is_done) ?? []);
 
   return { orders, isDone };
 }
