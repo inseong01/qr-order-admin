@@ -6,14 +6,14 @@ import OrderCardItemList from '../components/order-card-item-list';
 import OrderCardFooter from '../components/order-card-footer';
 
 interface OrderCardMobileProps {
-  isSlideClicked: boolean;
+  isClicked: boolean;
   order: Order;
 }
 
-export default function OrderCardMobile({ isSlideClicked, order }: OrderCardMobileProps) {
+export default function OrderCardMobile({ order, isClicked }: OrderCardMobileProps) {
   return (
     <AnimatePresence>
-      {isSlideClicked && (
+      {isClicked && (
         <motion.div
           key={'orderList'}
           initial={{ height: 0 }}
