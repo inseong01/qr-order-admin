@@ -4,7 +4,7 @@ import { atom, useAtom, useSetAtom } from 'jotai';
 import { useQuery } from '@tanstack/react-query';
 
 import { setWidgetAtomState } from '@/store/atom/widget-atom';
-import { MENU_CATEGORIES_QUERY_KEY } from '@/hooks/use-query/query-client';
+import { MENU_CATEGORIES_QUERY_KEY } from '@/hooks/use-query/query';
 import { deleteMenuCategory, MenuCategory } from '@/lib/supabase/function/menu-category';
 import { openSubmissionStatusAlertAtom } from '@/features/alert/popup/store/atom';
 import validate from '@/utils/function/validate';

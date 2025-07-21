@@ -9,7 +9,7 @@ import { initMenu, menuAtom } from '@/components/ui/menu/store/atom';
 import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
 import { openSubmissionStatusAlertAtom } from '@/features/alert/popup/store/atom';
 
-import { MENU_CATEGORIES_QUERY_KEY } from '@/hooks/use-query/query-client';
+import { MENU_CATEGORIES_QUERY_KEY } from '@/hooks/use-query/query';
 
 import { MenuCategory } from '@/lib/supabase/function/menu-category';
 import { deleteMenu, updateMenu } from '@/lib/supabase/function/menu';

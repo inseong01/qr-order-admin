@@ -1,10 +1,10 @@
 import supabase from '..';
-import { Tables, TablesInsert, TablesUpdate } from '../database.types';
+import { Tables, TablesInsert } from '../database.types';
 
 // table table type
 export type Table = Tables<'table'>;
 export type NewTable = TablesInsert<'table'>;
-export type UpdateTable = TablesUpdate<'table'>;
+export type UpsertTable = TablesInsert<'table'>;
 
 /**
  * 테이블 목록을 가져오는 함수
@@ -37,12 +37,11 @@ export const addTable = async (newTable: NewTable) => {
 
 /**
  * 테이블 정보를 수정하는 함수
- * @param id - 수정할 테이블 id
- * @param updatedTable - 수정할 테이블 정보
+ * @param updatedTables - 수정된 테이블 배열
  * @returns
  */
-export const updateTable = async (id: string, updatedTable: UpdateTable) => {
-  const { error } = await supabase.from('table').update(updatedTable).eq('id', id);
+export const updateTable = async (updatedTables: UpsertTable[]) => {
+  const { error } = await supabase.from('table').upsert(updatedTables, { ignoreDuplicates: false });
   if (error) {
     console.error(error.message);
     throw new Error(error.message);

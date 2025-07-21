@@ -30,6 +30,18 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+
+  overflow-x: hidden;
+}
+.textBox {
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  position: relative;
+
+  overflow-x: hidden;
 }
 
 .openIconBox {

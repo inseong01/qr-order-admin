@@ -3,7 +3,7 @@ import { useAtomValue } from 'jotai';
 import { motion, AnimatePresence } from 'motion/react';
 import { useQuery } from '@tanstack/react-query';
 
-import { REQUEST_LIST_QUERY_KEY } from '@/hooks/use-query/query-client';
+import { REQUEST_LIST_QUERY_KEY } from '@/hooks/use-query/query';
 import { Request } from '@/lib/supabase/function/request';
 
 import { requestAlertAtom } from './store/atom';

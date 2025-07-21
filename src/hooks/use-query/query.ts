@@ -7,12 +7,20 @@ import { getOrderList, Order } from '@/lib/supabase/function/order';
 import { FirstRequestItem, getRequestItemList } from '@/lib/supabase/function/request-item';
 import { getOrderItemList, OrderItem } from '@/lib/supabase/function/order-item';
 
+export const TABLE_LIST_QUERY_KEY = ['tableList'];
+export const REQUEST_LIST_QUERY_KEY = ['requestList'];
+export const FIRST_REQUEST_QUERY_KEY = ['firstRequest'];
+export const MENU_LIST_QUERY_KEY = ['menuList'];
+export const ALL_ORDER_LIST_QUERY_KEY = ['allOrderList'];
+export const ORDER_LIST_QUERY_KEY = ['orderList'];
+export const MENU_CATEGORIES_QUERY_KEY = ['menuCategoryList'];
+
 /**
  * 테이블 목록을 가져오는 쿼리
  */
 export function useQueryTableList() {
   const tableList = useQuery<Table[]>({
-    queryKey: ['tableList'],
+    queryKey: TABLE_LIST_QUERY_KEY,
     queryFn: getTableList,
     staleTime: Infinity,
     throwOnError: true,
@@ -27,7 +35,7 @@ export function useQueryTableList() {
  */
 export function useQueryRequestList() {
   const { data, isFetching } = useQuery<Request[]>({
-    queryKey: ['requestList'],
+    queryKey: REQUEST_LIST_QUERY_KEY,
     queryFn: getRequestList,
     refetchOnWindowFocus: false,
   });
@@ -41,12 +49,12 @@ export function useQueryRequestList() {
 export function useQueryFirstRequest(request_id: string) {
   const queryClient = useQueryClient();
   const { data, isFetching } = useQuery<FirstRequestItem[]>({
-    queryKey: ['firstRequest'],
+    queryKey: FIRST_REQUEST_QUERY_KEY,
     queryFn: () => getRequestItemList(request_id),
     refetchOnWindowFocus: false,
   });
 
-  const refetch = async () => await queryClient.refetchQueries({ queryKey: ['firstRequest'] });
+  const refetch = async () => await queryClient.refetchQueries({ queryKey: FIRST_REQUEST_QUERY_KEY });
 
   return { data, isFetching, refetch };
 }
@@ -57,12 +65,12 @@ export function useQueryFirstRequest(request_id: string) {
 export function useQueryMenuList() {
   const queryClient = useQueryClient();
   const { data, isFetching } = useQuery<Menu[]>({
-    queryKey: ['menuList'],
+    queryKey: MENU_LIST_QUERY_KEY,
     queryFn: getMenuList,
     staleTime: Infinity,
   });
 
-  const refetch = async () => await queryClient.refetchQueries({ queryKey: ['menuList'] });
+  const refetch = async () => await queryClient.refetchQueries({ queryKey: MENU_LIST_QUERY_KEY });
 
   return { data, refetch, isFetching };
 }
@@ -73,26 +81,26 @@ export function useQueryMenuList() {
 export function useQueryAllOrderList() {
   const queryClient = useQueryClient();
   const { data, isFetching } = useQuery<Order[]>({
-    queryKey: ['allOrderList'],
+    queryKey: ALL_ORDER_LIST_QUERY_KEY,
     queryFn: getOrderList,
   });
 
-  const refetch = async () => await queryClient.refetchQueries({ queryKey: ['allOrderList'] });
+  const refetch = async () => await queryClient.refetchQueries({ queryKey: ALL_ORDER_LIST_QUERY_KEY });
 
   return { data, fetchAmount: isFetching ? 1 : 0, refetch };
 }
 
 /**
- * 주문 목록을 가져오는 쿼리
+ * 하나의 주문 목록을 가져오는 쿼리
  */
 export function useQueryOrderList() {
   const queryClient = useQueryClient();
   const { data, isFetching } = useQuery<OrderItem[]>({
-    queryKey: ['orderList'],
+    queryKey: ORDER_LIST_QUERY_KEY,
     queryFn: getOrderItemList,
   });
 
-  const refetch = async () => await queryClient.refetchQueries({ queryKey: ['orderList'] });
+  const refetch = async () => await queryClient.refetchQueries({ queryKey: ORDER_LIST_QUERY_KEY });
 
   return { data, fetchAmount: isFetching ? 1 : 0, refetch };
 }

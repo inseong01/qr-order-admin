@@ -1,12 +1,12 @@
 import { atom } from 'jotai';
 
 import { Table } from '@/lib/supabase/function/table';
-import mockData from '@/mock/table.test.json';
+// import mockData from '@/mock/table.test.json';
 import { Stage } from 'konva/lib/Stage';
 
 interface TableState {
   editMode: '' | 'create' | 'update' | 'delete';
-  tables: Table[];
+  updatedTables: Table[];
   tableIds: string[]; // 작업 중인 테이블 ID 목록
   stage?: Stage;
   isEditing: boolean;
@@ -14,7 +14,7 @@ interface TableState {
 
 const initTableAtom: TableState = {
   editMode: '',
-  tables: mockData,
+  updatedTables: [],
   tableIds: [],
   stage: undefined,
   isEditing: false,
@@ -50,7 +50,7 @@ export const createTableAtom = atom(null, (get, set, newTable: Table) => {
   const currentState = get(tableAtom);
   set(tableAtom, {
     ...currentState,
-    tables: [...currentState.tables, newTable],
+    updatedTables: [...currentState.updatedTables, newTable],
     tableIds: [newTable.id], // 테이블 ID 추가
   });
 });
@@ -72,14 +72,15 @@ export const selectTableAtom = atom(null, (get, set, tableId: string) => {
 });
 
 export const updateTableAtom = atom(null, (get, set, updatedTable: Table) => {
-  const currentTables = get(tableAtom).tables;
-  const newTables = currentTables.map((table) => (table.id === updatedTable.id ? updatedTable : table));
-  set(tableAtom, (prev: TableState) => ({ ...prev, tables: newTables }));
+  const currentTables = get(tableAtom).updatedTables;
+  const newTables = !currentTables.length
+    ? [updatedTable]
+    : currentTables.map((table) => (table.id === updatedTable.id ? updatedTable : table));
+  set(tableAtom, (prev: TableState) => ({ ...prev, updatedTables: newTables }));
 });
 
-export const resetTablEditAtom = atom(null, (get, set) => {
-  const newTables = get(tableAtom).tables;
-  set(tableAtom, (prev: TableState) => ({ ...prev, tables: newTables, tableIds: [] }));
+export const resetTablEditAtom = atom(null, (_, set) => {
+  set(tableAtom, (prev: TableState) => ({ ...prev, editMode: '', updatedTables: [], tableIds: [] }));
 });
 
 export const toggleEditModeAtom = atom(null, (_, set) => {

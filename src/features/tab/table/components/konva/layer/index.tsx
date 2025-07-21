@@ -1,5 +1,5 @@
 import { useAtomValue, useSetAtom } from 'jotai';
-import { useEffect, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { Group, Line, Rect, Text, Transformer } from 'react-konva';
 import Konva from 'konva';
 
@@ -8,11 +8,22 @@ import { Table } from '@/lib/supabase/function/table';
 import { setTabModalAtomState } from '@/features/modal/tab/store/atom';
 
 import { resetTablEditAtom, selectTableAtom, tableAtom, updateTableAtom } from '../../../store/table-atom';
+import { editModeAtom, isEditingAtom, selectedTableIdsAtom } from '../../../store/table-edit-state';
 
-export default function TableLayer({ table }: { table: Table }) {
+export default function TableLayer({
+  table,
+  onTableChange,
+}: {
+  table: Table;
+  onTableChange: Dispatch<SetStateAction<Table[]>>;
+}) {
   const selectId = useSetAtom(selectIdState);
   const setTableModal = useSetAtom(setTabModalAtomState);
-  const { editMode, isEditing, tableIds, stage } = useAtomValue(tableAtom);
+  // const { editMode, isEditing, tableIds, stage } = useAtomValue(tableAtom);
+  const { stage } = useAtomValue(tableAtom);
+  const editMode = useAtomValue(editModeAtom);
+  const isEditing = useAtomValue(isEditingAtom);
+  const tableIds = useAtomValue(selectedTableIdsAtom);
   const updateTable = useSetAtom(updateTableAtom);
   const selectTable = useSetAtom(selectTableAtom);
   const resetTableEdit = useSetAtom(resetTablEditAtom);
@@ -95,15 +106,20 @@ export default function TableLayer({ table }: { table: Table }) {
   // 드래그 종료 시 위치 업데이트
   const handleDragEnd = (e: Konva.KonvaEventObject<DragEvent>) => {
     const node = e.target;
-    const newTableData: Table = {
-      ...table,
-      meta: {
-        ...table.meta,
-        x: node.x(),
-        y: node.y(),
-      },
-    };
-    updateTable(newTableData);
+    onTableChange((prev) => {
+      return prev.map((t) =>
+        t.id === table.id
+          ? {
+              ...table,
+              meta: {
+                ...table.meta,
+                x: node.x(),
+                y: node.y(),
+              },
+            }
+          : t
+      );
+    });
   };
 
   // 리사이즈 종료 시 크기 및 선(Line) 정보 업데이트
@@ -126,28 +142,32 @@ export default function TableLayer({ table }: { table: Table }) {
     node.x(0);
     node.y(0);
 
-    const newTableData: Table = {
-      ...table,
-      meta: {
-        ...table.meta,
-        x: newAbsX,
-        y: newAbsY,
-        rec: {
-          width: newWidth,
-          height: newHeight,
-        },
-        bottom: {
-          ...table.meta.bottom,
-          y: newHeight - 48,
-          line: {
-            ...table.meta.bottom.line,
-            points: [0, 0, newWidth - 40, 0],
-          },
-        },
-      },
-    };
-
-    updateTable(newTableData);
+    onTableChange((prev) => {
+      return prev.map((t) =>
+        t.id === table.id
+          ? {
+              ...table,
+              meta: {
+                ...table.meta,
+                x: newAbsX,
+                y: newAbsY,
+                rec: {
+                  width: newWidth,
+                  height: newHeight,
+                },
+                bottom: {
+                  ...table.meta.bottom,
+                  y: newHeight - 48,
+                  line: {
+                    ...table.meta.bottom.line,
+                    points: [0, 0, newWidth - 40, 0],
+                  },
+                },
+              },
+            }
+          : t
+      );
+    });
   };
 
   // 좌석 모형 변환 제한 설정
@@ -249,7 +269,7 @@ export default function TableLayer({ table }: { table: Table }) {
       </Group>
 
       {/* 좌석 하단 */}
-      {!isEditing && (
+      {!editMode && (
         <Group x={20} y={meta.bottom.y}>
           <Line points={meta.bottom.line.points} strokeWidth={1} stroke={'#8D8D8D'} />
           <Group x={0} y={10}>

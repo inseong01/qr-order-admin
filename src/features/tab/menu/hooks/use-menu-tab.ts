@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { MENU_LIST_QUERY_KEY } from '@/hooks/use-query/query-client';
+import { MENU_LIST_QUERY_KEY } from '@/hooks/use-query/query';
 import { Menu } from '@/lib/supabase/function/menu';
 
 export function useMenuTab() {
