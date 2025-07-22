@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { Table } from '@/lib/supabase/function/table';
+import { Table } from '@/lib/supabase/tables/table';
 
 /**
  * 새로운 테이블 객체를 생성합니다.

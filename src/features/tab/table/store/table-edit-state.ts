@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
 
-import { Table } from '@/lib/supabase/function/table';
+import { Table } from '@/lib/supabase/tables/table';
 
 type EditMode = '' | 'create' | 'update' | 'delete';
 
@@ -31,7 +31,7 @@ export const resetTablEditAtom = atom(null, (_, set) => {
   set(editModeAtom, '');
   set(draftTablesAtom, []);
   set(selectedTableIdsAtom, []);
-  // set(isEditingAtom, false);
+  set(isEditingAtom, false);
 });
 
 /**
@@ -72,6 +72,13 @@ export const createDraftTableAtom = atom(null, (get, set, newTable: Table) => {
   const currentTables = get(draftTablesAtom);
   set(draftTablesAtom, [...currentTables, newTable]);
   set(selectedTableIdsAtom, [newTable.id]);
+});
+
+/**
+ * 테이블 데이터 사본 설정
+ */
+export const setDraftTableAtom = atom(null, (get, set, newTables: Table[]) => {
+  set(draftTablesAtom, [...newTables]);
 });
 
 /**

@@ -1,5 +1,5 @@
-
 import { useAtomValue } from 'jotai';
+
 import { windowStateAtom } from '@/store/atom/window-atom';
 
 export function useTableTab() {

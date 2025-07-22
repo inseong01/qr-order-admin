@@ -1,16 +1,11 @@
 import { motion } from 'motion/react';
 
+import { OrderItem } from '@/lib/supabase/tables/order-item';
+
 import styles from './index.module.css';
-import { Menu } from '@/lib/supabase/function/menu';
-import { OrderItem } from '@/lib/supabase/function/order-item';
 
-export default function OrderSummary({ listData }: { listData: OrderItem[] }) {
-  // 해당 테이블의 주문만 가져오기
-  // 테이블 아이디 -> 주문 아이디 -> 주문 목록 아이디
-  // 주문 목록 아이디에서 메뉴 아이디 추출하여 메뉴 목록 배열화
-
-  const totalPrice = listData.reduce((prev, curr) => prev + curr.price * curr.amount, 0);
-  const priceToString = totalPrice.toLocaleString();
+export default function OrderSummary({ orders }: { orders: OrderItem[] }) {
+  const totalPrice = orders.reduce((prev, curr) => prev + curr.menu.price * curr.quantity, 0).toLocaleString();
 
   return (
     <motion.div
@@ -24,9 +19,9 @@ export default function OrderSummary({ listData }: { listData: OrderItem[] }) {
       <div className={styles.wrap}>
         {/* 주문내역 */}
         <ul className={styles.listBox}>
-          {listData.length > 0 ? (
-            listData.map((menu, idx) => {
-              return <OrderComponent key={idx} menu={menu} />;
+          {orders.length > 0 ? (
+            orders.map((order, idx) => {
+              return <OrderComponent key={idx} order={order} />;
             })
           ) : (
             <li className={styles.msg}>
@@ -41,8 +36,8 @@ export default function OrderSummary({ listData }: { listData: OrderItem[] }) {
 
           {/* 총 금액 */}
           <div className={styles.totalPrice}>
-            <div className={styles.name}>결제금액</div>
-            <div className={styles.price}>{priceToString}원</div>
+            <div className={styles.menu}>결제금액</div>
+            <div className={styles.price}>{totalPrice}원</div>
           </div>
         </div>
       </div>
@@ -57,20 +52,20 @@ export default function OrderSummary({ listData }: { listData: OrderItem[] }) {
   );
 }
 
-function OrderComponent({ menu }: { menu: Menu }) {
-  const { name, amount, price } = menu;
-  const priceToString = price.toLocaleString();
+function OrderComponent({ order }: { order: OrderItem }) {
+  const { menu, quantity } = order;
+  const price = (menu.price * quantity).toLocaleString();
 
   return (
     <li className={styles.list}>
       {/* 이름 */}
       <div className={styles.menuBox}>
-        <div className={styles.name}>{name}</div>
+        <div className={styles.name}>{menu.name}</div>
       </div>
 
       {/* 가격 */}
       <div className={styles.priceBox}>
-        <div className={styles.amount}>{amount}</div>x<div className={styles.price}>{priceToString}원</div>
+        <div className={styles.amount}>{quantity}</div>x<div className={styles.price}>{price}원</div>
       </div>
     </li>
   );

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-import { MenuCategory } from '@/lib/supabase/function/menu-category';
-import { NewMenu, UpdateMenu } from '@/lib/supabase/function/menu';
+import { MenuCategory } from '@/lib/supabase/tables/menu-category';
+import { NewMenu, UpdateMenu } from '@/lib/supabase/tables/menu';
 
 /** 메뉴 카테고리 생성 데이터 검증 */
 function createCategoryValue(value: string) {

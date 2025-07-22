@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from 'motion/react';
 
 import { useQueryFirstRequest } from '@/hooks/use-query/query';
-import { Request, updateRequest } from '@/lib/supabase/function/request';
+import { Request, updateRequest } from '@/lib/supabase/tables/request';
 
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

@@ -11,8 +11,8 @@ import { openSubmissionStatusAlertAtom } from '@/features/alert/popup/store/atom
 
 import { MENU_CATEGORIES_QUERY_KEY } from '@/hooks/use-query/query';
 
-import { MenuCategory } from '@/lib/supabase/function/menu-category';
-import { deleteMenu, updateMenu } from '@/lib/supabase/function/menu';
+import { MenuCategory } from '@/lib/supabase/tables/menu-category';
+import { deleteMenu, updateMenu } from '@/lib/supabase/tables/menu';
 
 import LIGHT_PICTURE_ICON from '@/assets/icon/light-picture-icon.svg';
 import LIGHT_PLUS_ICON from '@/assets/icon/light-plus.svg';
@@ -31,7 +31,6 @@ export default function UpdateMenuModal() {
   /* 비즈니스 로직 */
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     const submitter = (e.nativeEvent as SubmitEvent).submitter as HTMLButtonElement;
     const submitType = submitter.name;
     const title = submitType === 'update' ? '메뉴를 수정하겠습니까?' : '메뉴를 삭제하겠습니끼?';

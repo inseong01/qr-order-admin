@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { useSetAtom } from 'jotai';
 
-import { Menu } from '@/lib/supabase/function/menu';
+import { Menu } from '@/lib/supabase/tables/menu';
 import { setTabModalAtomState } from '@/features/modal/tab/store/atom';
 
 import LIGHT_PLUS_ICON from '@/assets/icon/light-plus.svg';

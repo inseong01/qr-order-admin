@@ -2,7 +2,7 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { AnimatePresence } from 'motion/react';
 
 import DialogLayout from '@/components/layout/dialog';
-import { setWidgetAtomState, widgetAtom } from '@/store/atom/widget-atom';
+import { setWidgetAtomState, widgetAtom } from '@/features/widget/store/atom';
 
 import AddCategoryForm from './menu/add-category-form';
 import UpdateCategoryForm from './menu/update-category-form';

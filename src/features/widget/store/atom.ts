@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
 
-import { Options } from '../../features/widget/const/types';
+type Options = 'create-menu-category' | 'update-menu-category' | 'delete-menu-category' | ''; // 위젯 옵션 할당, null은 모달 닫힘
 
 type Widget = {
   isOpen: boolean;

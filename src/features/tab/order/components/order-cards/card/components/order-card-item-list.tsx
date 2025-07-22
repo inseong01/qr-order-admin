@@ -1,10 +1,10 @@
-import { Order } from '@/lib/supabase/function/order';
-import { useQueryOrderList } from '@/hooks/use-query/query';
+import { Order } from '@/lib/supabase/tables/order';
+import { useQueryOrderMenuList } from '@/hooks/use-query/query';
 
 import styles from './order-card-item-list.module.css';
 
 export default function OrderCardItemList({ order }: { order: Order }) {
-  const { data } = useQueryOrderList();
+  const { data } = useQueryOrderMenuList();
   const currentOrderList = data?.filter((d) => d.order.id === order.id);
 
   return (

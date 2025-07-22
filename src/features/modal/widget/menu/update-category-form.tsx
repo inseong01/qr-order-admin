@@ -1,12 +1,12 @@
 import { ChangeEvent } from 'react';
 import { atom, useAtom, useSetAtom } from 'jotai';
-
 import { useQuery } from '@tanstack/react-query';
 
-import { setWidgetAtomState } from '@/store/atom/widget-atom';
-import { MENU_CATEGORIES_QUERY_KEY } from '@/hooks/use-query/query';
-import { MenuCategory, updateMenuCategory } from '@/lib/supabase/function/menu-category';
 import { openSubmissionStatusAlertAtom } from '@/features/alert/popup/store/atom';
+import { setWidgetAtomState } from '@/features/widget/store/atom';
+
+import { MENU_CATEGORIES_QUERY_KEY } from '@/hooks/use-query/query';
+import { MenuCategory, updateMenuCategory } from '@/lib/supabase/tables/menu-category';
 import validate from '@/utils/function/validate';
 
 import { useConfirmModal } from '../../confirm/hook/use-confirm-modal';

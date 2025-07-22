@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'motion/react';
 
-import { Order } from '@/lib/supabase/function/order';
+import { Order } from '@/lib/supabase/tables/order';
 
 import OrderCardItemList from '../components/order-card-item-list';
 import OrderCardFooter from '../components/order-card-footer';

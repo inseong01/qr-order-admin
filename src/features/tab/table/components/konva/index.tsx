@@ -1,14 +1,14 @@
 import Konva from 'konva';
 import { motion } from 'motion/react';
 import { useEffect, useMemo, useRef } from 'react';
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { Layer, Rect, Stage, Text } from 'react-konva';
 
-import { useQueryTableList } from '@/hooks/use-query/query';
+import { useQueryOrderMenuList, useQueryTableList } from '@/hooks/use-query/query';
 import { windowStateAtom } from '@/store/atom/window-atom';
 
-import { setTableStageAtom, tableAtom } from '../../store/table-atom';
-import { draftTablesAtom, editModeAtom } from '../../store/table-edit-state';
+import { draftTablesAtom, editModeAtom, setDraftTableAtom } from '../../store/table-edit-state';
+import { setTableStageAtom } from '../../store/table-state';
 import TableLayer from './layer';
 import styles from './index.module.css';
 
@@ -17,12 +17,12 @@ export default function KonvaSection() {
 
   const stageRef = useRef<Konva.Stage>(null);
   const editMode = useAtomValue(editModeAtom);
-  // const { editMode } = useAtomValue(tableAtom);
+  const draftTables = useAtomValue(draftTablesAtom);
   const { mainSection } = useAtomValue(windowStateAtom);
   const setTableStage = useSetAtom(setTableStageAtom);
+  const setDraftTables = useSetAtom(setDraftTableAtom);
 
-  const [editableTables, onTableChange] = useAtom(draftTablesAtom); // refetch 동기화 필요
-  const renderTables = editMode === 'update' || editMode === 'create' ? editableTables : (data ?? []);
+  const renderTables = editMode === 'update' || editMode === 'create' ? draftTables : (data ?? []);
 
   const stageScale = useMemo(() => {
     const isMobile = window.innerWidth <= 720 || window.innerHeight <= 720;
@@ -36,13 +36,13 @@ export default function KonvaSection() {
 
   // editableTables 데이터 관리
   useEffect(() => {
-    // create일 때 원본 데이터 사용 X
-    if (editMode === 'create') return;
-
+    if (editMode === 'create') return; // create일 때 원본 데이터 사용 X
     if (data) {
-      onTableChange(data);
+      setDraftTables(data);
     }
-  }, [editMode, data, onTableChange]);
+  }, [editMode, data, setDraftTables]);
+
+  const orderList = useQueryOrderMenuList();
 
   return (
     <motion.div className={styles.table} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
@@ -73,9 +73,10 @@ export default function KonvaSection() {
 
           {/* 테이블 목록 */}
           <Layer>
-            {renderTables.map((table) => (
-              <TableLayer key={table.id} table={table} onTableChange={onTableChange} />
-            ))}
+            {renderTables.map((table) => {
+              const orders = orderList.data?.filter((d) => d.order.table.id === table.id) ?? [];
+              return <TableLayer key={table.id} table={table} orders={orders} />;
+            })}
           </Layer>
         </Stage>
       )}

@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'motion/react';
 
 import { ListMenu, ListMenuAdd } from '@/components/ui/menu';
-import { Menu } from '@/lib/supabase/function/menu';
+import { Menu } from '@/lib/supabase/tables/menu';
 
 import { listBoxMotion } from './motion/variants';
 import { useMenuTab } from './hooks/use-menu-tab';

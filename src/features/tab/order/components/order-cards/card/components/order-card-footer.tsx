@@ -1,6 +1,6 @@
 import { useSetAtom } from 'jotai';
 
-import { completeOrder, deleteOrder, Order } from '@/lib/supabase/function/order';
+import { completeOrder, deleteOrder, Order } from '@/lib/supabase/tables/order';
 
 import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
 import { openSubmissionStatusAlertAtom } from '@/features/alert/popup/store/atom';

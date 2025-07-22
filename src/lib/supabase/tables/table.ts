@@ -22,25 +22,11 @@ export async function getTableList(): Promise<Table[]> {
 }
 
 /**
- * 테이블을 추가하는 함수
- * @param newTable - 추가할 테이블 정보
- * @returns
- */
-export const addTable = async (newTable: NewTable) => {
-  const { error } = await supabase.from('table').insert(newTable);
-  if (error) {
-    console.error(error.message);
-    throw new Error(error.message);
-  }
-  return;
-};
-
-/**
- * 테이블 정보를 수정하는 함수
+ * 테이블 정보를 삽입/수정하는 함수
  * @param updatedTables - 수정된 테이블 배열
  * @returns
  */
-export const updateTable = async (updatedTables: UpsertTable[]) => {
+export const upsertTable = async (updatedTables: UpsertTable[]) => {
   const { error } = await supabase.from('table').upsert(updatedTables, { ignoreDuplicates: false });
   if (error) {
     console.error(error.message);
@@ -51,11 +37,11 @@ export const updateTable = async (updatedTables: UpsertTable[]) => {
 
 /**
  * 테이블을 삭제하는 함수
- * @param id - 삭제할 테이블 id
+ * @param ids - 삭제할 테이블 ids 배열
  * @returns
  */
-export const deleteTable = async (id: string) => {
-  const { error } = await supabase.from('table').delete().eq('id', id);
+export const deleteTable = async (ids: string[]) => {
+  const { error } = await supabase.from('table').delete().in('id', ids);
   if (error) {
     console.error(error.message);
     throw new Error(error.message);

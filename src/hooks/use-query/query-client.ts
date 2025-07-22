@@ -3,10 +3,10 @@ import { useQueries, useQueryClient } from '@tanstack/react-query';
 import { REALTIME_LISTEN_TYPES, REALTIME_POSTGRES_CHANGES_LISTEN_EVENT } from '@supabase/realtime-js';
 
 import supabase from '../../lib/supabase';
-import { getMenuList } from '../../lib/supabase/function/menu';
-import { getOrderList } from '../../lib/supabase/function/order';
-import { getRequestList } from '../../lib/supabase/function/request';
-import { getMenuCategory } from '../../lib/supabase/function/menu-category';
+import { getMenuList } from '../../lib/supabase/tables/menu';
+import { getOrderList } from '../../lib/supabase/tables/order';
+import { getRequestList } from '../../lib/supabase/tables/request';
+import { getMenuCategory } from '../../lib/supabase/tables/menu-category';
 import {
   ALL_ORDER_LIST_QUERY_KEY,
   MENU_CATEGORIES_QUERY_KEY,

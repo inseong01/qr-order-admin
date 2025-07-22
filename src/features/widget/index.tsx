@@ -3,12 +3,13 @@ import { useAtomValue } from 'jotai';
 import { AnimatePresence, motion } from 'motion/react';
 
 import { windowStateAtom } from '@/store/atom/window-atom';
-import { widgetAtom } from '@/store/atom/widget-atom';
 
 import { footerAtom } from '../page/footer';
+import { MenuWidget } from './components/widget-menu';
+import { TableWidget } from './components/widget-table';
+import { WidgetIconButton } from './components/widget-button';
+import { widgetAtom } from './store/atom';
 import styles from './widget.module.css';
-
-import { MenuWidget, TableWidget, WidgetIconButton } from './components';
 
 export default function Widget() {
   const tab = useAtomValue(footerAtom);
@@ -38,7 +39,7 @@ export default function Widget() {
               opacity: 1,
             },
             notClicked: {
-              opacity: 0,
+              opacity: 1,
             },
           }}
         >

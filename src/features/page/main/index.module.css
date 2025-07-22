@@ -15,7 +15,7 @@
 }
 
 .leftBox {
-  width: calc(100% - var(--tab-modal-width));
+  width: calc(100% - var(--tab-right-width));
   height: 100%;
 
   font-size: var(--list-fz-large);
@@ -24,6 +24,11 @@
 
 .rightBox {
   height: 100%;
+
+  display: flex;
+  gap: 16px;
+
+  /* overflow: hidden; */
   position: relative;
 }
 

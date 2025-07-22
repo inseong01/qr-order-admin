@@ -4,7 +4,7 @@ import { animate, motion, useMotionValue, useTransform } from 'motion/react';
 
 import { openSubmissionStatusAlertAtom } from '@/features/alert/popup/store/atom';
 import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
-import { completeOrder, deleteOrder, Order } from '@/lib/supabase/function/order';
+import { completeOrder, deleteOrder, Order } from '@/lib/supabase/tables/order';
 import { windowStateAtom } from '@/store/atom/window-atom';
 import validate from '@/utils/function/validate';
 

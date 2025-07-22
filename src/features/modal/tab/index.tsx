@@ -15,7 +15,7 @@ export default function TabModalContainer() {
 
   // 활성화된 모달이 없으면 아무것도 렌더링하지 않습니다.
   if (!currentModal) {
-    return null;
+    return <div></div>;
   }
 
   // 모달 타입이 'menu'로 시작하는 경우
@@ -29,5 +29,5 @@ export default function TabModalContainer() {
   }
 
   // 해당하는 모달이 없는 경우
-  return null;
+  return <div></div>;
 }

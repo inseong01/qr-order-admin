@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 
-import { Order } from '@/lib/supabase/function/order';
+import { Order } from '@/lib/supabase/tables/order';
 
 import { swiper_motion } from './motion/variants';
 import OrderCard from './card/order-card';

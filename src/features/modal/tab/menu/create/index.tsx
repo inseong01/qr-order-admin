@@ -8,8 +8,8 @@ import { initMenu, menuAtom } from '@/components/ui/menu/store/atom';
 
 import { MENU_CATEGORIES_QUERY_KEY } from '@/hooks/use-query/query';
 
-import { addMenu } from '@/lib/supabase/function/menu';
-import { MenuCategory } from '@/lib/supabase/function/menu-category';
+import { addMenu } from '@/lib/supabase/tables/menu';
+import { MenuCategory } from '@/lib/supabase/tables/menu-category';
 
 import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
 import { openSubmissionStatusAlertAtom } from '@/features/alert/popup/store/atom';
@@ -31,7 +31,6 @@ export default function CreateMenuModal() {
   /* 비즈니스 로직 */
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     const title = '메뉴를 추가하겠습니까?';
     const onConfirm = async () => {
       const menuData = {

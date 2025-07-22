@@ -1,0 +1,32 @@
+/* ListBox */
+.listBox {
+  min-width: 73px;
+
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  border-radius: 8px;
+  background-color: var(--key-color);
+
+  color: white;
+  font-size: var(--list-fz-small);
+
+  cursor: pointer;
+  overflow: hidden;
+
+  padding: 8px;
+}
+.listBox[data-isrow='true'] {
+  justify-content: center;
+}
+.listBox[data-isrow='false'] {
+  flex-direction: column;
+}
+
+/* DetectAnimation */
+.animateBox {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

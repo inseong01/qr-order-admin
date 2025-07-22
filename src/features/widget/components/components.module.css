@@ -1,28 +1,4 @@
-.listBox {
-  min-width: 73px;
-
-  display: flex;
-  align-items: center;
-  gap: 5px;
-
-  border-radius: 8px;
-  background-color: var(--key-color);
-
-  color: white;
-  font-size: var(--list-fz-small);
-
-  cursor: pointer;
-  overflow: hidden;
-
-  padding: 8px;
-}
-.listBox[data-isrow='true'] {
-  justify-content: center;
-}
-.listBox[data-isrow='false'] {
-  flex-direction: column;
-}
-
+/* MenuWidget, TableWidget */
 .iconBox {
   width: 25px;
   height: 25px;
@@ -44,6 +20,7 @@
   overflow-x: hidden;
 }
 
+/* WidgetIconButton */
 .openIconBox {
   width: 10px;
   height: 10px;
@@ -57,10 +34,4 @@
 }
 .openIconBox [data-flip='false'] {
   transform: rotateX(0);
-}
-
-.animateBox {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
 }

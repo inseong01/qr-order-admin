@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
 
-import { detectMobile, detectViewportMode } from '../../utils/function/check-device';
+import { detectMobile, detectViewportMode } from '@/utils/function/check-device';
 
 type WindowState = {
   viewportMode: 'portrait' | 'landscape';

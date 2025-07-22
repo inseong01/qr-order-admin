@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
 
-import { Menu } from '@/lib/supabase/function/menu';
+import { Menu } from '@/lib/supabase/tables/menu';
 
 export const initMenu = {
   menu_category: {

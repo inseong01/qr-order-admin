@@ -21,9 +21,8 @@ export type OrderItem = {
 };
 
 /**
- * 주문 아이템 목록을 가져오는 함수
- * @param order_id 주문 아이디
- * @returns 주문 아이템 목록
+ * 주문 메뉴 목록을 가져오는 함수
+ * @returns 주문 메뉴 목록
  */
 export async function getOrderItemList(): Promise<OrderItem[]> {
   const { data, error } = await supabase.from('order_item').select(

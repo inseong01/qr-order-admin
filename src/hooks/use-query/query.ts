@@ -1,11 +1,11 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
-import { getTableList, Table } from '@/lib/supabase/function/table';
-import { getRequestList, Request } from '@/lib/supabase/function/request';
-import { getMenuList, Menu } from '@/lib/supabase/function/menu';
-import { getOrderList, Order } from '@/lib/supabase/function/order';
-import { FirstRequestItem, getRequestItemList } from '@/lib/supabase/function/request-item';
-import { getOrderItemList, OrderItem } from '@/lib/supabase/function/order-item';
+import { getTableList, Table } from '@/lib/supabase/tables/table';
+import { getRequestList, Request } from '@/lib/supabase/tables/request';
+import { getMenuList, Menu } from '@/lib/supabase/tables/menu';
+import { getOrderList, Order } from '@/lib/supabase/tables/order';
+import { FirstRequestItem, getRequestItemList } from '@/lib/supabase/tables/request-item';
+import { getOrderItemList, OrderItem } from '@/lib/supabase/tables/order-item';
 
 export const TABLE_LIST_QUERY_KEY = ['tableList'];
 export const REQUEST_LIST_QUERY_KEY = ['requestList'];
@@ -34,73 +34,61 @@ export function useQueryTableList() {
  * 요청 목록을 가져오는 쿼리
  */
 export function useQueryRequestList() {
-  const { data, isFetching } = useQuery<Request[]>({
+  const { data } = useQuery<Request[]>({
     queryKey: REQUEST_LIST_QUERY_KEY,
     queryFn: getRequestList,
     refetchOnWindowFocus: false,
   });
 
-  return { data, isFetching };
+  return { data };
 }
 
 /**
  * 첫번째 요청 목록을 가져오는 쿼리
  */
 export function useQueryFirstRequest(request_id: string) {
-  const queryClient = useQueryClient();
-  const { data, isFetching } = useQuery<FirstRequestItem[]>({
+  const { data } = useQuery<FirstRequestItem[]>({
     queryKey: FIRST_REQUEST_QUERY_KEY,
     queryFn: () => getRequestItemList(request_id),
     refetchOnWindowFocus: false,
   });
 
-  const refetch = async () => await queryClient.refetchQueries({ queryKey: FIRST_REQUEST_QUERY_KEY });
-
-  return { data, isFetching, refetch };
+  return { data };
 }
 
 /**
  * 메뉴 목록을 가져오는 쿼리
  */
 export function useQueryMenuList() {
-  const queryClient = useQueryClient();
-  const { data, isFetching } = useQuery<Menu[]>({
+  const { data } = useQuery<Menu[]>({
     queryKey: MENU_LIST_QUERY_KEY,
     queryFn: getMenuList,
     staleTime: Infinity,
   });
 
-  const refetch = async () => await queryClient.refetchQueries({ queryKey: MENU_LIST_QUERY_KEY });
-
-  return { data, refetch, isFetching };
+  return { data };
 }
 
 /**
  * 전체 주문 목록을 가져오는 쿼리
  */
 export function useQueryAllOrderList() {
-  const queryClient = useQueryClient();
-  const { data, isFetching } = useQuery<Order[]>({
+  const { data } = useQuery<Order[]>({
     queryKey: ALL_ORDER_LIST_QUERY_KEY,
     queryFn: getOrderList,
   });
 
-  const refetch = async () => await queryClient.refetchQueries({ queryKey: ALL_ORDER_LIST_QUERY_KEY });
-
-  return { data, fetchAmount: isFetching ? 1 : 0, refetch };
+  return { data };
 }
 
 /**
- * 하나의 주문 목록을 가져오는 쿼리
+ * 전체 주문 메뉴 목록을 가져오는 쿼리
  */
-export function useQueryOrderList() {
-  const queryClient = useQueryClient();
-  const { data, isFetching } = useQuery<OrderItem[]>({
+export function useQueryOrderMenuList() {
+  const { data } = useQuery<OrderItem[]>({
     queryKey: ORDER_LIST_QUERY_KEY,
     queryFn: getOrderItemList,
   });
 
-  const refetch = async () => await queryClient.refetchQueries({ queryKey: ORDER_LIST_QUERY_KEY });
-
-  return { data, fetchAmount: isFetching ? 1 : 0, refetch };
+  return { data };
 }

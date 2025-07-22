@@ -13,20 +13,17 @@
   font-size: var(--modal-fz-title);
 }
 .close {
-  width: 15px;
-  height: 15px;
+  width: 25px;
+  height: 25px;
 
   display: flex;
-  background-color: black; /* 임시 */
 
   position: absolute;
   top: 50%;
   right: 0;
   box-sizing: content-box;
 
-  transform: translateY(-50%);
-
-  padding: 5px;
+  transform: translateY(-50%) rotateZ(45deg);
 }
 
 .imgInput {
@@ -74,20 +71,6 @@
   cursor: default;
 
   padding: 25px;
-
-  /* width: 495px; */
-  /* height: 534px; */
-
-  /* padding: 16px;
-  border: 1px solid #d8d8d8;
-  border-radius: 15px;
-  background-color: white;
-  overflow: hidden;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px; */
 }
 
 .wrap {
