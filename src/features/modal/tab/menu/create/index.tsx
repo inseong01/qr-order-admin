@@ -17,12 +17,12 @@ import { openSubmissionStatusAlertAtom } from '@/features/alert/popup/store/atom
 import LIGHT_PLUS_ICON from '@/assets/icon/light-plus.svg';
 import LIGHT_PICTURE_ICON from '@/assets/icon/light-picture-icon.svg';
 
-import { tabModalAtom } from '../../store/atom';
+import { setModalClickAtom } from '../../store/atom';
 import styles from './../index.module.css';
 
 export default function CreateMenuModal() {
   const [inputValue, setInputValue] = useAtom(menuAtom);
-  const setModal = useSetAtom(tabModalAtom);
+  const setModalClick = useSetAtom(setModalClickAtom);
   const openSubmissionStatusAlert = useSetAtom(openSubmissionStatusAlertAtom);
   const { showConfirmModal } = useConfirmModal();
 
@@ -80,7 +80,7 @@ export default function CreateMenuModal() {
 
   /** 폼 창 닫기 */
   const handleClose = () => {
-    setModal(null);
+    setModalClick(false);
   };
 
   return (
@@ -129,6 +129,7 @@ export default function CreateMenuModal() {
               defaultValue={'default'}
               name='title'
               onChange={getInputValue}
+              value={inputValue.menu_category.title}
             >
               {/* 기본 옵션 */}
               <option key={'default'} value={'default'} disabled>

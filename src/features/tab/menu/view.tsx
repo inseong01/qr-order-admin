@@ -25,7 +25,7 @@ export default function MenuTabView() {
               {/* 메뉴 목록 */}
               <div className={styles.menu}>
                 {/* 추가 버튼 */}
-                <ListMenuAdd />
+                <ListMenuAdd category={category} />
 
                 {/* 메뉴 */}
                 {menuGroupByCategory[category]?.map((m: Menu) => (

@@ -1,13 +1,14 @@
 import { atom } from 'jotai';
 
 /**
- * 현재 활성화된 모달의 종류를 관리하는 atom.
- * 값 예시: 'menu-create', 'menu-update', 'table-info'
- * `null` 값은 모든 모달이 닫혔음을 의미합니다.
+ * 현재 활성화된 모달의 종류 타입 관리
  */
-export type ModalType = 'menu-create' | 'menu-update' | 'table-info' | null;
+export type ModalType = 'menu-create' | 'menu-update' | 'table-info';
 
-export const tabModalAtom = atom<ModalType>(null);
+/**
+ * 모달 종류
+ * */
+export const tabModalAtom = atom<ModalType>('menu-create');
 
 export const setTabModalAtomState = atom(
   (get) => get(tabModalAtom),
@@ -17,6 +18,19 @@ export const setTabModalAtomState = atom(
 );
 
 /**
- * 테이블 정보 모달 내에서 QR코드와 주문 내역 뷰를 전환하는 토글 상태를 관리하는 atom.
+ * 모달 열림 상태
+ * */
+export const modalOpenAtom = atom(false);
+
+export const setModalClickAtom = atom(null, (_, set, isOpen: boolean) => {
+  set(modalOpenAtom, isOpen);
+});
+
+/**
+ * 테이블 정보 모달 내에서 QR코드와 주문 내역 뷰를 전환 관리
  */
 export const tableToggleAtom = atom(false);
+
+export const setTableToggleAtom = atom(null, (_, set) => {
+  set(tableToggleAtom, (prev) => !prev);
+});

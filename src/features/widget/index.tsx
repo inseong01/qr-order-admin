@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import { useAtomValue } from 'jotai';
 import { AnimatePresence, motion } from 'motion/react';
 
@@ -16,40 +15,21 @@ export default function Widget() {
   const _window = useAtomValue(windowStateAtom);
   const { isOpen } = useAtomValue(widgetAtom);
 
-  const widgetRef = useRef(null);
-
   const components = {
     menu: MenuWidget,
     table: TableWidget,
     order: null,
   };
   const WidgetComponent = components[tab];
+  const isWidgetComponentOn = WidgetComponent && (!_window.isMobile || _window.viewportMode === 'portrait');
 
   return (
-    <AnimatePresence>
-      {WidgetComponent && (!_window.isMobile || _window.viewportMode === 'portrait') && (
-        <motion.div
-          ref={widgetRef}
-          className={styles.widgetWrap}
-          initial={'notClicked'}
-          animate={'clicked'}
-          exit={'notClicked'}
-          variants={{
-            clicked: {
-              opacity: 1,
-            },
-            notClicked: {
-              opacity: 1,
-            },
-          }}
-        >
-          {/* 위젯 버튼 */}
-          <WidgetIconButton />
+    <motion.div className={styles.widgetWrap} layout transition={{ duration: 0.3 }}>
+      {/* 위젯 버튼 */}
+      <WidgetIconButton />
 
-          {/* 위젯 목록 */}
-          <AnimatePresence>{isOpen ? <WidgetComponent /> : null}</AnimatePresence>
-        </motion.div>
-      )}
-    </AnimatePresence>
+      {/* 위젯 목록 */}
+      <AnimatePresence>{isOpen ? isWidgetComponentOn && <WidgetComponent /> : null}</AnimatePresence>
+    </motion.div>
   );
 }

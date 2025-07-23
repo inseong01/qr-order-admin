@@ -2,59 +2,48 @@ import { Suspense } from 'react';
 import { useAtomValue } from 'jotai';
 import { AnimatePresence, motion } from 'motion/react';
 
+import { modalOpenAtom, tabModalAtom } from '@/features/modal/tab/store/atom';
 import TabModalContainer from '@/features/modal/tab';
-import { tabModalAtom } from '@/features/modal/tab/store/atom';
-import { MenuTabView, OrderTabView, TableTabView } from '@/features/tab';
 import LoadingSpinner from '@/features/load/spinner';
+import TabViewContainer from '@/features/tab';
 import Widget from '@/features/widget';
 
 import { footerAtom } from '../footer';
 import styles from './index.module.css';
 
 export default function Main() {
-  const tab = useAtomValue(footerAtom);
+  const category = useAtomValue(footerAtom);
+  const isModalOpen = useAtomValue(modalOpenAtom);
   const currentModal = useAtomValue(tabModalAtom);
-
-  const component = {
-    menu: MenuTabView,
-    table: TableTabView,
-    order: OrderTabView,
-  };
-  const MainPageComponent = component[tab];
 
   return (
     <main className={styles.main}>
       <Suspense fallback={<LoadingSpinner />}>
-        {component ? (
+        {category ? (
           <>
+            {/* 좌측 */}
             <div className={styles.leftBox}>
-              <MainPageComponent />
+              <TabViewContainer />
             </div>
 
+            {/* 우측 */}
             <div className={styles.rightBox}>
-              <AnimatePresence mode='wait'>
-                {currentModal ? (
+              {/* 위젯 */}
+              <Widget />
+
+              {/* 모달 */}
+              <AnimatePresence mode='popLayout'>
+                {/* motion layout, <TabmodalContainer /> 내부로 이동하면 Widget layout 적용되지 않음 */}
+                {isModalOpen && (
                   <motion.div
-                    key='withModal'
-                    initial={{ x: '100%' }}
+                    layout
+                    key={currentModal}
+                    initial={{ x: 385 }}
                     animate={{ x: 0 }}
-                    exit={{ x: '100%' }}
-                    transition={{ duration: 0.5 }}
-                    style={{ display: 'flex' }}
+                    exit={{ x: 385 }}
+                    transition={{ duration: 0.3 }}
                   >
-                    <Widget />
                     <TabModalContainer />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key='withoutModal'
-                    initial={{ x: 0 }}
-                    animate={{ x: '100%' }}
-                    exit={{ x: 0 }}
-                    transition={{ duration: 0.5 }}
-                    style={{ display: 'flex' }}
-                  >
-                    <Widget />
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -67,30 +56,3 @@ export default function Main() {
     </main>
   );
 }
-
-//  <AnimatePresence mode='wait'>
-
-//               {/* 위젯 */}
-//               <motion.div
-//                 key={'withModal'}
-//                 initial={{ x: 350 }}
-//                 animate={{ x: 0 }}
-//                 exit={{ x: 350 }}
-//                 transition={{ duration: 0.5 }}
-//               >
-//                 <Widget />
-//               </motion.div>
-
-//               {currentModal ? (
-//                 <motion.div
-//                   key={'withModal'}
-//                   initial={{ x: '100%' }}
-//                   animate={{ x: 0 }}
-//                   exit={{ x: '100%' }}
-//                   transition={{ duration: 0.5 }}
-//                 >
-//                   {/* 모달 */}
-//                   <TabModalContainer />
-//                 </motion.div>
-//               ) : null}
-//             </AnimatePresence>

@@ -1,16 +1,16 @@
 import { useAtomValue, useSetAtom } from 'jotai';
 import { motion } from 'motion/react';
 
-import { tableToggleAtom } from '../../store/atom';
+import { setTableToggleAtom, tableToggleAtom } from '../../store/atom';
 
 import styles from './index.module.css';
 
 export default function ToggleDisplay() {
   const isToggled = useAtomValue(tableToggleAtom);
-  const setToggle = useSetAtom(tableToggleAtom);
+  const setToggle = useSetAtom(setTableToggleAtom);
 
   function onClickChangeBox() {
-    setToggle(!isToggled);
+    setToggle();
   }
 
   return (

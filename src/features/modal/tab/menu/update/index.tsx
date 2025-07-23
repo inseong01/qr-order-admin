@@ -17,12 +17,12 @@ import { deleteMenu, updateMenu } from '@/lib/supabase/tables/menu';
 import LIGHT_PICTURE_ICON from '@/assets/icon/light-picture-icon.svg';
 import LIGHT_PLUS_ICON from '@/assets/icon/light-plus.svg';
 
-import { tabModalAtom } from '../../store/atom';
+import { setModalClickAtom } from '../../store/atom';
 import styles from './../index.module.css';
 
 export default function UpdateMenuModal() {
   const [inputValue, setInputValue] = useAtom(menuAtom);
-  const setModal = useSetAtom(tabModalAtom);
+  const setModalClick = useSetAtom(setModalClickAtom);
   const openSubmissionStatusAlert = useSetAtom(openSubmissionStatusAlertAtom);
   const { showConfirmModal } = useConfirmModal();
 
@@ -84,7 +84,7 @@ export default function UpdateMenuModal() {
 
   /** 폼 창 닫기 */
   const handleClose = () => {
-    setModal(null);
+    setModalClick(false);
     setInputValue(initMenu);
   };
 
