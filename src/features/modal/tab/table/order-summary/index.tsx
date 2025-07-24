@@ -1,11 +1,20 @@
+import { useSetAtom } from 'jotai';
 import { motion } from 'motion/react';
 
 import { OrderItem } from '@/lib/supabase/tables/order-item';
 
+import { setModalClickAtom } from '../../store/atom';
+import ListComponent from './list';
 import styles from './index.module.css';
 
 export default function OrderSummary({ orders }: { orders: OrderItem[] }) {
+  const setModalClick = useSetAtom(setModalClickAtom);
   const totalPrice = orders.reduce((prev, curr) => prev + curr.menu.price * curr.quantity, 0).toLocaleString();
+
+  function handlePayment() {
+    alert('준비중입니다.');
+    setModalClick(false);
+  }
 
   return (
     <motion.div
@@ -21,7 +30,7 @@ export default function OrderSummary({ orders }: { orders: OrderItem[] }) {
         <ul className={styles.listBox}>
           {orders.length > 0 ? (
             orders.map((order, idx) => {
-              return <OrderComponent key={idx} order={order} />;
+              return <ListComponent key={idx} order={order} />;
             })
           ) : (
             <li className={styles.msg}>
@@ -44,29 +53,10 @@ export default function OrderSummary({ orders }: { orders: OrderItem[] }) {
 
       {/* 결제버튼 */}
       <div className={styles.submitBox}>
-        <button type='submit' className={styles.submit} style={{ backgroundColor: '#4caff8' }}>
+        <button type='button' className={styles.submit} style={{ backgroundColor: '#4caff8' }} onClick={handlePayment}>
           결제하기
         </button>
       </div>
     </motion.div>
-  );
-}
-
-function OrderComponent({ order }: { order: OrderItem }) {
-  const { menu, quantity } = order;
-  const price = (menu.price * quantity).toLocaleString();
-
-  return (
-    <li className={styles.list}>
-      {/* 이름 */}
-      <div className={styles.menuBox}>
-        <div className={styles.name}>{menu.name}</div>
-      </div>
-
-      {/* 가격 */}
-      <div className={styles.priceBox}>
-        <div className={styles.amount}>{quantity}</div>x<div className={styles.price}>{price}원</div>
-      </div>
-    </li>
   );
 }

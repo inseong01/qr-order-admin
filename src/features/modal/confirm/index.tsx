@@ -10,12 +10,13 @@ export default function ConfirmModal() {
   const [modalState, setModalState] = useAtom(confirmModalAtom);
 
   const handleClose = () => {
+    modalState.onCancle?.();
     setModalState((prev) => ({ ...prev, isOpen: false }));
   };
 
   const handleConfirm = () => {
     modalState.onConfirm?.();
-    handleClose();
+    setModalState((prev) => ({ ...prev, isOpen: false }));
   };
 
   return (

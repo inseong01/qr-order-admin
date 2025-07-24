@@ -5,12 +5,10 @@ import { debounce } from '@/utils/function/optimize';
 
 import { detectViewportModeAtom, resizeMainSectionAtom } from '../../store/atom/window-atom';
 import { openSubmissionStatusAlertAtom } from '../alert/popup/store/atom';
-import SubmissionStatusAlert from '../alert/popup';
-import WidgetCateogryModal from '../modal/widget';
-import ConfirmModal from '../modal/confirm';
-import Header from './header';
-import Main from './main';
-import Footer, { footerAtom } from './footer';
+
+import SuccessComponent from './success';
+import ErrorComponent from './error';
+import { footerAtom } from './footer';
 
 export default function PageWrap({ dataState }: { dataState: string }) {
   const tab = useAtomValue(footerAtom);
@@ -49,28 +47,4 @@ export default function PageWrap({ dataState }: { dataState: string }) {
   }
 
   return <></>;
-}
-
-function SuccessComponent() {
-  return (
-    <>
-      {/* 페이지 */}
-      <Header />
-      <Main />
-      <Footer />
-
-      {/* 알림 */}
-      <SubmissionStatusAlert />
-
-      {/* 확인 */}
-      <ConfirmModal />
-
-      {/* 위젯 모달 */}
-      <WidgetCateogryModal />
-    </>
-  );
-}
-
-function ErrorComponent() {
-  return <>오류가 발생했습니다.</>;
 }

@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from 'motion/react';
+import { QueryObserverResult, RefetchOptions } from '@tanstack/react-query';
 
 import { useQueryFirstRequest } from '@/hooks/use-query/query';
 import { Request, updateRequest } from '@/lib/supabase/tables/request';
@@ -8,17 +9,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import styles from './../index.module.css';
 
-export default function MessagePreview({ request }: { request: Request }) {
-  const { data } = useQueryFirstRequest(request.id);
+type MessageCountPannelProps = {
+  request: Request;
+  refetch: (options?: RefetchOptions) => Promise<QueryObserverResult<Request[], Error>>;
+};
+
+export default function MessagePreview({ request, refetch }: MessageCountPannelProps) {
+  const firstRequestQuery = useQueryFirstRequest(request.id);
   const summary =
-    data
-      ?.map(({ quantity, request_category }) => {
-        return `${request_category.title} ${quantity}개`;
-      })
+    firstRequestQuery.data
+      ?.map(({ quantity, request_category }) => `${request_category.title} ${quantity}개`)
       .join(', ') ?? '';
 
+  /* 좌석 요청 읽음 처리  */
   async function readRequest() {
     await updateRequest(request.id);
+    await refetch();
   }
 
   return (

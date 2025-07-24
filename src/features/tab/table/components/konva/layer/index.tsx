@@ -6,7 +6,7 @@ import Konva from 'konva';
 import { selectIdState } from '@/store/atom/id-atom';
 import { Table } from '@/lib/supabase/tables/table';
 import { OrderItem } from '@/lib/supabase/tables/order-item';
-import { setTabModalAtomState } from '@/features/modal/tab/store/atom';
+import { setModalClickAtom, setTabModalAtomState } from '@/features/modal/tab/store/atom';
 
 import {
   editModeAtom,
@@ -29,10 +29,11 @@ export default function TableLayer({ table, orders }: { table: Table; orders: Or
   const updateTable = useSetAtom(updateDraftTableAtom);
   const selectTable = useSetAtom(selectTableAtom);
   const resetTableEdit = useSetAtom(resetTablEditAtom);
+  const setModalClick = useSetAtom(setModalClickAtom);
 
-  // 원래 좌석 정보 임시 보관
+  /* 원래 좌석 정보 임시 보관 */
   const [preTransformTable, setPreTransformTable] = useState<Table | null>(null);
-  // Konva.Group 커서 변환
+  /* Konva.Group 커서 변환 */
   const { changeDefaultCursor, changePointerCursor } = useOnMouseChangeCursor(stage, table.id);
 
   const shapeRef = useRef<Konva.Rect>(null);
@@ -43,7 +44,7 @@ export default function TableLayer({ table, orders }: { table: Table; orders: Or
   const isSelectedTable = tableIds.includes(id);
   const totalPrice = orders.reduce((prev, curr) => prev + curr.menu.price * curr.quantity, 0).toLocaleString();
 
-  // Transformer와 Shape 연결
+  /* Transformer와 Shape 연결 */
   useEffect(() => {
     if (editMode === 'delete') return;
     if (!trRef.current || !shapeRef.current) return;
@@ -53,7 +54,7 @@ export default function TableLayer({ table, orders }: { table: Table; orders: Or
     }
   }, [editMode, tableIds]);
 
-  // 'Escape' 키를 눌렀을 때 좌석 되돌리기
+  /* 'Escape' 키를 눌렀을 때 좌석 되돌리기 */
   useEffect(() => {
     if (isEditing) return;
 
@@ -73,8 +74,8 @@ export default function TableLayer({ table, orders }: { table: Table; orders: Or
     };
   }, [editMode, preTransformTable, updateTable]);
 
-  // 좌석 선택
-  function handleSelectTable() {
+  /* 좌석 선택 */
+  function onClickSelectTable() {
     if (editMode === 'create') {
       return;
     }
@@ -96,16 +97,17 @@ export default function TableLayer({ table, orders }: { table: Table; orders: Or
     }
 
     selectId(id);
+    setModalClick(true);
     setTableModal('table-info');
   }
 
-  // 변형(드래그, 리사이즈) 시작 시 원래 정보 저장
+  /* 변형(드래그, 리사이즈) 시작 시 원래 정보 저장 */
   const handleTransformStart = () => {
     if (preTransformTable) return;
     setPreTransformTable(table);
   };
 
-  // 드래그 종료 시 위치 업데이트
+  /* 드래그 종료 시 위치 업데이트 */
   const handleDragEnd = (e: Konva.KonvaEventObject<DragEvent>) => {
     const node = e.target;
     const newTable = {
@@ -119,7 +121,7 @@ export default function TableLayer({ table, orders }: { table: Table; orders: Or
     updateTable(newTable);
   };
 
-  // 리사이즈 종료 시 크기 및 선(Line) 정보 업데이트
+  /* 리사이즈 종료 시 크기 및 선(Line) 정보 업데이트 */
   const handleTransformEnd = () => {
     const node = shapeRef.current;
     const group = groupRef.current;
@@ -162,7 +164,7 @@ export default function TableLayer({ table, orders }: { table: Table; orders: Or
     updateTable(newTable);
   };
 
-  // 좌석 모형 변환 제한 설정
+  /* 좌석 모형 변환 제한 설정 */
   function limitBoundBox(oldBox: any, newBox: any) {
     if (!stage) return oldBox;
 
@@ -190,7 +192,7 @@ export default function TableLayer({ table, orders }: { table: Table; orders: Or
     };
   }
 
-  // 좌석 이동 범위 제한
+  /* 좌석 이동 범위 제한 */
   function restrictDragBounds(e: Konva.KonvaEventObject<DragEvent>) {
     if (!stage) return;
 
@@ -224,8 +226,8 @@ export default function TableLayer({ table, orders }: { table: Table; orders: Or
       id={id}
       x={meta.x}
       y={meta.y}
-      onClick={handleSelectTable}
-      onTap={handleSelectTable}
+      onClick={onClickSelectTable}
+      onTap={onClickSelectTable}
       draggable={(editMode === 'create' || editMode === 'update') && isSelectedTable}
       onDragStart={handleTransformStart}
       onDragMove={restrictDragBounds}

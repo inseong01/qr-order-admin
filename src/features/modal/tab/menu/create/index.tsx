@@ -6,10 +6,9 @@ import validate from '@/utils/function/validate';
 
 import { initMenu, menuAtom } from '@/components/ui/menu/store/atom';
 
-import { MENU_CATEGORIES_QUERY_KEY } from '@/hooks/use-query/query';
+import { useQueryMenuCategoryList, useQueryMenuList } from '@/hooks/use-query/query';
 
 import { addMenu } from '@/lib/supabase/tables/menu';
-import { MenuCategory } from '@/lib/supabase/tables/menu-category';
 
 import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
 import { openSubmissionStatusAlertAtom } from '@/features/alert/popup/store/atom';
@@ -25,8 +24,8 @@ export default function CreateMenuModal() {
   const setModalClick = useSetAtom(setModalClickAtom);
   const openSubmissionStatusAlert = useSetAtom(openSubmissionStatusAlertAtom);
   const { showConfirmModal } = useConfirmModal();
-
-  const categories = useQuery<MenuCategory[]>({ queryKey: MENU_CATEGORIES_QUERY_KEY });
+  const menuListQuery = useQueryMenuList();
+  const menuCategoriesQuery = useQueryMenuCategoryList();
 
   /* 비즈니스 로직 */
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -35,7 +34,7 @@ export default function CreateMenuModal() {
     const onConfirm = async () => {
       const menuData = {
         img_url: inputValue.img_url,
-        category_id: categories.data?.find((c) => c.title === inputValue.menu_category.title)?.id,
+        category_id: menuCategoriesQuery.data?.find((c) => c.title === inputValue.menu_category.title)?.id,
         name: inputValue.name,
         price: Number(inputValue.price),
         tag: inputValue.tag,
@@ -51,7 +50,9 @@ export default function CreateMenuModal() {
 
       try {
         await addMenu(menuData);
+        await menuListQuery.refetch(); // 메뉴 리패치
         openSubmissionStatusAlert('추가되었습니다.'); // 데이터 처리 상태 알림
+        setModalClick(false);
         setInputValue(initMenu); // 초기화
       } catch (e) {
         console.error(e);
@@ -126,18 +127,17 @@ export default function CreateMenuModal() {
             <select
               className={styles.options}
               id='category'
-              defaultValue={'default'}
               name='title'
               onChange={getInputValue}
               value={inputValue.menu_category.title}
             >
               {/* 기본 옵션 */}
-              <option key={'default'} value={'default'} disabled>
+              <option key={'default'} disabled>
                 선택해주세요
               </option>
 
               {/* 옵션 */}
-              {categories.data?.map(({ id, title }) => {
+              {menuCategoriesQuery.data?.map(({ id, title }) => {
                 return (
                   <option key={id} value={title}>
                     {title}

@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { useSetAtom } from 'jotai';
+import { motion } from 'motion/react';
 
 import { Menu } from '@/lib/supabase/tables/menu';
 import { setModalClickAtom, setTabModalAtomState } from '@/features/modal/tab/store/atom';
@@ -66,8 +67,8 @@ export function ListMenuAdd({ category }: { category: string }) {
 
 function ListBox({ children, onClick }: { children: ReactNode; onClick?: () => void }) {
   return (
-    <button className={styles.list} onClick={onClick}>
+    <motion.button layout className={styles.list} onClick={onClick}>
       {children}
-    </button>
+    </motion.button>
   );
 }

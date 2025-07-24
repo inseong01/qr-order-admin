@@ -7,7 +7,7 @@
   overflow: auto;
 }
 
-.display {
+.displayRow {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -17,8 +17,9 @@
   text-align: start;
 }
 
-.menu {
+.menuRow {
   display: flex;
   align-items: flex-start;
+  flex-wrap: wrap;
   gap: 10px;
 }

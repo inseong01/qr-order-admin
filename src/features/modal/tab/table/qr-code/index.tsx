@@ -11,12 +11,11 @@ export default function QRPreviewBox({ tableNumber }: { tableNumber?: number }) 
 
   const qrcodeRef = useRef<HTMLImageElement>(null);
 
-  // QR코드 사진 생성
+  /* QR코드 사진 생성 */
   useEffect(() => {
     if (!qrcodeRef.current) return;
 
     const ref = qrcodeRef.current;
-    // 링크 진입 시 쿠키 전달하여 해당 tableNumber 아닌 주소로 주소변경 접근 제한
     QRcode.toDataURL(`https://qr-order-client.vercel.app/table/${tableNumber}`)
       .then((url: string) => {
         ref.src = url;
@@ -25,6 +24,7 @@ export default function QRPreviewBox({ tableNumber }: { tableNumber?: number }) 
       .catch((err: string) => console.error(err));
   }, [qrcodeRef]);
 
+  /* QR코드 다운로드 */
   function onClickDownloadQRcode() {
     if (!url) return;
     downloadFile(url, tableNumber);

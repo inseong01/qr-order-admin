@@ -13,8 +13,8 @@ import TableLayer from './layer';
 import styles from './index.module.css';
 
 export default function KonvaSection() {
-  const { data } = useQueryTableList();
-
+  const tablesQuery = useQueryTableList();
+  const orderList = useQueryOrderMenuList();
   const stageRef = useRef<Konva.Stage>(null);
   const editMode = useAtomValue(editModeAtom);
   const draftTables = useAtomValue(draftTablesAtom);
@@ -22,31 +22,31 @@ export default function KonvaSection() {
   const setTableStage = useSetAtom(setTableStageAtom);
   const setDraftTables = useSetAtom(setDraftTableAtom);
 
-  const renderTables = editMode === 'update' || editMode === 'create' ? draftTables : (data ?? []);
+  const needDraft = editMode === 'update' || editMode === 'create';
+  const renderTables = needDraft ? draftTables : (tablesQuery?.data ?? []);
 
   const stageScale = useMemo(() => {
     const isMobile = window.innerWidth <= 720 || window.innerHeight <= 720;
     return isMobile ? 0.49 : 1;
   }, [mainSection]);
 
+  /* stageRef 관리 */
   useEffect(() => {
     if (!stageRef.current) return;
     setTableStage(stageRef.current);
   }, [stageRef]);
 
-  // editableTables 데이터 관리
+  /* editableTables 데이터 관리 */
   useEffect(() => {
     if (editMode === 'create') return; // create일 때 원본 데이터 사용 X
-    if (data) {
-      setDraftTables(data);
+    if (tablesQuery.data) {
+      setDraftTables(tablesQuery.data);
     }
-  }, [editMode, data, setDraftTables]);
-
-  const orderList = useQueryOrderMenuList();
+  }, [editMode, tablesQuery.data, setDraftTables]);
 
   return (
     <motion.div className={styles.table} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-      {data?.length === 0 ? (
+      {tablesQuery.data?.length === 0 ? (
         <div className={styles.title}>위젯에서 테이블을 생성해주세요</div>
       ) : (
         <Stage
@@ -74,7 +74,7 @@ export default function KonvaSection() {
           {/* 테이블 목록 */}
           <Layer>
             {renderTables.map((table) => {
-              const orders = orderList.data?.filter((d) => d.order.table.id === table.id) ?? [];
+              const orders = orderList.data?.filter((d) => d.order?.table.id === table.id) ?? [];
               return <TableLayer key={table.id} table={table} orders={orders} />;
             })}
           </Layer>

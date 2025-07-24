@@ -1,5 +1,7 @@
 .container {
   position: relative;
+
+  flex-basis: 270px;
 }
 
 .bg {

@@ -1,9 +1,8 @@
 import { useAtom } from 'jotai';
 import { AnimatePresence } from 'motion/react';
 
-import { submissionStatusAlertAtom } from './store/atom';
-
 import DialogLayout from '@/components/layout/dialog';
+import { submissionStatusAlertAtom } from './store/atom';
 
 const SubmissionStatusAlert = () => {
   const [alertState, setAlertState] = useAtom(submissionStatusAlertAtom);

@@ -29,7 +29,7 @@ export default function Main() {
             {/* 우측 */}
             <div className={styles.rightBox}>
               {/* 위젯 */}
-              <Widget />
+              {category !== 'order' && <Widget />}
 
               {/* 모달 */}
               <AnimatePresence mode='popLayout'>

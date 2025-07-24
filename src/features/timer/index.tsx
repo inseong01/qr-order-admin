@@ -1,22 +1,24 @@
-import { useEffect, useState } from 'react';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { useEffect } from 'react';
 import { motion } from 'motion/react';
 
+import { connectStateAtom, dateStateAtom, setDateStateAtom, setTimeStateAtom, timeStateAtom } from './store/atom';
 import styles from './index.module.css';
 
-const initDate = new Date();
-
 export default function Timer() {
-  const [date, setDate] = useState(initDate.toLocaleDateString());
-  const [time, setTime] = useState(initDate.toLocaleTimeString().slice(0, -3));
+  const date = useAtomValue(dateStateAtom);
+  const time = useAtomValue(timeStateAtom);
+  const connectState = useAtomValue(connectStateAtom);
+  const setDateState = useSetAtom(setDateStateAtom);
+  const setTimeState = useSetAtom(setTimeStateAtom);
 
   useEffect(() => {
     const timer = setInterval(() => {
       const now = new Date();
       const newTime = now.toLocaleTimeString();
       const newDate = now.toLocaleDateString();
-
-      setTime(newTime.slice(0, -3));
-      setDate(newDate);
+      setTimeState(newTime.slice(0, -3));
+      setDateState(newDate);
     }, 1000);
 
     return () => {
@@ -37,7 +39,7 @@ export default function Timer() {
       <li className={styles.statusBox}>
         <span className={styles.status}>
           <span className={styles.title}>연결 상태</span>
-          <span className={styles.icon}></span>
+          <span className={styles.icon} data-connected={connectState}></span>
         </span>
       </li>
     </ul>

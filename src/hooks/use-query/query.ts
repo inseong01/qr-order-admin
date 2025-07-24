@@ -6,6 +6,7 @@ import { getMenuList, Menu } from '@/lib/supabase/tables/menu';
 import { getOrderList, Order } from '@/lib/supabase/tables/order';
 import { FirstRequestItem, getRequestItemList } from '@/lib/supabase/tables/request-item';
 import { getOrderItemList, OrderItem } from '@/lib/supabase/tables/order-item';
+import { getMenuCategory, MenuCategory } from '@/lib/supabase/tables/menu-category';
 
 export const TABLE_LIST_QUERY_KEY = ['tableList'];
 export const REQUEST_LIST_QUERY_KEY = ['requestList'];
@@ -34,13 +35,13 @@ export function useQueryTableList() {
  * 요청 목록을 가져오는 쿼리
  */
 export function useQueryRequestList() {
-  const { data } = useQuery<Request[]>({
+  const { data, refetch } = useQuery<Request[]>({
     queryKey: REQUEST_LIST_QUERY_KEY,
     queryFn: getRequestList,
     refetchOnWindowFocus: false,
   });
 
-  return { data };
+  return { data, refetch };
 }
 
 /**
@@ -60,25 +61,25 @@ export function useQueryFirstRequest(request_id: string) {
  * 메뉴 목록을 가져오는 쿼리
  */
 export function useQueryMenuList() {
-  const { data } = useQuery<Menu[]>({
+  const { data, refetch } = useQuery<Menu[]>({
     queryKey: MENU_LIST_QUERY_KEY,
     queryFn: getMenuList,
     staleTime: Infinity,
   });
 
-  return { data };
+  return { data, refetch };
 }
 
 /**
  * 전체 주문 목록을 가져오는 쿼리
  */
 export function useQueryAllOrderList() {
-  const { data } = useQuery<Order[]>({
+  const { data, refetch } = useQuery<Order[]>({
     queryKey: ALL_ORDER_LIST_QUERY_KEY,
     queryFn: getOrderList,
   });
 
-  return { data };
+  return { data, refetch };
 }
 
 /**
@@ -86,9 +87,21 @@ export function useQueryAllOrderList() {
  */
 export function useQueryOrderMenuList() {
   const { data } = useQuery<OrderItem[]>({
-    queryKey: ORDER_LIST_QUERY_KEY,
+    queryKey: MENU_CATEGORIES_QUERY_KEY,
     queryFn: getOrderItemList,
   });
 
   return { data };
+}
+
+/**
+ * 메뉴 카테고리 목록을 가져오는 쿼리
+ */
+export function useQueryMenuCategoryList() {
+  const { data, refetch } = useQuery<MenuCategory[]>({
+    queryKey: ORDER_LIST_QUERY_KEY,
+    queryFn: getMenuCategory,
+  });
+
+  return { data, refetch };
 }

@@ -1,12 +1,16 @@
 import { useEffect } from 'react';
+import { useSetAtom } from 'jotai';
 import { useQueries, useQueryClient } from '@tanstack/react-query';
 import { REALTIME_LISTEN_TYPES, REALTIME_POSTGRES_CHANGES_LISTEN_EVENT } from '@supabase/realtime-js';
 
-import supabase from '../../lib/supabase';
-import { getMenuList } from '../../lib/supabase/tables/menu';
-import { getOrderList } from '../../lib/supabase/tables/order';
-import { getRequestList } from '../../lib/supabase/tables/request';
-import { getMenuCategory } from '../../lib/supabase/tables/menu-category';
+import { setConnectStateAtom } from '@/features/timer/store/atom';
+
+import supabase from '@/lib/supabase';
+import { getRequestList } from '@/lib/supabase/tables/request';
+import { getOrderList } from '@/lib/supabase/tables/order';
+import { getMenuCategory } from '@/lib/supabase/tables/menu-category';
+import { getMenuList } from '@/lib/supabase/tables/menu';
+
 import {
   ALL_ORDER_LIST_QUERY_KEY,
   MENU_CATEGORIES_QUERY_KEY,
@@ -20,15 +24,14 @@ export type DataStatus = 'pending' | 'fulfilled' | 'rejected';
  * 초기 데이터 로드 및 Supabase Realtime 구독을 처리하는 커스텀 훅
  *
  * @description
- * - 앱 초기 실행에 필요한 데이터(요청, 주문, 메뉴, 카테고리)를 TanStack Query의 useQueries를 사용해 병렬로 가져옵니다.
- * - Supabase의 Realtime 기능을 구독하여 'order' 및 'request' 테이블에 변경이 생기면 관련 쿼리를 다시 가져옵니다.
- * - 데이터 로딩 상태를 상세히 추적하여 UI에 피드백을 제공할 수 있도록 'success', 'pending', 'error' 상태를 반환합니다.
+ * - 앱 초기 실행에 필요한 데이터(요청, 주문, 메뉴, 카테고리)를 useQueries 사용해 병렬 처리
+ * - Supabase의 Realtime 기능을 구독하여 'order' 및 'request' 테이블 변경이 생기면 쿼리 리패치
+ * - UI 피드백을 제공할 수 있도록 'success', 'pending', 'error' 상태 반환
  *
  * @param method 실시간으로 감지할 이벤트 타입 (e.g., '*')
  */
 export function useQueryClientTable(method: REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.ALL) {
   const queryClient = useQueryClient();
-
   const queries = useQueries({
     queries: [
       {
@@ -73,11 +76,11 @@ export function useQueryClientTable(method: REALTIME_POSTGRES_CHANGES_LISTEN_EVE
       };
     },
   });
+  const setConnectState = useSetAtom(setConnectStateAtom);
 
   // Supabase Realtime 구독 설정
   useEffect(() => {
-    const channel = supabase.channel('db-changes');
-
+    const channel = supabase.channel('qr-order-realtime-changes');
     channel
       .on(
         REALTIME_LISTEN_TYPES.POSTGRES_CHANGES,
@@ -88,7 +91,7 @@ export function useQueryClientTable(method: REALTIME_POSTGRES_CHANGES_LISTEN_EVE
         },
         () => {
           // 주문 목록 쿼리 무효화 및 재요청
-          queryClient.invalidateQueries({ queryKey: ['allOrderList'] });
+          queryClient.invalidateQueries({ queryKey: ALL_ORDER_LIST_QUERY_KEY });
         }
       )
       .on(
@@ -100,14 +103,17 @@ export function useQueryClientTable(method: REALTIME_POSTGRES_CHANGES_LISTEN_EVE
         },
         () => {
           // 요청 목록 쿼리 무효화 및 재요청
-          queryClient.invalidateQueries({ queryKey: ['requestList'] });
+          queryClient.invalidateQueries({ queryKey: REQUEST_LIST_QUERY_KEY });
         }
       )
-      .subscribe();
+      .subscribe(() => {
+        setConnectState(true);
+      });
 
     // 컴포넌트 언마운트 시 구독 해제
     return () => {
       supabase.removeChannel(channel);
+      setConnectState(false);
     };
   }, [queryClient, method]);
 

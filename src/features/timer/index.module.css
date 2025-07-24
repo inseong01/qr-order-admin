@@ -49,5 +49,10 @@
   height: 10px;
 
   border-radius: 50%;
-  background-color: #00e522; /* 상태 별 색상 변경 */
+}
+.icon[data-connected='true'] {
+  background-color: #00e522;
+}
+.icon[data-connected='false'] {
+  background-color: #da2b2e;
 }

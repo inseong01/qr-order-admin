@@ -1,30 +1,17 @@
-import { useEffect } from 'react';
-import { atom, useAtomValue, useSetAtom } from 'jotai';
-
-import styles from './index.module.css';
+import { atom, useAtomValue } from 'jotai';
 
 import Timer from '@/features/timer';
-import Tab from '@/components/ui/tab';
 
 import { footerAtom } from '../footer';
-import { useQueryAllOrderList } from '@/hooks/use-query/query';
-
-/*
-메뉴 탭부터 리뉴얼
-상단 탭으로 카테고리 항목 표시 X
-메뉴 상하 스크롤로 카테고리 정렬 표시 O
-*/
+import HeaderMenuTab from './header-menu';
+import HeaderTableTab from './header-table';
+import HeaderOrderTab from './header-order';
+import styles from './index.module.css';
 
 export const headerTabIdxAtom = atom(0);
 
 export default function Header() {
   const footerTab = useAtomValue(footerAtom);
-  const setHeaderTabIdx = useSetAtom(headerTabIdxAtom);
-
-  useEffect(() => {
-    setHeaderTabIdx(0);
-  }, [footerTab]);
-
   const component = {
     menu: HeaderMenuTab,
     table: HeaderTableTab,
@@ -42,65 +29,5 @@ export default function Header() {
       {/* 현재 시간 */}
       <Timer />
     </header>
-  );
-}
-
-function HeaderMenuTab() {
-  const headerTabIdx = useAtomValue(headerTabIdxAtom);
-  const setHeaderTabIdx = useSetAtom(headerTabIdxAtom);
-
-  const handleTabClick = async (tabIdx: number) => {
-    if (headerTabIdx === tabIdx) return;
-
-    setHeaderTabIdx(tabIdx);
-  };
-
-  return <Tab text={'전체 메뉴'} isSelected={headerTabIdx === 0} handleTabClick={() => handleTabClick(0)} />;
-}
-
-function HeaderTableTab() {
-  const headerTabIdx = useAtomValue(headerTabIdxAtom);
-  const setHeaderTabIdx = useSetAtom(headerTabIdxAtom);
-
-  const handleTabClick = async (tabIdx: number) => {
-    if (headerTabIdx === tabIdx) return;
-
-    setHeaderTabIdx(tabIdx);
-  };
-
-  return (
-    <>
-      <Tab text={'현재 구역'} isSelected={headerTabIdx === 0} handleTabClick={() => handleTabClick(0)} />
-    </>
-  );
-}
-
-function HeaderOrderTab() {
-  const headerTabIdx = useAtomValue(headerTabIdxAtom);
-  const setHeaderTabIdx = useSetAtom(headerTabIdxAtom);
-  const { data } = useQueryAllOrderList();
-  const processingOrders = data?.filter((o) => !o.is_done) ?? [];
-  const completeOrders = data?.filter((o) => o.is_done) ?? [];
-
-  const handleTabClick = async (tabIdx: number) => {
-    if (headerTabIdx === tabIdx) return;
-
-    setHeaderTabIdx(tabIdx);
-  };
-
-  return (
-    <>
-      <Tab
-        text={`접수 ${processingOrders.length}`}
-        isSelected={headerTabIdx === 0}
-        handleTabClick={() => handleTabClick(0)}
-      />
-
-      <Tab
-        text={`완료 ${completeOrders.length}`}
-        isSelected={headerTabIdx === 1}
-        handleTabClick={() => handleTabClick(1)}
-      />
-    </>
   );
 }

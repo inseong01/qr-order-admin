@@ -9,29 +9,31 @@ import { useMenuTab } from './hooks/use-menu-tab';
 import styles from './view.module.css';
 
 export default function MenuTabView() {
-  const { menuGroupByCategory, menuCategoryKeys } = useMenuTab();
+  const { menuGroupByCategory, menuCategories, isMenuExist } = useMenuTab();
 
   return (
     <motion.ul className={styles.listBox} variants={listBoxMotion} initial={'notLoad'} animate={'load'}>
       <AnimatePresence>
-        {menuCategoryKeys.length === 0 ? (
+        {!isMenuExist ? (
           <li>메뉴를 생성해주세요</li>
         ) : (
-          menuCategoryKeys.map((category, idx) => (
-            <li key={idx} className={styles.display}>
+          menuCategories?.map((category, idx) => (
+            <li key={idx} className={styles.displayRow}>
               {/* 메뉴 카테고리 */}
-              <div className={styles.category}>{category}</div>
+              <motion.div layout={'position'} className={styles.category}>
+                {category.title}
+              </motion.div>
 
               {/* 메뉴 목록 */}
-              <div className={styles.menu}>
+              <motion.div layout className={styles.menuRow}>
                 {/* 추가 버튼 */}
-                <ListMenuAdd category={category} />
+                <ListMenuAdd category={category.title} />
 
                 {/* 메뉴 */}
-                {menuGroupByCategory[category]?.map((m: Menu) => (
+                {menuGroupByCategory[category.title]?.map((m: Menu) => (
                   <ListMenu key={m.id} {...m} />
                 ))}
-              </div>
+              </motion.div>
             </li>
           ))
         )}

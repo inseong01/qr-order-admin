@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { animate, motion, useMotionValue, useTransform } from 'motion/react';
 
@@ -10,15 +10,21 @@ import validate from '@/utils/function/validate';
 
 import OrderCardTablet from './variants/order-card-tablet';
 import OrderCardMobile from './variants/order-card-mobile';
+import { clickStateAtom, setClickStateAtom } from './store/atom';
 import styles from './order-card.module.css';
 
 export default function OrderCard({ order }: { order: Order }) {
   const { isMobile } = useAtomValue(windowStateAtom);
-  const [isClicked, clickOrderCard] = useState(false);
+  const isClicked = useAtomValue(clickStateAtom);
+  const setClickState = useSetAtom(setClickStateAtom);
+
+  function clickTopBox() {
+    setClickState();
+  }
 
   return (
     <OrderCardContainer orderId={order.id}>
-      <div className={styles.topBox} onClick={() => clickOrderCard((prev) => !prev)} data-is-completed={order.is_done}>
+      <div className={styles.topBox} onClick={clickTopBox} data-is-completed={order.is_done}>
         <div className={styles.top}>
           <div className={styles.title}>#{order.order_number}</div>
           <div className={styles.right}>
@@ -109,7 +115,7 @@ function OrderCardContainer({ children, orderId }: OrderCardContainerProps) {
   };
 
   return (
-    <div className={styles.container}>
+    <motion.div layout className={styles.container}>
       {/* 주문 */}
       <motion.li className={styles.slide} drag={isMobile ? 'x' : false} style={{ x }} onDragEnd={handleDragEnd}>
         {children}
@@ -125,6 +131,6 @@ function OrderCardContainer({ children, orderId }: OrderCardContainerProps) {
           주문 삭제
         </motion.div>
       </motion.div>
-    </div>
+    </motion.div>
   );
 }

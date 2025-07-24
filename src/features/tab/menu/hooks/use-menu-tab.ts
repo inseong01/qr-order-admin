@@ -1,17 +1,18 @@
-import { useQuery } from '@tanstack/react-query';
-
-import { MENU_LIST_QUERY_KEY } from '@/hooks/use-query/query';
-import { Menu } from '@/lib/supabase/tables/menu';
+import { useQueryMenuCategoryList, useQueryMenuList } from '@/hooks/use-query/query';
 
 export function useMenuTab() {
-  const { data } = useQuery<Menu[]>({ queryKey: MENU_LIST_QUERY_KEY });
+  const menuListQuery = useQueryMenuList();
+  const menuCategoriesQuery = useQueryMenuCategoryList();
 
   const menuGroupByCategory: { [key: string]: any } = {};
-  data?.forEach((v) => {
-    const category = v.menu_category.title;
-    menuGroupByCategory[category] = menuGroupByCategory[category] ? [...menuGroupByCategory[category], v] : [v];
-  });
-  const menuCategoryKeys = Object.keys(menuGroupByCategory);
+  const menuCategories = menuCategoriesQuery.data;
+  const isMenuExist = Object.keys(menuGroupByCategory).length === 0;
 
-  return { menuGroupByCategory, menuCategoryKeys };
+  /* 메뉴 분류 */
+  menuListQuery.data?.forEach((m) => {
+    const category = m.menu_category.title;
+    menuGroupByCategory[category] = menuGroupByCategory[category] ? [...menuGroupByCategory[category], m] : [m];
+  });
+
+  return { menuGroupByCategory, menuCategories, isMenuExist };
 }
