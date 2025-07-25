@@ -1,13 +1,13 @@
 :root {
   --key-color: #4caff8;
-  --page-fz-title: 26px;
+  --page-fz-title: 1.6rem; /* 26px */
   --page-fw-bold: 900;
-  --modal-fz-title: 20px;
-  --list-fz-title: 16px;
+  --modal-fz-title: 1.4rem; /* 20px */
+  --list-fz-title: 1rem;
   --list-fw-title-bold: 700;
-  --list-fz-large: 20px;
-  --list-fz-small: 14px;
-  --list-fz-regular: 16px;
+  --list-fz-large: 1.4rem; /* 20px */
+  --list-fz-small: 0.9rem; /* 14px */
+  --list-fz-regular: 1rem;
   --font-main-color: #404040;
   --font-sub-color: #8d8d8d;
   --tab-right-width: 439px; /* widget + gap + modal */
@@ -27,6 +27,7 @@ body {
 }
 
 * {
+  font-family: 'NanumSquareNeo', sans-serif;
   box-sizing: border-box;
   padding: 0;
   margin: 0;
@@ -62,8 +63,7 @@ input {
   border: none;
   border-bottom: 1px solid #d9d9d9;
 
-  padding: 8px;
-  padding-left: 0;
+  padding: 8px 4px;
 }
 input:focus {
   outline: none;

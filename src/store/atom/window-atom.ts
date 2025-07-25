@@ -11,8 +11,8 @@ type WindowState = {
   };
 };
 
-const paddingX = 70;
-const paddingY = 85 + 70 + 85;
+const paddingX = 70; // main section padding X
+const paddingY = 85 + 70 + 85; // header + main section padding Y + footer height
 const initialWindowState: WindowState = {
   viewportMode: 'portrait',
   isMobile: false,

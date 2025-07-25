@@ -2,7 +2,7 @@ import { atom } from 'jotai';
 
 import { Table } from '@/lib/supabase/tables/table';
 
-type EditMode = '' | 'create' | 'update' | 'delete';
+export type EditMode = '' | 'create' | 'update' | 'delete';
 
 /**
  * 편집 모드 상태
@@ -36,23 +36,25 @@ export const resetTablEditAtom = atom(null, (_, set) => {
 
 /**
  * 편집 모드 지정
+ *
+ * 선택된 좌석 초기화 동시 진행
  */
 export const setEditModeAtom = atom(null, (_, set, mode: EditMode) => {
   set(editModeAtom, mode);
+  set(selectedTableIdsAtom, []);
 });
 
 /**
- * 편집 모드 토글
+ * 편집 모드 상태 설정
  */
-export const toggleEditModeAtom = atom(null, (get, set) => {
-  const current = get(isEditingAtom);
-  set(isEditingAtom, !current);
+export const setEditStateAtom = atom(null, (_, set, state: boolean) => {
+  set(isEditingAtom, state);
 });
 
 /**
- * 테이블 선택/해제
+ * 다중 테이블 선택/해제
  */
-export const selectTableAtom = atom(null, (get, set, tableId: string) => {
+export const selectMultiTablesAtom = atom(null, (get, set, tableId: string) => {
   const currentIds = get(selectedTableIdsAtom);
   const newIds = new Set(currentIds);
 
@@ -66,12 +68,10 @@ export const selectTableAtom = atom(null, (get, set, tableId: string) => {
 });
 
 /**
- * 새로운 테이블 사본 추가
+ * 단일 테이블 선택
  */
-export const createDraftTableAtom = atom(null, (get, set, newTable: Table) => {
-  const currentTables = get(draftTablesAtom);
-  set(draftTablesAtom, [...currentTables, newTable]);
-  set(selectedTableIdsAtom, [newTable.id]);
+export const selectSingleTableAtom = atom(null, (_, set, tableId: string) => {
+  set(selectedTableIdsAtom, [tableId]);
 });
 
 /**

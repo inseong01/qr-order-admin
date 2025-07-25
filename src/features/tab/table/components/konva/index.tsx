@@ -1,14 +1,16 @@
 import Konva from 'konva';
 import { motion } from 'motion/react';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { Layer, Rect, Stage, Text } from 'react-konva';
 
 import { useQueryOrderMenuList, useQueryTableList } from '@/hooks/use-query/query';
 import { windowStateAtom } from '@/store/atom/window-atom';
 
-import { draftTablesAtom, editModeAtom, setDraftTableAtom } from '../../store/table-edit-state';
+import { draftTablesAtom, editModeAtom, selectedTableIdsAtom } from '../../store/table-edit-state';
 import { setTableStageAtom } from '../../store/table-state';
+import { setStagePositionStateAtom, stagePositionStateAtom } from './store/atom';
+import { setEditDescription } from './function/set-edit-description';
 import TableLayer from './layer';
 import styles from './index.module.css';
 
@@ -18,17 +20,15 @@ export default function KonvaSection() {
   const stageRef = useRef<Konva.Stage>(null);
   const editMode = useAtomValue(editModeAtom);
   const draftTables = useAtomValue(draftTablesAtom);
+  const tableIds = useAtomValue(selectedTableIdsAtom);
   const { mainSection } = useAtomValue(windowStateAtom);
+  const { x, y } = useAtomValue(stagePositionStateAtom);
   const setTableStage = useSetAtom(setTableStageAtom);
-  const setDraftTables = useSetAtom(setDraftTableAtom);
+  const setStagePositionState = useSetAtom(setStagePositionStateAtom);
 
   const needDraft = editMode === 'update' || editMode === 'create';
   const renderTables = needDraft ? draftTables : (tablesQuery?.data ?? []);
-
-  const stageScale = useMemo(() => {
-    const isMobile = window.innerWidth <= 720 || window.innerHeight <= 720;
-    return isMobile ? 0.49 : 1;
-  }, [mainSection]);
+  const editDescription = setEditDescription(editMode, Boolean(tableIds.length));
 
   /* stageRef 관리 */
   useEffect(() => {
@@ -36,13 +36,19 @@ export default function KonvaSection() {
     setTableStage(stageRef.current);
   }, [stageRef]);
 
-  /* editableTables 데이터 관리 */
-  useEffect(() => {
-    if (editMode === 'create') return; // create일 때 원본 데이터 사용 X
-    if (tablesQuery.data) {
-      setDraftTables(tablesQuery.data);
-    }
-  }, [editMode, tablesQuery.data, setDraftTables]);
+  /* 드래그 화면 위치 초기화 */
+  function resetStagePosition() {
+    if (editMode) return;
+    if (x === 0 && y === 0) return;
+    setStagePositionState({ x: 0, y: 0 });
+  }
+
+  /* 화면 드래그 위치 동기화 */
+  function setLastDragPosition() {
+    if (!stageRef.current) return;
+    const lastPos = stageRef.current.position();
+    setStagePositionState({ x: lastPos.x, y: lastPos.y });
+  }
 
   return (
     <motion.div className={styles.table} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
@@ -50,18 +56,21 @@ export default function KonvaSection() {
         <div className={styles.title}>위젯에서 테이블을 생성해주세요</div>
       ) : (
         <Stage
+          draggable
           ref={stageRef}
+          x={editMode ? 0 : x}
+          y={editMode ? 0 : y}
           width={mainSection.width}
           height={mainSection.height}
-          scaleX={stageScale}
-          scaleY={stageScale}
-          draggable={!editMode}
+          onDblClick={resetStagePosition}
+          onDblTap={resetStagePosition}
+          onDragEnd={setLastDragPosition}
         >
           {/* 편집 모드 배경 */}
           <Layer opacity={editMode ? 1 : 0}>
-            <Rect width={mainSection.width} height={mainSection.height} cornerRadius={12} fill='#b4b4b4' />
+            <Rect width={mainSection.width} height={mainSection.height} cornerRadius={0} fill='#b4b4b4' />
             <Text
-              text='배경 내에서 좌석을 수정할 수 있습니다'
+              text={editDescription}
               width={mainSection.width}
               height={mainSection.height}
               align='center'

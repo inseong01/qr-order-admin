@@ -23,6 +23,8 @@ export default function Widget() {
   const WidgetComponent = components[tab];
   const isWidgetComponentOn = WidgetComponent && (!_window.isMobile || _window.viewportMode === 'portrait');
 
+  /* 모바일 위젯 등장 및 스타일링 작업 */
+
   return (
     <motion.div className={styles.widgetWrap} layout transition={{ duration: 0.3 }}>
       {/* 위젯 버튼 */}

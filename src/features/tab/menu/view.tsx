@@ -25,7 +25,7 @@ export default function MenuTabView() {
               </motion.div>
 
               {/* 메뉴 목록 */}
-              <motion.div layout className={styles.menuRow}>
+              <motion.div layout={'position'} className={styles.menuRow}>
                 {/* 추가 버튼 */}
                 <ListMenuAdd category={category.title} />
 

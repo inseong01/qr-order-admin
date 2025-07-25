@@ -120,3 +120,20 @@
 
   padding: 15px 0;
 }
+
+@media (max-height: 768px) {
+  .addMenuModal {
+    gap: 10px;
+  }
+
+  .inputWrapper {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .inputTitle {
+    width: 30%;
+    text-align: start;
+  }
+}

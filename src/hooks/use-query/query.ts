@@ -20,7 +20,7 @@ export const MENU_CATEGORIES_QUERY_KEY = ['menuCategoryList'];
  * 테이블 목록을 가져오는 쿼리
  */
 export function useQueryTableList() {
-  const tableList = useQuery<Table[]>({
+  const { data, refetch } = useQuery<Table[]>({
     queryKey: TABLE_LIST_QUERY_KEY,
     queryFn: getTableList,
     staleTime: Infinity,
@@ -28,7 +28,7 @@ export function useQueryTableList() {
     refetchOnWindowFocus: false,
   });
 
-  return tableList;
+  return { data, refetch };
 }
 
 /**
@@ -87,7 +87,8 @@ export function useQueryAllOrderList() {
  */
 export function useQueryOrderMenuList() {
   const { data } = useQuery<OrderItem[]>({
-    queryKey: MENU_CATEGORIES_QUERY_KEY,
+    // queryKey: MENU_CATEGORIES_QUERY_KEY, // 변경 전
+    queryKey: ORDER_LIST_QUERY_KEY,
     queryFn: getOrderItemList,
   });
 
@@ -99,7 +100,8 @@ export function useQueryOrderMenuList() {
  */
 export function useQueryMenuCategoryList() {
   const { data, refetch } = useQuery<MenuCategory[]>({
-    queryKey: ORDER_LIST_QUERY_KEY,
+    // queryKey: ORDER_LIST_QUERY_KEY, // 변경 전
+    queryKey: MENU_CATEGORIES_QUERY_KEY,
     queryFn: getMenuCategory,
   });
 

@@ -13,7 +13,8 @@ import {
   isEditingAtom,
   resetTablEditAtom,
   selectedTableIdsAtom,
-  selectTableAtom,
+  selectMultiTablesAtom,
+  selectSingleTableAtom,
   updateDraftTableAtom,
 } from '../../../store/table-edit-state';
 import { tableStageAtom } from '../../../store/table-state';
@@ -27,7 +28,8 @@ export default function TableLayer({ table, orders }: { table: Table; orders: Or
   const selectId = useSetAtom(selectIdState);
   const setTableModal = useSetAtom(setTabModalAtomState);
   const updateTable = useSetAtom(updateDraftTableAtom);
-  const selectTable = useSetAtom(selectTableAtom);
+  const selectMutiTables = useSetAtom(selectMultiTablesAtom);
+  const selectSingleTable = useSetAtom(selectSingleTableAtom);
   const resetTableEdit = useSetAtom(resetTablEditAtom);
   const setModalClick = useSetAtom(setModalClickAtom);
 
@@ -81,18 +83,12 @@ export default function TableLayer({ table, orders }: { table: Table; orders: Or
     }
 
     if (editMode === 'delete') {
-      selectTable(table.id);
+      selectMutiTables(table.id);
       return;
     }
 
     if (editMode === 'update') {
-      // 다시 클릭하면 선택 해제
-      if (isSelectedTable) return selectTable(table.id);
-
-      // 업데이트에서는 테이블 하나만 선택 가능
-      if (tableIds.length > 0) return;
-
-      selectTable(table.id);
+      selectSingleTable(table.id);
       return;
     }
 
@@ -102,13 +98,13 @@ export default function TableLayer({ table, orders }: { table: Table; orders: Or
   }
 
   /* 변형(드래그, 리사이즈) 시작 시 원래 정보 저장 */
-  const handleTransformStart = () => {
+  function handleTransformStart() {
     if (preTransformTable) return;
     setPreTransformTable(table);
-  };
+  }
 
   /* 드래그 종료 시 위치 업데이트 */
-  const handleDragEnd = (e: Konva.KonvaEventObject<DragEvent>) => {
+  function handleDragEnd(e: Konva.KonvaEventObject<DragEvent>) {
     const node = e.target;
     const newTable = {
       ...table,
@@ -119,10 +115,10 @@ export default function TableLayer({ table, orders }: { table: Table; orders: Or
       },
     };
     updateTable(newTable);
-  };
+  }
 
   /* 리사이즈 종료 시 크기 및 선(Line) 정보 업데이트 */
-  const handleTransformEnd = () => {
+  function handleTransformEnd() {
     const node = shapeRef.current;
     const group = groupRef.current;
     if (!node || !group) return;
@@ -162,7 +158,7 @@ export default function TableLayer({ table, orders }: { table: Table; orders: Or
       },
     };
     updateTable(newTable);
-  };
+  }
 
   /* 좌석 모형 변환 제한 설정 */
   function limitBoundBox(oldBox: any, newBox: any) {

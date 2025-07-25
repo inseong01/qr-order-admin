@@ -10,7 +10,7 @@ export const initMenu = {
   img_url: '',
   name: '',
   price: 0,
-  tag: '신규',
+  tag: '기본',
 };
 
 export const menuAtom = atom<Menu>(initMenu);

@@ -8,15 +8,19 @@ import { createNewTable } from '@/features/tab/table/components/konva/function/k
 import { setRequestAlertAtom } from '@/features/alert/request/store/atom';
 import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
 import {
-  createDraftTableAtom,
   draftTablesAtom,
   editModeAtom,
   isEditingAtom,
   resetTablEditAtom,
   selectedTableIdsAtom,
+  selectSingleTableAtom,
+  setDraftTableAtom,
   setEditModeAtom,
-  toggleEditModeAtom,
+  setEditStateAtom,
 } from '@/features/tab/table/store/table-edit-state';
+import { openSubmissionStatusAlertAtom } from '@/features/alert/popup/store/atom';
+
+import { useQueryTableList } from '@/hooks/use-query/query';
 
 import LIGHT_ADD_LIST_ICON from '@/assets/icon/light-add-list.svg';
 import LIGHT_DELETE_ICON from '@/assets/icon/light-delete.svg';
@@ -32,16 +36,19 @@ import styles from './components.module.css';
  * 테이블 탭 위젯
  */
 export function TableWidget() {
+  const tablesQuery = useQueryTableList();
   const { mainSection } = useAtomValue(windowStateAtom);
   const editMode = useAtomValue(editModeAtom);
   const isEditing = useAtomValue(isEditingAtom);
   const tableIds = useAtomValue(selectedTableIdsAtom);
   const draftTables = useAtomValue(draftTablesAtom);
-  const setAlertStatus = useSetAtom(setRequestAlertAtom);
+  const setTableRequestAlertStatus = useSetAtom(setRequestAlertAtom);
   const setTableEditMode = useSetAtom(setEditModeAtom);
-  const addNewTable = useSetAtom(createDraftTableAtom);
-  const toggleEditMode = useSetAtom(toggleEditModeAtom);
+  const selectSingleTable = useSetAtom(selectSingleTableAtom);
+  const setEditState = useSetAtom(setEditStateAtom);
+  const setDraftTables = useSetAtom(setDraftTableAtom);
   const resetTableState = useSetAtom(resetTablEditAtom);
+  const openSubmissionStatusAlert = useSetAtom(openSubmissionStatusAlertAtom);
   const { showConfirmModal } = useConfirmModal();
 
   /** 좌석 삭제 로직 */
@@ -49,8 +56,15 @@ export function TableWidget() {
     if (editMode === 'delete' && !!tableIds.length) {
       const title = '테이블을 삭제할까요?';
       const onConfirm = async () => {
-        deleteTable(tableIds);
-        resetTableState();
+        try {
+          await deleteTable(tableIds);
+          resetTableState();
+          await tablesQuery.refetch();
+          openSubmissionStatusAlert('삭제되었습니다.');
+        } catch (err) {
+          console.error(err);
+          openSubmissionStatusAlert('오류가 발생했습니다.');
+        }
       };
 
       showConfirmModal({ title, onConfirm });
@@ -58,8 +72,9 @@ export function TableWidget() {
     }
 
     setTableEditMode('delete');
-    toggleEditMode();
-    setAlertStatus(false);
+    setDraftTables(tablesQuery.data ?? []);
+    setEditState(true);
+    setTableRequestAlertStatus(false);
   }
 
   /** 좌석 정보 수정 로직 */
@@ -67,8 +82,15 @@ export function TableWidget() {
     if (editMode === 'update' && !!draftTables.length) {
       const title = '테이블을 수정할까요?';
       const onConfirm = async () => {
-        upsertTable(draftTables);
-        resetTableState();
+        try {
+          await upsertTable(draftTables);
+          resetTableState();
+          await tablesQuery.refetch();
+          openSubmissionStatusAlert('수정되었습니다.');
+        } catch (err) {
+          console.error(err);
+          openSubmissionStatusAlert('오류가 발생했습니다.');
+        }
       };
 
       showConfirmModal({ title, onConfirm });
@@ -76,8 +98,9 @@ export function TableWidget() {
     }
 
     setTableEditMode('update');
-    toggleEditMode();
-    setAlertStatus(false);
+    setDraftTables(tablesQuery.data ?? []);
+    setEditState(true);
+    setTableRequestAlertStatus(false);
   }
 
   /** 좌석 생성 로직 */
@@ -85,31 +108,40 @@ export function TableWidget() {
     if (editMode === 'create') {
       const title = '테이블을 추가할까요?';
       const onConfirm = async () => {
-        upsertTable(draftTables);
-        resetTableState();
+        try {
+          await upsertTable(draftTables);
+          resetTableState();
+          await tablesQuery.refetch();
+          openSubmissionStatusAlert('추가되었습니다.');
+        } catch (err) {
+          console.error(err);
+          openSubmissionStatusAlert('오류가 발생했습니다.');
+        }
       };
 
       showConfirmModal({ title, onConfirm });
       return;
     }
 
+    setTableEditMode('create');
     const pseudoStageSize = {
       stageWidth: mainSection.width,
       stageHeight: mainSection.height,
     };
-    const newTable = createNewTable(pseudoStageSize, draftTables);
-    addNewTable(newTable);
-    setTableEditMode('create');
-    toggleEditMode();
-    setAlertStatus(false);
+    const newTable = createNewTable(pseudoStageSize, tablesQuery.data ?? []);
+    setDraftTables([...(tablesQuery.data ?? []), newTable]);
+    selectSingleTable(newTable.id);
+    setEditState(true);
+    setTableRequestAlertStatus(false);
   }
 
+  /** 편집 상태 변경 */
   function handleEditMode() {
     if (editMode) {
       resetTableState();
       return;
     }
-    toggleEditMode();
+    setEditState(!isEditing);
   }
 
   return (

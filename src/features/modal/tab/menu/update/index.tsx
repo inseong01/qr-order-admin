@@ -1,6 +1,5 @@
 import { ChangeEvent, FormEvent } from 'react';
 import { useAtom, useSetAtom } from 'jotai';
-import { useQuery } from '@tanstack/react-query';
 
 import validate from '@/utils/function/validate';
 
@@ -170,6 +169,7 @@ export default function UpdateMenuModal() {
             <span className={styles.inputTitle}>판매 상태</span>
 
             <select className={styles.options} id='status' name='tag' onChange={getInputValue} value={inputValue.tag}>
+              <option value={'기본'}>기본</option>
               <option value={'신규'}>신규</option>
               <option value={'인기'}>인기</option>
               <option value={'품절'}>품절</option>
