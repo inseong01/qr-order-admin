@@ -9,8 +9,8 @@
   position: relative;
 }
 .modalTitle {
-  color: var(--font-main-color);
-  font-size: var(--modal-fz-title);
+  color: var(--main-color);
+  font-size: var(--fz-l);
 }
 .close {
   width: 25px;
@@ -35,10 +35,10 @@
   align-items: center;
   gap: 5px;
 
-  color: var(--font-sub-color);
-  font-size: var(--list-fz-small);
+  color: var(--sub-color);
+  font-size: var(--fz-s);
 
-  border: 1px solid var(--font-sub-color);
+  border: 1px solid var(--sub-color);
   border-radius: 8px;
 
   cursor: pointer;

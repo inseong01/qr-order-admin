@@ -6,7 +6,7 @@ import { useQueryAllOrderList } from '@/hooks/use-query/query';
 import { completeOrder, deleteOrder, Order } from '@/lib/supabase/tables/order';
 
 import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
-import { openSubmissionStatusAlertAtom } from '@/features/alert/popup/store/atom';
+import { openSubmissionAlertAtom } from '@/features/alert/popup/store/atom';
 
 import validate from '@/utils/function/validate';
 
@@ -36,7 +36,7 @@ interface OrderCardSubmitButtonProps {
 
 function OrderCardSubmitButton({ order, type, refetch }: OrderCardSubmitButtonProps) {
   const { showConfirmModal } = useConfirmModal();
-  const openSubmissionStatusAlert = useSetAtom(openSubmissionStatusAlertAtom);
+  const openSubmissionAlert = useSetAtom(openSubmissionAlertAtom);
 
   /* 비즈니스 로직 */
   function onClickUpdateListState() {
@@ -52,10 +52,10 @@ function OrderCardSubmitButton({ order, type, refetch }: OrderCardSubmitButtonPr
       try {
         type === 'complete' ? await completeOrder(order.id) : await deleteOrder(order.id); // supabase 전달
         await refetch();
-        openSubmissionStatusAlert(type === 'complete' ? '완료되었습니다' : '삭제되었습니다.'); // 데이터 처리 상태 알림
+        openSubmissionAlert(type === 'complete' ? '완료되었습니다' : '삭제되었습니다.'); // 데이터 처리 상태 알림
       } catch (e) {
         console.error(e);
-        openSubmissionStatusAlert('오류가 발생했습니다');
+        openSubmissionAlert('오류가 발생했습니다');
       }
     };
 

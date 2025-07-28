@@ -4,9 +4,8 @@ import { motion, AnimatePresence } from 'motion/react';
 
 import { useQueryRequestList } from '@/hooks/use-query/query';
 
+import { MessageCountPannel, MessagePreview } from './components/message/message';
 import { requestAlertAtom } from './store/atom';
-import MessagePreview from './message-preview';
-import MessageCountPannel from './message-count';
 import styles from './index.module.css';
 
 export default function TableRequestAlert() {
@@ -33,7 +32,7 @@ export default function TableRequestAlert() {
           {miniRequestCount > 0 && <MessageCountPannel count={miniRequestCount} />}
 
           {/* 테이블 요청 메시지 */}
-          {hasExtraMsg && <MessagePreview request={notReadRequests[0]} refetch={requestsQuery.refetch} />}
+          {hasExtraMsg && <MessagePreview request={notReadRequests[0]} requestRefetch={requestsQuery.refetch} />}
         </motion.div>
       )}
     </AnimatePresence>

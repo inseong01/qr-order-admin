@@ -24,7 +24,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 15px;
+  gap: 35px;
 }
 
 /* listBox - 주문목록 */
@@ -102,8 +102,8 @@
   background-color: var(--key-color);
 
   color: white;
-  font-size: var(--list-fz-regular);
-  font-weight: var(--page-fw-bold);
+  font-size: var(--fz-r);
+  font-weight: var(--fw-b);
 
   padding: 15px 0;
 }

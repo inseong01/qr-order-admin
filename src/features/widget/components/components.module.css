@@ -1,4 +1,4 @@
-/* MenuWidget, TableWidget */
+/* Menu Widget, Table Widget */
 .iconBox {
   width: 25px;
   height: 25px;
@@ -20,7 +20,14 @@
   overflow-x: hidden;
 }
 
-/* WidgetIconButton */
+@media (max-height: 768px) {
+  .iconBox {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Widget Icon Button */
 .openIconBox {
   width: 10px;
   height: 10px;

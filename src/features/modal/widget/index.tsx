@@ -27,7 +27,7 @@ export default function WidgetCateogryModal() {
   const ModalForm = widgetState.option !== '' ? component[widgetState.option] : null;
 
   function handleClose() {
-    setWidgetState({ option: '' });
+    setWidgetState({ option: '' }); // 모달 닫기
   }
 
   return (

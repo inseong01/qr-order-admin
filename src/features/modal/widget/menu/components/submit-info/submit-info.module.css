@@ -1,0 +1,10 @@
+.submitInfo {
+  max-height: 206px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  font-size: var(--fz-s);
+  overflow-y: auto;
+}

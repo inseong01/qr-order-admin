@@ -48,13 +48,13 @@ export function useQueryRequestList() {
  * 첫번째 요청 목록을 가져오는 쿼리
  */
 export function useQueryFirstRequest(request_id: string) {
-  const { data } = useQuery<FirstRequestItem[]>({
+  const { data, refetch } = useQuery<FirstRequestItem[]>({
     queryKey: FIRST_REQUEST_QUERY_KEY,
     queryFn: () => getRequestItemList(request_id),
     refetchOnWindowFocus: false,
   });
 
-  return { data };
+  return { data, refetch };
 }
 
 /**

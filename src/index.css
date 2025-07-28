@@ -1,15 +1,28 @@
 :root {
+  /* color */
   --key-color: #4caff8;
-  --page-fz-title: 1.6rem; /* 26px */
-  --page-fw-bold: 900;
-  --modal-fz-title: 1.4rem; /* 20px */
-  --list-fz-title: 1rem;
-  --list-fw-title-bold: 700;
-  --list-fz-large: 1.4rem; /* 20px */
-  --list-fz-small: 0.9rem; /* 14px */
-  --list-fz-regular: 1rem;
-  --font-main-color: #404040;
-  --font-sub-color: #8d8d8d;
+  --main-color: #404040;
+  --sub-color: #8d8d8d;
+
+  /* font weight */
+  --fw-b: 900;
+  --fw-m: 700;
+
+  /* font size */
+  --fz-xl: 1.6rem; /* 26px */
+  --fz-l: 1.4rem; /* 22.4px */
+  --fz-m: 1.2rem; /* 22.4px */
+  --fz-r: 1rem; /* 16px */
+  --fz-s: 0.9rem; /* 14px */
+
+  /* font size response */
+  --fz-xl-response: 1.4rem; /* 22.4px */
+  --fz-l-response: 1.2rem; /* 19.2px */
+  --fz-m-response: 1rem; /* 19.2px */
+  --fz-r-response: 0.8rem; /* 12.8px */
+  --fz-s-response: 0.75rem; /* 12px */
+
+  /* tab width */
   --tab-right-width: 439px; /* widget + gap + modal */
   --tab-modal-width: 350px;
 }
@@ -85,7 +98,7 @@ select {
   -moz-appearance: none;
 
   font-size: 1rem;
-  color: var(--font-main-color);
+  color: var(--main-color);
   background-color: #fff;
   padding: 0.6em 1em;
   border: 1px solid #ccc;

@@ -1,0 +1,31 @@
+/* dialog */
+.dialog {
+  width: 360px;
+
+  color: #222;
+  border: 1px solid #c9c9c9;
+  border-radius: 10px;
+  background-color: white;
+  outline: none;
+  overflow: hidden;
+
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  font-size: 1rem;
+
+  cursor: default;
+  z-index: 99999;
+}
+
+/* backdrop */
+.backdrop {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 999;
+}

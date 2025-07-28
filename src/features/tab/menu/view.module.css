@@ -17,6 +17,7 @@
 
 .category {
   text-align: start;
+  font-size: var(--fz-l);
 }
 
 .menuRow {
@@ -24,4 +25,10 @@
   align-items: flex-start;
   flex-wrap: wrap;
   gap: 12px;
+}
+
+@media (max-height: 768px) {
+  .category {
+    font-size: var(--fz-l-response);
+  }
 }

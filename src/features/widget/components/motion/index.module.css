@@ -1,21 +1,21 @@
-/* ListBox */
+/* List Box */
 .listBox {
-  min-width: 73px;
+  min-width: 85px;
 
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 10px;
 
   border-radius: 8px;
   background-color: var(--key-color);
 
   color: white;
-  font-size: var(--list-fz-small);
+  font-size: var(--fz-s);
 
   cursor: pointer;
   overflow: hidden;
 
-  padding: 8px;
+  padding: 12px;
 }
 .listBox[data-isrow='true'] {
   justify-content: center;
@@ -24,7 +24,16 @@
   flex-direction: column;
 }
 
-/* DetectAnimation */
+@media (max-height: 768px) {
+  .listBox {
+    min-width: 70px;
+
+    font-size: var(--fz-s-response);
+    padding: 8px;
+  }
+}
+
+/* Detect Animation */
 .animateBox {
   display: flex;
   flex-direction: column;

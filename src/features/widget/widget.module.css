@@ -1,18 +1,6 @@
 .widgetWrap {
-  /* position: absolute;
-
-  right: 105%;
-  bottom: 0;
-  z-index: 999; */
-
   display: flex;
   flex-direction: column-reverse;
   align-items: center;
   gap: 10px;
-}
-
-@media (max-width: 720px) {
-  .widgetWrap {
-    bottom: 65px;
-  }
 }

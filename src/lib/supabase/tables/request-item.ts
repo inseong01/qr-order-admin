@@ -41,7 +41,8 @@ export async function getRequestItemList(request_id: string): Promise<FirstReque
     )
   `
     )
-    .eq('request_id', request_id);
+    .eq('request_id', request_id)
+    .order('created_at', { ascending: false });
 
   if (error) {
     console.error(error.message);

@@ -1,27 +1,28 @@
-import { atom, useAtom, useSetAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 
 import { useQueryMenuCategoryList } from '@/hooks/use-query/query';
 
-import { openSubmissionStatusAlertAtom } from '@/features/alert/popup/store/atom';
+import { openSubmissionAlertAtom } from '@/features/alert/popup/store/atom';
 import { setWidgetAtomState } from '@/features/widget/store/atom';
 
 import { addMenuCategory } from '@/lib/supabase/tables/menu-category';
 import validate from '@/utils/function/validate';
 
 import { useConfirmModal } from '../../confirm/hook/use-confirm-modal';
+import { SubmitInfoBox } from './components/submit-info/submit-info';
+import SubmitButton from './components/button/button';
+import TitleBox from './components/title/title';
+import { categoryInputAtom } from './store/atom';
 import styles from './add-category-form.module.css';
-
-// 분류 추가 폼 입력 값을 관리하는 Atom
-const addCategoryInputAtom = atom('');
 
 /**
  * 새로운 메뉴 분류를 추가하는 컴포넌트
  */
 export default function AddCategoryForm() {
-  const [inputValue, setInputValue] = useAtom(addCategoryInputAtom);
+  const [inputValue, setInputValue] = useAtom(categoryInputAtom);
   const menuCategoriesQuery = useQueryMenuCategoryList();
   const setWidgetState = useSetAtom(setWidgetAtomState);
-  const openSubmissionStatusAlert = useSetAtom(openSubmissionStatusAlertAtom);
+  const openSubmissionAlert = useSetAtom(openSubmissionAlertAtom);
   const { showConfirmModal } = useConfirmModal();
 
   /* 비즈니스 로직 */
@@ -39,10 +40,10 @@ export default function AddCategoryForm() {
       try {
         await addMenuCategory({ title: data }); // supabase 전달
         await menuCategoriesQuery.refetch();
-        openSubmissionStatusAlert('추가되었습니다'); // 데이터 처리 상태 알림
+        openSubmissionAlert('추가되었습니다'); // 데이터 처리 상태 알림
       } catch (e) {
         console.error(e);
-        openSubmissionStatusAlert('오류가 발생했습니다');
+        openSubmissionAlert('오류가 발생했습니다');
       } finally {
         setInputValue('');
       }
@@ -64,10 +65,10 @@ export default function AddCategoryForm() {
     <form className={`${styles.submitForm} ${styles.category}`} onSubmit={handleSubmit}>
       <div className={styles.sortModal}>
         {/* 제목 */}
-        <div className={styles.title}>분류 추가</div>
+        <TitleBox>분류 추가</TitleBox>
 
         {/* 입력 */}
-        <ul className={styles.submitInfo}>
+        <SubmitInfoBox>
           <li className={styles.info}>
             <input
               required
@@ -79,12 +80,10 @@ export default function AddCategoryForm() {
               placeholder='분류명을 입력해주세요'
             />
           </li>
-        </ul>
+        </SubmitInfoBox>
 
         {/* 제출 */}
-        <div className={styles.submitBtn}>
-          <input type='submit' className={styles.btn} value='추가하기' />
-        </div>
+        <SubmitButton value='추가하기' />
       </div>
     </form>
   );

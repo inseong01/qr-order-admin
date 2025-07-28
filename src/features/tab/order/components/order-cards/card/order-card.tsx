@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { animate, motion, useMotionValue, useTransform } from 'motion/react';
 
-import { openSubmissionStatusAlertAtom } from '@/features/alert/popup/store/atom';
+import { openSubmissionAlertAtom } from '@/features/alert/popup/store/atom';
 import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
 import { completeOrder, deleteOrder, Order } from '@/lib/supabase/tables/order';
 import { windowStateAtom } from '@/store/atom/window-atom';
@@ -50,7 +50,7 @@ function OrderCardContainer({ children, orderId }: OrderCardContainerProps) {
   const completeOpacity = useTransform(x, [50, 100], [0, 1]);
   const { isMobile } = useAtomValue(windowStateAtom);
   const { showConfirmModal } = useConfirmModal();
-  const openSubmissionStatusAlert = useSetAtom(openSubmissionStatusAlertAtom);
+  const openSubmissionAlert = useSetAtom(openSubmissionAlertAtom);
 
   /* 비즈니스 로직 */
   const handleDragEnd = async (
@@ -83,10 +83,10 @@ function OrderCardContainer({ children, orderId }: OrderCardContainerProps) {
 
         try {
           await completeOrder(orderId); // supabase 전달
-          openSubmissionStatusAlert('완료되었습니다'); // 데이터 처리 상태 알림
+          openSubmissionAlert('완료되었습니다'); // 데이터 처리 상태 알림
         } catch (e) {
           console.error(e);
-          openSubmissionStatusAlert('오류가 발생했습니다.'); // 데이터 처리 상태 알림
+          openSubmissionAlert('오류가 발생했습니다.'); // 데이터 처리 상태 알림
         }
       };
     } else {
@@ -102,10 +102,10 @@ function OrderCardContainer({ children, orderId }: OrderCardContainerProps) {
 
         try {
           await deleteOrder(orderId); // supabase 전달
-          openSubmissionStatusAlert('삭제되었습니다.'); // 데이터 처리 상태 알림
+          openSubmissionAlert('삭제되었습니다.'); // 데이터 처리 상태 알림
         } catch (e) {
           console.error(e);
-          openSubmissionStatusAlert('오류가 발생했습니다.'); // 데이터 처리 상태 알림
+          openSubmissionAlert('오류가 발생했습니다.'); // 데이터 처리 상태 알림
         }
       };
     }

@@ -17,12 +17,11 @@
 .leftBox {
   width: 100%;
   height: 100%;
-
-  font-size: var(--list-fz-large);
   position: relative;
 }
 
 .rightBox {
+  width: auto;
   height: 100%;
 
   display: flex;

@@ -32,8 +32,8 @@
   position: relative;
 }
 .modalTitle {
-  color: var(--font-main-color);
-  font-size: var(--modal-fz-title);
+  color: var(--main-color);
+  font-size: var(--fz-l);
 }
 .close {
   width: 25px;
@@ -63,10 +63,10 @@
   align-items: center;
   gap: 5px;
 
-  color: var(--font-sub-color);
-  font-size: var(--list-fz-small);
+  color: var(--sub-color);
+  font-size: var(--fz-s);
 
-  border: 1px solid var(--font-sub-color);
+  border: 1px solid #d9d9d9;
   border-radius: 8px;
 
   cursor: pointer;
@@ -84,21 +84,36 @@
 .main {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 30px;
 }
+
 .inputWrapper {
   width: 100%;
 
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.inputWrapper input {
+  text-align: end;
+}
+
+.inputTitle {
+  font-size: var(--fz-r);
+  min-width: 100px;
+  text-align: start;
+}
+
+.priceBox {
+  display: flex;
+  align-items: center;
   gap: 5px;
 }
-.inputTitle {
-  font-size: var(--list-fz-regular);
-}
+
 .options {
-  font-size: var(--list-fz-small);
+  font-size: var(--fz-s);
 }
 
 .submitBox {
@@ -115,8 +130,8 @@
   background-color: var(--key-color);
 
   color: white;
-  font-size: var(--list-fz-regular);
-  font-weight: var(--page-fw-bold);
+  font-size: var(--fz-r);
+  font-weight: var(--fw-b);
 
   padding: 15px 0;
 }
@@ -126,14 +141,7 @@
     gap: 10px;
   }
 
-  .inputWrapper {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .inputTitle {
-    width: 30%;
-    text-align: start;
+  .modalTitle {
+    font-size: var(--fz-l-response);
   }
 }

@@ -18,7 +18,7 @@ import {
   setEditModeAtom,
   setEditStateAtom,
 } from '@/features/tab/table/store/table-edit-state';
-import { openSubmissionStatusAlertAtom } from '@/features/alert/popup/store/atom';
+import { openSubmissionAlertAtom } from '@/features/alert/popup/store/atom';
 
 import { useQueryTableList } from '@/hooks/use-query/query';
 
@@ -48,7 +48,7 @@ export function TableWidget() {
   const setEditState = useSetAtom(setEditStateAtom);
   const setDraftTables = useSetAtom(setDraftTableAtom);
   const resetTableState = useSetAtom(resetTablEditAtom);
-  const openSubmissionStatusAlert = useSetAtom(openSubmissionStatusAlertAtom);
+  const openSubmissionAlert = useSetAtom(openSubmissionAlertAtom);
   const { showConfirmModal } = useConfirmModal();
 
   /** 좌석 삭제 로직 */
@@ -60,10 +60,10 @@ export function TableWidget() {
           await deleteTable(tableIds);
           resetTableState();
           await tablesQuery.refetch();
-          openSubmissionStatusAlert('삭제되었습니다.');
+          openSubmissionAlert('삭제되었습니다.');
         } catch (err) {
           console.error(err);
-          openSubmissionStatusAlert('오류가 발생했습니다.');
+          openSubmissionAlert('오류가 발생했습니다.');
         }
       };
 
@@ -86,10 +86,10 @@ export function TableWidget() {
           await upsertTable(draftTables);
           resetTableState();
           await tablesQuery.refetch();
-          openSubmissionStatusAlert('수정되었습니다.');
+          openSubmissionAlert('수정되었습니다.');
         } catch (err) {
           console.error(err);
-          openSubmissionStatusAlert('오류가 발생했습니다.');
+          openSubmissionAlert('오류가 발생했습니다.');
         }
       };
 
@@ -112,10 +112,10 @@ export function TableWidget() {
           await upsertTable(draftTables);
           resetTableState();
           await tablesQuery.refetch();
-          openSubmissionStatusAlert('추가되었습니다.');
+          openSubmissionAlert('추가되었습니다.');
         } catch (err) {
           console.error(err);
-          openSubmissionStatusAlert('오류가 발생했습니다.');
+          openSubmissionAlert('오류가 발생했습니다.');
         }
       };
 

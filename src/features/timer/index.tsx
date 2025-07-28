@@ -38,7 +38,7 @@ export default function Timer() {
       {/* 연결 상태 */}
       <li className={styles.statusBox}>
         <span className={styles.status}>
-          <span className={styles.title}>연결 상태</span>
+          <span className={styles.title}>연결상태</span>
           <span className={styles.icon} data-connected={connectState}></span>
         </span>
       </li>

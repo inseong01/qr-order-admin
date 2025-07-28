@@ -10,7 +10,7 @@ export const submissionStatusAlertAtom = atom<SubmissionStatusAlertState>({
   title: '',
 });
 
-export const openSubmissionStatusAlertAtom = atom(null, (_, set, title: string) => {
+export const openSubmissionAlertAtom = atom(null, (_, set, title: string) => {
   set(submissionStatusAlertAtom, {
     isOpen: true,
     title,

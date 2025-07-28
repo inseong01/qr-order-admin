@@ -7,9 +7,9 @@
   justify-content: center;
   align-items: center;
 
-  font-size: var(--page-fz-title);
-  font-weight: var(--page-fw-bold);
-  color: var(--font-main-color);
+  font-size: var(--fz-xl);
+  font-weight: var(--fw-b);
+  color: var(--main-color);
 
   cursor: default;
 }

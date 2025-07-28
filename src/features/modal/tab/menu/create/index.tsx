@@ -10,7 +10,7 @@ import { useQueryMenuCategoryList, useQueryMenuList } from '@/hooks/use-query/qu
 import { addMenu } from '@/lib/supabase/tables/menu';
 
 import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
-import { openSubmissionStatusAlertAtom } from '@/features/alert/popup/store/atom';
+import { openSubmissionAlertAtom } from '@/features/alert/popup/store/atom';
 
 import LIGHT_PLUS_ICON from '@/assets/icon/light-plus.svg';
 import LIGHT_PICTURE_ICON from '@/assets/icon/light-picture-icon.svg';
@@ -21,7 +21,7 @@ import styles from './../index.module.css';
 export default function CreateMenuModal() {
   const [inputValue, setInputValue] = useAtom(menuAtom);
   const setModalClick = useSetAtom(setModalClickAtom);
-  const openSubmissionStatusAlert = useSetAtom(openSubmissionStatusAlertAtom);
+  const openSubmissionAlert = useSetAtom(openSubmissionAlertAtom);
   const { showConfirmModal } = useConfirmModal();
   const menuListQuery = useQueryMenuList();
   const menuCategoriesQuery = useQueryMenuCategoryList();
@@ -50,12 +50,12 @@ export default function CreateMenuModal() {
       try {
         await addMenu(menuData);
         await menuListQuery.refetch(); // 메뉴 리패치
-        openSubmissionStatusAlert('추가되었습니다.'); // 데이터 처리 상태 알림
+        openSubmissionAlert('추가되었습니다.'); // 데이터 처리 상태 알림
         setModalClick(false);
         setInputValue(initMenu); // 초기화
       } catch (e) {
         console.error(e);
-        openSubmissionStatusAlert('오류가 발생했습니다');
+        openSubmissionAlert('오류가 발생했습니다');
       }
     };
 
@@ -149,15 +149,18 @@ export default function CreateMenuModal() {
           <label className={styles.inputWrapper} htmlFor='price'>
             <span className={styles.inputTitle}>가격</span>
 
-            <input
-              type='number'
-              step={10}
-              id='price'
-              name='price'
-              placeholder='가격을 입력해주세요.'
-              onChange={getInputValue}
-              value={inputValue.price}
-            />
+            <div className={styles.priceBox}>
+              <input
+                type='number'
+                step={10}
+                id='price'
+                name='price'
+                placeholder='가격을 입력해주세요.'
+                onChange={getInputValue}
+                value={inputValue.price}
+              />
+              <span>원</span>
+            </div>
           </label>
 
           <label className={styles.inputWrapper} htmlFor='status'>

@@ -1,8 +1,8 @@
 import { ChangeEvent } from 'react';
-import { atom, useAtom, useSetAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import { useQuery } from '@tanstack/react-query';
 
-import { openSubmissionStatusAlertAtom } from '@/features/alert/popup/store/atom';
+import { openSubmissionAlertAtom } from '@/features/alert/popup/store/atom';
 import { setWidgetAtomState } from '@/features/widget/store/atom';
 
 import { MENU_CATEGORIES_QUERY_KEY, useQueryMenuCategoryList } from '@/hooks/use-query/query';
@@ -11,10 +11,11 @@ import { MenuCategory, updateMenuCategory } from '@/lib/supabase/tables/menu-cat
 import validate from '@/utils/function/validate';
 
 import { useConfirmModal } from '../../confirm/hook/use-confirm-modal';
+import { SubmitInfoBox } from './components/submit-info/submit-info';
+import SubmitButton from './components/button/button';
+import TitleBox from './components/title/title';
+import { selectedCategoriesAtom } from './store/atom';
 import styles from './update-category-form.module.css';
-
-// 분류 편집 폼 상태를 관리하는 Atoms
-const selectedCategoriesAtom = atom<Record<string, any>>({}); // 선택된 분류의 ID, title 저장
 
 /**
  * 기존 메뉴 분류를 수정하는 컴포넌트
@@ -24,14 +25,19 @@ export default function UpdateCategoryForm() {
   const [selectedCategories, setSelectedCategories] = useAtom(selectedCategoriesAtom);
   const menuCategoriesQuery = useQueryMenuCategoryList();
   const setWidgetState = useSetAtom(setWidgetAtomState);
-  const openSubmissionStatusAlert = useSetAtom(openSubmissionStatusAlertAtom);
+  const openSubmissionAlert = useSetAtom(openSubmissionAlertAtom);
   const { showConfirmModal } = useConfirmModal();
 
   /* 비즈니스 로직 */
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const updatedCategories = Object.values(selectedCategories);
+    if (!updatedCategories.length) {
+      alert('분류 항목을 선택해주세요.');
+      return e.preventDefault();
+    }
+
     const title = '선택한 분류를 수정하겠습니까?';
     const onConfirm = async () => {
-      const updatedCategories = Object.values(selectedCategories);
       const { success, data, error } = await validate.updateCategoryValue(updatedCategories); // 값 검증
       if (!success) {
         const message = error?.issues[0].message;
@@ -43,10 +49,10 @@ export default function UpdateCategoryForm() {
       try {
         await updateMenuCategory(data); // supabase 전달
         await menuCategoriesQuery.refetch();
-        openSubmissionStatusAlert('수정되었습니다'); // 데이터 처리 상태 알림
+        openSubmissionAlert('수정되었습니다'); // 데이터 처리 상태 알림
       } catch (e) {
         console.log(e);
-        openSubmissionStatusAlert('오류가 발생했습니다');
+        openSubmissionAlert('오류가 발생했습니다');
       } finally {
         setSelectedCategories([]);
       }
@@ -90,13 +96,13 @@ export default function UpdateCategoryForm() {
     <form className={styles.submitForm} onSubmit={handleSubmit}>
       <div className={styles.sortModal}>
         {/* 제목 */}
-        <div className={styles.title}>분류 수정</div>
+        <TitleBox>분류 수정</TitleBox>
 
         {/* 목록 */}
-        <ul className={styles.submitInfo}>
+        <SubmitInfoBox>
           {categories.data?.map(({ id, title }) => (
-            <li key={id} className={styles.list}>
-              <label htmlFor={id} className={styles.left}>
+            <li key={id} className={styles.info}>
+              <label htmlFor={id} className={styles.top}>
                 <span>{title}</span>
 
                 <input
@@ -114,19 +120,18 @@ export default function UpdateCategoryForm() {
                   type='text'
                   id={id}
                   name='title'
-                  className={styles.right}
+                  placeholder='분류명을 작성해주세요.'
+                  className={styles.bottom}
                   value={selectedCategories[id]?.title ?? ''}
                   onChange={handleTyping}
                 />
               )}
             </li>
           ))}
-        </ul>
+        </SubmitInfoBox>
 
         {/* 제출 */}
-        <div className={styles.submitBtn}>
-          <input type='submit' className={styles.btn} value='수정하기' name='update' />
-        </div>
+        <SubmitButton value='수정하기' />
       </div>
     </form>
   );

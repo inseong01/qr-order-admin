@@ -1,0 +1,40 @@
+/* 제출 버튼 */
+.submitBtn {
+  width: 100%;
+  height: auto;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn {
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 5px;
+  line-height: 19px;
+
+  flex: 1;
+  padding: 8px;
+
+  cursor: pointer;
+
+  color: white;
+  font-weight: 600;
+  background-color: #4caff8;
+  border: none;
+}
+.btn.delete {
+  background-color: #f0f0f0;
+  color: #f30000;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover {
+    background-color: #80c8fc;
+  }
+  .btn.delete:hover {
+    background-color: #e6e6e6;
+    color: #e00000;
+  }
+}
