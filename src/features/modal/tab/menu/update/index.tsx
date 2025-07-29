@@ -1,9 +1,15 @@
-import { ChangeEvent, FormEvent } from 'react';
-import { useAtom, useSetAtom } from 'jotai';
+import { ChangeEvent, FormEvent, useId } from 'react';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
 import validate from '@/utils/function/validate';
 
-import { initMenu, menuAtom } from '@/components/ui/menu/store/atom';
+import {
+  initMenu,
+  menuAtom,
+  menuImageAtom,
+  resetMenuImageAtom,
+  setMenuImageAtom,
+} from '@/components/ui/menu/store/atom';
 
 import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
 import { openSubmissionAlertAtom } from '@/features/alert/popup/store/atom';
@@ -11,21 +17,26 @@ import { openSubmissionAlertAtom } from '@/features/alert/popup/store/atom';
 import { useQueryMenuCategoryList, useQueryMenuList } from '@/hooks/use-query/query';
 
 import { deleteMenu, updateMenu } from '@/lib/supabase/tables/menu';
+import { deleteImageByFileName, updateImage } from '@/lib/supabase/storage/store';
 
-import LIGHT_PICTURE_ICON from '@/assets/icon/light-picture-icon.svg';
 import LIGHT_PLUS_ICON from '@/assets/icon/light-plus.svg';
 
 import { setModalClickAtom } from '../../store/atom';
 import styles from './../index.module.css';
+import { updateMenuData } from '@/utils/function/set-menu';
 
 export default function UpdateMenuModal() {
   const [inputValue, setInputValue] = useAtom(menuAtom);
+  const menuImage = useAtomValue(menuImageAtom);
   const setModalClick = useSetAtom(setModalClickAtom);
   const openSubmissionAlert = useSetAtom(openSubmissionAlertAtom);
+  const setMenuImage = useSetAtom(setMenuImageAtom);
+  const resetMenuImage = useSetAtom(resetMenuImageAtom);
   const { showConfirmModal } = useConfirmModal();
   const menuListQuery = useQueryMenuList();
   const menuCategoriesQuery = useQueryMenuCategoryList();
-
+  const fileId = inputValue.img_url.split('menu_').at(-1);
+  console.log(inputValue);
   /* 비즈니스 로직 */
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -33,17 +44,36 @@ export default function UpdateMenuModal() {
     const submitType = submitter.name;
     const title = submitType === 'update' ? '메뉴를 수정하겠습니까?' : '메뉴를 삭제하겠습니끼?';
     const onConfirm = async () => {
-      const menuData = {
-        id: inputValue.id,
-        img_url: inputValue.img_url,
-        category_id: menuCategoriesQuery.data?.find((c) => c.title === inputValue.menu_category.title)?.id,
-        name: inputValue.name,
-        price: Number(inputValue.price),
-        tag: inputValue.tag,
-      };
+      // 이미지 스토리지 업데이트
+      try {
+        if (!fileId) {
+          alert('다시 시도해주세요.');
+          return;
+        }
+        if (menuImage) {
+          console.log(menuImage, fileId, submitType);
+          await updateImage({ file: menuImage, fileId });
+        } else {
+          console.log(fileId, submitType);
+          await deleteImageByFileName({ fileId });
+        }
+      } catch (err) {
+        console.error(e);
+        openSubmissionAlert('오류가 발생했습니다');
+        return;
+      } finally {
+        setModalClick(false);
+        setInputValue(initMenu); // 초기화
+        resetMenuImage();
+      }
 
-      const valid = await validate.updateMenuValue(menuData); // 값 검증
+      // 메뉴 데이터 가공
+      const hasImg = !!menuImage;
+      const menuCategories = menuCategoriesQuery.data;
+      const menuData = updateMenuData({ fileId, inputValue, menuCategories, hasImg });
 
+      // 값 검증
+      const valid = await validate.updateMenuValue(menuData);
       if (!valid.success) {
         const message = valid.error.issues[0].message;
         alert(message);
@@ -54,11 +84,13 @@ export default function UpdateMenuModal() {
         submitType === 'update' ? await updateMenu(menuData.id, menuData) : await deleteMenu(menuData.id);
         await menuListQuery.refetch();
         openSubmissionAlert(submitType === 'update' ? '수정되었습니다' : '삭제되었습니다.'); // 데이터 처리 상태 알림
-        setModalClick(false);
-        setInputValue(initMenu); // 초기화
       } catch (e) {
         console.error(e);
         openSubmissionAlert('오류가 발생했습니다');
+      } finally {
+        setModalClick(false);
+        setInputValue(initMenu); // 초기화
+        resetMenuImage();
       }
     };
 
@@ -88,6 +120,14 @@ export default function UpdateMenuModal() {
     setInputValue(initMenu);
   };
 
+  /** 이미지 파일 설정 */
+  const setImgFile = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files;
+    if (file) {
+      setMenuImage(file[0]);
+    }
+  };
+
   return (
     <form className={styles.addMenuModal} onSubmit={handleSubmit}>
       <div className={styles.wrap}>
@@ -101,14 +141,21 @@ export default function UpdateMenuModal() {
           </button>
         </div>
 
-        <label className={styles.imgInput} htmlFor='thumbnail'>
-          <button type='button' className={styles.iconBox} onClick={() => {}}>
-            <img src={LIGHT_PICTURE_ICON} alt='img input icon' />
-          </button>
+        <label className={styles.imgInput} htmlFor='img_url'>
+          <span className={styles.inputTitle}>사진 변경</span>
 
-          <span>사진 첨부</span>
+          <div className={styles.imgBox}>
+            <img src={inputValue.img_url} alt='음식 섬네일' />
+          </div>
 
-          <input type='file' id='thumbnail' hidden />
+          <input
+            type='file'
+            id='img_url'
+            name='img_url'
+            hidden
+            onChange={setImgFile}
+            accept='image/png, image/jpeg, image/webp'
+          />
         </label>
 
         <div className={styles.main}>

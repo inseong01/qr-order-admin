@@ -30,12 +30,12 @@ export default function Footer() {
   const openSubmissionAlert = useSetAtom(openSubmissionAlertAtom);
 
   function handleTabClick(tabTitle: FooterTab) {
-    if (isTableEditing) {
-      openSubmissionAlert('탭 전환은 편집 종료 후 가능합니다. 작업 내용을 먼저 저장해주세요.');
-      return;
-    }
     if (modalState.isOpen) return;
     if (tab === tabTitle) return;
+    if (isTableEditing) {
+      openSubmissionAlert('탭 전환은 편집 종료 후 가능합니다.');
+      return;
+    }
 
     setFooterTab(tabTitle);
     setHeaderTabIdx(0);

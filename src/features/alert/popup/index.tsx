@@ -2,10 +2,13 @@ import { useAtom } from 'jotai';
 import { AnimatePresence } from 'motion/react';
 
 import DialogLayout from '@/components/layout/dialog';
-import { submissionStatusAlertAtom } from './store/atom';
 
-const SubmissionStatusAlert = () => {
+import { submissionStatusAlertAtom } from './store/atom';
+import styles from './index.module.css';
+
+export default function SubmissionStatusAler() {
   const [alertState, setAlertState] = useAtom(submissionStatusAlertAtom);
+  const titleArr = alertState.title.split('.');
 
   const handleClose = () => {
     setAlertState((prev) => ({ ...prev, isOpen: false }));
@@ -16,11 +19,15 @@ const SubmissionStatusAlert = () => {
       {alertState.isOpen && (
         <DialogLayout handleClose={handleClose} isScaleUp={false}>
           {/* 알림 */}
-          <span>{alertState.title}</span>
+          {titleArr.map((t, idx: number) => {
+            return (
+              <div key={idx} className={styles.textBox}>
+                <span>{t}</span>
+              </div>
+            );
+          })}
         </DialogLayout>
       )}
     </AnimatePresence>
   );
-};
-
-export default SubmissionStatusAlert;
+}

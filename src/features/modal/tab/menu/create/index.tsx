@@ -1,13 +1,15 @@
-import { ChangeEvent } from 'react';
-import { useAtom, useSetAtom } from 'jotai';
+import { ChangeEvent, useId } from 'react';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
 import validate from '@/utils/function/validate';
+import { createImgPath } from '@/utils/function/image-path';
 
-import { initMenu, menuAtom } from '@/components/ui/menu/store/atom';
+import { initMenu, menuAtom, menuImageAtom, setMenuImageAtom } from '@/components/ui/menu/store/atom';
 
 import { useQueryMenuCategoryList, useQueryMenuList } from '@/hooks/use-query/query';
 
 import { addMenu } from '@/lib/supabase/tables/menu';
+import { uploadImage } from '@/lib/supabase/storage/store';
 
 import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
 import { openSubmissionAlertAtom } from '@/features/alert/popup/store/atom';
@@ -17,38 +19,51 @@ import LIGHT_PICTURE_ICON from '@/assets/icon/light-picture-icon.svg';
 
 import { setModalClickAtom } from '../../store/atom';
 import styles from './../index.module.css';
+import { buildMenuData } from '@/utils/function/set-menu';
 
 export default function CreateMenuModal() {
   const [inputValue, setInputValue] = useAtom(menuAtom);
+  const menuImage = useAtomValue(menuImageAtom);
   const setModalClick = useSetAtom(setModalClickAtom);
   const openSubmissionAlert = useSetAtom(openSubmissionAlertAtom);
+  const setMenuImage = useSetAtom(setMenuImageAtom);
   const { showConfirmModal } = useConfirmModal();
   const menuListQuery = useQueryMenuList();
   const menuCategoriesQuery = useQueryMenuCategoryList();
+  const _fileId = useId();
+  const fileId = menuImage ? _fileId : '';
 
   /* 비즈니스 로직 */
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const title = '메뉴를 추가하겠습니까?';
     const onConfirm = async () => {
-      const menuData = {
-        img_url: inputValue.img_url,
-        category_id: menuCategoriesQuery.data?.find((c) => c.title === inputValue.menu_category.title)?.id,
-        name: inputValue.name,
-        price: Number(inputValue.price),
-        tag: inputValue.tag,
-      };
+      // 이미지 스토리지 삽입
+      try {
+        if (menuImage) {
+          await uploadImage({ file: menuImage, fileId });
+        }
+      } catch (err) {
+        console.error(e);
+        openSubmissionAlert('오류가 발생했습니다');
+        return;
+      }
 
-      const valid = await validate.createMenuValue(menuData); // 값 검증
+      // 메뉴 데이터 가공
+      const menuCategories = menuCategoriesQuery.data;
+      const menuData = buildMenuData({ fileId, inputValue, menuCategories });
 
+      // 메뉴 데이터 검증
+      const valid = await validate.createMenuValue(menuData);
       if (!valid.success) {
         const message = valid.error.issues[0].message;
         alert(message);
         return;
       }
 
+      // 메뉴 데이터 발신
       try {
-        await addMenu(menuData);
+        await addMenu(menuData); // 메뉴 삽입
         await menuListQuery.refetch(); // 메뉴 리패치
         openSubmissionAlert('추가되었습니다.'); // 데이터 처리 상태 알림
         setModalClick(false);
@@ -83,6 +98,14 @@ export default function CreateMenuModal() {
     setModalClick(false);
   };
 
+  /** 이미지 파일 설정 */
+  const setImgFile = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files;
+    if (file) {
+      setMenuImage(file[0]);
+    }
+  };
+
   return (
     <form className={styles.addMenuModal} onSubmit={handleSubmit}>
       <div className={styles.wrap}>
@@ -96,14 +119,25 @@ export default function CreateMenuModal() {
           </button>
         </div>
 
-        <label className={styles.imgInput} htmlFor='thumbnail'>
-          <button type='button' className={styles.iconBox} onClick={handleClose}>
-            <img src={LIGHT_PICTURE_ICON} alt='img input icon' />
-          </button>
+        <label className={styles.imgInput} htmlFor='img_url'>
+          <span className={styles.inputTitle}>사진 첨부</span>
 
-          <span>사진 첨부</span>
+          <div className={styles.imgBox}>
+            <div className={styles.iconBox}>
+              <img src={LIGHT_PICTURE_ICON} alt='사진 아이콘' />
+            </div>
 
-          <input type='file' id='thumbnail' hidden />
+            <span>사진을 첨부해주세요</span>
+          </div>
+
+          <input
+            type='file'
+            id='img_url'
+            name='img_url'
+            hidden
+            onChange={setImgFile}
+            accept='image/png, image/jpeg, image/webp'
+          />
         </label>
 
         <div className={styles.main}>

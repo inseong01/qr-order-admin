@@ -17,8 +17,8 @@ export default function MenuTabView() {
         {!isMenuExist ? (
           <li>메뉴를 생성해주세요</li>
         ) : (
-          menuCategories?.map((category, idx) => (
-            <li key={idx} className={styles.displayRow}>
+          menuCategories?.map((category) => (
+            <li key={category.id} className={styles.displayRow}>
               {/* 메뉴 카테고리 */}
               <motion.div layout={'position'} className={styles.category}>
                 {category.title}
@@ -30,8 +30,8 @@ export default function MenuTabView() {
                 <ListMenuAdd category={category.title} />
 
                 {/* 메뉴 */}
-                {menuGroupByCategory[category.title]?.map((m: Menu) => (
-                  <ListMenu key={m.id} {...m} />
+                {menuGroupByCategory[category.title]?.map((m: Menu, idx: number) => (
+                  <ListMenu key={idx} {...m} />
                 ))}
               </motion.div>
             </li>

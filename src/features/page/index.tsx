@@ -4,7 +4,6 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { debounce } from '@/utils/function/optimize';
 
 import { detectViewportModeAtom, resizeMainSectionAtom } from '../../store/atom/window-atom';
-import { openSubmissionAlertAtom } from '../alert/popup/store/atom';
 
 import SuccessComponent from './success';
 import ErrorComponent from './error';
@@ -14,11 +13,9 @@ export default function PageWrap({ dataState }: { dataState: string }) {
   const tab = useAtomValue(footerAtom);
   const resizeMainSection = useSetAtom(resizeMainSectionAtom);
   const detectViewportMode = useSetAtom(detectViewportModeAtom);
-  const openSubmissionAlert = useSetAtom(openSubmissionAlertAtom);
 
   // 화면 감지
   useEffect(() => {
-    openSubmissionAlert('안녕하세요'); // 제출 처리 결과 알림
     detectViewportMode(); // 초기 뷰포트 모드 상태 할당
     window.addEventListener('resize', detectViewportMode);
     return () => {

@@ -1,5 +1,5 @@
 .dialog {
-  width: 360px; /* 임의 */
+  min-width: 360px;
 
   color: #222;
   border: 1px solid #c9c9c9;
@@ -17,7 +17,7 @@
   cursor: default;
   z-index: 99999;
 
-  padding: 12px;
+  padding: 24px;
 }
 
 /* backdrop */
