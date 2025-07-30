@@ -9,22 +9,12 @@ import { windowStateAtom } from '@/store/atom/window-atom';
 import validate from '@/utils/function/validate';
 
 import OrderCardTablet from './variants/order-card-tablet';
-import OrderCardMobile from './variants/order-card-mobile';
-import { clickStateAtom, setClickStateAtom } from './store/atom';
 import styles from './order-card.module.css';
 
 export default function OrderCard({ order }: { order: Order }) {
-  const { isMobile } = useAtomValue(windowStateAtom);
-  const isClicked = useAtomValue(clickStateAtom);
-  const setClickState = useSetAtom(setClickStateAtom);
-
-  function clickTopBox() {
-    setClickState();
-  }
-
   return (
     <OrderCardContainer orderId={order.id}>
-      <div className={styles.topBox} onClick={clickTopBox} data-is-completed={order.is_done}>
+      <div className={styles.topBox} data-is-completed={order.is_done}>
         <div className={styles.top}>
           <div className={styles.title}>#{order.order_number}</div>
           <div className={styles.right}>
@@ -33,7 +23,7 @@ export default function OrderCard({ order }: { order: Order }) {
         </div>
       </div>
 
-      {isMobile ? <OrderCardMobile order={order} isClicked={isClicked} /> : <OrderCardTablet order={order} />}
+      <OrderCardTablet order={order} />
     </OrderCardContainer>
   );
 }

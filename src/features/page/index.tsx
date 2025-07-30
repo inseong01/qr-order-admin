@@ -31,10 +31,6 @@ export default function PageWrap({ dataState }: { dataState: string }) {
     return () => window.removeEventListener('resize', debouncedResize);
   }, [tab]);
 
-  if (dataState === 'pending') {
-    return <></>;
-  }
-
   if (dataState === 'fulfilled') {
     return <SuccessComponent />;
   }

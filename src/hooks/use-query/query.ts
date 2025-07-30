@@ -87,7 +87,6 @@ export function useQueryAllOrderList() {
  */
 export function useQueryOrderMenuList() {
   const { data } = useQuery<OrderItem[]>({
-    // queryKey: MENU_CATEGORIES_QUERY_KEY, // 변경 전
     queryKey: ORDER_LIST_QUERY_KEY,
     queryFn: getOrderItemList,
   });
@@ -100,7 +99,6 @@ export function useQueryOrderMenuList() {
  */
 export function useQueryMenuCategoryList() {
   const { data, refetch } = useQuery<MenuCategory[]>({
-    // queryKey: ORDER_LIST_QUERY_KEY, // 변경 전
     queryKey: MENU_CATEGORIES_QUERY_KEY,
     queryFn: getMenuCategory,
   });

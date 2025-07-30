@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "analyze": "npx vite-bundle-visualizer",
-    "commit": "bash ./auto/bash/commit-work-log.sh"
+    "commit": "bash ./auto/bash/commit-work-log.sh",
+    "test": "npx vitest"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
@@ -44,6 +45,7 @@
     "eslint-plugin-react-refresh": "^0.4.14",
     "globals": "^15.12.0",
     "prettier": "^3.6.2",
-    "vite": "^6.0.1"
+    "vite": "^6.0.1",
+    "vitest": "^3.2.4"
   }
 }

@@ -1,6 +1,6 @@
 import { atom } from 'jotai';
 
-import { detectMobile, detectViewportMode } from '@/utils/function/check-device';
+import { detectMobileSize, detectViewportMode } from '@/utils/function/check-device';
 
 type WindowState = {
   viewportMode: 'portrait' | 'landscape';
@@ -27,7 +27,7 @@ export const windowStateAtom = atom<WindowState>(initialWindowState);
 
 // 뷰포트 모드 감지
 export const detectViewportModeAtom = atom(null, (_, set) => {
-  const isMobile = detectMobile();
+  const isMobile = detectMobileSize();
   const viewportMode = detectViewportMode().includes('landscape') ? 'landscape' : 'portrait';
   set(windowStateAtom, (prev: WindowState) => ({ ...prev, isMobile, viewportMode }));
 });
