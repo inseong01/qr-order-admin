@@ -4,7 +4,7 @@
     "menu": { "id": "menu-1", "name": "불고기피자", "price": 18000 },
     "order": {
       "id": "order-1",
-      "is_done": false,
+      "is_done": true,
       "order_number": 101,
       "table": { "id": "table-1", "number": 1 }
     },
@@ -15,7 +15,7 @@
     "menu": { "id": "menu-2", "name": "치즈버거", "price": 9000 },
     "order": {
       "id": "order-2",
-      "is_done": true,
+      "is_done": false,
       "order_number": 102,
       "table": { "id": "table-2", "number": 2 }
     },
@@ -59,7 +59,7 @@
     "menu": { "id": "menu-6", "name": "샐러드", "price": 7000 },
     "order": {
       "id": "order-3",
-      "is_done": true,
+      "is_done": false,
       "order_number": 106,
       "table": { "id": "table-3", "number": 3 }
     },
@@ -81,7 +81,7 @@
     "menu": { "id": "menu-8", "name": "아이스크림", "price": 5000 },
     "order": {
       "id": "order-3",
-      "is_done": true,
+      "is_done": false,
       "order_number": 108,
       "table": { "id": "table-3", "number": 3 }
     },
@@ -103,7 +103,7 @@
     "menu": { "id": "menu-10", "name": "오렌지주스", "price": 3500 },
     "order": {
       "id": "order-10",
-      "is_done": true,
+      "is_done": false,
       "order_number": 110,
       "table": { "id": "table-5", "number": 5 }
     },

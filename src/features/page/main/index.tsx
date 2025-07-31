@@ -2,8 +2,9 @@ import { Suspense } from 'react';
 import { useAtomValue } from 'jotai';
 import { AnimatePresence, motion } from 'motion/react';
 
+import { menuAtom } from '@/components/ui/menu/store/atom';
 import { windowStateAtom } from '@/store/atom/window-atom';
-import { modalOpenAtom, tabModalAtom } from '@/features/modal/tab/store/atom';
+import { modalOpenAtom } from '@/features/modal/tab/store/atom';
 import TabModalContainer from '@/features/modal/tab';
 import LoadingSpinner from '@/features/load/spinner';
 import TabViewContainer from '@/features/tab';
@@ -14,7 +15,7 @@ import styles from './index.module.css';
 
 export default function Main() {
   const category = useAtomValue(footerAtom);
-  const { isMobile } = useAtomValue(windowStateAtom);
+  const { isMobile, mainSection } = useAtomValue(windowStateAtom);
 
   return (
     <main className={styles.main}>
@@ -22,7 +23,7 @@ export default function Main() {
         {category ? (
           <>
             {/* 좌측 */}
-            <div className={styles.leftBox}>
+            <div className={styles.leftBox} style={{ width: mainSection.width }}>
               <TabViewContainer />
             </div>
 
@@ -41,7 +42,7 @@ export default function Main() {
 function MainRightComponent() {
   const category = useAtomValue(footerAtom);
   const isModalOpen = useAtomValue(modalOpenAtom);
-  const currentModal = useAtomValue(tabModalAtom);
+  const selectedMenu = useAtomValue(menuAtom);
 
   return (
     <div className={styles.rightBox}>
@@ -54,7 +55,7 @@ function MainRightComponent() {
         {isModalOpen && (
           <motion.div
             layout
-            key={currentModal}
+            key={selectedMenu.id}
             initial={{ x: 385 }}
             animate={{ x: 0 }}
             exit={{ x: 385 }}

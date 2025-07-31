@@ -1,0 +1,33 @@
+/* 카드 */
+.card {
+  min-width: calc(100% / 5 - 10px);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 25px; /* 최소 여백 */
+
+  background-color: #fff;
+
+  cursor: default;
+
+  padding: 25px 16px;
+}
+.card[data-start='true'] {
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+.card[data-start='false'] {
+  padding-top: 45px;
+}
+.card[data-end='true'] {
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+
+.contents {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 30px;
+}

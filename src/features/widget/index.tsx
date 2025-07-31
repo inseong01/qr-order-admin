@@ -21,12 +21,15 @@ export default function Widget() {
   const isWidgetComponentOn = !!WidgetComponent;
 
   return (
-    <motion.div className={styles.widgetWrap} layout transition={{ duration: 0.3 }}>
-      {/* 위젯 버튼 */}
-      <WidgetIconButton />
+    <>
+      <motion.div className={styles.widgetWrap} layout transition={{ duration: 0.3 }}>
+        {/* 위젯 버튼 */}
+        <WidgetIconButton />
 
-      {/* 위젯 목록 */}
+        {/* 위젯 목록 */}
+      </motion.div>
+
       <AnimatePresence>{isOpen ? isWidgetComponentOn && <WidgetComponent /> : null}</AnimatePresence>
-    </motion.div>
+    </>
   );
 }

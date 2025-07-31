@@ -1,4 +1,4 @@
-export const swiper_motion = {
+export const card_motion = {
   active: {
     opacity: 1,
   },

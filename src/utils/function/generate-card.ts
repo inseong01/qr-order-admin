@@ -1,28 +1,8 @@
 import { Order } from '@/lib/supabase/tables/order';
 import { OrderItem } from '@/lib/supabase/tables/order-item';
 
-type InitCardObj = {
-  isStart: boolean;
-  isEnd: boolean;
-  header: {
-    table: OrderItem['order']['table'];
-    startAt: string;
-  };
-  main: { menu: OrderItem['menu']; quantity: number }[];
-};
-
-const createNewCard = (isStart: boolean = true): InitCardObj => ({
-  isStart,
-  isEnd: false,
-  header: {
-    table: { id: '', number: 0 },
-    startAt: '',
-  },
-  main: [],
-});
-
 type generateCardLayoutArrProps = {
-  order: Order[];
+  orders: Order[];
   orderItems: OrderItem[];
   maxHeight: number;
 };
@@ -50,62 +30,61 @@ type generateCardLayoutArrProps = {
  *     - 높이 54px
  *     - 하단 공백 25px
  */
-export function generateCardLayoutArr({ order, orderItems, maxHeight }: generateCardLayoutArrProps) {
+export function generateCardLayoutArr({ orders, orderItems, maxHeight }: generateCardLayoutArrProps) {
   // 주문 모음
-  const ordersMap = new Map();
-  orderItems.forEach((o) => {
-    if (ordersMap.has(o.order.id)) {
-      ordersMap.get(o.order.id).push(o);
-    } else {
-      ordersMap.set(o.order.id, [o]);
-    }
-  });
-
-  /* 주문 목록 반복 필요, 중첩 반복문 필요 */
-  console.log(ordersMap.values());
+  const ordersMap = buildOrdersMap(orderItems);
+  const allOrders = ordersMap.values().toArray();
 
   let cardArr = [];
-  for (const orderItem of orderItems) {
+  for (const tableOrder of allOrders) {
     let currentCardHeight = 0;
-    let currentCard = createNewCard();
+    let currentCard = createNewCard(true, tableOrder[0]);
 
-    // 헤더
-    const startAt = currentCard.isStart ? findOrderStartAt({ order, orderItem }) : '';
-    currentCard.header = { table: orderItem.order.table, startAt };
+    for (const orderItem of tableOrder) {
+      // 헤더
+      const startAt = currentCard.isStart ? findOrderStartAt({ orders, orderItem }) : '';
+      const orderNumber = orderItem.order.order_number;
+      currentCard.isDone = orderItem.order.is_done;
+      currentCard.header = { table: orderItem.order.table, startAt, orderNumber };
 
-    const headerHeight = calculateHeader(currentCard.isStart);
-    if (headerHeight + currentCardHeight > maxHeight) {
-      cardArr.push(currentCard);
+      const headerHeight = calculateHeader(currentCard.isStart);
+      if (headerHeight + currentCardHeight > maxHeight) {
+        cardArr.push(currentCard);
 
-      currentCard = createNewCard(false);
-      currentCard.header = { table: orderItem.order.table, startAt: '' };
-      currentCardHeight = calculateHeader(false);
+        currentCard = createNewCard(false, tableOrder[0]);
+        currentCard.isDone = orderItem.order.is_done;
+        currentCard.header = { table: orderItem.order.table, startAt: '', orderNumber };
+        currentCardHeight = calculateHeader(false);
+      }
+
+      // 메인 계산
+      const menuHeight = calculateMain();
+      if (menuHeight + currentCardHeight > maxHeight) {
+        cardArr.push(currentCard);
+
+        currentCard = createNewCard(false, tableOrder[0]);
+        currentCard.isDone = orderItem.order.is_done;
+        currentCard.header = { table: orderItem.order.table, startAt: '', orderNumber };
+        currentCardHeight = calculateHeader(false);
+      }
+
+      // 메뉴
+      currentCard.main.push({ menu: orderItem.menu, quantity: orderItem.quantity });
+      currentCardHeight += menuHeight;
     }
-
-    // 메인 계산
-    const menuHeight = calculateMain();
-    if (menuHeight + currentCardHeight > maxHeight) {
-      cardArr.push(currentCard);
-
-      currentCard = createNewCard(false);
-      currentCard.header = { table: orderItem.order.table, startAt: '' };
-      currentCardHeight = calculateHeader(false);
-    }
-
-    // 메뉴
-    currentCard.main.push({ menu: orderItem.menu, quantity: orderItem.quantity });
-    currentCardHeight += menuHeight;
 
     // 푸터
     const footerHeight = calculateFooter();
     if (currentCardHeight + footerHeight > maxHeight) {
       cardArr.push(currentCard);
 
-      const footerCard = createNewCard(false);
+      const footerCard = createNewCard(false, tableOrder[0]);
       footerCard.header = { ...currentCard.header, startAt: '' };
+      currentCard.isDone = cardArr.at(-1)?.isDone ?? null;
       footerCard.isEnd = true;
       cardArr.push(footerCard);
     } else {
+      currentCard.footer.orderId = tableOrder[0].order.id;
       currentCard.isEnd = true;
       cardArr.push(currentCard);
     }
@@ -115,18 +94,70 @@ export function generateCardLayoutArr({ order, orderItems, maxHeight }: generate
   return cardArr;
 }
 
+export type CardObj = {
+  isStart: boolean;
+  isEnd: boolean;
+  isDone: boolean | null;
+  header: {
+    table: OrderItem['order']['table'];
+    startAt: string;
+    orderNumber: number;
+  };
+  main: { menu: OrderItem['menu']; quantity: number }[];
+  footer: {
+    orderId: string;
+  };
+};
+
+/** 새로운 주문 카드 생성 */
+function createNewCard(isStart: boolean = true, tableOrder: OrderItem): CardObj {
+  const isDone = tableOrder.order.is_done;
+  const tableId = tableOrder.order.table.id;
+  const orderNumber = tableOrder.order.order_number;
+  const orderId = tableOrder.order.id;
+
+  return {
+    isStart,
+    isEnd: false,
+    isDone,
+    header: {
+      table: { id: tableId, number: 0 },
+      startAt: '',
+      orderNumber,
+    },
+    main: [],
+    footer: {
+      orderId,
+    },
+  };
+}
+
 type FindOrderStartAtProps = {
-  order: Order[];
+  orders: Order[];
   orderItem: OrderItem;
 };
 
+/** 주문 id 기준 맵핑 */
+export function buildOrdersMap(orderItems: OrderItem[]): Map<OrderItem['order']['id'], OrderItem[]> {
+  const ordersMap = new Map();
+
+  orderItems.forEach((o) => {
+    if (ordersMap.has(o.order.id)) {
+      ordersMap.get(o.order.id).push(o);
+    } else {
+      ordersMap.set(o.order.id, [o]);
+    }
+  });
+  return ordersMap;
+}
+
 /** 주문 시각 반환  */
-function findOrderStartAt({ order, orderItem }: FindOrderStartAtProps) {
-  return order.find((o) => o.id === orderItem.order.id)?.created_at ?? '';
+export function findOrderStartAt({ orders, orderItem }: FindOrderStartAtProps) {
+  return orders.find((o) => o.id === orderItem.order.id)?.created_at ?? '';
 }
 
 /** 헤더 계산 */
-function calculateHeader(isStart: boolean) {
+export function calculateHeader(isStart: boolean) {
   const CARD_PADDING_TOP_START = 25;
   const CARD_PADDING_TOP_NEXT = 45;
   const HEADER_HEIGHT = 90;
@@ -139,7 +170,7 @@ function calculateHeader(isStart: boolean) {
 }
 
 /** 메인 계산 */
-function calculateMain() {
+export function calculateMain() {
   const MENU_HEIGHT = 22;
   const MENU_PADDING_BOTTOM = 25;
   const DIVISION_LINE = 1;
@@ -148,7 +179,7 @@ function calculateMain() {
 }
 
 /** 푸터 계산 */
-function calculateFooter() {
+export function calculateFooter() {
   const FOOTER_HEIGHT = 54;
   const FOOTER_PADDING_TOP = 25; // 메인과 푸터 최소 여백
   const FOOTER_PADDING_BOTTOM = 25;
