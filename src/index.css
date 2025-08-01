@@ -3,6 +3,10 @@
   --key-color: #4caff8;
   --main-color: #404040;
   --sub-color: #8d8d8d;
+  --inactive-color: #e6e6e6;
+
+  /* background-color */
+  --inactive-bg-color: #808080;
 
   /* font weight */
   --fw-b: 900;

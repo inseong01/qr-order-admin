@@ -8,15 +8,21 @@ type CardHeaderProps = {
 
 export default function CardHeader({ header }: CardHeaderProps) {
   const elapsedData = getElapsed(header);
+  const formattedTime = new Date(header.startAt).toLocaleTimeString('ko-KR', {
+    hour12: false,
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+  const isDone = Boolean(header.updatedAt);
 
   return (
-    <div className={styles.topBox}>
+    <div className={styles.topBox} data-finished={isDone}>
       {/* 상단 */}
       <div className={styles.top}>
         <div className={styles.title}>#{header.orderNumber}</div>
 
         <div className={styles.right}>
-          <div className={styles.table}>00:00</div>
+          <div className={styles.table}>{formattedTime}</div>
           <div className={styles.elapsed} data-state={elapsedData.state}>
             {elapsedData.elapsed}
             {elapsedData.type} 경과

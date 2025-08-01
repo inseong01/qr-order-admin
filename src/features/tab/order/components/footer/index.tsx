@@ -8,10 +8,13 @@ type CardFooterProps = {
 };
 
 export default function CardFooter({ order }: CardFooterProps) {
+  const orderId = order.footer.orderId;
+  const inactive = order.isDone ?? false;
+
   return (
-    <div className={styles.footer}>
+    <div className={styles.footer} data-finished={order.isDone}>
       {/* 완료 */}
-      <CardButton orderId={order.footer.orderId} type='complete' />
+      <CardButton orderId={orderId} inavtive={inactive} type='complete' />
     </div>
   );
 }

@@ -4,15 +4,14 @@ export function getElapsed(header: CardObj['header']) {
   if (!header.startAt) return { type: '초', elapsed: -1 };
 
   const now = Date.now();
-  const startAt = new Date(header.startAt).getTime();
+  const isDoneOrder = Boolean(header.updatedAt);
+  const startAt = isDoneOrder ? new Date(header.updatedAt).getTime() : new Date(header.startAt).getTime();
   const elapsedMs = now - startAt;
 
   const seconds = Math.floor(elapsedMs / 1000);
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);
   const days = Math.floor(hours / 24);
-
-  /* 주문 번호 104, startAt 빈 문자열 NaN 오류 발생  */
 
   if (seconds < 60) {
     return { state: 'good', type: '초', elapsed: seconds };

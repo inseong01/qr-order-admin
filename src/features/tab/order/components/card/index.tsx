@@ -15,12 +15,12 @@ export default function Card({ order }: CardProps) {
   return (
     <CardBox order={order}>
       <div className={styles.contents}>
-        <CardHeader header={order.header} />
+        {order.isStart && <CardHeader header={order.header} />}
 
         <CardMain order={order} />
       </div>
 
-      <CardFooter order={order} />
+      {order.isEnd && <CardFooter order={order} />}
     </CardBox>
   );
 }
@@ -32,7 +32,7 @@ type CardBoxProps = {
 
 function CardBox({ children, order }: CardBoxProps) {
   return (
-    <li className={styles.card} data-start={order.isStart} data-end={order.isEnd}>
+    <li className={styles.card} data-start={order.isStart} data-end={order.isEnd} data-height={order.heightType}>
       {children}
     </li>
   );

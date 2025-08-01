@@ -3,10 +3,7 @@ import { motion } from 'motion/react';
 import { useAtomValue } from 'jotai';
 
 import { windowStateAtom } from '@/store/atom/window-atom';
-import { useQueryOrderMenuList } from '@/hooks/use-query/query';
 import { generateCardLayoutArr } from '@/utils/function/generate-card';
-
-import orderItemMock from '@/mock/order-item.test.json';
 
 import { useOrderTab } from './hooks/use-order-tab';
 import { card_motion } from './motion/variants';
@@ -14,15 +11,13 @@ import Card from './components/card';
 import styles from './view.module.css';
 
 export default function OrderTabView() {
-  const { orders } = useOrderTab();
+  const { orders, orderItems } = useOrderTab();
   const { mainSection } = useAtomValue(windowStateAtom);
   const ordersRef = useRef<HTMLUListElement>(null);
   const isDataEmpty = orders.length === 0;
-  const orderMenusQuery = useQueryOrderMenuList();
   const orderCardList = generateCardLayoutArr({
     orders,
-    // orderItems: orderMenusQuery?.data ?? [],
-    orderItems: orderItemMock,
+    orderItems,
     maxHeight: mainSection.height,
   });
 

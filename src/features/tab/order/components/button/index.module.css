@@ -31,3 +31,7 @@
 .btn.delete {
   color: #fb2c2c;
 }
+
+.btn:disabled {
+  cursor: default;
+}

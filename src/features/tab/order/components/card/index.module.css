@@ -1,6 +1,6 @@
 /* 카드 */
 .card {
-  min-width: calc(100% / 5 - 10px);
+  width: 285px;
 
   display: flex;
   flex-direction: column;
@@ -13,16 +13,28 @@
 
   padding: 25px 16px;
 }
+
+/* 카드 스타일 속성 - 곡선 */
 .card[data-start='true'] {
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
 }
-.card[data-start='false'] {
-  padding-top: 45px;
-}
 .card[data-end='true'] {
   border-bottom-left-radius: 16px;
   border-bottom-right-radius: 16px;
+}
+
+/* 카드 스타일 속성 - 상단 여백 */
+.card[data-start='false'] {
+  padding-top: 45px;
+}
+
+/* 카드 스타일 속성 - 높이 */
+.card[data-height='full'] {
+  height: 100%;
+}
+.card[data-height='half'] {
+  height: calc(50% - 5px); /* gap: 10  */
 }
 
 .contents {

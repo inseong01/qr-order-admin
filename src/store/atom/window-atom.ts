@@ -12,7 +12,7 @@ type WindowState = {
 };
 
 const paddingX = 70; // main section padding X
-const paddingY = 85 + 70 + 85; // header + main section padding Y + footer height
+const paddingY = 79 + 70 + 79; // header + main section padding Y + footer height
 const initialWindowState: WindowState = {
   viewportMode: 'portrait',
   isMobile: false,
@@ -37,8 +37,8 @@ export const resizeMainSectionAtom = atom(null, (_, set) => {
   set(windowStateAtom, (prev: WindowState) => ({
     ...prev,
     mainSection: {
-      width: window.innerWidth - paddingX,
-      height: window.innerHeight - paddingY,
+      width: Math.floor(window.innerWidth - paddingX),
+      height: Math.floor(window.innerHeight - paddingY),
     },
   }));
 });

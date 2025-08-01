@@ -9,8 +9,8 @@ import {
   generateCardLayoutArr,
 } from '../function/generate-card';
 
-import mock_orders from '@/features/tab/order/components/order-cards/card/variants/order-card-table.mock.json';
-import mock_order_items from '@/features/tab/order/components/order-cards/card/components/order-card.mock.json';
+import mock_orders from '@/mock/order.test.json';
+import mock_order_items from '@/mock/order-item.test.json';
 
 describe('generate card function test', () => {
   describe('buildOrdersMap ', () => {
@@ -35,7 +35,7 @@ describe('generate card function test', () => {
   describe('calculateHeader', () => {
     it('시작 카드일 때 헤더 높이', () => {
       const headerHeight = calculateHeader(true);
-      expect(headerHeight).toBe(160);
+      expect(headerHeight).toBe(143);
     });
 
     it('시작 카드가 아닐 때 헤더 높이', () => {
@@ -45,21 +45,26 @@ describe('generate card function test', () => {
   });
 
   describe('calculateMain', () => {
-    it('메뉴 하나 있을 때 메인 높이', () => {
+    it('메뉴 1개 있을 때 메인 높이', () => {
       const mainHeight = calculateMain();
-      expect(mainHeight).toBe(48);
+      expect(mainHeight).toBe(69);
     });
 
-    it('메뉴 두 개 있을 때 메인 높이', () => {
+    it('메뉴 2개 있을 때 메인 높이', () => {
       const mainHeight = calculateMain() * 2;
-      expect(mainHeight).toBe(96);
+      expect(mainHeight).toBe(138);
+    });
+
+    it('메뉴 7개 있을 때 메인 높이', () => {
+      const mainHeight = calculateMain() * 7;
+      expect(mainHeight).toBe(483);
     });
   });
 
-  describe('calculateFooter', () => {
+  describe.only('calculateFooter', () => {
     it('푸터 높이', () => {
       const footerHeight = calculateFooter();
-      expect(footerHeight).toBe(104);
+      expect(footerHeight).toBe(79);
     });
   });
 

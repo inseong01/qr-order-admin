@@ -26,7 +26,7 @@
 .right {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 10px;
 
   font-size: var(--fz-s);
 }
@@ -35,6 +35,16 @@
   border-radius: 8px;
   padding: 6px;
 }
+
+/* 하단 */
+.bottom {
+  display: flex;
+  align-items: flex-start;
+
+  font-size: var(--fz-r);
+}
+
+/* 주문 경과 스타일링 */
 .elapsed[data-state='good'] {
   color: #222;
   background-color: #fff;
@@ -44,10 +54,8 @@
   background-color: #e83c3c;
 }
 
-/* 하단 */
-.bottom {
-  display: flex;
-  align-items: flex-start;
-
-  font-size: var(--fz-r);
+/* 완료된 주문 스타일링 */
+[data-finished='true'] .elapsed[data-state='bad'] {
+  color: var(--inactive-color);
+  background-color: var(--inactive-bg-color);
 }

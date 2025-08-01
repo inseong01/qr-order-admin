@@ -15,7 +15,7 @@ import styles from './index.module.css';
 
 export default function Main() {
   const category = useAtomValue(footerAtom);
-  const { isMobile, mainSection } = useAtomValue(windowStateAtom);
+  const { isMobile } = useAtomValue(windowStateAtom);
 
   return (
     <main className={styles.main}>
@@ -23,7 +23,7 @@ export default function Main() {
         {category ? (
           <>
             {/* 좌측 */}
-            <div className={styles.leftBox} style={{ width: mainSection.width }}>
+            <div className={styles.leftBox}>
               <TabViewContainer />
             </div>
 
@@ -60,6 +60,7 @@ function MainRightComponent() {
             animate={{ x: 0 }}
             exit={{ x: 385 }}
             transition={{ duration: 0.3 }}
+            style={{ padding: '35px 35px 35px 0' }}
           >
             <TabModalContainer />
           </motion.div>

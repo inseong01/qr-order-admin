@@ -11,9 +11,10 @@ import styles from './index.module.css';
 interface CardButtonProps {
   orderId: Order['id'];
   type: 'delete' | 'complete';
+  inavtive: boolean;
 }
 
-export default function CardButton({ orderId, type }: CardButtonProps) {
+export default function CardButton({ orderId, type, inavtive = false }: CardButtonProps) {
   const { showConfirmModal } = useConfirmModal();
   const { refetch } = useQueryAllOrderList();
   const openSubmissionAlert = useSetAtom(openSubmissionAlertAtom);
@@ -47,6 +48,7 @@ export default function CardButton({ orderId, type }: CardButtonProps) {
       type='button'
       className={`${styles.btn} ${type === 'delete' ? styles.delete : ''}`}
       onClick={onClickUpdateListState}
+      disabled={inavtive}
     >
       {type === 'delete' ? '삭제' : '조리 완료'}
     </button>
