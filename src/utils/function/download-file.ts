@@ -1,15 +1,15 @@
-import { TableNum } from '../../types/common';
+import { Table } from '@/lib/supabase/tables/table';
 
 /**
  * 주어진 URL에서 파일을 비동기적으로 다운로드하고,
  * 지정된 테이블 번호를 사용하여 파일 이름을 지정합니다.
  *
- * @param {string} url - 다운로드할 파일의 URL.
- * @param {TableNum} tableNum - 파일 이름에 포함될 테이블 번호.
- * @returns {Promise<void>} 파일 다운로드가 성공적으로 시작되면 resolve되는 Promise.
+ * @param url - 다운로드할 파일의 URL.
+ * @param tableNum - 파일 이름에 포함될 테이블 번호.
+ * @returns  파일 다운로드가 성공적으로 시작되면 resolve되는 Promise.
  *                          오류 발생 시 콘솔에 에러를 출력합니다.
  */
-export default async function downloadFile(url: string, tableNum: TableNum): Promise<void> {
+export default async function downloadFile(url: string, tableNum: Table['number']): Promise<void> {
   try {
     const response = await fetch(url);
     if (!response.ok) {

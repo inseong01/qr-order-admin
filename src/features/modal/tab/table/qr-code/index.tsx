@@ -27,6 +27,10 @@ export default function QRPreviewBox({ tableNumber }: { tableNumber?: number }) 
   /* QR코드 다운로드 */
   function onClickDownloadQRcode() {
     if (!url) return;
+    if (!tableNumber) {
+      alert('테이블 정보를 불러오지 못했습니다.');
+      return;
+    }
     downloadFile(url, tableNumber);
   }
 

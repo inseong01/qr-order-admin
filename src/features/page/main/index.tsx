@@ -12,13 +12,14 @@ import Widget from '@/features/widget';
 
 import { footerAtom } from '../footer';
 import styles from './index.module.css';
+import { ExceptionText } from '@/components/ui/exception';
 
 export default function Main() {
   const category = useAtomValue(footerAtom);
   const { isMobile } = useAtomValue(windowStateAtom);
 
   return (
-    <main className={styles.main}>
+    <main className={styles.main} data-empty={!category}>
       <Suspense fallback={<LoadingSpinner />}>
         {category ? (
           <>
@@ -31,7 +32,7 @@ export default function Main() {
             {!isMobile && <MainRightComponent />}
           </>
         ) : (
-          '예기치 않은 오류가 발생했습니다.'
+          <ExceptionText text='예기치 않은 오류가 발생했습니다.' />
         )}
       </Suspense>
     </main>

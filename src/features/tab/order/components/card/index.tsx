@@ -15,7 +15,7 @@ export default function Card({ order }: CardProps) {
   return (
     <CardBox order={order}>
       <div className={styles.contents}>
-        {order.isStart && <CardHeader header={order.header} />}
+        {order.isStart && <CardHeader header={order.header} isDone={!!order.isDone} />}
 
         <CardMain order={order} />
       </div>

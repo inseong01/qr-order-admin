@@ -1,21 +1,20 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, FormEvent } from 'react';
 import { useAtom, useSetAtom } from 'jotai';
 import { useQuery } from '@tanstack/react-query';
 
 import { openSubmissionAlertAtom } from '@/features/alert/popup/store/atom';
 import { setWidgetAtomState } from '@/features/widget/store/atom';
 
-import { MENU_CATEGORIES_QUERY_KEY, useQueryMenuCategoryList } from '@/hooks/use-query/query';
+import { MENU_CATEGORIES_QUERY_KEY, useQueryMenuCategoryList, useQueryMenuList } from '@/hooks/use-query/query';
 
 import { MenuCategory, updateMenuCategory } from '@/lib/supabase/tables/menu-category';
 import validate from '@/utils/function/validate';
 
-import { useConfirmModal } from '../../confirm/hook/use-confirm-modal';
-import { SubmitInfoBox } from './components/submit-info/submit-info';
-import SubmitButton from './components/button/button';
-import TitleBox from './components/title/title';
-import { selectedCategoriesAtom } from './store/atom';
-import styles from './update-category-form.module.css';
+import { useConfirmModal } from '../../../../confirm/hook/use-confirm-modal';
+import SubmitButton from '../button/button';
+import { SubmitFormBox, SubmitInfoBox, TitleBox } from '../common';
+import { selectedCategoriesAtom } from '../../store/atom';
+import styles from './update-form.module.css';
 
 /**
  * 기존 메뉴 분류를 수정하는 컴포넌트
@@ -23,13 +22,14 @@ import styles from './update-category-form.module.css';
 export default function UpdateCategoryForm() {
   const categories = useQuery<MenuCategory[]>({ queryKey: MENU_CATEGORIES_QUERY_KEY });
   const [selectedCategories, setSelectedCategories] = useAtom(selectedCategoriesAtom);
+  const menuListQuery = useQueryMenuList();
   const menuCategoriesQuery = useQueryMenuCategoryList();
   const setWidgetState = useSetAtom(setWidgetAtomState);
   const openSubmissionAlert = useSetAtom(openSubmissionAlertAtom);
   const { showConfirmModal } = useConfirmModal();
 
   /* 비즈니스 로직 */
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     const updatedCategories = Object.values(selectedCategories);
     if (!updatedCategories.length) {
       alert('분류 항목을 선택해주세요.');
@@ -49,6 +49,7 @@ export default function UpdateCategoryForm() {
       try {
         await updateMenuCategory(data); // supabase 전달
         await menuCategoriesQuery.refetch();
+        await menuListQuery.refetch();
         openSubmissionAlert('수정되었습니다'); // 데이터 처리 상태 알림
       } catch (e) {
         console.log(e);
@@ -93,46 +94,44 @@ export default function UpdateCategoryForm() {
   }
 
   return (
-    <form className={styles.submitForm} onSubmit={handleSubmit}>
-      <div className={styles.sortModal}>
-        {/* 제목 */}
-        <TitleBox>분류 수정</TitleBox>
+    <SubmitFormBox onSubmit={handleSubmit}>
+      {/* 제목 */}
+      <TitleBox>분류 수정</TitleBox>
 
-        {/* 목록 */}
-        <SubmitInfoBox>
-          {categories.data?.map(({ id, title }) => (
-            <li key={id} className={styles.info}>
-              <label htmlFor={id} className={styles.top}>
-                <span>{title}</span>
+      {/* 목록 */}
+      <SubmitInfoBox>
+        {categories.data?.map(({ id, title }) => (
+          <li key={id} className={styles.info}>
+            <label htmlFor={id} className={styles.top}>
+              <span>{title}</span>
 
-                <input
-                  type='checkbox'
-                  id={id}
-                  name='check'
-                  className={styles.check}
-                  checked={Object.hasOwn(selectedCategories, id)}
-                  onChange={handleCheckboxChange}
-                />
-              </label>
+              <input
+                type='checkbox'
+                id={id}
+                name='check'
+                className={styles.check}
+                checked={Object.hasOwn(selectedCategories, id)}
+                onChange={handleCheckboxChange}
+              />
+            </label>
 
-              {Object.hasOwn(selectedCategories, id) && (
-                <input
-                  type='text'
-                  id={id}
-                  name='title'
-                  placeholder='분류명을 작성해주세요.'
-                  className={styles.bottom}
-                  value={selectedCategories[id]?.title ?? ''}
-                  onChange={handleTyping}
-                />
-              )}
-            </li>
-          ))}
-        </SubmitInfoBox>
+            {Object.hasOwn(selectedCategories, id) && (
+              <input
+                type='text'
+                id={id}
+                name='title'
+                placeholder='분류명을 작성해주세요.'
+                className={styles.bottom}
+                value={selectedCategories[id]?.title ?? ''}
+                onChange={handleTyping}
+              />
+            )}
+          </li>
+        ))}
+      </SubmitInfoBox>
 
-        {/* 제출 */}
-        <SubmitButton value='수정하기' />
-      </div>
-    </form>
+      {/* 제출 */}
+      <SubmitButton value='수정하기' />
+    </SubmitFormBox>
   );
 }

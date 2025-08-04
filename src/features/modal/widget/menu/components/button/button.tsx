@@ -1,4 +1,4 @@
-import styles from './index.module.css';
+import styles from './button.module.css';
 
 type SubmitButtonProps = {
   value: '추가하기' | '수정하기' | '삭제하기';

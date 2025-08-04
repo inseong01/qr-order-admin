@@ -5,7 +5,7 @@ import { getRequestList, Request } from '@/lib/supabase/tables/request';
 import { getMenuList, Menu } from '@/lib/supabase/tables/menu';
 import { getOrderList, Order } from '@/lib/supabase/tables/order';
 import { FirstRequestItem, getRequestItemList } from '@/lib/supabase/tables/request-item';
-import { getOrderItemList, OrderItem } from '@/lib/supabase/tables/order-item';
+import { getOrderItems, OrderItem } from '@/lib/supabase/tables/order-item';
 import { getMenuCategory, MenuCategory } from '@/lib/supabase/tables/menu-category';
 
 export const TABLE_LIST_QUERY_KEY = ['tableList'];
@@ -20,7 +20,7 @@ export const MENU_CATEGORIES_QUERY_KEY = ['menuCategoryList'];
  * 테이블 목록을 가져오는 쿼리
  */
 export function useQueryTableList() {
-  const { data, refetch } = useQuery<Table[]>({
+  const { data, refetch, isLoading } = useQuery<Table[]>({
     queryKey: TABLE_LIST_QUERY_KEY,
     queryFn: getTableList,
     staleTime: Infinity,
@@ -28,7 +28,7 @@ export function useQueryTableList() {
     refetchOnWindowFocus: false,
   });
 
-  return { data, refetch };
+  return { data, refetch, isLoading };
 }
 
 /**
@@ -61,37 +61,39 @@ export function useQueryFirstRequest(request_id: string) {
  * 메뉴 목록을 가져오는 쿼리
  */
 export function useQueryMenuList() {
-  const { data, refetch } = useQuery<Menu[]>({
+  const { data, refetch, isLoading } = useQuery<Menu[]>({
     queryKey: MENU_LIST_QUERY_KEY,
     queryFn: getMenuList,
     staleTime: Infinity,
   });
 
-  return { data, refetch };
+  return { data, refetch, isLoading };
 }
 
 /**
  * 전체 주문 목록을 가져오는 쿼리
  */
 export function useQueryAllOrderList() {
-  const { data, refetch } = useQuery<Order[]>({
+  const { data, refetch, isLoading } = useQuery<Order[]>({
     queryKey: ALL_ORDER_LIST_QUERY_KEY,
     queryFn: getOrderList,
+    staleTime: 1000 * 60,
   });
 
-  return { data, refetch };
+  return { data, refetch, isLoading };
 }
 
 /**
  * 전체 주문 메뉴 목록을 가져오는 쿼리
  */
-export function useQueryOrderMenuList() {
-  const { data } = useQuery<OrderItem[]>({
+export function useQueryOrderItems() {
+  const { data, isLoading } = useQuery<OrderItem[]>({
     queryKey: ORDER_LIST_QUERY_KEY,
-    queryFn: getOrderItemList,
+    queryFn: getOrderItems,
+    staleTime: 1000 * 60,
   });
 
-  return { data };
+  return { data, isLoading };
 }
 
 /**

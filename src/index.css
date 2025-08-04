@@ -29,6 +29,11 @@
   /* tab width */
   --tab-right-width: 439px; /* widget + gap + modal */
   --tab-modal-width: 350px;
+
+  /* widget position */
+  --widget-left: -105px;
+  --widget-bottom: 35px;
+  --widget-category-bottom: 55px; /* widget icon height + gap */
 }
 
 html,
@@ -40,7 +45,7 @@ body {
 
 body {
   color: #222;
-  background-color: white;
+  background-color: #f3f3f3;
 }
 
 * {

@@ -5,8 +5,8 @@ export function getElapsed(header: CardObj['header']) {
 
   const now = Date.now();
   const isDoneOrder = Boolean(header.updatedAt);
-  const startAt = isDoneOrder ? new Date(header.updatedAt).getTime() : new Date(header.startAt).getTime();
-  const elapsedMs = now - startAt;
+  const startAt = new Date(header.startAt).getTime();
+  const elapsedMs = isDoneOrder ? new Date(header.updatedAt).getTime() - startAt : now - startAt;
 
   const seconds = Math.floor(elapsedMs / 1000);
   const minutes = Math.floor(seconds / 60);

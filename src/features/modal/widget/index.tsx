@@ -4,9 +4,9 @@ import { AnimatePresence } from 'motion/react';
 import DialogLayout from '@/components/layout/dialog';
 import { setWidgetAtomState, widgetAtom } from '@/features/widget/store/atom';
 
-import AddCategoryForm from './menu/add-category-form';
-import UpdateCategoryForm from './menu/update-category-form';
-import DeleteCategoryForm from './menu/delete-category-form';
+import AddCategoryForm from './menu/components/category/add-form';
+import UpdateCategoryForm from './menu/components/category/update-form';
+import DeleteCategoryForm from './menu/components/category/delete-form';
 
 /**
  * 위젯 모달 전용 컴포넌트

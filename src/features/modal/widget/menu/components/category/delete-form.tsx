@@ -11,12 +11,11 @@ import { deleteMenuCategory, MenuCategory } from '@/lib/supabase/tables/menu-cat
 
 import validate from '@/utils/function/validate';
 
-import { useConfirmModal } from '../../confirm/hook/use-confirm-modal';
-import { SubmitInfoBox } from './components/submit-info/submit-info';
-import SubmitButton from './components/button/button';
-import TitleBox from './components/title/title';
-import { selectedCategoryIdsAtom } from './store/atom';
-import styles from './delete-category-form.module.css';
+import { useConfirmModal } from '../../../../confirm/hook/use-confirm-modal';
+import SubmitButton from '../button/button';
+import { SubmitFormBox, SubmitInfoBox, TitleBox } from '../common';
+import { selectedCategoryIdsAtom } from '../../store/atom';
+import styles from './delete-form.module.css';
 
 /**
  * 기존 메뉴 분류를 삭제하는 컴포넌트
@@ -79,34 +78,32 @@ export default function DeleteCategoryForm() {
   }
 
   return (
-    <form className={styles.submitForm} onSubmit={handleSubmit}>
-      <div className={styles.sortModal}>
-        {/* 제목 */}
-        <TitleBox>분류 삭제</TitleBox>
+    <SubmitFormBox onSubmit={handleSubmit}>
+      {/* 제목 */}
+      <TitleBox>분류 삭제</TitleBox>
 
-        {/* 목록 */}
-        <SubmitInfoBox>
-          {categories.data?.map(({ id, title }) => (
-            <li key={id} className={styles.info}>
-              <label htmlFor={id} className={styles.left}>
-                <span>{title}</span>
+      {/* 목록 */}
+      <SubmitInfoBox>
+        {categories.data?.map(({ id, title }) => (
+          <li key={id} className={styles.info}>
+            <label htmlFor={id} className={styles.left}>
+              <span>{title}</span>
 
-                <input
-                  type='checkbox'
-                  id={id}
-                  name='check'
-                  className={styles.check}
-                  checked={selectedCategories.includes(id)}
-                  onChange={handleCheckboxChange}
-                />
-              </label>
-            </li>
-          ))}
-        </SubmitInfoBox>
+              <input
+                type='checkbox'
+                id={id}
+                name='check'
+                className={styles.check}
+                checked={selectedCategories.includes(id)}
+                onChange={handleCheckboxChange}
+              />
+            </label>
+          </li>
+        ))}
+      </SubmitInfoBox>
 
-        {/* 제출 */}
-        <SubmitButton value='삭제하기' />
-      </div>
-    </form>
+      {/* 제출 */}
+      <SubmitButton value='삭제하기' />
+    </SubmitFormBox>
   );
 }

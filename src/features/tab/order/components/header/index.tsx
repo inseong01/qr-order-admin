@@ -4,16 +4,16 @@ import { getElapsed } from '@/utils/function/get-elapsed';
 
 type CardHeaderProps = {
   header: CardObj['header'];
+  isDone: boolean;
 };
 
-export default function CardHeader({ header }: CardHeaderProps) {
+export default function CardHeader({ header, isDone }: CardHeaderProps) {
   const elapsedData = getElapsed(header);
   const formattedTime = new Date(header.startAt).toLocaleTimeString('ko-KR', {
     hour12: false,
     hour: '2-digit',
     minute: '2-digit',
   });
-  const isDone = Boolean(header.updatedAt);
 
   return (
     <div className={styles.topBox} data-finished={isDone}>

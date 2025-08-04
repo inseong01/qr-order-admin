@@ -1,12 +1,13 @@
 import { useAtomValue, useSetAtom } from 'jotai';
 import { useEffect, useRef, useState } from 'react';
 import { Group, Line, Rect, Text, Transformer } from 'react-konva';
+import { Tween } from 'konva/lib/Tween';
 import Konva from 'konva';
 
 import { selectIdState } from '@/store/atom/id-atom';
 import { Table } from '@/lib/supabase/tables/table';
 import { OrderItem } from '@/lib/supabase/tables/order-item';
-import { setModalClickAtom, setTabModalAtomState } from '@/features/modal/tab/store/atom';
+import { resetTableToggleAtom, setModalClickAtom, setTabModalAtomState } from '@/features/modal/tab/store/atom';
 
 import {
   editModeAtom,
@@ -32,6 +33,7 @@ export default function TableLayer({ table, orders }: { table: Table; orders: Or
   const selectSingleTable = useSetAtom(selectSingleTableAtom);
   const resetTableEdit = useSetAtom(resetTablEditAtom);
   const setModalClick = useSetAtom(setModalClickAtom);
+  const resetTableToggle = useSetAtom(resetTableToggleAtom);
 
   /* 원래 좌석 정보 임시 보관 */
   const [preTransformTable, setPreTransformTable] = useState<Table | null>(null);
@@ -76,6 +78,32 @@ export default function TableLayer({ table, orders }: { table: Table; orders: Or
     };
   }, [editMode, preTransformTable, updateTable]);
 
+  const bottomRef = useRef<Konva.Group>(null);
+
+  /** 좌석 편집 모드 여부에 따른 애니메이션 */
+  useEffect(() => {
+    if (!bottomRef?.current) return;
+    if (editMode) {
+      const fadeOut = new Tween({
+        node: bottomRef.current,
+        duration: 0.3,
+        opacity: 0,
+        easing: Konva.Easings.EaseInOut,
+      });
+      fadeOut.play();
+      return;
+    }
+
+    const fadeIn = new Tween({
+      node: bottomRef.current,
+      duration: 0.3,
+      opacity: 1,
+      easing: Konva.Easings.EaseInOut,
+    });
+    fadeIn.play();
+    return;
+  }, [editMode]);
+
   /* 좌석 선택 */
   function onClickSelectTable() {
     if (editMode === 'create') {
@@ -95,6 +123,7 @@ export default function TableLayer({ table, orders }: { table: Table; orders: Or
     selectId(id);
     setModalClick(true);
     setTableModal('table-info');
+    resetTableToggle();
   }
 
   /* 변형(드래그, 리사이즈) 시작 시 원래 정보 저장 */
@@ -261,21 +290,21 @@ export default function TableLayer({ table, orders }: { table: Table; orders: Or
       </Group>
 
       {/* 좌석 하단 */}
-      {!editMode && (
-        <Group x={20} y={meta.bottom.y}>
-          <Line points={meta.bottom.line.points} strokeWidth={1} stroke={'#8D8D8D'} />
-          <Group x={0} y={10}>
-            <Text text='합계' width={meta.bottom.priceText.width} fill={'#8D8D8D'} fontSize={15} align='left' />
-            <Text
-              text={`${totalPrice}원`}
-              width={meta.bottom.priceText.width}
-              fill={'#8D8D8D'}
-              fontSize={15}
-              align='right'
-            />
-          </Group>
+      {/* {!editMode && ( */}
+      <Group ref={bottomRef} x={20} y={meta.bottom.y}>
+        <Line points={meta.bottom.line.points} strokeWidth={1} stroke={'#8D8D8D'} />
+        <Group x={0} y={10}>
+          <Text text='합계' width={meta.bottom.priceText.width} fill={'#8D8D8D'} fontSize={15} align='left' />
+          <Text
+            text={`${totalPrice}원`}
+            width={meta.bottom.priceText.width}
+            fill={'#8D8D8D'}
+            fontSize={15}
+            align='right'
+          />
         </Group>
-      )}
+      </Group>
+      {/* )} */}
     </Group>
   );
 }

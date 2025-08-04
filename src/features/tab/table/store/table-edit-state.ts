@@ -77,7 +77,7 @@ export const selectSingleTableAtom = atom(null, (_, set, tableId: string) => {
 /**
  * 테이블 데이터 사본 설정
  */
-export const setDraftTableAtom = atom(null, (get, set, newTables: Table[]) => {
+export const setDraftTableAtom = atom(null, (_, set, newTables: Table[]) => {
   set(draftTablesAtom, [...newTables]);
 });
 

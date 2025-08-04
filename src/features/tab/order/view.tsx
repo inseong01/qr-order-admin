@@ -1,39 +1,38 @@
-import { useRef } from 'react';
-import { motion } from 'motion/react';
+import { useMemo } from 'react';
 import { useAtomValue } from 'jotai';
 
 import { windowStateAtom } from '@/store/atom/window-atom';
 import { generateCardLayoutArr } from '@/utils/function/generate-card';
+import { ExceptionText } from '@/components/ui/exception';
+import LoadingSpinner from '@/features/load/spinner';
 
+import { ListUlBox } from '../components/list-box';
 import { useOrderTab } from './hooks/use-order-tab';
-import { card_motion } from './motion/variants';
 import Card from './components/card';
-import styles from './view.module.css';
 
 export default function OrderTabView() {
-  const { orders, orderItems } = useOrderTab();
+  const { orders, orderItems, isLoading } = useOrderTab();
   const { mainSection } = useAtomValue(windowStateAtom);
-  const ordersRef = useRef<HTMLUListElement>(null);
+  const orderCardList = useMemo(() => {
+    return generateCardLayoutArr({
+      orders,
+      orderItems,
+      maxHeight: mainSection.height,
+    });
+  }, [orders, orderItems, mainSection.height]);
   const isDataEmpty = orders.length === 0;
-  const orderCardList = generateCardLayoutArr({
-    orders,
-    orderItems,
-    maxHeight: mainSection.height,
-  });
+
+  if (isLoading) return <LoadingSpinner />;
 
   return (
-    <motion.ul
-      ref={ordersRef}
-      className={styles.orders}
-      variants={card_motion}
-      initial={'notActive'}
-      animate={'active'}
-    >
+    <ListUlBox isDataEmpty={isDataEmpty} sectionWidth={mainSection.width} tab='order'>
       {isDataEmpty ? (
-        <li>표시할 주문이 없습니다.</li>
+        <ExceptionText text='표시할 주문이 없습니다.' />
       ) : (
-        orderCardList?.map((order, idx) => <Card key={idx} order={order} />)
+        orderCardList?.map((order, idx) => {
+          return <Card key={order.footer.orderId + idx} order={order} />;
+        })
       )}
-    </motion.ul>
+    </ListUlBox>
   );
 }

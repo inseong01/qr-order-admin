@@ -29,8 +29,8 @@ import LIGHT_BACK_ICON from '@/assets/icon/light-back-icon.svg';
 import LIGHT_TABLE_ICON from '@/assets/icon/light-table-icon.svg';
 import LIGHT_SAVE_ICON from '@/assets/icon/light-save-icon.svg';
 
-import { AnimatedIconSwitcher, AnimatedTextSwitcher, DetectAnimation, ListBox } from './motion';
-import styles from './components.module.css';
+import { AnimatedIconSwitcher, AnimatedTextSwitcher, DetectAnimation, ListBox } from '../motion';
+import styles from './tab.module.css';
 
 /**
  * 테이블 탭 위젯
@@ -141,6 +141,7 @@ export function TableWidget() {
       resetTableState();
       return;
     }
+
     setEditState(!isEditing);
   }
 

@@ -1,10 +1,11 @@
 import { useAtomValue, useSetAtom } from 'jotai';
+import { motion } from 'motion/react';
 
 import LIGHT_LIST_UP_ICON from '@/assets/icon/light-list-up.svg';
 
-import { setWidgetAtomState, widgetAtom } from '../store/atom';
-import styles from './components.module.css';
-import { ListBox } from './motion';
+import { setWidgetAtomState, widgetAtom } from '../../store/atom';
+import { ListBox } from '../motion';
+import styles from './index.module.css';
 
 /**
  * 위젯 버튼
@@ -23,7 +24,12 @@ export function WidgetIconButton() {
       <span>{isOpen ? '닫기' : '열기'}</span>
 
       <div className={styles.openIconBox}>
-        <img src={LIGHT_LIST_UP_ICON} alt='widget close icon' data-flip={isOpen} />
+        <motion.img
+          initial={{ rotateZ: 0 }}
+          animate={{ rotateZ: isOpen ? 180 : 0 }}
+          src={LIGHT_LIST_UP_ICON}
+          alt='widget close icon'
+        />
       </div>
     </ListBox>
   );

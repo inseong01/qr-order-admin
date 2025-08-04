@@ -2,7 +2,7 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { AnimatePresence, motion } from 'motion/react';
 
 import { idAtom } from '@/store/atom/id-atom';
-import { useQueryOrderMenuList, useQueryTableList } from '@/hooks/use-query/query';
+import { useQueryOrderItems, useQueryTableList } from '@/hooks/use-query/query';
 
 import LIGHT_PLUS_ICON from '@/assets/icon/light-plus.svg';
 
@@ -16,7 +16,7 @@ export default function TableInfoPannel() {
   const tableId = useAtomValue(idAtom);
   const isToggled = useAtomValue(tableToggleAtom);
   const tables = useQueryTableList();
-  const allOrders = useQueryOrderMenuList();
+  const allOrders = useQueryOrderItems();
   const setModalClick = useSetAtom(setModalClickAtom);
 
   function handleClose() {

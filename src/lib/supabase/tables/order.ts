@@ -45,7 +45,10 @@ export async function getOrderList(): Promise<Order[]> {
  * @returns
  */
 export const completeOrder = async (id: string) => {
-  const { error } = await supabase.from('order').update({ is_done: true }).eq('id', id);
+  const { error } = await supabase
+    .from('order')
+    .update({ is_done: true, updated_at: new Date().toISOString() })
+    .eq('id', id);
 
   if (error) {
     console.error(error.message);

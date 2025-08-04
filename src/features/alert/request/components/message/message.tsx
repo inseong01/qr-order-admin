@@ -21,9 +21,9 @@ export function MessageCountPannel({ count }: { count: number }) {
                 layout
                 key={idx}
                 className={styles.msg}
-                initial={{ scaleX: 0.5, opacity: 0 }}
-                animate={{ scaleX: 1, opacity: 1 }}
-                exit={{ scaleX: 0.5, opacity: 0 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
               >
                 <div className={styles.top}></div>
               </motion.li>
@@ -55,14 +55,14 @@ export function MessagePreview({ request, requestRefetch }: MessageCountPannelPr
 
   return (
     <motion.ul className={`${styles.reqeustMsg}`}>
-      <AnimatePresence mode='popLayout'>
+      <AnimatePresence mode='popLayout' initial={false}>
         <motion.li
+          layout
           key={request.id}
           className={styles.msg}
-          initial={{ scaleX: 0.5, opacity: 0 }}
-          animate={{ scaleX: 1, opacity: 1 }}
-          exit={{ scaleX: 0.5, opacity: 0 }}
-          layout
+          initial={{ x: '-100%', opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          exit={{ x: '-100%', opacity: 0 }}
         >
           {/* 상단 */}
           <div className={styles.top}>

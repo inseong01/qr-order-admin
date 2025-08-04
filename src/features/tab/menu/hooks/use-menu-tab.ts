@@ -14,5 +14,7 @@ export function useMenuTab() {
     menuGroupByCategory[category] = menuGroupByCategory[category] ? [...menuGroupByCategory[category], m] : [m];
   });
 
-  return { menuGroupByCategory, menuCategories, isMenuExist };
+  const isLoading = menuListQuery.isLoading;
+
+  return { menuGroupByCategory, menuCategories, isMenuExist, isLoading };
 }

@@ -1,21 +1,27 @@
+import { useAtomValue } from 'jotai';
 import { AnimatePresence, motion } from 'motion/react';
 
+import LoadingSpinner from '@/features/load/spinner';
 import { ListMenu, ListMenuAdd } from '@/components/ui/menu';
+import { ExceptionText } from '@/components/ui/exception';
+import { windowStateAtom } from '@/store/atom/window-atom';
 import { Menu } from '@/lib/supabase/tables/menu';
 
-import { listBoxMotion } from './motion/variants';
+import { ListUlBox } from '../components/list-box';
 import { useMenuTab } from './hooks/use-menu-tab';
-
 import styles from './view.module.css';
 
 export default function MenuTabView() {
-  const { menuGroupByCategory, menuCategories, isMenuExist } = useMenuTab();
+  const { menuGroupByCategory, menuCategories, isMenuExist, isLoading } = useMenuTab();
+  const { mainSection } = useAtomValue(windowStateAtom);
+
+  if (isLoading) return <LoadingSpinner />;
 
   return (
-    <motion.ul className={styles.listBox} variants={listBoxMotion} initial={'notLoad'} animate={'load'}>
+    <ListUlBox isDataEmpty={!isMenuExist} sectionWidth={mainSection.width} tab='menu'>
       <AnimatePresence>
         {!isMenuExist ? (
-          <li>메뉴를 생성해주세요</li>
+          <ExceptionText text='위젯에서 메뉴 분류를 생성해주세요.' />
         ) : (
           menuCategories?.map((category) => (
             <li key={category.id} className={styles.displayRow}>
@@ -24,7 +30,7 @@ export default function MenuTabView() {
                 {category.title}
               </motion.div>
 
-              {/* 메뉴 목록 */}
+              {/* 목록 */}
               <motion.div layout={'position'} className={styles.menuRow}>
                 {/* 추가 버튼 */}
                 <ListMenuAdd category={category.title} />
@@ -38,6 +44,6 @@ export default function MenuTabView() {
           ))
         )}
       </AnimatePresence>
-    </motion.ul>
+    </ListUlBox>
   );
 }

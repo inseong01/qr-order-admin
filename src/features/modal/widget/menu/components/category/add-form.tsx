@@ -8,12 +8,11 @@ import { setWidgetAtomState } from '@/features/widget/store/atom';
 import { addMenuCategory } from '@/lib/supabase/tables/menu-category';
 import validate from '@/utils/function/validate';
 
-import { useConfirmModal } from '../../confirm/hook/use-confirm-modal';
-import { SubmitInfoBox } from './components/submit-info/submit-info';
-import SubmitButton from './components/button/button';
-import TitleBox from './components/title/title';
-import { categoryInputAtom } from './store/atom';
-import styles from './add-category-form.module.css';
+import { useConfirmModal } from '../../../../confirm/hook/use-confirm-modal';
+import SubmitButton from '../button/button';
+import { SubmitFormBox, SubmitInfoBox, TitleBox } from '../common';
+import { categoryInputAtom } from '../../store/atom';
+import styles from './add-form.module.css';
 
 /**
  * 새로운 메뉴 분류를 추가하는 컴포넌트
@@ -62,29 +61,27 @@ export default function AddCategoryForm() {
   };
 
   return (
-    <form className={`${styles.submitForm} ${styles.category}`} onSubmit={handleSubmit}>
-      <div className={styles.sortModal}>
-        {/* 제목 */}
-        <TitleBox>분류 추가</TitleBox>
+    <SubmitFormBox onSubmit={handleSubmit}>
+      {/* 제목 */}
+      <TitleBox>분류 추가</TitleBox>
 
-        {/* 입력 */}
-        <SubmitInfoBox>
-          <li className={styles.info}>
-            <input
-              required
-              type='text'
-              className={styles.input}
-              name='title'
-              value={inputValue}
-              onChange={handleInputChange}
-              placeholder='분류명을 입력해주세요'
-            />
-          </li>
-        </SubmitInfoBox>
+      {/* 입력 */}
+      <SubmitInfoBox>
+        <li className={`${styles.category} ${styles.info}`}>
+          <input
+            required
+            type='text'
+            className={styles.input}
+            name='title'
+            value={inputValue}
+            onChange={handleInputChange}
+            placeholder='분류명을 입력해주세요'
+          />
+        </li>
+      </SubmitInfoBox>
 
-        {/* 제출 */}
-        <SubmitButton value='추가하기' />
-      </div>
-    </form>
+      {/* 제출 */}
+      <SubmitButton value='추가하기' />
+    </SubmitFormBox>
   );
 }

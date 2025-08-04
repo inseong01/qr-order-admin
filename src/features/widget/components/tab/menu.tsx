@@ -4,9 +4,9 @@ import LIGHT_ADD_LIST_ICON from '@/assets/icon/light-add-list.svg';
 import LIGHT_DELETE_ICON from '@/assets/icon/light-delete.svg';
 import LIGHT_EDIT_ICON from '@/assets/icon/light-edit.svg';
 
-import { setWidgetAtomState } from '../store/atom';
-import { DetectAnimation, ListBox } from './motion';
-import styles from './components.module.css';
+import { setWidgetAtomState } from '../../store/atom';
+import { DetectAnimation, ListBox } from '../motion';
+import styles from './tab.module.css';
 
 /**
  * 메뉴 탭 위젯

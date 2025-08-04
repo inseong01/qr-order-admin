@@ -22,12 +22,12 @@ describe('generate card function test', () => {
 
   describe('findOrderStartAt', () => {
     it('특정 주문 시각 반환 1', () => {
-      const startAt = findOrderStartAt({ orders: mock_orders, orderItem: mock_order_items[0] });
+      const startAt = findOrderStartAt({ orders: mock_orders, orderId: mock_order_items[0].id });
       expect(startAt).toBe('2025-07-30T10:00:00.000Z');
     });
 
     it('특정 주문 시각 반환 2', () => {
-      const startAt = findOrderStartAt({ orders: mock_orders, orderItem: mock_order_items[1] });
+      const startAt = findOrderStartAt({ orders: mock_orders, orderId: mock_order_items[1].id });
       expect(startAt).toBe('2025-07-30T10:10:00.000Z');
     });
   });

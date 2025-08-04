@@ -19,32 +19,30 @@ type GenerateCardLayoutArrProps = {
 export function generateCardLayoutArr({ orders, orderItems, maxHeight }: GenerateCardLayoutArrProps) {
   // 주문 항목을 주문 ID 기준으로 그룹화하여 Map 생성
   const ordersMap = buildOrdersMap(orderItems);
-  const allOrders = ordersMap.values().toArray();
-
   let cardArr: CardObj[] = [];
   // 다음 카드 높이가 전체 높이의 절반 차지하는지 여부를 나타내는 플래그
   let isNextCardTobeHalf = false;
 
   // 그룹화된 모든 주문에 대해 반복
-  for (const tableOrder of allOrders) {
-    const _orderItem = tableOrder[0];
+  for (const order of orders) {
+    const tableOrder = ordersMap.get(order.id) ?? [];
     let currentCardHeight = 0;
     // 새로운 카드 생성 (첫 카드이므로 isStart = true)
-    let currentCard = createNewCard(true, _orderItem);
+    let currentCard = createNewCard(true, order);
 
     // 주문 시작 및 업데이트 시간 찾음
-    const startAt = currentCard.isStart ? findOrderStartAt({ orders, orderItem: _orderItem }) : '';
-    const updatedAt = currentCard.isStart ? findOrderUpdatedAt({ orders, orderItem: _orderItem }) : '';
-    const orderNumber = _orderItem.order.order_number;
-    currentCard.isDone = _orderItem.order.is_done;
-    currentCard.header = { table: _orderItem.order.table, startAt, updatedAt, orderNumber };
+    const startAt = currentCard.isStart ? findOrderStartAt({ orders, orderId: order.id }) : '';
+    const updatedAt = currentCard.isStart ? findOrderUpdatedAt({ orders, orderId: order.id }) : '';
+    const orderNumber = order.order_number;
+    currentCard.isDone = order.is_done;
+    currentCard.header = { table: order.table, startAt, updatedAt, orderNumber };
 
     /*
       카드 높이 유형 판단
       - 이전 카드의 높이가 절반이어서, 다음 카드가 절반 높이로 지정된 경우
     */
     if (isNextCardTobeHalf) {
-      currentCardHeight = Math.floor(maxHeight / 2);
+      currentCardHeight = Math.floor(maxHeight / 2) - 5;
       currentCard.heightType = 'half';
       isNextCardTobeHalf = false;
     }
@@ -58,9 +56,9 @@ export function generateCardLayoutArr({ orders, orderItems, maxHeight }: Generat
       // 초과하면, 현재 카드를 배열에 추가하고 새로운 카드를 생성
       cardArr.push(currentCard);
 
-      currentCard = createNewCard(false, tableOrder[0]);
-      currentCard.isDone = _orderItem.order.is_done;
-      currentCard.header = { table: _orderItem.order.table, startAt: '', updatedAt: '', orderNumber };
+      currentCard = createNewCard(false, order);
+      currentCard.isDone = order.is_done;
+      currentCard.header = { table: order.table, startAt: '', updatedAt: '', orderNumber };
       currentCardHeight = calculateHeader(false);
     } else {
       // 초과하지 않으면, 현재 카드 높이에 헤더 높이를 더함
@@ -71,16 +69,16 @@ export function generateCardLayoutArr({ orders, orderItems, maxHeight }: Generat
       메인(주문 항목) 높이 계산 및 카드 분할
       - 각 주문 항목을 순회하며 높이 계산
     */
+    const menuHeight = calculateMain();
     for (const orderItem of tableOrder) {
-      const menuHeight = calculateMain();
       // 주문 항목을 추가했을 때 최대 높이를 초과하는지 확인
       if (menuHeight + currentCardHeight > maxHeight) {
         // 초과하면, 현재 카드를 배열에 추가하고 새로운 카드 생성
         cardArr.push(currentCard);
 
-        currentCard = createNewCard(false, tableOrder[0]);
-        currentCard.isDone = orderItem.order.is_done;
-        currentCard.header = { table: orderItem.order.table, startAt: '', updatedAt: '', orderNumber };
+        currentCard = createNewCard(false, order);
+        currentCard.isDone = order.is_done;
+        currentCard.header = { table: order.table, startAt: '', updatedAt: '', orderNumber };
         currentCardHeight = calculateHeader(false);
       }
 
@@ -97,14 +95,17 @@ export function generateCardLayoutArr({ orders, orderItems, maxHeight }: Generat
     const doseFooterFit = footerHeight + currentCardHeight <= maxHeight;
     if (doseFooterFit) {
       // 푸터가 카드에 맞는 경우
-      currentCard.footer.orderId = tableOrder[0].order.id;
+      currentCard.footer.orderId = order.id;
       currentCard.isEnd = true;
 
       // 카드의 최종 높이가 전체 높이의 절반을 넘는지 확인하고 카드 높이 유형 결정
-      const isOverHalf = currentCardHeight + footerHeight > maxHeight / 2;
+      const isOverHalf =
+        currentCard.heightType === 'full'
+          ? currentCardHeight + footerHeight > maxHeight / 2 - 5
+          : currentCardHeight + footerHeight > maxHeight - 5;
       currentCard.heightType = isOverHalf ? 'full' : 'half';
-      // 현재 카드가 절반 높이이면, 다음 카드는 전체 높이
-      // 현재 카드가 절반 이하의 높이면, 다음 카드는 절반 높이
+      // 현재 카드가 절반 초과 높이이면, 다음 카드는 전체 높이
+      // 현재 카드가 절반 이하 높이면, 다음 카드는 절반 높이
       isNextCardTobeHalf = !isOverHalf;
 
       cardArr.push(currentCard);
@@ -113,7 +114,7 @@ export function generateCardLayoutArr({ orders, orderItems, maxHeight }: Generat
       cardArr.push(currentCard);
 
       // 푸터만을 위한 새로운 카드 생성
-      const footerCard = createNewCard(false, tableOrder[0]);
+      const footerCard = createNewCard(false, order);
       footerCard.header = { ...currentCard.header, startAt: '' }; // 헤더 정보는 유지하되, 시작 시간은 비움
       footerCard.isDone = currentCard.isDone;
       footerCard.isEnd = true;
@@ -136,7 +137,7 @@ export type CardObj = {
   isDone: boolean | null;
   heightType: HeightType;
   header: {
-    table: OrderItem['order']['table'];
+    table: Order['table'];
     startAt: string;
     updatedAt: string;
     orderNumber: number;
@@ -153,26 +154,23 @@ export type CardObj = {
  * @param tableOrder - 카드 생성의 기준이 되는 주문 항목 데이터
  * @returns 생성된 카드 객체.
  */
-function createNewCard(isStart: boolean = true, tableOrder: OrderItem): CardObj {
-  const isDone = tableOrder.order.is_done;
-  const tableId = tableOrder.order.table.id;
-  const orderNumber = tableOrder.order.order_number;
-  const orderId = tableOrder.order.id;
+function createNewCard(isStart: boolean = true, order: Order): CardObj {
+  const { is_done, table, order_number, id } = order;
 
   return {
     isStart,
     isEnd: false,
-    isDone,
+    isDone: is_done,
     heightType: 'full',
     header: {
-      table: { id: tableId, number: 0 },
+      table,
       startAt: '',
       updatedAt: '',
-      orderNumber,
+      orderNumber: order_number,
     },
     main: [],
     footer: {
-      orderId,
+      orderId: id,
     },
   };
 }
@@ -197,7 +195,7 @@ export function buildOrdersMap(orderItems: OrderItem[]): Map<OrderItem['order'][
 
 type FindOrderProps = {
   orders: Order[];
-  orderItem: OrderItem;
+  orderId: string;
 };
 
 /**
@@ -205,8 +203,8 @@ type FindOrderProps = {
  * @param props - 주문 정보
  * @returns 타임스탬프 문자열으로 찾지 못하면 빈 문자열 반환
  */
-export function findOrderUpdatedAt({ orders, orderItem }: FindOrderProps) {
-  return orders.find((o) => o.id === orderItem.order.id)?.updated_at ?? '';
+export function findOrderUpdatedAt({ orders, orderId }: FindOrderProps) {
+  return orders.find((o) => o.id === orderId)?.updated_at ?? '';
 }
 
 /**
@@ -214,8 +212,8 @@ export function findOrderUpdatedAt({ orders, orderItem }: FindOrderProps) {
  * @param props - 주문 정보
  * @returns 타임스탬프 문자열으로 찾지 못하면 빈 문자열 반환
  */
-export function findOrderStartAt({ orders, orderItem }: FindOrderProps) {
-  return orders.find((o) => o.id === orderItem.order.id)?.created_at ?? '';
+export function findOrderStartAt({ orders, orderId }: FindOrderProps) {
+  return orders.find((o) => o.id === orderId)?.created_at ?? '';
 }
 
 /**

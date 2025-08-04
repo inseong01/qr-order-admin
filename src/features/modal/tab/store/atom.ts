@@ -34,3 +34,7 @@ export const tableToggleAtom = atom(false);
 export const setTableToggleAtom = atom(null, (_, set) => {
   set(tableToggleAtom, (prev) => !prev);
 });
+
+export const resetTableToggleAtom = atom(null, (_, set) => {
+  set(tableToggleAtom, false);
+});

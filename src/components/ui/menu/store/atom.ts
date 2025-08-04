@@ -24,10 +24,10 @@ export const clearSelectedMenuAtom = atom(null, (_, set) => {
 });
 
 /* 메뉴 이미지 상태 관리 */
-export const menuImageAtom = atom<File>();
-export const setMenuImageAtom = atom(null, (_, set, file: File) => {
-  set(menuImageAtom, file);
+export const menuImageFileAtom = atom<File>();
+export const setMenuImageFileAtom = atom(null, (_, set, file: File) => {
+  set(menuImageFileAtom, file);
 });
-export const resetMenuImageAtom = atom(null, (_, set) => {
-  set(menuImageAtom, undefined);
+export const resetMenuImageFileAtom = atom(null, (_, set) => {
+  set(menuImageFileAtom, undefined);
 });

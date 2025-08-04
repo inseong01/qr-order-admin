@@ -1,3 +1,5 @@
+import { motion } from 'motion/react';
+
 import SubmissionStatusAlert from '../alert/popup';
 import WidgetCateogryModal from '../modal/widget';
 import ConfirmModal from '../modal/confirm';
@@ -8,7 +10,7 @@ import Main from './main';
 
 export default function SuccessComponent() {
   return (
-    <>
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
       {/* 페이지 */}
       <Header />
       <Main />
@@ -22,6 +24,6 @@ export default function SuccessComponent() {
 
       {/* 위젯 모달 */}
       <WidgetCateogryModal />
-    </>
+    </motion.div>
   );
 }
