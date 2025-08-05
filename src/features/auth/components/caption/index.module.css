@@ -1,0 +1,5 @@
+.caption {
+  color: var(--error-color);
+  font-size: var(--fz-s-response);
+  text-align: start;
+}

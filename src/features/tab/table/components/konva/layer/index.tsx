@@ -290,7 +290,6 @@ export default function TableLayer({ table, orders }: { table: Table; orders: Or
       </Group>
 
       {/* 좌석 하단 */}
-      {/* {!editMode && ( */}
       <Group ref={bottomRef} x={20} y={meta.bottom.y}>
         <Line points={meta.bottom.line.points} strokeWidth={1} stroke={'#8D8D8D'} />
         <Group x={0} y={10}>
@@ -304,7 +303,6 @@ export default function TableLayer({ table, orders }: { table: Table; orders: Or
           />
         </Group>
       </Group>
-      {/* )} */}
     </Group>
   );
 }

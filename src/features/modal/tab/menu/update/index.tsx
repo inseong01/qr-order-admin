@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useRef } from 'react';
+import { ChangeEvent, FormEvent } from 'react';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
 import validate from '@/utils/function/validate';

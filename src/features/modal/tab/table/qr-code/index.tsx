@@ -16,7 +16,7 @@ export default function QRPreviewBox({ tableNumber }: { tableNumber?: number }) 
     if (!qrcodeRef.current) return;
 
     const ref = qrcodeRef.current;
-    QRcode.toDataURL(`https://qr-order-client.vercel.app/table/${tableNumber}`)
+    QRcode.toDataURL(`${import.meta.env.VITE_CLIENT_URL}/table/${tableNumber}`)
       .then((url: string) => {
         ref.src = url;
         getURL(url);

@@ -1,0 +1,17 @@
+.guestLink {
+  color: var(--sub-color);
+  font-size: var(--fz-s);
+
+  background: none;
+  border: none;
+
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  margin-top: 32px;
+  padding: 8px;
+}
+
+.guestLink:hover {
+  color: var(--key-color);
+}

@@ -4,6 +4,7 @@
   --main-color: #404040;
   --sub-color: #8d8d8d;
   --inactive-color: #e6e6e6;
+  --error-color: #dc3545;
 
   /* background-color */
   --inactive-bg-color: #808080;
@@ -50,6 +51,7 @@ body {
 
 * {
   font-family: 'NanumSquareNeo', sans-serif;
+  font-weight: 500;
   box-sizing: border-box;
   padding: 0;
   margin: 0;

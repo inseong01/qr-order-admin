@@ -1,4 +1,5 @@
 import { useAtom } from 'jotai';
+import { useEffect } from 'react';
 import { AnimatePresence } from 'motion/react';
 
 import DialogLayout from '@/components/layout/dialog';
@@ -13,6 +14,19 @@ export default function SubmissionStatusAler() {
   const handleClose = () => {
     setAlertState((prev) => ({ ...prev, isOpen: false }));
   };
+
+  /** 모달 닫기 timeout 설정 */
+  useEffect(() => {
+    if (!alertState.isOpen) return;
+
+    const timeout = setTimeout(() => {
+      setAlertState((prev) => ({ ...prev, isOpen: false }));
+    }, 1300);
+
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [alertState.isOpen]);
 
   return (
     <AnimatePresence>

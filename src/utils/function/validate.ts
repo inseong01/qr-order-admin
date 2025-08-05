@@ -2,6 +2,8 @@ import { z } from 'zod';
 
 import { MenuCategory } from '@/lib/supabase/tables/menu-category';
 import { NewMenu, UpdateMenu } from '@/lib/supabase/tables/menu';
+import { FindPwdForm, LoginForm, SignupForm } from '@/features/auth/store/atom';
+import { PWD_MAX, PWD_MIN } from '@/features/auth/const';
 
 /** 메뉴 카테고리 생성 데이터 검증 */
 function createCategoryValue(value: string) {
@@ -74,6 +76,61 @@ function orderIdValue(id: string) {
   return orderIdSchema.safeParseAsync(id);
 }
 
+/** 로그인 스키마 */
+const login = z.object({
+  // 이메일
+  id: z
+    .string({ message: '이메일은 필수 입력 항목입니다.' })
+    .nonempty({ message: '이메일을 입력해주세요.' })
+    .email({ message: '올바른 이메일 주소 형식이 아닙니다.' }),
+
+  // 비밀번호
+  password: z
+    .string({ message: '비밀번호는 필수 입력 항목입니다.' })
+    .nonempty({ message: '비밀번호를 입력해주세요.' })
+    .min(8, { message: `최소 ${PWD_MIN}자 이상이어야 합니다.` })
+    .max(20, { message: `최대 ${PWD_MAX}자까지 가능합니다.` })
+    .regex(/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*])[a-zA-Z\d!@#$%^&*]{8,}$/, {
+      message: '영문, 숫자, 특수문자를 각각 최소 1개 이상 포함해야 합니다.',
+    }),
+});
+
+/** 회원가입 스키마 (KR 기준) */
+const signup = z
+  .object({
+    // 이메일
+    id: z
+      .string({ message: '이메일은 필수 입력 항목입니다.' })
+      .nonempty({ message: '이메일을 입력해주세요.' })
+      .email({ message: '올바른 이메일 주소 형식이 아닙니다.' }),
+
+    // 비밀번호
+    password: z
+      .string({ message: '비밀번호는 필수 입력 항목입니다.' })
+      .nonempty({ message: '비밀번호를 입력해주세요.' })
+      .min(8, { message: `최소 ${PWD_MIN}자 이상이어야 합니다.` })
+      .max(20, { message: `최대 ${PWD_MAX}자까지 가능합니다.` })
+      .regex(/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*])/, {
+        message: '영문, 숫자, 특수문자를 각각 최소 1개 이상 포함해야 합니다.',
+      }),
+
+    // 비밀번호 확인
+    confirmPassword: z.string({ message: '비밀번호 확인은 필수 입력 항목입니다.' }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    path: ['confirmPassword'],
+    message: '비밀번호가 일치하지 않습니다.',
+  });
+
+/** 비밀번호 찾기 스키마 */
+const findPassword = z.object({
+  // 아이디(이메일)
+  id: z
+    .string({ message: '이메일 주소는 필수 입력 항목입니다.' })
+    .nonempty({ message: '이메일 주소를 입력해주세요.' })
+    .email({ message: '올바른 이메일 주소 형식이 아닙니다.' }),
+});
+
 export default {
   createCategoryValue,
   updateCategoryValue,
@@ -81,4 +138,9 @@ export default {
   createMenuValue,
   updateMenuValue,
   orderIdValue,
+  schema: {
+    login,
+    signup,
+    findPassword,
+  },
 } as const;

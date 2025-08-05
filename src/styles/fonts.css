@@ -1,0 +1,26 @@
+/* NanumSquareNeo - Regular */
+@font-face {
+  font-family: 'NanumSquareNeo';
+  font-weight: 500;
+  font-style: normal;
+  src: url('../assets/fonts/NanumSquareNeoOTF-Rg.otf') format('opentype');
+  font-display: swap;
+}
+
+/* NanumSquareNeo - Bold */
+@font-face {
+  font-family: 'NanumSquareNeo';
+  font-weight: var(--fw-m);
+  font-style: normal;
+  src: url('../assets/fonts/NanumSquareNeoOTF-Bd.otf') format('opentype');
+  font-display: swap;
+}
+
+/* NanumSquareNeo - ExtraBold */
+@font-face {
+  font-family: 'NanumSquareNeo';
+  font-weight: var(--fw-b);
+  font-style: normal;
+  src: url('../assets/fonts/NanumSquareNeoOTF-Eb.otf') format('opentype');
+  font-display: swap;
+}

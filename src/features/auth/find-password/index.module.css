@@ -1,0 +1,44 @@
+/* 하단 */
+.title {
+  color: var(--main-color);
+  font-size: var(--fz-xl);
+  line-height: 1.4;
+  font-weight: var(--fw-b);
+  text-align: center;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+.link {
+  min-width: 95px;
+
+  color: var(--sub-color);
+  font-size: var(--fz-s);
+  line-height: 1.5;
+
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  position: relative;
+
+  padding: 0 8px;
+}
+
+.link:hover {
+  color: var(--key-color);
+}
+
+/* 링크 사이 구분선 */
+.link:not(:last-child)::after {
+  content: '|';
+  color: #e0e0e0;
+
+  position: absolute;
+  top: 0;
+  right: -4px; /* .link padding-x / 2 */
+}

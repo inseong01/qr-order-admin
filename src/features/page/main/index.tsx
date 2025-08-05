@@ -3,7 +3,10 @@ import { useAtomValue } from 'jotai';
 import { AnimatePresence, motion } from 'motion/react';
 
 import { menuAtom } from '@/components/ui/menu/store/atom';
+import { ExceptionText } from '@/components/ui/exception';
+
 import { windowStateAtom } from '@/store/atom/window-atom';
+
 import { modalOpenAtom } from '@/features/modal/tab/store/atom';
 import TabModalContainer from '@/features/modal/tab';
 import LoadingSpinner from '@/features/load/spinner';
@@ -12,7 +15,6 @@ import Widget from '@/features/widget';
 
 import { footerAtom } from '../footer';
 import styles from './index.module.css';
-import { ExceptionText } from '@/components/ui/exception';
 
 export default function Main() {
   const category = useAtomValue(footerAtom);

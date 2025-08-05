@@ -15,11 +15,4 @@ export const openSubmissionAlertAtom = atom(null, (_, set, title: string) => {
     isOpen: true,
     title,
   });
-
-  setTimeout(() => {
-    set(submissionStatusAlertAtom, {
-      isOpen: false,
-      title: '',
-    });
-  }, 1500);
 });

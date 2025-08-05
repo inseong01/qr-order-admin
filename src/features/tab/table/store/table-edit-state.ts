@@ -1,6 +1,7 @@
 import { atom } from 'jotai';
 
 import { Table } from '@/lib/supabase/tables/table';
+import { setModalClickAtom } from '@/features/modal/tab/store/atom';
 
 export type EditMode = '' | 'create' | 'update' | 'delete';
 
@@ -37,9 +38,10 @@ export const resetTablEditAtom = atom(null, (_, set) => {
 /**
  * 편집 모드 지정
  *
- * 선택된 좌석 초기화 동시 진행
+ * 선택된 좌석 초기화, 좌석 모달 닫기
  */
 export const setEditModeAtom = atom(null, (_, set, mode: EditMode) => {
+  set(setModalClickAtom, false);
   set(editModeAtom, mode);
   set(selectedTableIdsAtom, []);
 });

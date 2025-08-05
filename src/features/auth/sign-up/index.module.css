@@ -1,0 +1,22 @@
+/* 하단 */
+.title {
+  color: var(--main-color);
+  font-size: var(--fz-xl);
+  line-height: 1.4;
+  font-weight: var(--fw-b);
+  text-align: center;
+}
+
+.link {
+  color: var(--sub-color);
+  font-size: var(--fz-s);
+  line-height: 1.5;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  text-align: center;
+}
+
+.link:hover {
+  color: var(--key-color);
+}

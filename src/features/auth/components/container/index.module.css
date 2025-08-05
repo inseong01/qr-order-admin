@@ -1,0 +1,28 @@
+.container {
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  background-color: #f3f3f3;
+}
+
+.formBox {
+  width: 400px;
+  min-height: 405px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 34px;
+
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+
+  cursor: default;
+
+  padding: 40px;
+}
