@@ -72,25 +72,25 @@ export default function UpdateMenuModal() {
         console.error(e);
         openSubmissionAlert('이미지 처리 과정에서 오류가 발생했습니다');
         return;
-      } finally {
-        setModalClick(false);
-        setInputValue(initMenu); // 초기화
-        resetMenuImage();
       }
 
       // 메뉴 업데이트
       try {
         submitType === 'update' ? await updateMenu(menuData.id, menuData) : await deleteMenu(menuData.id);
         await menuListQuery.refetch();
-        openSubmissionAlert(submitType === 'update' ? '수정되었습니다' : '삭제되었습니다.'); // 데이터 처리 상태 알림
       } catch (e) {
         console.error(e);
         openSubmissionAlert('메뉴 처리 과정에서 오류가 발생했습니다');
-      } finally {
-        setModalClick(false);
-        setInputValue(initMenu); // 초기화
-        resetMenuImage();
+        return;
       }
+
+      // 데이터 처리 상태 알림
+      openSubmissionAlert(submitType === 'update' ? '수정되었습니다' : '삭제되었습니다.');
+
+      // 초기화
+      setModalClick(false);
+      setInputValue(initMenu);
+      resetMenuImage();
     };
 
     showConfirmModal({ title, onConfirm });

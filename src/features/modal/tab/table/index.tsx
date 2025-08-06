@@ -1,7 +1,7 @@
 import { useAtomValue, useSetAtom } from 'jotai';
 import { AnimatePresence, motion } from 'motion/react';
 
-import { idAtom } from '@/store/atom/id-atom';
+import { idAtom } from '@/store/id-atom';
 import { useQueryOrderItems, useQueryTableList } from '@/hooks/use-query/query';
 
 import LIGHT_PLUS_ICON from '@/assets/icon/light-plus.svg';

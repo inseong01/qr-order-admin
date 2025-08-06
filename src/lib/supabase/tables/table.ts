@@ -28,10 +28,12 @@ export async function getTableList(): Promise<Table[]> {
  */
 export const upsertTable = async (updatedTables: UpsertTable[]) => {
   const { error } = await supabase.from('table').upsert(updatedTables, { ignoreDuplicates: false });
+
   if (error) {
     console.error(error.message);
     throw new Error(error.message);
   }
+
   return;
 };
 
@@ -41,10 +43,18 @@ export const upsertTable = async (updatedTables: UpsertTable[]) => {
  * @returns
  */
 export const deleteTable = async (ids: string[]) => {
-  const { error } = await supabase.from('table').delete().in('id', ids);
+  const { error, data } = await supabase.from('table').delete().in('id', ids).select();
+
   if (error) {
     console.error(error.message);
     throw new Error(error.message);
   }
+
+  // 조건에 맞는 행이 없거나 RLS 정책에 의해 접근이 거부된 경우
+  if (!data.length) {
+    console.error('Delete failed: No rows matched the condition.');
+    throw new Error('Unable to delete the table.');
+  }
+
   return;
 };

@@ -1,3 +1,12 @@
+.box {
+  height: 32px;
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .guestLink {
   color: var(--sub-color);
   font-size: var(--fz-s);
@@ -8,7 +17,6 @@
   cursor: pointer;
   transition: color 0.2s ease;
 
-  margin-top: 32px;
   padding: 8px;
 }
 

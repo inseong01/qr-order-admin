@@ -38,27 +38,34 @@ export default function DeleteCategoryForm() {
 
     const title = '선택한 분류를 삭제하겠습니까?';
     const onConfirm = async () => {
-      const { success, data, error } = await validate.deleteCategoryValue(selectedCategories); // 값 검증
+      // 값 검증
+      const { success, data, error } = await validate.deleteCategoryValue(selectedCategories);
       if (!success) {
         const message = error?.issues[0].message;
         alert(message);
         setSelectedCategories([]);
+        setWidgetState({ option: 'delete-menu-category' });
         return;
       }
 
+      // supabase 전달
       try {
-        await deleteMenuCategory(data); // supabase 전달
+        await deleteMenuCategory(data);
         await menuCategoriesQuery.refetch();
-        openSubmissionAlert('삭제되었습니다'); // 데이터 처리 상태 알림
       } catch (e) {
-        console.log(e);
+        console.error(e);
         openSubmissionAlert('오류가 발생했습니다');
-      } finally {
-        setSelectedCategories([]);
+        return;
       }
+
+      // 데이터 처리 상태 알림
+      openSubmissionAlert('삭제되었습니다');
+
+      // 초기화
+      setSelectedCategories([]);
     };
     const onCancle = () => {
-      setSelectedCategories([]);
+      setWidgetState({ option: 'delete-menu-category' });
     };
 
     e.preventDefault();

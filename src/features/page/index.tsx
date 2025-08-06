@@ -3,7 +3,7 @@ import { useAtomValue, useSetAtom } from 'jotai';
 
 import { debounce } from '@/utils/function/optimize';
 
-import { detectViewportModeAtom, resizeMainSectionAtom } from '../../store/atom/window-atom';
+import { detectViewportModeAtom, resizeMainSectionAtom } from '../../store/window-atom';
 
 import SuccessComponent from './success';
 import ErrorComponent from './error';

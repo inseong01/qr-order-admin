@@ -51,11 +51,17 @@ export const addMenu = async (newMenu: NewMenu) => {
  * @returns
  */
 export const updateMenu = async (id: string, updatedMenu: UpdateMenu) => {
-  const { error } = await supabase.from('menu').update(updatedMenu).eq('id', id);
+  const { error, data } = await supabase.from('menu').update(updatedMenu).eq('id', id).select();
 
   if (error) {
     console.error(error.message);
     throw new Error(error.message);
+  }
+
+  // 조건에 맞는 행이 없거나 RLS 정책에 의해 접근이 거부된 경우
+  if (!data.length) {
+    console.error('Update failed: No rows matched the condition.');
+    throw new Error('Unable to update the menu.');
   }
 
   return;
@@ -67,11 +73,17 @@ export const updateMenu = async (id: string, updatedMenu: UpdateMenu) => {
  * @returns
  */
 export const deleteMenu = async (id: string) => {
-  const { error } = await supabase.from('menu').delete().eq('id', id);
-
+  const { error, data } = await supabase.from('menu').delete().eq('id', id).select();
+  console.log(data);
   if (error) {
     console.error(error.message);
     throw new Error(error.message);
+  }
+
+  // 조건에 맞는 행이 없거나 RLS 정책에 의해 접근이 거부된 경우
+  if (!data.length) {
+    console.error('Delete failed: No rows matched the condition.');
+    throw new Error('Unable to delete the menu.');
   }
 
   return;

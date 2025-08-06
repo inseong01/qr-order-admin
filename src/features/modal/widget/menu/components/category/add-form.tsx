@@ -28,27 +28,34 @@ export default function AddCategoryForm() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     const title = '새로운 분류를 추가하겠습니까?';
     const onConfirm = async () => {
-      const { success, data, error } = await validate.createCategoryValue(inputValue); // 값 검증
+      // 값 검증
+      const { success, data, error } = await validate.createCategoryValue(inputValue);
       if (!success) {
         const message = error?.issues[0].message;
         alert(message);
         setInputValue('');
+        setWidgetState({ option: 'create-menu-category' });
         return;
       }
 
+      // supabase 전달
       try {
-        await addMenuCategory({ title: data }); // supabase 전달
+        await addMenuCategory({ title: data });
         await menuCategoriesQuery.refetch();
-        openSubmissionAlert('추가되었습니다'); // 데이터 처리 상태 알림
       } catch (e) {
         console.error(e);
         openSubmissionAlert('오류가 발생했습니다');
-      } finally {
-        setInputValue('');
+        return;
       }
+
+      // 데이터 처리 상태 알림
+      openSubmissionAlert('추가되었습니다');
+
+      // 초기화
+      setInputValue('');
     };
     const onCancle = () => {
-      setInputValue('');
+      setWidgetState({ option: 'create-menu-category' });
     };
 
     e.preventDefault();

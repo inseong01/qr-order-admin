@@ -63,13 +63,18 @@ export default function CreateMenuModal() {
       try {
         await addMenu(menuData); // 메뉴 삽입
         await menuListQuery.refetch(); // 메뉴 리패치
-        openSubmissionAlert('추가되었습니다.'); // 데이터 처리 상태 알림
-        setModalClick(false);
-        setInputValue(initMenu); // 초기화
       } catch (e) {
         console.error(e);
         openSubmissionAlert('메뉴 추가 과정에서 오류가 발생했습니다');
+        return;
       }
+
+      // 데이터 처리 상태 알림
+      openSubmissionAlert('추가되었습니다.');
+
+      // 초기화
+      setModalClick(false);
+      setInputValue(initMenu);
     };
 
     showConfirmModal({ title, onConfirm });

@@ -5,7 +5,7 @@ import { Layer, Rect, Stage, Text } from 'react-konva';
 import { Tween } from 'konva/lib/Tween';
 
 import { useQueryOrderItems, useQueryTableList } from '@/hooks/use-query/query';
-import { windowStateAtom } from '@/store/atom/window-atom';
+import { windowStateAtom } from '@/store/window-atom';
 
 import { draftTablesAtom, editModeAtom, selectedTableIdsAtom } from '../../store/table-edit-state';
 import { setTableStageAtom } from '../../store/table-state';

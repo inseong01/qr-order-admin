@@ -4,7 +4,7 @@ import validate from '@/utils/function/validate';
 import Caption from '@/features/auth/components/caption';
 import useAuthForm from '@/features/auth/hooks/use-auth-form';
 
-import { errorFormAtom, signupFormAtom } from '../../../store/atom';
+import { errorFormAtom, signupFormAtom } from '../../../store/form-atom';
 import { PWD_MAX, PWD_MIN } from '../../../const';
 import styles from './index.module.css';
 

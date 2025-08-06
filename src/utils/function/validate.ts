@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { MenuCategory } from '@/lib/supabase/tables/menu-category';
 import { NewMenu, UpdateMenu } from '@/lib/supabase/tables/menu';
-import { FindPwdForm, LoginForm, SignupForm } from '@/features/auth/store/atom';
+import { FindPwdForm, LoginForm, SignupForm } from '@/features/auth/store/form-atom';
 import { PWD_MAX, PWD_MIN } from '@/features/auth/const';
 
 /** 메뉴 카테고리 생성 데이터 검증 */

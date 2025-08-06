@@ -5,11 +5,10 @@ import { AnimatePresence, motion } from 'motion/react';
 import { menuAtom } from '@/components/ui/menu/store/atom';
 import { ExceptionText } from '@/components/ui/exception';
 
-import { windowStateAtom } from '@/store/atom/window-atom';
+import { windowStateAtom } from '@/store/window-atom';
 
 import { modalOpenAtom } from '@/features/modal/tab/store/atom';
 import TabModalContainer from '@/features/modal/tab';
-import LoadingSpinner from '@/features/load/spinner';
 import TabViewContainer from '@/features/tab';
 import Widget from '@/features/widget';
 
@@ -22,21 +21,13 @@ export default function Main() {
 
   return (
     <main className={styles.main} data-empty={!category}>
-      <Suspense fallback={<LoadingSpinner />}>
-        {category ? (
-          <>
-            {/* 좌측 */}
-            <div className={styles.leftBox}>
-              <TabViewContainer />
-            </div>
+      {/* 좌측 */}
+      <div className={styles.leftBox}>
+        <TabViewContainer />
+      </div>
 
-            {/* 우측 */}
-            {!isMobile && <MainRightComponent />}
-          </>
-        ) : (
-          <ExceptionText text='예기치 않은 오류가 발생했습니다.' />
-        )}
-      </Suspense>
+      {/* 우측 */}
+      {!isMobile && <MainRightComponent />}
     </main>
   );
 }

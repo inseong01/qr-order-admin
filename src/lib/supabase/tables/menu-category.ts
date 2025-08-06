@@ -59,11 +59,17 @@ export const updateMenuCategory = async (updatedMenuCategories: UpdateMenuCatego
  * @returns
  */
 export const deleteMenuCategory = async (id: string[]) => {
-  const { error } = await supabase.from('menu_category').delete().in('id', id);
+  const { error, data } = await supabase.from('menu_category').delete().in('id', id).select();
 
   if (error) {
     console.error(error.message);
     throw new Error(error.message);
+  }
+
+  // 조건에 맞는 행이 없거나 RLS 정책에 의해 접근이 거부된 경우
+  if (!data.length) {
+    console.error('Delete failed: No rows matched the condition.');
+    throw new Error('Unable to delete the menu category.');
   }
 
   return;

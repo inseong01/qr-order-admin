@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import LoadingSpinner from '@/features/load/spinner';
 import { ListMenu, ListMenuAdd } from '@/components/ui/menu';
 import { ExceptionText } from '@/components/ui/exception';
-import { windowStateAtom } from '@/store/atom/window-atom';
+import { windowStateAtom } from '@/store/window-atom';
 import { Menu } from '@/lib/supabase/tables/menu';
 
 import { ListUlBox } from '../components/list-box';

@@ -4,7 +4,7 @@ import validate from '@/utils/function/validate';
 import Caption from '@/features/auth/components/caption';
 import useAuthForm from '@/features/auth/hooks/use-auth-form';
 
-import { errorFormAtom, findPwdFormAtom } from '../../../store/atom';
+import { errorFormAtom, findPwdFormAtom } from '../../../store/form-atom';
 import styles from './index.module.css';
 
 export default function FindPasswordForm() {

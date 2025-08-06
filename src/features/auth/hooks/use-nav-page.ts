@@ -1,7 +1,7 @@
 import { useAtomValue, useSetAtom } from 'jotai';
 import { MouseEvent } from 'react';
 
-import { loadingStateAtom, resetFormAtom } from '../store/atom';
+import { loadingStateAtom, resetFormAtom } from '../store/form-atom';
 
 /**
  * 인증 페이지 간의 이동을 처리하는 커스텀 훅

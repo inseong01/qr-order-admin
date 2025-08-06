@@ -63,7 +63,7 @@ export const resetFormAtom = atom(null, (_, set) => {
 });
 
 /* 로딩 */
-export const loadingStateAtom = atom(false);
+export const loadingStateAtom = atom(true);
 export const setLoadingStateAtom = atom(null, (_, set, state: boolean) => {
   set(loadingStateAtom, state);
 });

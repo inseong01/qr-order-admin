@@ -13,17 +13,27 @@ interface ImportMeta {
 }
 
 interface Window {
-  // captcha 타입 설정
-  turnstile?: {
-    render: (
-      container: HTMLElement,
-      options: {
-        sitekey: string;
-        language: string;
-        theme: string;
-        callback: (token: string) => void;
-        'error-callback': (code: stirng) => void;
-      }
-    ) => void;
-  };
+  onloadTurnstileCallback?: () => void;
+  turnstile?: Turnstile;
+}
+
+const turnstile: Turnstile;
+
+interface Turnstile {
+  render: (
+    container: string | HTMLElement,
+    options: {
+      sitekey: string;
+      callback?: (token: string) => void;
+      'error-callback'?: () => void;
+      'expired-callback'?: () => void;
+      theme?: 'light' | 'dark' | 'auto';
+      language?: string;
+      action?: string;
+      cData?: string;
+    }
+  ) => string | void;
+
+  reset: (widgetId?: string) => void;
+  remove: (widgetId?: string) => void;
 }

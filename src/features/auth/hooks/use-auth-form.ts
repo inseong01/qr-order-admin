@@ -2,7 +2,7 @@ import { PrimitiveAtom, useAtom, useSetAtom } from 'jotai';
 import { ChangeEvent, FormEvent } from 'react';
 import { ZodError, ZodType } from 'zod';
 
-import { clearErrorFormAtom, loadingStateAtom, setErrorFormAtom, SignupForm } from '../store/atom';
+import { clearErrorFormAtom, loadingStateAtom, setErrorFormAtom, SignupForm } from '../store/form-atom';
 
 type UseAuthFormProps<T> = {
   formAtom: PrimitiveAtom<T>;
@@ -43,7 +43,11 @@ export default function useAuthForm<T>({ formAtom, validationSchema, onSubmit }:
     try {
       // Zod 스키마로 폼 데이터 검증
       validationSchema.parse(formState);
-      setErrorForm([]); // 에러 상태 초기화
+
+      // 에러 상태 초기화
+      setErrorForm([]);
+
+      // 비즈니스 로직 실행
       await onSubmit(formState);
     } catch (error) {
       if (error instanceof ZodError) {
@@ -51,6 +55,7 @@ export default function useAuthForm<T>({ formAtom, validationSchema, onSubmit }:
         setErrorForm(error.issues);
       } else {
         console.error('An unexpected error occurred:', error);
+        alert('로그인 오류');
       }
     } finally {
       setIsLoading(false);

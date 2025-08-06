@@ -1,24 +1,40 @@
 import { useAtomValue } from 'jotai';
 
+import supabase from '@/lib/supabase';
 import validate from '@/utils/function/validate';
 import Caption from '@/features/auth/components/caption';
 import useAuthForm from '@/features/auth/hooks/use-auth-form';
+import { captchaTokenAtom } from '@/features/auth/components/guest-link';
 
-import { errorFormAtom, loginFormAtom } from '../../../store/atom';
+import { errorFormAtom, loginFormAtom } from '../../../store/form-atom';
 import styles from './index.module.css';
 
 /**
  * 아이디, 비밀번호 입력 및 로그인 버튼을 포함하는 폼 컴포넌트
  */
 export default function LoginForm() {
+  const captchaToken = useAtomValue(captchaTokenAtom);
   const errorForm = useAtomValue(errorFormAtom);
 
   const { formState, isLoading, handleInputChange, handleSubmit } = useAuthForm({
     formAtom: loginFormAtom,
     validationSchema: validate.schema.login,
-    onSubmit: async (data) => {
+    onSubmit: async (formData) => {
       // TODO: Supabase 로그인 로직 구현
-      console.log('Submitting login data:', data);
+      // 비밀번호가 생각 안 남, 비밀번호 찾기 구현
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: formData.id,
+        password: formData.password,
+        options: { captchaToken },
+      });
+
+      if (error) {
+        console.error(error.message);
+        throw new Error(error.message);
+      }
+
+      console.log(data);
+
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
     },
   });

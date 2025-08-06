@@ -4,7 +4,7 @@ import { Group, Line, Rect, Text, Transformer } from 'react-konva';
 import { Tween } from 'konva/lib/Tween';
 import Konva from 'konva';
 
-import { selectIdState } from '@/store/atom/id-atom';
+import { selectIdState } from '@/store/id-atom';
 import { Table } from '@/lib/supabase/tables/table';
 import { OrderItem } from '@/lib/supabase/tables/order-item';
 import { resetTableToggleAtom, setModalClickAtom, setTabModalAtomState } from '@/features/modal/tab/store/atom';

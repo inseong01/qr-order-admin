@@ -27,39 +27,52 @@ export default function UpdateCategoryForm() {
   const setWidgetState = useSetAtom(setWidgetAtomState);
   const openSubmissionAlert = useSetAtom(openSubmissionAlertAtom);
   const { showConfirmModal } = useConfirmModal();
-
   /* 비즈니스 로직 */
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    // 선택 카테고리 확인
     const updatedCategories = Object.values(selectedCategories);
     if (!updatedCategories.length) {
       alert('분류 항목을 선택해주세요.');
       return e.preventDefault();
     }
 
+    // 선택 카테고리 입력 확인
+    const isValueEmpty = updatedCategories.some((category) => !category.title);
+    if (isValueEmpty) {
+      alert('새로운 항목 이름을 입력해주세요.');
+      return e.preventDefault();
+    }
+
+    // 값 검증
+    const { success, data, error } = await validate.updateCategoryValue(updatedCategories);
+    if (!success) {
+      const message = error?.issues[0].message;
+      alert(message);
+      setWidgetState({ option: 'update-menu-category' });
+      return e.preventDefault();
+    }
+
     const title = '선택한 분류를 수정하겠습니까?';
     const onConfirm = async () => {
-      const { success, data, error } = await validate.updateCategoryValue(updatedCategories); // 값 검증
-      if (!success) {
-        const message = error?.issues[0].message;
-        alert(message);
-        setSelectedCategories([]);
+      // supabase 전달
+      try {
+        await updateMenuCategory(data);
+        await menuCategoriesQuery.refetch();
+        await menuListQuery.refetch();
+      } catch (e) {
+        console.error(e);
+        openSubmissionAlert('오류가 발생했습니다');
         return;
       }
 
-      try {
-        await updateMenuCategory(data); // supabase 전달
-        await menuCategoriesQuery.refetch();
-        await menuListQuery.refetch();
-        openSubmissionAlert('수정되었습니다'); // 데이터 처리 상태 알림
-      } catch (e) {
-        console.log(e);
-        openSubmissionAlert('오류가 발생했습니다');
-      } finally {
-        setSelectedCategories([]);
-      }
+      // 데이터 처리 상태 알림
+      openSubmissionAlert('수정되었습니다');
+
+      // 초기화
+      setSelectedCategories([]);
     };
     const onCancle = () => {
-      setSelectedCategories([]);
+      setWidgetState({ option: 'update-menu-category' });
     };
 
     e.preventDefault();

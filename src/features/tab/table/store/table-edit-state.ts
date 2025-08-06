@@ -44,6 +44,7 @@ export const setEditModeAtom = atom(null, (_, set, mode: EditMode) => {
   set(setModalClickAtom, false);
   set(editModeAtom, mode);
   set(selectedTableIdsAtom, []);
+  set(isEditingAtom, mode !== '' ? true : false);
 });
 
 /**

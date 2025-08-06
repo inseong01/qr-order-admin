@@ -45,11 +45,17 @@ export async function getRequestList(): Promise<Request[]> {
  * @returns
  */
 export const updateRequest = async (id: string) => {
-  const { error } = await supabase.from('request').update({ is_read: true }).eq('id', id);
+  const { error, data } = await supabase.from('request').update({ is_read: true }).eq('id', id).select();
 
   if (error) {
     console.error(error.message);
     throw new Error(error.message);
+  }
+
+  // 조건에 맞는 행이 없거나 RLS 정책에 의해 접근이 거부된 경우
+  if (!data.length) {
+    console.error('Update failed: No rows matched the condition.');
+    throw new Error('Unable to update the request.');
   }
 
   return;

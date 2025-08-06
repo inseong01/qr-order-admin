@@ -1,7 +1,7 @@
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 
-import { modalAtom } from '@/store/atom/modal-atom';
-import { resetIdState } from '@/store/atom/id-atom';
+import { modalAtom } from '@/store/modal-atom';
+import { resetIdState } from '@/store/id-atom';
 
 import { widgetAtomWithReset } from '@/features/widget/store/atom';
 import { setModalClickAtom } from '@/features/modal/tab/store/atom';

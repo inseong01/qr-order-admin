@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useAtomValue } from 'jotai';
 
-import { windowStateAtom } from '@/store/atom/window-atom';
+import { windowStateAtom } from '@/store/window-atom';
 import { generateCardLayoutArr } from '@/utils/function/generate-card';
 import { ExceptionText } from '@/components/ui/exception';
 import LoadingSpinner from '@/features/load/spinner';

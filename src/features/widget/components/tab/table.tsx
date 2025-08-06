@@ -1,6 +1,6 @@
 import { useAtomValue, useSetAtom } from 'jotai';
 
-import { windowStateAtom } from '@/store/atom/window-atom';
+import { windowStateAtom } from '@/store/window-atom';
 
 import { deleteTable, upsertTable } from '@/lib/supabase/tables/table';
 
@@ -73,7 +73,6 @@ export function TableWidget() {
 
     setTableEditMode('delete');
     setDraftTables(tablesQuery.data ?? []);
-    setEditState(true);
     setTableRequestAlertStatus(false);
   }
 
@@ -99,7 +98,6 @@ export function TableWidget() {
 
     setTableEditMode('update');
     setDraftTables(tablesQuery.data ?? []);
-    setEditState(true);
     setTableRequestAlertStatus(false);
   }
 
@@ -131,7 +129,6 @@ export function TableWidget() {
     const newTable = createNewTable(pseudoStageSize, tablesQuery.data ?? []);
     setDraftTables([...(tablesQuery.data ?? []), newTable]);
     selectSingleTable(newTable.id);
-    setEditState(true);
     setTableRequestAlertStatus(false);
   }
 
@@ -144,6 +141,8 @@ export function TableWidget() {
 
     setEditState(!isEditing);
   }
+
+  const hasTable = Array.isArray(tablesQuery.data) && tablesQuery.data.length !== 0;
 
   return (
     <DetectAnimation>
@@ -183,42 +182,46 @@ export function TableWidget() {
         </div>
       </ListBox>
 
-      <ListBox key='tableWidget2' onClick={clickUpdateTable} isRow={false} isAnimate={true}>
-        <div className={styles.iconBox}>
-          <AnimatedIconSwitcher
-            isSaveMode={editMode === 'update' && !!draftTables.length}
-            initIconSrc={LIGHT_EDIT_ICON}
-            changedIconSrc={LIGHT_SAVE_ICON}
-            alt='icon'
-          />
-        </div>
-        <div className={styles.textBox}>
-          <AnimatedTextSwitcher
-            isSaveMode={editMode === 'update' && !!draftTables.length}
-            initText='좌석 수정'
-            changedText='수정하기'
-          />
-        </div>
-      </ListBox>
+      {hasTable && (
+        <ListBox key='tableWidget2' onClick={clickUpdateTable} isRow={false} isAnimate={true}>
+          <div className={styles.iconBox}>
+            <AnimatedIconSwitcher
+              isSaveMode={editMode === 'update' && !!draftTables.length}
+              initIconSrc={LIGHT_EDIT_ICON}
+              changedIconSrc={LIGHT_SAVE_ICON}
+              alt='icon'
+            />
+          </div>
+          <div className={styles.textBox}>
+            <AnimatedTextSwitcher
+              isSaveMode={editMode === 'update' && !!draftTables.length}
+              initText='좌석 수정'
+              changedText='수정하기'
+            />
+          </div>
+        </ListBox>
+      )}
 
-      <ListBox key='tableWidget3' onClick={clickDeleteTable} isRow={false} isAnimate={true}>
-        <div className={styles.iconBox}>
-          <AnimatedIconSwitcher
-            isSaveMode={editMode === 'delete' && !!tableIds.length}
-            initIconSrc={LIGHT_DELETE_ICON}
-            changedIconSrc={LIGHT_SAVE_ICON}
-            alt='icon'
-          />
-        </div>
+      {hasTable && (
+        <ListBox key='tableWidget3' onClick={clickDeleteTable} isRow={false} isAnimate={true}>
+          <div className={styles.iconBox}>
+            <AnimatedIconSwitcher
+              isSaveMode={editMode === 'delete' && !!tableIds.length}
+              initIconSrc={LIGHT_DELETE_ICON}
+              changedIconSrc={LIGHT_SAVE_ICON}
+              alt='icon'
+            />
+          </div>
 
-        <div className={styles.textBox}>
-          <AnimatedTextSwitcher
-            isSaveMode={editMode === 'delete' && !!tableIds.length}
-            initText='좌석 삭제'
-            changedText='삭제하기'
-          />
-        </div>
-      </ListBox>
+          <div className={styles.textBox}>
+            <AnimatedTextSwitcher
+              isSaveMode={editMode === 'delete' && !!tableIds.length}
+              initText='좌석 삭제'
+              changedText='삭제하기'
+            />
+          </div>
+        </ListBox>
+      )}
     </DetectAnimation>
   );
 }

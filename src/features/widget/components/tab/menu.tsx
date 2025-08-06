@@ -4,6 +4,8 @@ import LIGHT_ADD_LIST_ICON from '@/assets/icon/light-add-list.svg';
 import LIGHT_DELETE_ICON from '@/assets/icon/light-delete.svg';
 import LIGHT_EDIT_ICON from '@/assets/icon/light-edit.svg';
 
+import { useQueryMenuCategoryList } from '@/hooks/use-query/query';
+
 import { setWidgetAtomState } from '../../store/atom';
 import { DetectAnimation, ListBox } from '../motion';
 import styles from './tab.module.css';
@@ -13,6 +15,7 @@ import styles from './tab.module.css';
  */
 export function MenuWidget() {
   const setWidgetState = useSetAtom(setWidgetAtomState);
+  const { data } = useQueryMenuCategoryList();
 
   function createMenuCategory() {
     setWidgetState({ option: 'create-menu-category' });
@@ -26,6 +29,8 @@ export function MenuWidget() {
     setWidgetState({ option: 'delete-menu-category' });
   }
 
+  const hasCategory = Array.isArray(data) && data.length !== 0;
+
   return (
     <DetectAnimation>
       <ListBox key='menuWidget1' onClick={createMenuCategory} isRow={false} isAnimate={true}>
@@ -36,21 +41,25 @@ export function MenuWidget() {
         <span>분류 추가</span>
       </ListBox>
 
-      <ListBox key='menuWidget2' onClick={updateMenuCategory} isRow={false} isAnimate={true}>
-        <div className={styles.iconBox}>
-          <img src={LIGHT_EDIT_ICON} alt='icon' />
-        </div>
+      {hasCategory && (
+        <ListBox key='menuWidget2' onClick={updateMenuCategory} isRow={false} isAnimate={true}>
+          <div className={styles.iconBox}>
+            <img src={LIGHT_EDIT_ICON} alt='icon' />
+          </div>
 
-        <span>분류 수정</span>
-      </ListBox>
+          <span>분류 수정</span>
+        </ListBox>
+      )}
 
-      <ListBox key='menuWidget3' onClick={deleteMenuCategory} isRow={false} isAnimate={true}>
-        <div className={styles.iconBox}>
-          <img src={LIGHT_DELETE_ICON} alt='icon' />
-        </div>
+      {hasCategory && (
+        <ListBox key='menuWidget3' onClick={deleteMenuCategory} isRow={false} isAnimate={true}>
+          <div className={styles.iconBox}>
+            <img src={LIGHT_DELETE_ICON} alt='icon' />
+          </div>
 
-        <span>분류 삭제</span>
-      </ListBox>
+          <span>분류 삭제</span>
+        </ListBox>
+      )}
     </DetectAnimation>
   );
 }

@@ -1,5 +1,7 @@
 import { NavLink } from 'react-router';
 
+import { PATHS } from '@/constants/paths';
+
 import useNavPage from '../hooks/use-nav-page';
 import AuthContainer from '../components/container';
 import SignUpForm from './components/form';
@@ -18,7 +20,7 @@ export default function SignUpPage() {
 
       {/* 하단 */}
       <nav>
-        <NavLink to={'/'} className={styles.link} onClick={handleNav}>
+        <NavLink to={PATHS.AUTH.LOGIN} className={styles.link} onClick={handleNav}>
           돌아가기
         </NavLink>
       </nav>
