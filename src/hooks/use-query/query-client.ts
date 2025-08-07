@@ -1,9 +1,6 @@
 import { useEffect } from 'react';
-import { useSetAtom } from 'jotai';
 import { useQueries, useQueryClient } from '@tanstack/react-query';
 import { REALTIME_LISTEN_TYPES, REALTIME_POSTGRES_CHANGES_LISTEN_EVENT } from '@supabase/realtime-js';
-
-import { setConnectStateAtom } from '@/features/timer/store/atom';
 
 import supabase from '@/lib/supabase';
 import { getRequestList } from '@/lib/supabase/tables/request';
@@ -76,7 +73,6 @@ export function useQueryClientTable(method: REALTIME_POSTGRES_CHANGES_LISTEN_EVE
       };
     },
   });
-  const setConnectState = useSetAtom(setConnectStateAtom);
 
   // Supabase Realtime 구독 설정
   useEffect(() => {
@@ -106,14 +102,11 @@ export function useQueryClientTable(method: REALTIME_POSTGRES_CHANGES_LISTEN_EVE
           queryClient.invalidateQueries({ queryKey: REQUEST_LIST_QUERY_KEY });
         }
       )
-      .subscribe(() => {
-        setConnectState(true);
-      });
+      .subscribe(() => {});
 
     // 컴포넌트 언마운트 시 구독 해제
     return () => {
       supabase.removeChannel(channel);
-      setConnectState(false);
     };
   }, [queryClient, method]);
 

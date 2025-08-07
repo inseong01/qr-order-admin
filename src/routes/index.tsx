@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router';
 import { ROUTES } from '@/constants/routes';
 import NotFound from '@/Not-found';
 import App from '@/App';
+import GlobalSettingsHandler from '@/components/layout/global-settings-handler';
 
 import ProtectedRoute from './protected-route';
 import AuthRoutes from './auth-routes';
@@ -16,10 +17,13 @@ import PublicRoute from './public-route';
 export default function RootRouter() {
   return (
     <BrowserRouter>
+      {/* 사용자 환경 설정 */}
+      <GlobalSettingsHandler />
+
       <Routes>
         {/* 인증 필요 라우트 */}
         <Route element={<ProtectedRoute />}>
-          <Route path={ROUTES.HOME} index element={<App />} />
+          <Route path={ROUTES.ROOT} index element={<App />} />
         </Route>
 
         {/* 인증 불필요 라우트 */}

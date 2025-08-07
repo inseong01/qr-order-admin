@@ -11,7 +11,7 @@ import styles from './index.module.css';
  * 로그인 페이지 전체 UI
  */
 export default function LoginPage() {
-  const { handleNav } = useNavPage();
+  const { handleNav, disabled } = useNavPage();
 
   return (
     <AuthContainer>
@@ -23,11 +23,23 @@ export default function LoginPage() {
 
       {/* 하단 */}
       <nav className={styles.actions}>
-        <NavLink to={PATHS.AUTH.SIGNUP} className={styles.link} onClick={handleNav}>
+        <NavLink
+          to={PATHS.AUTH.SIGNUP}
+          className={styles.link}
+          onClick={handleNav}
+          aria-disabled={disabled}
+          data-disabled={disabled}
+        >
           회원가입
         </NavLink>
 
-        <NavLink to={PATHS.AUTH.FIND.PASSWORD} className={styles.link} onClick={handleNav}>
+        <NavLink
+          to={PATHS.AUTH.FIND.PASSWORD}
+          className={styles.link}
+          onClick={handleNav}
+          aria-disabled={disabled}
+          data-disabled={disabled}
+        >
           비밀번호 찾기
         </NavLink>
       </nav>

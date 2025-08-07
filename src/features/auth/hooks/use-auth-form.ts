@@ -1,8 +1,18 @@
 import { PrimitiveAtom, useAtom, useSetAtom } from 'jotai';
-import { ChangeEvent, FormEvent } from 'react';
+import { ChangeEvent, FormEvent, useEffect } from 'react';
 import { ZodError, ZodType } from 'zod';
+import { useParams } from 'react-router';
 
-import { clearErrorFormAtom, loadingStateAtom, setErrorFormAtom, SignupForm } from '../store/form-atom';
+import {
+  clearErrorFormAtom,
+  loadingStateAtom,
+  setErrorFormAtom,
+  SignupForm,
+  successStateAtom,
+} from '../store/form-atom';
+import { captchaRefreshAtom } from '../store/token-atom';
+import { CAPTCHA_TOKEN } from '../const';
+import { AuthError } from '@supabase/supabase-js';
 
 type UseAuthFormProps<T> = {
   formAtom: PrimitiveAtom<T>;
@@ -19,8 +29,16 @@ type UseAuthFormProps<T> = {
 export default function useAuthForm<T>({ formAtom, validationSchema, onSubmit }: UseAuthFormProps<T>) {
   const [formState, setFormState] = useAtom(formAtom);
   const [isLoading, setIsLoading] = useAtom(loadingStateAtom);
+  const [isSuccess, setSuccess] = useAtom(successStateAtom);
   const setErrorForm = useSetAtom(setErrorFormAtom);
   const clearErrorForm = useSetAtom(clearErrorFormAtom);
+  const captchaRefresh = useSetAtom(captchaRefreshAtom);
+  const { '*': params } = useParams();
+
+  /** 경로 이동 시 제출 상태 초기화 */
+  useEffect(() => {
+    setSuccess(false);
+  }, [params]);
 
   /**
    * 입력 값 변경 시 폼 상태를 업데이트,
@@ -49,14 +67,24 @@ export default function useAuthForm<T>({ formAtom, validationSchema, onSubmit }:
 
       // 비즈니스 로직 실행
       await onSubmit(formState);
+
+      // 성공 처리
+      setSuccess(true);
     } catch (error) {
       if (error instanceof ZodError) {
         // Zod 유효성 검사 실패 시 에러 상태 업데이트
         setErrorForm(error.issues);
+      } else if (error instanceof AuthError) {
+        // AuthError 목록
+        switch (error.code) {
+          case 'captcha_failed': {
+            captchaRefresh();
+          }
+        }
       } else {
-        console.error('An unexpected error occurred:', error);
         alert('로그인 오류');
       }
+      console.error('An unexpected error occurred:', error);
     } finally {
       setIsLoading(false);
     }
@@ -65,6 +93,7 @@ export default function useAuthForm<T>({ formAtom, validationSchema, onSubmit }:
   return {
     formState,
     isLoading,
+    isSuccess,
     handleInputChange,
     handleSubmit,
   };

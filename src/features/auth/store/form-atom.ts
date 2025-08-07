@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { boolean, ZodIssue } from 'zod';
+import { ZodIssue } from 'zod';
 
 /* 로그인 */
 export type LoginForm = {
@@ -34,6 +34,15 @@ const initFindPwdForm: FindPwdForm = {
 };
 export const findPwdFormAtom = atom(initFindPwdForm);
 
+/* 비밀번호 수정 */
+export type ResetPwdForm = {
+  password: string;
+};
+const initResetPwdForm: ResetPwdForm = {
+  password: '',
+};
+export const resetPwdFormAtom = atom(initResetPwdForm);
+
 /* 입력 에러 */
 export type ErrorFormKeys = Map<keyof SignupForm, any>;
 export const errorFormAtom = atom<ErrorFormKeys>(new Map());
@@ -66,4 +75,10 @@ export const resetFormAtom = atom(null, (_, set) => {
 export const loadingStateAtom = atom(true);
 export const setLoadingStateAtom = atom(null, (_, set, state: boolean) => {
   set(loadingStateAtom, state);
+});
+
+/* 제출 성공 상태 */
+export const successStateAtom = atom(false);
+export const setSuccessStateAtom = atom(null, (_, set, state: boolean) => {
+  set(successStateAtom, state);
 });

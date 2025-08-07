@@ -8,7 +8,7 @@ import FindPasswordForm from './components/form';
 import styles from './index.module.css';
 
 export default function FindPasswordPage() {
-  const { handleNav } = useNavPage();
+  const { handleNav, disabled } = useNavPage();
 
   return (
     <AuthContainer>
@@ -20,7 +20,13 @@ export default function FindPasswordPage() {
 
       {/* 하단 */}
       <nav className={styles.actions}>
-        <NavLink to={PATHS.AUTH.LOGIN} className={styles.link} onClick={handleNav}>
+        <NavLink
+          to={PATHS.AUTH.LOGIN}
+          className={styles.link}
+          onClick={handleNav}
+          aria-disabled={disabled}
+          data-disabled={disabled}
+        >
           로그인
         </NavLink>
       </nav>

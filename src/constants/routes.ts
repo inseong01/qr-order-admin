@@ -4,7 +4,8 @@ export const ROUTES = {
   SIGNUP: 'signup',
   FIND: 'find',
   AUTH: 'auth',
+  RESET: 'reset',
   PASSWORD: 'password',
-  HOME: '/',
+  ROOT: '/',
   ALL: '*',
 } as const;

@@ -17,6 +17,10 @@
   text-align: center;
 }
 
-.link:hover {
+.link[data-disabled='false']:hover {
   color: var(--key-color);
+}
+
+.link[data-disabled='true'] {
+  cursor: not-allowed;
 }

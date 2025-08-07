@@ -2,6 +2,7 @@ import { Navigate, Outlet } from 'react-router';
 
 import useAuthSession from '@/features/auth/hooks/use-auth-session';
 import LoadingSpinner from '@/features/load/spinner';
+import { PATHS } from '@/constants/paths';
 
 /**
  * @description 인증된 사용자만 접근 가능한 경로를 보호하는 컴포넌트
@@ -13,7 +14,7 @@ export default function ProtectedRoute() {
 
   if (isLoading) return <LoadingSpinner />;
 
-  if (!isLogin) return <Navigate to='/auth/login' replace />;
+  if (!isLogin) return <Navigate to={PATHS.AUTH.LOGIN} replace />;
 
   return <Outlet />;
 }

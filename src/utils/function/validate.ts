@@ -2,8 +2,14 @@ import { z } from 'zod';
 
 import { MenuCategory } from '@/lib/supabase/tables/menu-category';
 import { NewMenu, UpdateMenu } from '@/lib/supabase/tables/menu';
-import { FindPwdForm, LoginForm, SignupForm } from '@/features/auth/store/form-atom';
-import { PWD_MAX, PWD_MIN } from '@/features/auth/const';
+import {
+  passwordLetterRegex,
+  passwordNumberRegex,
+  passwordRegex,
+  passwordSpecialRegex,
+  PWD_MAX,
+  PWD_MIN,
+} from '@/features/auth/const';
 
 /** 메뉴 카테고리 생성 데이터 검증 */
 function createCategoryValue(value: string) {
@@ -19,7 +25,6 @@ function createCategoryValue(value: string) {
 
 /** 메뉴 카테고리 수정 데이터 검증 */
 function updateCategoryValue(data: MenuCategory[]) {
-  console.log('data: ', data);
   const categorySchema = z.array(
     z.object({
       id: z.string().nonempty({ message: '분류가 선택되지 않았습니다.' }),
@@ -88,14 +93,17 @@ const login = z.object({
   password: z
     .string({ message: '비밀번호는 필수 입력 항목입니다.' })
     .nonempty({ message: '비밀번호를 입력해주세요.' })
-    .min(8, { message: `최소 ${PWD_MIN}자 이상이어야 합니다.` })
-    .max(20, { message: `최대 ${PWD_MAX}자까지 가능합니다.` })
-    .regex(/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*])[a-zA-Z\d!@#$%^&*]{8,}$/, {
-      message: '영문, 숫자, 특수문자를 각각 최소 1개 이상 포함해야 합니다.',
+    .min(PWD_MIN, { message: `최소 ${PWD_MIN}자 이상이어야 합니다.` })
+    .max(PWD_MAX, { message: `최대 ${PWD_MAX}자까지 가능합니다.` })
+    .regex(passwordRegex, {
+      message: '소문자, 대문자, 숫자, 특수문자가 포함되어야 합니다.',
+    })
+    .refine((val) => !val.includes('\\'), {
+      message: `\\ 특수문자는 사용할 수 없습니다.`,
     }),
 });
 
-/** 회원가입 스키마 (KR 기준) */
+/** 회원가입 스키마 */
 const signup = z
   .object({
     // 이메일
@@ -108,10 +116,19 @@ const signup = z
     password: z
       .string({ message: '비밀번호는 필수 입력 항목입니다.' })
       .nonempty({ message: '비밀번호를 입력해주세요.' })
-      .min(8, { message: `최소 ${PWD_MIN}자 이상이어야 합니다.` })
-      .max(20, { message: `최대 ${PWD_MAX}자까지 가능합니다.` })
-      .regex(/^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*])/, {
-        message: '영문, 숫자, 특수문자를 각각 최소 1개 이상 포함해야 합니다.',
+      .min(PWD_MIN, { message: `최소 ${PWD_MIN}자 이상이어야 합니다.` })
+      .max(PWD_MAX, { message: `최대 ${PWD_MAX}자까지 가능합니다.` })
+      .refine((val) => passwordLetterRegex.test(val), {
+        message: '소문자, 대문자가 포함되어야 합니다.',
+      })
+      .refine((val) => passwordNumberRegex.test(val), {
+        message: '숫자가 포함되어야 합니다.',
+      })
+      .refine((val) => passwordSpecialRegex.test(val), {
+        message: '특수문자가 포함되어야 합니다.',
+      })
+      .refine((val) => !val.includes('\\'), {
+        message: `\\ 특수문자는 사용할 수 없습니다.`,
       }),
 
     // 비밀번호 확인
@@ -131,6 +148,28 @@ const findPassword = z.object({
     .email({ message: '올바른 이메일 주소 형식이 아닙니다.' }),
 });
 
+/** 비밀번호 수정 스키마 */
+const resetPassword = z.object({
+  // 비밀번호
+  password: z
+    .string({ message: '비밀번호는 필수 입력 항목입니다.' })
+    .nonempty({ message: '비밀번호를 입력해주세요.' })
+    .min(PWD_MIN, { message: `최소 ${PWD_MIN}자 이상이어야 합니다.` })
+    .max(PWD_MAX, { message: `최대 ${PWD_MAX}자까지 가능합니다.` })
+    .refine((val) => passwordLetterRegex.test(val), {
+      message: '소문자, 대문자가 포함되어야 합니다.',
+    })
+    .refine((val) => passwordNumberRegex.test(val), {
+      message: '숫자가 포함되어야 합니다.',
+    })
+    .refine((val) => passwordSpecialRegex.test(val), {
+      message: '특수문자가 포함되어야 합니다.',
+    })
+    .refine((val) => !val.includes('\\'), {
+      message: `\\ 특수문자는 사용할 수 없습니다.`,
+    }),
+});
+
 export default {
   createCategoryValue,
   updateCategoryValue,
@@ -142,5 +181,6 @@ export default {
     login,
     signup,
     findPassword,
+    resetPassword,
   },
 } as const;

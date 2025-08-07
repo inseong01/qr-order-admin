@@ -1,19 +1,22 @@
+import { useAtomValue } from 'jotai';
 import { Navigate, Outlet } from 'react-router';
 
+import { PATHS } from '@/constants/paths';
 import useAuthSession from '@/features/auth/hooks/use-auth-session';
-import LoadingSpinner from '@/features/load/spinner';
+import { successStateAtom } from '@/features/auth/store/form-atom';
 
 /**
- * @description 비인증 사용자만 접근 가능한 경로를 처리하는 컴포넌트
- * - 로딩 중일 때는 로딩 스피너를 보여줍니다.
- * - 이미 로그인한 사용자는 메인 페이지로 리디렉션합니다.
+ * 로그인한 사용자는 접근할 수 없는 페이지
+ * (ex: 로그인, 회원가입)
  */
 export default function PublicRoute() {
-  const { isLogin, isLoading } = useAuthSession();
+  const { isLogin } = useAuthSession();
+  const isSuccess = useAtomValue(successStateAtom);
 
-  // if (isLoading) return <LoadingSpinner />;
-
-  if (isLogin) return <Navigate to='/' replace />;
+  if (isLogin && !isSuccess) {
+    return <Navigate to={PATHS.MAIN} replace />;
+  }
 
   return <Outlet />;
 }
+

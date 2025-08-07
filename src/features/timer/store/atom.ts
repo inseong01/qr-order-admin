@@ -1,10 +1,5 @@
 import { atom } from 'jotai';
 
-export const connectStateAtom = atom(false);
-export const setConnectStateAtom = atom(null, (_, set, state: boolean) => {
-  set(connectStateAtom, state);
-});
-
 const initDate = new Date();
 
 export const dateStateAtom = atom(initDate.toLocaleDateString());

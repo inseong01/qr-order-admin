@@ -29,12 +29,8 @@
   padding: 0 8px;
 }
 
-.link[data-disabled='false']:hover {
+.link:hover {
   color: var(--key-color);
-}
-
-.link[data-disabled='true'] {
-  cursor: not-allowed;
 }
 
 /* 링크 사이 구분선 */

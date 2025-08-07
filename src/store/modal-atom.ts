@@ -1,33 +1,11 @@
 import { atom } from 'jotai';
 
-// TODO: 추후 리액트 컨텍스트로 처리
-//- zustand
-// export type ModalType =
-//   | 'info'
-//   | 'insert'
-//   | 'update'
-//   | 'upsert'
-//   | 'update-category'
-//   | 'insert-category';
-
-// type InitialState = {
-//   modal: {
-//     isOpen: boolean;
-//     type: ModalType;
-//   };
-// };
-
-//- jotai
-// export type ModalType = 'info' | 'insert' | 'update' | 'upsert' | 'update-category' | 'insert-category';
-
 type Modal = {
   isOpen: boolean;
-  // type: ModalType;
 };
 
 const initialModal: Modal = {
   isOpen: false,
-  // type: 'insert',
 };
 
 // 모달 상태
@@ -45,11 +23,8 @@ export const modalAtomWithReset = atom(
 export const setModalState = atom(
   (get) => get(modalAtom),
   (_, set, { isOpen }: { isOpen: boolean }) => {
-    // (get, set, { type, isOpen }: { type?: ModalType; isOpen: boolean }) => {
-    // const currentModal = get(modalAtom);
     set(modalAtom, {
       isOpen,
-      // type: type || currentModal.type,
     });
   }
 );

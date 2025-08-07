@@ -1,5 +1,4 @@
 import { useAtomValue } from 'jotai';
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
 import supabase from '@/lib/supabase';
@@ -9,60 +8,40 @@ import Caption from '@/features/auth/components/caption';
 import useAuthForm from '@/features/auth/hooks/use-auth-form';
 import { captchaTokenAtom } from '@/features/auth/store/token-atom';
 
-import { errorFormAtom, loginFormAtom } from '../../../store/form-atom';
+import { errorFormAtom, resetPwdFormAtom } from '../../../store/form-atom';
 import styles from './index.module.css';
 
-/**
- * 아이디, 비밀번호 입력 및 로그인 버튼을 포함하는 폼 컴포넌트
- */
-export default function LoginForm() {
+export default function ResetPasswordForm() {
   const captchaToken = useAtomValue(captchaTokenAtom);
   const errorForm = useAtomValue(errorFormAtom);
   const navigate = useNavigate();
   const { formState, isLoading, isSuccess, handleInputChange, handleSubmit } = useAuthForm({
-    formAtom: loginFormAtom,
-    validationSchema: validate.schema.login,
+    formAtom: resetPwdFormAtom,
+    validationSchema: validate.schema.resetPassword,
     onSubmit: async (formData) => {
-      // 로그인
-      const { error } = await supabase.auth.signInWithPassword({
-        email: formData.id,
-        password: formData.password,
-        options: { captchaToken },
-      });
+      // 비밀번호 수정
+      const { error } = await supabase.auth.updateUser({ password: formData.password });
+
+      // 지연
+      await new Promise((resolve) => setTimeout(resolve, 700));
 
       // 오류 처리
       if (error) throw error;
+
+      // 알림
+      alert('수정되었습니다!');
+
+      // 리다이렉트
+      navigate(PATHS.AUTH.LOGIN, { replace: true });
     },
   });
 
-  useEffect(() => {
-    if (isSuccess) {
-      setTimeout(() => {
-        navigate(PATHS.ROOT, { replace: true });
-      }, 1500);
-    }
-  }, [isSuccess, navigate]);
-
   const disabled = isLoading || !captchaToken || isSuccess;
-  const description = isSuccess ? '로그인 성공!' : !captchaToken ? '확인 중...' : '로그인';
+  const description = !captchaToken ? '확인 중...' : '수정하기';
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
       <div className={styles.inputBox}>
-        <input
-          required
-          type='email'
-          name='id'
-          aria-invalid={!!errorForm.get('id')}
-          data-invalid={!!errorForm.get('id')}
-          className={styles.input}
-          placeholder='이메일'
-          value={formState.id}
-          onChange={handleInputChange}
-          disabled={disabled}
-        />
-        {!!errorForm.get('id') && <Caption text={errorForm.get('id')} />}
-
         <input
           required
           type='password'
@@ -70,7 +49,7 @@ export default function LoginForm() {
           aria-invalid={!!errorForm.get('password')}
           data-invalid={!!errorForm.get('password')}
           className={styles.input}
-          placeholder='비밀번호'
+          placeholder='새로운 비밀번호를 입력해주세요.'
           value={formState.password}
           onChange={handleInputChange}
           disabled={disabled}

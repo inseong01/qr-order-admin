@@ -8,7 +8,7 @@ import SignUpForm from './components/form';
 import styles from './index.module.css';
 
 export default function SignUpPage() {
-  const { handleNav } = useNavPage();
+  const { handleNav, disabled } = useNavPage();
 
   return (
     <AuthContainer>
@@ -20,7 +20,13 @@ export default function SignUpPage() {
 
       {/* 하단 */}
       <nav>
-        <NavLink to={PATHS.AUTH.LOGIN} className={styles.link} onClick={handleNav}>
+        <NavLink
+          to={PATHS.AUTH.LOGIN}
+          className={styles.link}
+          onClick={handleNav}
+          aria-disabled={disabled}
+          data-disabled={disabled}
+        >
           돌아가기
         </NavLink>
       </nav>

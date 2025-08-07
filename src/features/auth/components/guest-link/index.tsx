@@ -1,72 +1,67 @@
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useNavigate, useParams } from 'react-router';
 import { useEffect } from 'react';
 
 import supabase from '@/lib/supabase';
+import { ROUTES } from '@/constants/routes';
+import { PATHS } from '@/constants/paths';
 
+import { setSuccessStateAtom, successStateAtom } from '../../store/form-atom';
 import styles from './index.module.css';
 
-// TODO: 상태 분리
 const clickStateAtom = atom(false);
-export const captchaTokenAtom = atom('');
-const setCaptchaTokenAtom = atom(null, (_, set, token: string) => {
-  set(captchaTokenAtom, token);
-});
 
-export default function GuestLink() {
+type GuestLinkProps = {
+  captchaToken: string;
+};
+
+export default function GuestLink({ captchaToken }: GuestLinkProps) {
   const [isClick, setClick] = useAtom(clickStateAtom);
-  const captchaToken = useAtomValue(captchaTokenAtom);
-  const setCaptchaToken = useSetAtom(setCaptchaTokenAtom);
+  const isSuccess = useAtomValue(successStateAtom);
+  const setSuccessState = useSetAtom(setSuccessStateAtom);
+  const { '*': params } = useParams();
+  const navigate = useNavigate();
 
-  // TODO: 방문자 접속 로직 구현
+  /** 익명 사용자 로그인 */
   const handleGuestLogin = async () => {
-    if (isClick) {
-      alert('처리 중입니다.'); // TODO: UI 입력창 반응 제한
-      return;
-    }
+    // UI 입력창 반응 제한
+    if (isClick) return alert('잠시만 기다려주세요.');
     setClick(true);
 
+    // 지연
+    await new Promise((resolve) => setTimeout(resolve, 700));
+
     // 로그인
-    const res = await supabase.auth.signInAnonymously({
+    const { error } = await supabase.auth.signInAnonymously({
       options: {
         captchaToken,
       },
     });
 
-    if (res.error) {
-      console.error(res.error.message);
-      throw new Error(res.error.message);
-    }
+    // 성공 처리
+    setSuccessState(true);
+
+    // 오류 처리
+    if (error) throw error;
   };
 
-  /** 캡챠 실행 */
   useEffect(() => {
-    window.onloadTurnstileCallback = function () {
-      if (typeof turnstile !== 'undefined') {
-        turnstile.render('.cf-turnstile', {
-          sitekey: import.meta.env.VITE_SITE_KEY,
-          theme: 'light', // TODO: 사용자 테마
-          language: 'ko', // TODO: 사용자 언어
-          callback: (token: string) => setCaptchaToken(token),
-        });
-      }
-    };
+    if (isSuccess) {
+      setTimeout(() => {
+        navigate(PATHS.ROOT, { replace: true });
+      }, 1500);
+    }
+  }, [isSuccess, navigate]);
 
-    return () => {
-      delete window.onloadTurnstileCallback;
-    };
-  }, [setCaptchaToken]);
+  const openGuestLink = params?.includes(ROUTES.LOGIN) && captchaToken;
 
   return (
-    <>
-      <div className={styles.box}>
-        {captchaToken && (
-          <button type='button' className={styles.guestLink} onClick={handleGuestLogin}>
-            방문자로 접속하기
-          </button>
-        )}
-      </div>
-
-      <div className='cf-turnstile' style={{ position: 'absolute', bottom: 160 }}></div>
-    </>
+    <div className={styles.box}>
+      {openGuestLink && (
+        <button type='button' className={styles.guestLink} onClick={handleGuestLogin}>
+          방문자로 접속하기
+        </button>
+      )}
+    </div>
   );
 }

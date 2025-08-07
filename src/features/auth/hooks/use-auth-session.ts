@@ -29,6 +29,7 @@ export default function useAuthSession() {
         case 'INITIAL_SESSION': {
           if (!session) {
             logout();
+            clearStorageKeys();
             setSession(null);
           } else {
             login();

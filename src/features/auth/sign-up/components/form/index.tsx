@@ -1,25 +1,36 @@
 import { useAtomValue } from 'jotai';
 
+import supabase from '@/lib/supabase';
 import validate from '@/utils/function/validate';
 import Caption from '@/features/auth/components/caption';
 import useAuthForm from '@/features/auth/hooks/use-auth-form';
+import { captchaTokenAtom } from '@/features/auth/store/token-atom';
 
 import { errorFormAtom, signupFormAtom } from '../../../store/form-atom';
 import { PWD_MAX, PWD_MIN } from '../../../const';
 import styles from './index.module.css';
 
 export default function SignUpForm() {
+  const captchaToken = useAtomValue(captchaTokenAtom);
   const errorForm = useAtomValue(errorFormAtom);
-
-  const { formState, isLoading, handleInputChange, handleSubmit } = useAuthForm({
+  const { formState, isLoading, isSuccess, handleInputChange, handleSubmit } = useAuthForm({
     formAtom: signupFormAtom,
     validationSchema: validate.schema.signup,
-    onSubmit: async (data) => {
-      // TODO: Supabase 회원가입 로직 구현
-      console.log('Submitting signup data:', data);
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
+    onSubmit: async (formData) => {
+      // 회원가입
+      const { error } = await supabase.auth.signUp({
+        email: formData.id,
+        password: formData.password,
+        options: { captchaToken, data: { signup_origin: 'qr_order_adim', is_approved: false } },
+      });
+
+      // 오류 처리
+      if (error) throw error;
     },
   });
+
+  const disabled = isLoading || !captchaToken || isSuccess;
+  const description = !captchaToken ? '확인 중...' : '가입하기';
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
@@ -34,7 +45,7 @@ export default function SignUpForm() {
           placeholder='이메일'
           value={formState.id}
           onChange={handleInputChange}
-          disabled={isLoading}
+          disabled={disabled}
         />
         {!!errorForm.get('id') && <Caption text={errorForm.get('id')} />}
 
@@ -50,7 +61,7 @@ export default function SignUpForm() {
           placeholder='비밀번호'
           value={formState.password}
           onChange={handleInputChange}
-          disabled={isLoading}
+          disabled={disabled}
         />
         {!!errorForm.get('password') && <Caption text={errorForm.get('password')} />}
 
@@ -64,13 +75,13 @@ export default function SignUpForm() {
           placeholder='비밀번호 확인'
           value={formState.confirmPassword}
           onChange={handleInputChange}
-          disabled={isLoading}
+          disabled={disabled}
         />
         {!!errorForm.get('confirmPassword') && <Caption text={errorForm.get('confirmPassword')} />}
       </div>
 
-      <button type='submit' className={styles.button} disabled={isLoading}>
-        {isLoading ? '회원가입 중...' : '회원가입'}
+      <button type='submit' className={styles.button} disabled={disabled}>
+        {description}
       </button>
     </form>
   );
