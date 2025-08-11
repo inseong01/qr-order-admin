@@ -1,5 +1,6 @@
 import { PrimitiveAtom, useAtom, useSetAtom } from 'jotai';
 import { ChangeEvent, FormEvent, useEffect } from 'react';
+import { AuthError } from '@supabase/supabase-js';
 import { ZodError, ZodType } from 'zod';
 import { useParams } from 'react-router';
 
@@ -11,8 +12,7 @@ import {
   successStateAtom,
 } from '../store/form-atom';
 import { captchaRefreshAtom } from '../store/token-atom';
-import { CAPTCHA_TOKEN } from '../const';
-import { AuthError } from '@supabase/supabase-js';
+import useSuccessRedirect from './use-success-redirect';
 
 type UseAuthFormProps<T> = {
   formAtom: PrimitiveAtom<T>;
@@ -39,6 +39,9 @@ export default function useAuthForm<T>({ formAtom, validationSchema, onSubmit }:
   useEffect(() => {
     setSuccess(false);
   }, [params]);
+
+  /** 성공 리다이렉트 */
+  useSuccessRedirect();
 
   /**
    * 입력 값 변경 시 폼 상태를 업데이트,
@@ -69,7 +72,7 @@ export default function useAuthForm<T>({ formAtom, validationSchema, onSubmit }:
       await onSubmit(formState);
 
       // 성공 처리
-      setSuccess(true);
+      // setSuccess(true);
     } catch (error) {
       if (error instanceof ZodError) {
         // Zod 유효성 검사 실패 시 에러 상태 업데이트

@@ -1,9 +1,6 @@
 import { useAtomValue } from 'jotai';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router';
 
 import supabase from '@/lib/supabase';
-import { PATHS } from '@/constants/paths';
 import validate from '@/utils/function/validate';
 import Caption from '@/features/auth/components/caption';
 import useAuthForm from '@/features/auth/hooks/use-auth-form';
@@ -18,7 +15,6 @@ import styles from './index.module.css';
 export default function LoginForm() {
   const captchaToken = useAtomValue(captchaTokenAtom);
   const errorForm = useAtomValue(errorFormAtom);
-  const navigate = useNavigate();
   const { formState, isLoading, isSuccess, handleInputChange, handleSubmit } = useAuthForm({
     formAtom: loginFormAtom,
     validationSchema: validate.schema.login,
@@ -34,14 +30,6 @@ export default function LoginForm() {
       if (error) throw error;
     },
   });
-
-  useEffect(() => {
-    if (isSuccess) {
-      setTimeout(() => {
-        navigate(PATHS.ROOT, { replace: true });
-      }, 1500);
-    }
-  }, [isSuccess, navigate]);
 
   const disabled = isLoading || !captchaToken || isSuccess;
   const description = isSuccess ? '로그인 성공!' : !captchaToken ? '확인 중...' : '로그인';

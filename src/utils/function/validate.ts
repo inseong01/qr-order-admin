@@ -170,6 +170,11 @@ const resetPassword = z.object({
     }),
 });
 
+/** 캡챠 토큰 검증 스키마 */
+const captchaToken = z
+  .string({ message: '캡챠 토큰은 필수입니다.' })
+  .nonempty({ message: '캡챠 토큰이 누락되었습니다.' });
+
 export default {
   createCategoryValue,
   updateCategoryValue,
@@ -182,5 +187,6 @@ export default {
     signup,
     findPassword,
     resetPassword,
+    captchaToken,
   },
 } as const;

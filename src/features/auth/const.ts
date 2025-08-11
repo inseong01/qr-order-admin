@@ -23,3 +23,6 @@ export const productResetPasswordUrl = `${import.meta.env.VITE_CLIENT_URL + PATH
 
 /* 토큰명 */
 export const CAPTCHA_TOKEN = 'captcha_token';
+
+/* 리다이렉트 지연 */
+export const REDIRECT_DELAY = 1500;

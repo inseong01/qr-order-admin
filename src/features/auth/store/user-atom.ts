@@ -12,3 +12,6 @@ export const setLogoutAtom = atom(null, (_, set) => {
 
 /* 사용자 로그인 정보 */
 export const userSessionAtom = atom<Session | null>(null);
+export const setUserSessionAtom = atom(null, (_, set, session: Session | null) => {
+  set(userSessionAtom, session);
+});

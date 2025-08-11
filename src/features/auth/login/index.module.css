@@ -33,8 +33,8 @@
   color: var(--key-color);
 }
 
-.link[data-disabled='true'] {
-  cursor: not-allowed;
+.link[data-disabled='true']:hover {
+  cursor: default;
 }
 
 /* 링크 사이 구분선 */

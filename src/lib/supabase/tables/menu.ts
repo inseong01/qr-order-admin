@@ -74,7 +74,7 @@ export const updateMenu = async (id: string, updatedMenu: UpdateMenu) => {
  */
 export const deleteMenu = async (id: string) => {
   const { error, data } = await supabase.from('menu').delete().eq('id', id).select();
-  console.log(data);
+
   if (error) {
     console.error(error.message);
     throw new Error(error.message);

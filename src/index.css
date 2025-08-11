@@ -130,3 +130,9 @@ select:focus {
 ::-webkit-scrollbar {
   display: none;
 }
+
+:disabled {
+  opacity: 0.6;
+  transform: none;
+  pointer-events: none;
+}

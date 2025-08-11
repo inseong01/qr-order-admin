@@ -23,11 +23,10 @@ export default function AuthContainer({ children }: ConatinerProps) {
   useEffect(() => {
     if (captchaToken) return;
 
-    setFirstLoadState(false);
-
     window.onloadTurnstileCallback = function () {
       if (typeof turnstile === 'undefined') return;
       if (!isFirstLoad) return;
+      setFirstLoadState(false);
       turnstile.render('.cf-turnstile', {
         sitekey: import.meta.env.VITE_SITE_KEY,
         theme,

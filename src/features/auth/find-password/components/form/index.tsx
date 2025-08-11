@@ -21,9 +21,6 @@ export default function FindPasswordForm() {
       const redirectTo = import.meta.env.DEV ? localResetPasswordUrl : productResetPasswordUrl;
       const { error } = await supabase.auth.resetPasswordForEmail(formData.id, { captchaToken, redirectTo });
 
-      // 지연
-      await new Promise((resolve) => setTimeout(resolve, 700));
-
       // 오류 처리
       if (error) throw error;
 

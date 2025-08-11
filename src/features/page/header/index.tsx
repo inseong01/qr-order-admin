@@ -2,15 +2,15 @@ import { atom, useAtomValue, useSetAtom } from 'jotai';
 
 import supabase from '@/lib/supabase';
 import Timer from '@/features/timer';
+import { userSessionAtom } from '@/features/auth/store/user-atom';
+import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
+import { openSubmissionAlertAtom } from '@/features/alert/popup/store/atom';
 
 import { footerAtom } from '../footer';
 import HeaderMenuTab from './header-menu';
 import HeaderTableTab from './header-table';
 import HeaderOrderTab from './header-order';
 import styles from './index.module.css';
-import { userSessionAtom } from '@/features/auth/store/user-atom';
-import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
-import { openSubmissionAlertAtom } from '@/features/alert/popup/store/atom';
 
 export const headerTabIdxAtom = atom(0);
 
@@ -35,11 +35,9 @@ export default function Header() {
       // 에러 처리
       if (error) {
         console.error('Error logging out:', error);
-        openSubmissionAlert('메뉴 추가 과정에서 오류가 발생했습니다');
+        openSubmissionAlert('로그아웃 과정에서 오류가 발생했습니다');
         return;
       }
-
-      openSubmissionAlert('로그아웃 되었습니다.');
     };
 
     showConfirmModal({ title, onConfirm });

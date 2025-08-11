@@ -11,16 +11,17 @@
   color: var(--sub-color);
   font-size: var(--fz-s);
   line-height: 1.5;
-  cursor: pointer;
-  text-decoration: none;
-  transition: color 0.2s ease;
   text-align: center;
+  text-decoration: none;
+
+  cursor: pointer;
+  transition: color 0.2s ease;
 }
 
 .link[data-disabled='false']:hover {
   color: var(--key-color);
 }
 
-.link[data-disabled='true'] {
-  cursor: not-allowed;
+.link[data-disabled='true']:hover {
+  cursor: default;
 }
