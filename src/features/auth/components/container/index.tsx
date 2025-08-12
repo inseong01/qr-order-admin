@@ -1,47 +1,66 @@
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { ReactNode, useEffect } from 'react';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { ReactNode, useEffect, useRef } from 'react';
 import { useParams } from 'react-router';
 
+import ToastNotification from '@/features/alert/toast';
 import { languageAtom, themeAtom } from '@/store/settings-atom';
-import { captchaTokenAtom, firstLoadStateAtom, setCaptchaTokenAtom } from '../../store/token-atom';
-import GuestLink from '../guest-link';
+
 import styles from './index.module.css';
+import GuestLink from '../guest-link';
+import { CAPTCHA_FAIL_TEST_KEY, CAPTCHA_PASS_TEST_KEY } from '../../const';
+import { authStatusAtom, captchaTokenAtom, setCaptchaTokenAtom } from '../../store/auth-atom';
 
 type ConatinerProps = {
   children: ReactNode;
 };
 
 export default function AuthContainer({ children }: ConatinerProps) {
-  const [isFirstLoad, setFirstLoadState] = useAtom(firstLoadStateAtom);
   const captchaToken = useAtomValue(captchaTokenAtom);
   const language = useAtomValue(languageAtom);
   const theme = useAtomValue(themeAtom);
   const setCaptchaToken = useSetAtom(setCaptchaTokenAtom);
+  const setAuthStatus = useSetAtom(authStatusAtom);
   const { '*': params } = useParams();
+  const widgetId = useRef('');
 
   /** 캡챠 실행 */
   useEffect(() => {
-    if (captchaToken) return;
+    if (captchaToken) {
+      turnstile.remove(widgetId?.current ?? '');
+      widgetId.current = '';
+      return;
+    }
 
-    window.onloadTurnstileCallback = function () {
+    window.onloadTurnstileCallback = () => {
       if (typeof turnstile === 'undefined') return;
-      if (!isFirstLoad) return;
-      setFirstLoadState(false);
-      turnstile.render('.cf-turnstile', {
-        sitekey: import.meta.env.VITE_SITE_KEY,
+      if (widgetId.current) return;
+
+      const id = turnstile.render('.cf-turnstile', {
+        // sitekey: import.meta.env.VITE_SITE_KEY,
+        // sitekey:  CAPTCHA_PASS_TEST_KEY,
+        sitekey: CAPTCHA_FAIL_TEST_KEY,
         theme,
         language,
-        callback: (token: string) => {
+        callback: (token) => {
           setCaptchaToken(token);
         },
+        'error-callback': () => {
+          setAuthStatus('error');
+        },
       });
+
+      if (id) {
+        widgetId.current = id;
+      }
     };
     window.onloadTurnstileCallback();
 
     return () => {
       delete window.onloadTurnstileCallback;
     };
-  }, [params, isFirstLoad, captchaToken, setCaptchaToken]);
+  }, [params, captchaToken, setCaptchaToken]);
+
+  const bottom = params === 'signup' ? 130 : 160;
 
   return (
     <div className={styles.container}>
@@ -49,10 +68,13 @@ export default function AuthContainer({ children }: ConatinerProps) {
       <div className={styles.formBox}>{children}</div>
 
       {/* 방문자 접속하기 */}
-      <GuestLink captchaToken={captchaToken} />
+      {params === 'login' && <GuestLink captchaToken={captchaToken} />}
 
       {/* 캡챠 */}
-      <div className='cf-turnstile' style={{ position: 'absolute', bottom: 160 }}></div>
+      <div className='cf-turnstile' style={{ position: 'absolute', bottom }}></div>
+
+      {/* 토스트 알림 */}
+      <ToastNotification />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { useSetAtom } from 'jotai';
 
-import { openSubmissionAlertAtom } from '@/features/alert/popup/store/atom';
+import { showToastAtom } from '@/features/alert/toast/store/atom';
 import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
 import { completeOrder, deleteOrder, Order } from '@/lib/supabase/tables/order';
 import { useQueryAllOrderList } from '@/hooks/use-query/query';
@@ -17,7 +17,7 @@ interface CardButtonProps {
 export default function CardButton({ orderId, type, inavtive = false }: CardButtonProps) {
   const { showConfirmModal } = useConfirmModal();
   const { refetch } = useQueryAllOrderList();
-  const openSubmissionAlert = useSetAtom(openSubmissionAlertAtom);
+  const showToast = useSetAtom(showToastAtom);
 
   /* 비즈니스 로직 */
   function onClickUpdateListState() {
@@ -33,10 +33,10 @@ export default function CardButton({ orderId, type, inavtive = false }: CardButt
       try {
         type === 'complete' ? await completeOrder(orderId) : await deleteOrder(orderId); // supabase 전달
         await refetch();
-        openSubmissionAlert(type === 'complete' ? '완료되었습니다' : '삭제되었습니다.'); // 데이터 처리 상태 알림
+        showToast(type === 'complete' ? '완료되었습니다' : '삭제되었습니다.'); // 데이터 처리 상태 알림
       } catch (e) {
         console.error(e);
-        openSubmissionAlert('오류가 발생했습니다');
+        showToast('오류가 발생했습니다');
       }
     };
 

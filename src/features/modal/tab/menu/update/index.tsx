@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/menu/store/atom';
 
 import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
-import { openSubmissionAlertAtom } from '@/features/alert/popup/store/atom';
+import { showToastAtom } from '@/features/alert/toast/store/atom';
 
 import { useQueryMenuCategoryList, useQueryMenuList } from '@/hooks/use-query/query';
 
@@ -29,7 +29,7 @@ export default function UpdateMenuModal() {
   const [inputValue, setInputValue] = useAtom(menuAtom);
   const menuImageFile = useAtomValue(menuImageFileAtom);
   const setModalClick = useSetAtom(setModalClickAtom);
-  const openSubmissionAlert = useSetAtom(openSubmissionAlertAtom);
+  const showToast = useSetAtom(showToastAtom);
   const setMenuImage = useSetAtom(setMenuImageFileAtom);
   const resetMenuImage = useSetAtom(resetMenuImageFileAtom);
   const { showConfirmModal } = useConfirmModal();
@@ -70,7 +70,7 @@ export default function UpdateMenuModal() {
         }
       } catch (err) {
         console.error(e);
-        openSubmissionAlert('이미지 처리 과정에서 오류가 발생했습니다');
+        showToast('이미지 처리 과정에서 오류가 발생했습니다');
         return;
       }
 
@@ -80,12 +80,12 @@ export default function UpdateMenuModal() {
         await menuListQuery.refetch();
       } catch (e) {
         console.error(e);
-        openSubmissionAlert('메뉴 처리 과정에서 오류가 발생했습니다');
+        showToast('메뉴 처리 과정에서 오류가 발생했습니다');
         return;
       }
 
       // 데이터 처리 상태 알림
-      openSubmissionAlert(submitType === 'update' ? '수정되었습니다' : '삭제되었습니다.');
+      showToast(submitType === 'update' ? '수정되었습니다' : '삭제되었습니다.');
 
       // 초기화
       setModalClick(false);

@@ -18,7 +18,7 @@ import {
   setEditModeAtom,
   setEditStateAtom,
 } from '@/features/tab/table/store/table-edit-state';
-import { openSubmissionAlertAtom } from '@/features/alert/popup/store/atom';
+import { showToastAtom } from '@/features/alert/toast/store/atom';
 
 import { useQueryTableList } from '@/hooks/use-query/query';
 
@@ -48,7 +48,7 @@ export function TableWidget() {
   const setEditState = useSetAtom(setEditStateAtom);
   const setDraftTables = useSetAtom(setDraftTableAtom);
   const resetTableState = useSetAtom(resetTablEditAtom);
-  const openSubmissionAlert = useSetAtom(openSubmissionAlertAtom);
+  const showToast = useSetAtom(showToastAtom);
   const { showConfirmModal } = useConfirmModal();
 
   /** 좌석 삭제 로직 */
@@ -60,10 +60,10 @@ export function TableWidget() {
           await deleteTable(tableIds);
           resetTableState();
           await tablesQuery.refetch();
-          openSubmissionAlert('삭제되었습니다.');
+          showToast('삭제되었습니다.');
         } catch (err) {
           console.error(err);
-          openSubmissionAlert('오류가 발생했습니다.');
+          showToast('오류가 발생했습니다.');
         }
       };
 
@@ -85,10 +85,10 @@ export function TableWidget() {
           await upsertTable(draftTables);
           resetTableState();
           await tablesQuery.refetch();
-          openSubmissionAlert('수정되었습니다.');
+          showToast('수정되었습니다.');
         } catch (err) {
           console.error(err);
-          openSubmissionAlert('오류가 발생했습니다.');
+          showToast('오류가 발생했습니다.');
         }
       };
 
@@ -110,10 +110,10 @@ export function TableWidget() {
           await upsertTable(draftTables);
           resetTableState();
           await tablesQuery.refetch();
-          openSubmissionAlert('추가되었습니다.');
+          showToast('추가되었습니다.');
         } catch (err) {
           console.error(err);
-          openSubmissionAlert('오류가 발생했습니다.');
+          showToast('오류가 발생했습니다.');
         }
       };
 

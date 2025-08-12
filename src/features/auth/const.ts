@@ -15,7 +15,7 @@ export const specialCharsRegex = new RegExp(`[${ESCAPED}]`);
 export const passwordLetterRegex = new RegExp(`(?=.*[a-z])(?=.*[A-Z])`);
 export const passwordNumberRegex = new RegExp(`(?=.*\\d)`);
 export const passwordSpecialRegex = new RegExp(`(?=.*[${ESCAPED}])`);
-export const passwordRegex = new RegExp(`^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[${ESCAPED}])[a-zA-Z\\d${ESCAPED}]{8,}$`);
+export const passwordRegex = new RegExp(`^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[${ESCAPED}])[a-zA-Z\\d${ESCAPED}]+$`);
 
 /* 리다이렉트 경로 */
 export const localResetPasswordUrl = `http://localhost:5173${PATHS.AUTH.RESET.PASSWORD}`;
@@ -26,3 +26,7 @@ export const CAPTCHA_TOKEN = 'captcha_token';
 
 /* 리다이렉트 지연 */
 export const REDIRECT_DELAY = 1500;
+
+/* 캡챠 테스트 키 */
+export const CAPTCHA_PASS_TEST_KEY = '1x00000000000000000000AA';
+export const CAPTCHA_FAIL_TEST_KEY = '2x00000000000000000000AB';

@@ -2,9 +2,9 @@ import { atom, useAtomValue, useSetAtom } from 'jotai';
 
 import supabase from '@/lib/supabase';
 import Timer from '@/features/timer';
-import { userSessionAtom } from '@/features/auth/store/user-atom';
+import { userSessionAtom } from '@/features/auth/store/auth-atom';
 import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
-import { openSubmissionAlertAtom } from '@/features/alert/popup/store/atom';
+import { showToastAtom } from '@/features/alert/toast/store/atom';
 
 import { footerAtom } from '../footer';
 import HeaderMenuTab from './header-menu';
@@ -23,7 +23,7 @@ export default function Header() {
   };
   const HeaderTabList = component[footerTab];
   const { showConfirmModal } = useConfirmModal();
-  const openSubmissionAlert = useSetAtom(openSubmissionAlertAtom);
+  const showToast = useSetAtom(showToastAtom);
 
   const handleLogout = async () => {
     const title = '로그아웃 하시겠습니까?';
@@ -35,7 +35,7 @@ export default function Header() {
       // 에러 처리
       if (error) {
         console.error('Error logging out:', error);
-        openSubmissionAlert('로그아웃 과정에서 오류가 발생했습니다');
+        showToast('로그아웃 과정에서 오류가 발생했습니다');
         return;
       }
     };

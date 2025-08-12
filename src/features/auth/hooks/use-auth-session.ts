@@ -1,71 +1,66 @@
-import { useAtomValue, useSetAtom } from 'jotai';
-import { Session } from '@supabase/supabase-js';
 import { useCallback, useEffect } from 'react';
+import { Session } from '@supabase/supabase-js';
+import { useAtomValue, useSetAtom } from 'jotai';
 
 import supabase from '@/lib/supabase';
-import { verifyJWT } from '@/utils/function/verify-jwt';
-import { clearStorageKeys } from '@/utils/function/clear-storage-key';
-import { loginStateAtom, setLoginAtom, setLogoutAtom, setUserSessionAtom } from '@/features/auth/store/user-atom';
-import { loadingStateAtom, setLoadingStateAtom, setSuccessStateAtom } from '../store/form-atom';
+import { verifyAuthJWT } from '../util/verify-auth-jwt';
+import { getAuthSession } from '../util/auth-supabase-api';
+import { clearStorageKeys } from '../util/clear-storage-key';
+import { authStatusAtom, captchaRefreshAtom, isLoggedInAtom, setUserSessionAtom } from '../store/auth-atom';
 
 export default function useAuthSession() {
-  /** 로딩 상태 관리 */
-  const isLoading = useAtomValue(loadingStateAtom);
-  const setLoadingState = useSetAtom(setLoadingStateAtom);
-
-  /** 로그인 상태 관리 */
-  const isLogin = useAtomValue(loginStateAtom);
-  const logout = useSetAtom(setLogoutAtom);
-  const login = useSetAtom(setLoginAtom);
-
-  /** 사용자 세션 관리 */
+  const isLogin = useAtomValue(isLoggedInAtom);
+  const authStatus = useAtomValue(authStatusAtom);
+  const setAuthStatus = useSetAtom(authStatusAtom);
   const setSession = useSetAtom(setUserSessionAtom);
+  const captchaRefresh = useSetAtom(captchaRefreshAtom);
 
-  /** 로그인 접속 성공 관리 */
-  const setSuccessState = useSetAtom(setSuccessStateAtom);
+  /** 로그아웃 및 상태 초기화 */
+  const logoutAndClear = useCallback(() => {
+    setSession(null);
+    clearStorageKeys();
+    setAuthStatus('idle');
+  }, [setSession, setAuthStatus]);
 
-  /** 세션 유효성 검사 + 상태 반영 */
+  /**
+   * 세션 유효성 검사 + 상태 반영
+   *
+   * authStatus 의존성 추가 시 무한루프 적용됨
+   */
   const processSession = useCallback(
     async (session: Session | null) => {
+      if (authStatus === 'success') return;
+
       if (!session) {
-        logoutAndClear();
-        setLoadingState(false);
-        return;
+        return logoutAndClear();
       }
 
+      setAuthStatus('loading');
       try {
-        setLoadingState(true);
-        const validSession = await verifyJWT();
+        const validSession = await verifyAuthJWT();
         if (validSession) {
-          login();
           setSession(session);
-          setSuccessState(true);
+          setAuthStatus('success');
         } else {
           logoutAndClear();
         }
       } catch (err) {
         console.error(err);
         logoutAndClear();
-      } finally {
-        setLoadingState(false);
       }
     },
-    [login, logout, setSession, setSuccessState, setLoadingState]
+    [logoutAndClear, setAuthStatus, setSession]
   );
-
-  /** 로그아웃 및 초기화 */
-  const logoutAndClear = useCallback(() => {
-    logout();
-    setSession(null);
-    clearStorageKeys();
-    setSuccessState(false);
-  }, [logout, setSession, setSuccessState]);
 
   /** 초기 마운트 시 세션 검증 */
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      processSession(data.session);
-    });
+    getAuthSession()
+      .then((res) => {
+        processSession(res.data.session);
+      })
+      .catch(() => {
+        setAuthStatus('error');
+      });
   }, [processSession]);
 
   /** 인증 상태 변경 감지 */
@@ -75,13 +70,14 @@ export default function useAuthSession() {
     } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_OUT') {
         logoutAndClear();
+        captchaRefresh();
       } else {
         processSession(session);
       }
     });
 
     return () => subscription.unsubscribe();
-  }, [processSession, logoutAndClear]);
+  }, [processSession, logoutAndClear, captchaRefresh]);
 
-  return { isLogin, isLoading };
+  return { isLogin };
 }

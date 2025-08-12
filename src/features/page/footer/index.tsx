@@ -9,7 +9,7 @@ import { setModalClickAtom } from '@/features/modal/tab/store/atom';
 import Tab from '@/components/ui/tab';
 import { resetCategoriesAtom } from '@/features/modal/widget/menu/store/atom';
 import { isEditingAtom } from '@/features/tab/table/store/table-edit-state';
-import { openSubmissionAlertAtom } from '@/features/alert/popup/store/atom';
+import { showToastAtom } from '@/features/alert/toast/store/atom';
 
 import { headerTabIdxAtom } from '../header';
 import styles from './index.module.css';
@@ -27,13 +27,13 @@ export default function Footer() {
   const widgetReset = useSetAtom(widgetAtomWithReset);
   const resetId = useSetAtom(resetIdState);
   const resetCategoriesForm = useSetAtom(resetCategoriesAtom);
-  const openSubmissionAlert = useSetAtom(openSubmissionAlertAtom);
+  const showToast = useSetAtom(showToastAtom);
 
   function handleTabClick(tabTitle: FooterTab) {
     if (modalState.isOpen) return;
     if (tab === tabTitle) return;
     if (isTableEditing) {
-      openSubmissionAlert('탭 전환은 편집 종료 후 가능합니다.');
+      showToast('탭 전환은 편집 종료 후 가능합니다.');
       return;
     }
 

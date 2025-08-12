@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router';
 
-import { ROUTES } from '@/constants/routes';
-import NotFound from '@/Not-found';
 import App from '@/App';
+import NotFound from '@/Not-found';
+import { ROUTES } from '@/constants/routes';
 import GlobalSettingsHandler from '@/components/layout/global-settings-handler';
 
 import ProtectedRoute from './protected-route';

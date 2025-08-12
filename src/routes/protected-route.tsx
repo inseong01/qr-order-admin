@@ -1,8 +1,9 @@
 import { Navigate, Outlet } from 'react-router';
 
-import useAuthSession from '@/features/auth/hooks/use-auth-session';
-import LoadingSpinner from '@/features/load/spinner';
 import { PATHS } from '@/constants/paths';
+import LoadingSpinner from '@/features/load/spinner';
+import useAuthSession from '@/features/auth/hooks/use-auth-session';
+import useDisabledState from '@/features/auth/hooks/use-disabled';
 
 /**
  * @description 인증된 사용자만 접근 가능한 경로를 보호하는 컴포넌트
@@ -10,9 +11,10 @@ import { PATHS } from '@/constants/paths';
  * - 로그인하지 않은 사용자는 로그인 페이지로 리디렉션합니다.
  */
 export default function ProtectedRoute() {
-  const { isLogin, isLoading } = useAuthSession();
+  const { isLogin } = useAuthSession();
+  const { authStatus } = useDisabledState();
 
-  if (isLoading) return <LoadingSpinner />;
+  if (authStatus === 'loading') return <LoadingSpinner />;
 
   if (!isLogin) return <Navigate to={PATHS.AUTH.LOGIN} replace />;
 

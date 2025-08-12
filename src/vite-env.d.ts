@@ -25,7 +25,7 @@ interface Turnstile {
     options: {
       sitekey: string;
       callback?: (token: string) => void;
-      'error-callback'?: () => void;
+      'error-callback'?: (code: string) => void;
       'expired-callback'?: () => void;
       theme?: 'light' | 'dark' | 'auto';
       language?: string;

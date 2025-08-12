@@ -2,7 +2,7 @@ import { ChangeEvent, FormEvent } from 'react';
 import { useAtom, useSetAtom } from 'jotai';
 import { useQuery } from '@tanstack/react-query';
 
-import { openSubmissionAlertAtom } from '@/features/alert/popup/store/atom';
+import { showToastAtom } from '@/features/alert/toast/store/atom';
 import { setWidgetAtomState } from '@/features/widget/store/atom';
 
 import { MENU_CATEGORIES_QUERY_KEY, useQueryMenuCategoryList, useQueryMenuList } from '@/hooks/use-query/query';
@@ -25,7 +25,7 @@ export default function UpdateCategoryForm() {
   const menuListQuery = useQueryMenuList();
   const menuCategoriesQuery = useQueryMenuCategoryList();
   const setWidgetState = useSetAtom(setWidgetAtomState);
-  const openSubmissionAlert = useSetAtom(openSubmissionAlertAtom);
+  const showToast = useSetAtom(showToastAtom);
   const { showConfirmModal } = useConfirmModal();
   /* 비즈니스 로직 */
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -61,12 +61,12 @@ export default function UpdateCategoryForm() {
         await menuListQuery.refetch();
       } catch (e) {
         console.error(e);
-        openSubmissionAlert('오류가 발생했습니다');
+        showToast('오류가 발생했습니다');
         return;
       }
 
       // 데이터 처리 상태 알림
-      openSubmissionAlert('수정되었습니다');
+      showToast('수정되었습니다');
 
       // 초기화
       setSelectedCategories([]);

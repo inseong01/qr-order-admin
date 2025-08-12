@@ -131,7 +131,8 @@ select:focus {
   display: none;
 }
 
-:disabled {
+:disabled,
+[data-disabled='true'] {
   opacity: 0.6;
   transform: none;
   pointer-events: none;

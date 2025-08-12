@@ -3,7 +3,7 @@ import { useAtom, useSetAtom } from 'jotai';
 import { useQuery } from '@tanstack/react-query';
 
 import { setWidgetAtomState } from '@/features/widget/store/atom';
-import { openSubmissionAlertAtom } from '@/features/alert/popup/store/atom';
+import { showToastAtom } from '@/features/alert/toast/store/atom';
 
 import { MENU_CATEGORIES_QUERY_KEY, useQueryMenuCategoryList } from '@/hooks/use-query/query';
 
@@ -25,7 +25,7 @@ export default function DeleteCategoryForm() {
   const [selectedCategories, setSelectedCategories] = useAtom(selectedCategoryIdsAtom);
   const menuCategoriesQuery = useQueryMenuCategoryList();
   const setWidgetState = useSetAtom(setWidgetAtomState);
-  const openSubmissionAlert = useSetAtom(openSubmissionAlertAtom);
+  const showToast = useSetAtom(showToastAtom);
   const { showConfirmModal } = useConfirmModal();
 
   /* 비즈니스 로직 */
@@ -54,12 +54,12 @@ export default function DeleteCategoryForm() {
         await menuCategoriesQuery.refetch();
       } catch (e) {
         console.error(e);
-        openSubmissionAlert('오류가 발생했습니다');
+        showToast('오류가 발생했습니다');
         return;
       }
 
       // 데이터 처리 상태 알림
-      openSubmissionAlert('삭제되었습니다');
+      showToast('삭제되었습니다');
 
       // 초기화
       setSelectedCategories([]);

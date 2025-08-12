@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 
-import SubmissionStatusAlert from '../alert/popup';
+import ToastNotification from '../alert/toast';
 import WidgetCateogryModal from '../modal/widget';
 import ConfirmModal from '../modal/confirm';
 
@@ -16,8 +16,8 @@ export default function SuccessComponent() {
       <Main />
       <Footer />
 
-      {/* 알림 */}
-      <SubmissionStatusAlert />
+      {/* 토스트 알림 */}
+      <ToastNotification />
 
       {/* 확인 */}
       <ConfirmModal />

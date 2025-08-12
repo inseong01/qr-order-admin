@@ -1,18 +1,20 @@
-import { PrimitiveAtom, useAtom, useSetAtom } from 'jotai';
-import { ChangeEvent, FormEvent, useEffect } from 'react';
-import { AuthError } from '@supabase/supabase-js';
-import { ZodError, ZodType } from 'zod';
+import { ZodType } from 'zod';
 import { useParams } from 'react-router';
+import { ChangeEvent, FormEvent, useEffect } from 'react';
+import { PrimitiveAtom, useAtom, useAtomValue, useSetAtom } from 'jotai';
+
+import { showToastAtom } from '@/features/alert/toast/store/atom';
 
 import {
+  authStatusAtom,
+  captchaRefreshAtom,
   clearErrorFormAtom,
-  loadingStateAtom,
+  FormInputs,
+  resetAllFormsAtom,
   setErrorFormAtom,
-  SignupForm,
-  successStateAtom,
-} from '../store/form-atom';
-import { captchaRefreshAtom } from '../store/token-atom';
+} from '../store/auth-atom';
 import useSuccessRedirect from './use-success-redirect';
+import { AuthErrorHandler } from '../util/error-handler';
 
 type UseAuthFormProps<T> = {
   formAtom: PrimitiveAtom<T>;
@@ -28,20 +30,25 @@ type UseAuthFormProps<T> = {
  */
 export default function useAuthForm<T>({ formAtom, validationSchema, onSubmit }: UseAuthFormProps<T>) {
   const [formState, setFormState] = useAtom(formAtom);
-  const [isLoading, setIsLoading] = useAtom(loadingStateAtom);
-  const [isSuccess, setSuccess] = useAtom(successStateAtom);
+  const authStatus = useAtomValue(authStatusAtom);
+  const setAuthStatus = useSetAtom(authStatusAtom);
   const setErrorForm = useSetAtom(setErrorFormAtom);
   const clearErrorForm = useSetAtom(clearErrorFormAtom);
   const captchaRefresh = useSetAtom(captchaRefreshAtom);
+  const resetForms = useSetAtom(resetAllFormsAtom);
+  const showToast = useSetAtom(showToastAtom);
   const { '*': params } = useParams();
 
-  /** 경로 이동 시 제출 상태 초기화 */
+  /** 경로 이동 시 폼 상태 초기화 */
   useEffect(() => {
-    setSuccess(false);
-  }, [params]);
+    resetForms();
+  }, [params, resetForms]);
 
   /** 성공 리다이렉트 */
   useSuccessRedirect();
+
+  /** Supabase Auth 오류 처리기 */
+  const errorHandler = new AuthErrorHandler(showToast, setErrorForm, captchaRefresh);
 
   /**
    * 입력 값 변경 시 폼 상태를 업데이트,
@@ -50,7 +57,12 @@ export default function useAuthForm<T>({ formAtom, validationSchema, onSubmit }:
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormState((prev: T) => ({ ...prev, [name]: value }));
-    clearErrorForm(name as keyof SignupForm);
+    clearErrorForm(name as keyof FormInputs);
+
+    // 에러 상태면 다시 유휴 상태로 변경
+    if (authStatus === 'error') {
+      setAuthStatus('idle');
+    }
   };
 
   /**
@@ -59,7 +71,7 @@ export default function useAuthForm<T>({ formAtom, validationSchema, onSubmit }:
    */
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true);
+    setAuthStatus('loading');
 
     try {
       // Zod 스키마로 폼 데이터 검증
@@ -70,33 +82,14 @@ export default function useAuthForm<T>({ formAtom, validationSchema, onSubmit }:
 
       // 비즈니스 로직 실행
       await onSubmit(formState);
-
-      // 성공 처리
-      // setSuccess(true);
     } catch (error) {
-      if (error instanceof ZodError) {
-        // Zod 유효성 검사 실패 시 에러 상태 업데이트
-        setErrorForm(error.issues);
-      } else if (error instanceof AuthError) {
-        // AuthError 목록
-        switch (error.code) {
-          case 'captcha_failed': {
-            captchaRefresh();
-          }
-        }
-      } else {
-        alert('로그인 오류');
-      }
-      console.error('An unexpected error occurred:', error);
-    } finally {
-      setIsLoading(false);
+      setAuthStatus('error');
+      errorHandler.handle(error);
     }
   };
 
   return {
     formState,
-    isLoading,
-    isSuccess,
     handleInputChange,
     handleSubmit,
   };

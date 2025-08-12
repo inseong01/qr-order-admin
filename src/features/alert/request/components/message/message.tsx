@@ -8,7 +8,7 @@ import { useQueryFirstRequest } from '@/hooks/use-query/query';
 import { Request, updateRequest } from '@/lib/supabase/tables/request';
 
 import styles from './message.module.css';
-import { openSubmissionAlertAtom } from '@/features/alert/popup/store/atom';
+import { showToastAtom } from '@/features/alert/toast/store/atom';
 import { useSetAtom } from 'jotai';
 
 export function MessageCountPannel({ count }: { count: number }) {
@@ -43,7 +43,7 @@ type MessageCountPannelProps = {
 
 export function MessagePreview({ request, requestRefetch }: MessageCountPannelProps) {
   const firstRequestQuery = useQueryFirstRequest(request.id);
-  const openSubmissionAlert = useSetAtom(openSubmissionAlertAtom);
+  const showToast = useSetAtom(showToastAtom);
   const summary =
     firstRequestQuery.data
       ?.map(({ quantity, request_category }) => `${request_category.title} ${quantity}개`)
@@ -57,7 +57,7 @@ export function MessagePreview({ request, requestRefetch }: MessageCountPannelPr
       await firstRequestQuery.refetch();
     } catch (err) {
       console.error(err);
-      openSubmissionAlert('요청 처리 과정에서 오류가 발생했습니다');
+      showToast('요청 처리 과정에서 오류가 발생했습니다');
     }
   }
 

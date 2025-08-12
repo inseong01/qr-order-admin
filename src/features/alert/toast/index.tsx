@@ -1,17 +1,21 @@
 import { useAtom } from 'jotai';
 import { useEffect } from 'react';
+import { useParams } from 'react-router';
 import { AnimatePresence } from 'motion/react';
 
 import DialogLayout from '@/components/layout/dialog';
 
-import { submissionStatusAlertAtom } from './store/atom';
+import { toastStateAtom } from './store/atom';
 import styles from './index.module.css';
 
-export default function SubmissionStatusAler() {
-  const [alertState, setAlertState] = useAtom(submissionStatusAlertAtom);
+export default function ToastNotification() {
+  const [alertState, setAlertState] = useAtom(toastStateAtom);
+  const { '*': params } = useParams();
   const titleArr = alertState.title.split('.');
 
   const handleClose = () => {
+    // params 있으면 배경 클릭 닫기 제한('/': undefined)
+    if (params) return;
     setAlertState((prev) => ({ ...prev, isOpen: false }));
   };
 

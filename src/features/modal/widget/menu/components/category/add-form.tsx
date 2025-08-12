@@ -2,7 +2,7 @@ import { useAtom, useSetAtom } from 'jotai';
 
 import { useQueryMenuCategoryList } from '@/hooks/use-query/query';
 
-import { openSubmissionAlertAtom } from '@/features/alert/popup/store/atom';
+import { showToastAtom } from '@/features/alert/toast/store/atom';
 import { setWidgetAtomState } from '@/features/widget/store/atom';
 
 import { addMenuCategory } from '@/lib/supabase/tables/menu-category';
@@ -21,7 +21,7 @@ export default function AddCategoryForm() {
   const [inputValue, setInputValue] = useAtom(categoryInputAtom);
   const menuCategoriesQuery = useQueryMenuCategoryList();
   const setWidgetState = useSetAtom(setWidgetAtomState);
-  const openSubmissionAlert = useSetAtom(openSubmissionAlertAtom);
+  const showToast = useSetAtom(showToastAtom);
   const { showConfirmModal } = useConfirmModal();
 
   /* 비즈니스 로직 */
@@ -44,12 +44,12 @@ export default function AddCategoryForm() {
         await menuCategoriesQuery.refetch();
       } catch (e) {
         console.error(e);
-        openSubmissionAlert('오류가 발생했습니다');
+        showToast('오류가 발생했습니다');
         return;
       }
 
       // 데이터 처리 상태 알림
-      openSubmissionAlert('추가되었습니다');
+      showToast('추가되었습니다');
 
       // 초기화
       setInputValue('');
