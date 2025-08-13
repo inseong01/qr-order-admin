@@ -38,11 +38,11 @@ export default function useAuthSession() {
       setAuthStatus('loading');
       try {
         const validSession = await verifyAuthJWT();
-        if (validSession) {
+        if (!validSession) {
+          logoutAndClear();
+        } else {
           setSession(session);
           setAuthStatus('success');
-        } else {
-          logoutAndClear();
         }
       } catch (err) {
         console.error(err);

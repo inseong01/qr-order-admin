@@ -2,13 +2,15 @@ import { beforeEach, describe, expect, it } from 'vitest';
 
 import { clearStorageKeys } from '../../util/clear-storage-key';
 
+/* clearStorageKeys 테스트 */
 describe('clearStorageKeys', () => {
   beforeEach(() => {
     localStorage.clear();
     sessionStorage.clear();
   });
 
-  it('localStorage, sessionStorage 모두 비움', () => {
+  /* 1. localStorage와 sessionStorage의 모든 키 삭제 */
+  it('localStorage와 sessionStorage의 모든 항목을 제거해야 함', () => {
     localStorage.setItem('foo', 'bar');
     sessionStorage.setItem('baz', 'qux');
 
@@ -18,7 +20,8 @@ describe('clearStorageKeys', () => {
     expect(sessionStorage.length).toBe(0);
   });
 
-  it('스토리지가 비어있어도 에러 없이 동작', () => {
+  /* 2. 스토리지가 비어있는 경우 */
+  it('스토리지가 비어있을 때 호출해도 에러가 발생하지 않아야 함', () => {
     expect(() => clearStorageKeys()).not.toThrow();
   });
 });

@@ -1,8 +1,9 @@
+import { ReactNode } from 'react';
 import { NavLink } from 'react-router';
 
 import styles from './index.module.css';
 import useNavPage from '../../hooks/use-nav-page';
-import { ReactNode } from 'react';
+import useDisabledState from '../../hooks/use-disabled';
 
 type AuthFormTitleProps = {
   text: string;
@@ -20,7 +21,8 @@ type AuthNavLinkProps = {
 
 // AuthNavLink
 export function AuthNavLink({ text, to }: AuthNavLinkProps) {
-  const { handleNav, disabled } = useNavPage();
+  const { handleNav } = useNavPage();
+  const { disabled } = useDisabledState();
 
   return (
     <NavLink to={to} className={styles.link} onClick={handleNav} aria-disabled={disabled} data-disabled={disabled}>

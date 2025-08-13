@@ -22,7 +22,8 @@ export type FormInputs = {
 export const isLoggedInAtom = atom((get) => !!get(userSessionAtom));
 
 // 인증 절차 상태
-export const authStatusAtom = atom<'idle' | 'loading' | 'success' | 'error'>('loading');
+type AuthStatusAtom = 'idle' | 'loading' | 'success' | 'error';
+export const authStatusAtom = atom<AuthStatusAtom>('loading');
 
 // 로그인
 export const loginFormAtom = atom({ id: '', password: '' });

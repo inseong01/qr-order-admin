@@ -25,5 +25,5 @@ export default function useNavPage() {
     resetForm();
   };
 
-  return { handleNav, disabled };
+  return { handleNav };
 }

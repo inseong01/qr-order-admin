@@ -8,7 +8,7 @@ type setInputMessage = (issues: ZodIssue[]) => void;
 export type ActionFn = () => void;
 
 export class AuthErrorHandler {
-  authHandler: Record<string, () => void>;
+  private authHandler: Record<string, () => void>;
 
   constructor(
     private showMessage: ShowMessage,
@@ -30,11 +30,11 @@ export class AuthErrorHandler {
       const handler = this.authHandler[String(error.code)];
       if (handler) {
         handler();
-      } else {
-        this.show(`알 수 없는 오류가 발생했습니다. (${error.code})`);
+        return;
       }
-      return;
     }
+
+    this.show(`알 수 없는 오류가 발생했습니다. (${error})`);
   }
 
   private show = (msg: string) => {
