@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useAtomValue } from 'jotai';
 
 import { windowStateAtom } from '@/store/window-atom';
-import { generateCardLayoutArr } from '@/utils/function/generate-card';
+import { generateCardLayoutArr } from '@/features/tab/order/util/generate-card';
 import { ExceptionText } from '@/components/ui/exception';
 import LoadingSpinner from '@/features/load/spinner';
 

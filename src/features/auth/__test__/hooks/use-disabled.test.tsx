@@ -7,7 +7,7 @@ import { ReactNode } from 'react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { cleanup, renderHook } from '@testing-library/react';
 
-import TestProvider from './components/atom-provider';
+import { TestProvider } from './components/atom-provider';
 import useDisabledState from '../../hooks/use-disabled';
 import { authStatusAtom, captchaTokenAtom } from '../../store/auth-atom';
 

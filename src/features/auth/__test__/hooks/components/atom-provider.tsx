@@ -14,7 +14,7 @@ type HydrateAtomsProps = {
 };
 
 function HydrateAtoms({ initialValues = new Map([]), children }: HydrateAtomsProps) {
-  useHydrateAtoms(initialValues);
+  useHydrateAtoms(initialValues, { dangerouslyForceHydrate: false });
   return children;
 }
 
@@ -23,12 +23,10 @@ function HydrateAtoms({ initialValues = new Map([]), children }: HydrateAtomsPro
  * @param {any} initialValues - 초기화할 atom과 값의 Map
  * @param {ReactNode} children - 렌더링할 자원 컴포넌트
  */
-function TestProvider({ initialValues, children, store }: HydrateAtomsProps) {
+export function TestProvider({ initialValues, children, store }: HydrateAtomsProps) {
   return (
     <Provider store={store}>
       <HydrateAtoms initialValues={initialValues}>{children}</HydrateAtoms>
     </Provider>
   );
 }
-
-export default TestProvider;

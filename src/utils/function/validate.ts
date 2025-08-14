@@ -50,11 +50,11 @@ function deleteCategoryValue(id: string[]) {
 /** 메뉴 생성 데이터 검증 */
 function createMenuValue(data: NewMenu) {
   const newMenuSchema = z.object({
-    category_id: z.string({ message: '메뉴 분류를 선택헤주세요.' }),
-    name: z.string({ message: '메뉴 이름을 입력해주세요.' }).nonempty({ message: '메뉴 이름을 입력해주세요.' }),
-    price: z.number({ message: '가격을 입력해주세요.' }).nonnegative({ message: '가격은 양수이어야 합니다.' }),
-    tag: z.string({ message: '태그를 선택해주세요.' }),
-    img_url: z.string({ message: '올바르지 않은 이미지 주소입니다.' }).optional(),
+    category_id: z.string().nonempty({ message: '메뉴 분류를 선택헤주세요.' }),
+    name: z.string().nonempty({ message: '메뉴 이름을 입력해주세요.' }),
+    price: z.number().nonnegative({ message: '가격은 양수이어야 합니다.' }),
+    tag: z.string().nonempty({ message: '태그를 선택해주세요.' }),
+    img_url: z.string().nonempty({ message: '올바르지 않은 이미지 주소입니다.' }).optional(),
   });
 
   return newMenuSchema.safeParseAsync(data);
@@ -63,12 +63,12 @@ function createMenuValue(data: NewMenu) {
 /** 메뉴 수정 데이터 검증 */
 function updateMenuValue(data: UpdateMenu) {
   const updatedMenuSchema = z.object({
-    id: z.string({ message: '메뉴 아이디는 포함되어야 합니다.' }),
-    category_id: z.string({ message: '메뉴 분류를 선택헤주세요.' }),
-    name: z.string({ message: '메뉴 이름을 입력해주세요.' }).nonempty({ message: '메뉴 이름을 입력해주세요.' }),
-    price: z.number({ message: '가격을 입력해주세요.' }).nonnegative({ message: '가격은 양수이어야 합니다.' }),
-    tag: z.string({ message: '태그를 선택해주세요.' }),
-    img_url: z.string({ message: '올바르지 않은 이미지 주소입니다.' }),
+    id: z.string().nonempty({ message: '메뉴 아이디는 포함되어야 합니다.' }),
+    category_id: z.string().nonempty({ message: '메뉴 분류를 선택헤주세요.' }),
+    name: z.string().nonempty({ message: '메뉴 이름을 입력해주세요.' }),
+    price: z.number().nonnegative({ message: '가격을 입력해주세요.' }),
+    tag: z.string().nonempty({ message: '태그를 선택해주세요.' }),
+    img_url: z.string().nonempty({ message: '올바르지 않은 이미지 주소입니다.' }),
   });
 
   return updatedMenuSchema.safeParseAsync(data);
@@ -76,7 +76,7 @@ function updateMenuValue(data: UpdateMenu) {
 
 /** 주문 아이디 데이터 검증 */
 function orderIdValue(id: string) {
-  const orderIdSchema = z.string({ message: '주문이 선택되지 않았습니다.' });
+  const orderIdSchema = z.string().nonempty({ message: '주문이 선택되지 않았습니다.' });
 
   return orderIdSchema.safeParseAsync(id);
 }
@@ -85,13 +85,13 @@ function orderIdValue(id: string) {
 const login = z.object({
   // 이메일
   id: z
-    .string({ message: '이메일은 필수 입력 항목입니다.' })
+    .string()
     .nonempty({ message: '이메일을 입력해주세요.' })
     .email({ message: '올바른 이메일 주소 형식이 아닙니다.' }),
 
   // 비밀번호
   password: z
-    .string({ message: '비밀번호는 필수 입력 항목입니다.' })
+    .string()
     .nonempty({ message: '비밀번호를 입력해주세요.' })
     .min(PWD_MIN, { message: `최소 ${PWD_MIN}자 이상이어야 합니다.` })
     .max(PWD_MAX, { message: `최대 ${PWD_MAX}자까지 가능합니다.` })
@@ -108,13 +108,13 @@ const signup = z
   .object({
     // 이메일
     id: z
-      .string({ message: '이메일은 필수 입력 항목입니다.' })
+      .string()
       .nonempty({ message: '이메일을 입력해주세요.' })
       .email({ message: '올바른 이메일 주소 형식이 아닙니다.' }),
 
     // 비밀번호
     password: z
-      .string({ message: '비밀번호는 필수 입력 항목입니다.' })
+      .string()
       .nonempty({ message: '비밀번호를 입력해주세요.' })
       .min(PWD_MIN, { message: `최소 ${PWD_MIN}자 이상이어야 합니다.` })
       .max(PWD_MAX, { message: `최대 ${PWD_MAX}자까지 가능합니다.` })
@@ -132,7 +132,7 @@ const signup = z
       }),
 
     // 비밀번호 확인
-    confirmPassword: z.string({ message: '비밀번호 확인은 필수 입력 항목입니다.' }),
+    confirmPassword: z.string().nonempty({ message: '비밀번호 확인은 필수 입력 항목입니다.' }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ['confirmPassword'],
@@ -143,7 +143,7 @@ const signup = z
 const findPassword = z.object({
   // 아이디(이메일)
   id: z
-    .string({ message: '이메일 주소는 필수 입력 항목입니다.' })
+    .string()
     .nonempty({ message: '이메일 주소를 입력해주세요.' })
     .email({ message: '올바른 이메일 주소 형식이 아닙니다.' }),
 });
@@ -152,7 +152,7 @@ const findPassword = z.object({
 const resetPassword = z.object({
   // 비밀번호
   password: z
-    .string({ message: '비밀번호는 필수 입력 항목입니다.' })
+    .string()
     .nonempty({ message: '비밀번호를 입력해주세요.' })
     .min(PWD_MIN, { message: `최소 ${PWD_MIN}자 이상이어야 합니다.` })
     .max(PWD_MAX, { message: `최대 ${PWD_MAX}자까지 가능합니다.` })
@@ -171,9 +171,7 @@ const resetPassword = z.object({
 });
 
 /** 캡챠 토큰 검증 스키마 */
-const captchaToken = z
-  .string({ message: '캡챠 토큰은 필수입니다.' })
-  .nonempty({ message: '캡챠 토큰이 누락되었습니다.' });
+const captchaToken = z.string().nonempty({ message: '캡챠 토큰이 누락되었습니다.' });
 
 export default {
   createCategoryValue,

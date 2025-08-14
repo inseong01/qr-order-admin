@@ -9,14 +9,14 @@ import { useQueryMenuCategoryList, useQueryMenuList } from '@/hooks/use-query/qu
 
 import { addMenu } from '@/lib/supabase/tables/menu';
 import { uploadImage } from '@/lib/supabase/storage/store';
-import { buildMenuData } from '@/utils/function/set-menu';
-import { generateNumberId } from '@/utils/function/generate-id';
 
 import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
 import { showToastAtom } from '@/features/alert/toast/store/atom';
 
-import { setModalClickAtom } from '../../store/atom';
 import styles from './../index.module.css';
+import { buildMenuData } from '../util/set-menu';
+import { setModalClickAtom } from '../../store/atom';
+import { generateNumberId } from '../util/generate-id';
 import { MenuFormFields, MenuImageInput, MenuModalHeader } from '../components/common';
 
 export default function CreateMenuModal() {

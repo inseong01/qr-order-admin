@@ -9,11 +9,12 @@ import { Table } from '@/lib/supabase/tables/table';
  * @returns  파일 다운로드가 성공적으로 시작되면 resolve되는 Promise.
  *                          오류 발생 시 콘솔에 에러를 출력합니다.
  */
-export default async function downloadFile(url: string, tableNum: Table['number']): Promise<void> {
+export async function downloadFile(url: string, tableNum: Table['number']): Promise<void> {
   try {
     const response = await fetch(url);
+
     if (!response.ok) {
-      throw new Error(`File download failed: ${response.statusText}`);
+      throw new Error(`File download denied.`);
     }
 
     const blob = await response.blob();
@@ -31,6 +32,10 @@ export default async function downloadFile(url: string, tableNum: Table['number'
     document.body.removeChild(a);
     window.URL.revokeObjectURL(urlObj);
   } catch (err) {
-    console.error('DownloadFile has an error:', err);
+    if (err instanceof Error) {
+      console.error(`Unexpected error: ${err.message}`);
+      return;
+    }
+    console.error('Unexpected error');
   }
 }

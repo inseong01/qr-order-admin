@@ -2,9 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
 import QRcode from 'qrcode';
 
-import downloadFile from '@/utils/function/download-file';
-
 import styles from './index.module.css';
+import { downloadFile } from './util/download-file';
 
 export default function QRPreviewBox({ tableNumber }: { tableNumber?: number }) {
   const [url, getURL] = useState('');

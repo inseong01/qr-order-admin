@@ -1,3 +1,8 @@
+/**
+ * @file 주문 카드 레이아웃 생성 관련 함수의 단위 테스트입니다.
+ * @description 주문 데이터를 기반으로 동적인 카드 UI 레이아웃을 생성하는 로직이
+ *              정확하게 계산되고 구성되는지 검증합니다.
+ */
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -7,7 +12,7 @@ import {
   calculateMain,
   findOrderStartAt,
   generateCardLayoutArr,
-} from '../function/generate-card';
+} from '../generate-card';
 
 import mock_orders from '@/mock/order.test.json';
 import mock_order_items from '@/mock/order-item.test.json';

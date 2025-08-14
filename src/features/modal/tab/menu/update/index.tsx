@@ -18,12 +18,12 @@ import { useQueryMenuCategoryList, useQueryMenuList } from '@/hooks/use-query/qu
 
 import { deleteMenu, updateMenu } from '@/lib/supabase/tables/menu';
 import { deleteImageByFileName, updateImage } from '@/lib/supabase/storage/store';
-import { generateNumberId } from '@/utils/function/generate-id';
-import { updateMenuData } from '@/utils/function/set-menu';
+import { generateNumberId } from '@/features/modal/tab/menu/util/generate-id';
 
+import styles from './../index.module.css';
+import { updateMenuData } from '../util/set-menu';
 import { setModalClickAtom } from '../../store/atom';
 import { MenuFormFields, MenuImageInput, MenuModalHeader } from '../components/common';
-import styles from './../index.module.css';
 
 export default function UpdateMenuModal() {
   const [inputValue, setInputValue] = useAtom(menuAtom);

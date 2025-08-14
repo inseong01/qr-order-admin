@@ -203,7 +203,7 @@ type FindOrderProps = {
  * @param props - 주문 정보
  * @returns 타임스탬프 문자열으로 찾지 못하면 빈 문자열 반환
  */
-export function findOrderUpdatedAt({ orders, orderId }: FindOrderProps) {
+function findOrderUpdatedAt({ orders, orderId }: FindOrderProps) {
   return orders.find((o) => o.id === orderId)?.updated_at ?? '';
 }
 

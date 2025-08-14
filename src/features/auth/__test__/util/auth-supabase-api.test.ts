@@ -1,3 +1,8 @@
+/**
+ * @file Supabase 인증 API 래퍼 함수의 단위 테스트입니다.
+ * @description 로그인, 회원가입, 로그아웃, 세션 조회 등 Supabase의 인증 관련 API 호출이
+ *              성공 또는 실패 시 올바른 데이터를 반환하는지 검증합니다.
+ */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import supabase from '@/lib/supabase';
 import { AuthError, Session, User } from '@supabase/supabase-js';

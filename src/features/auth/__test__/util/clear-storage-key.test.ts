@@ -1,3 +1,8 @@
+/**
+ * @file clearStorageKeys 유틸리티 함수의 단위 테스트입니다.
+ * @description 함수 호출 시 localStorage와 sessionStorage의 모든 데이터가
+ *              정상적으로 삭제되는지 검증합니다.
+ */
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import { clearStorageKeys } from '../../util/clear-storage-key';

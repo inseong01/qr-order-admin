@@ -31,3 +31,9 @@ file-status.txt
 commit-msg.txt
 
 .vscode
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

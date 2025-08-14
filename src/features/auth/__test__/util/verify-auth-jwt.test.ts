@@ -1,3 +1,8 @@
+/**
+ * @file verifyAuthJWT 유틸리티 함수의 단위 테스트입니다.
+ * @description Supabase 클라이언트의 getSession을 호출하여 현재 사용자의 JWT 세션이
+ *              유효한지 확인하고, 유효한 경우 세션 객체를, 그렇지 않은 경우 null을 반환하는지 검증합니다.
+ */
 import { AuthError, Session } from '@supabase/supabase-js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -51,39 +56,30 @@ describe('verifyAuthJWT', () => {
 
     const result = await verifyAuthJWT();
 
-    // getSession이 호출되었는지 확인
     expect(mockSupabase.auth.getSession).toHaveBeenCalledTimes(1);
-    // 유효한 세션이 반환되었는지 확인
     expect(result).toEqual(mockSession);
   });
 
   /* 2. 세션이 존재하지 않는 경우 (null) */
   it('세션이 존재하지 않는 경우 null 반환', async () => {
     // getSession이 null 세션을 반환하도록 기본 설정되어 있음
-
     const result = await verifyAuthJWT();
 
-    // getSession이 호출되었는지 확인
     expect(mockSupabase.auth.getSession).toHaveBeenCalledTimes(1);
-    // null이 반환되었는지 확인
     expect(result).toBeNull();
   });
 
   /* 3. getSession 호출 시 에러가 발생하는 경우 */
   it('getSession 호출이 실패한 경우 null을 반환하고 에러를 로그 남김', async () => {
     const mockError = new AuthError('Failed to verify JWT session');
-    // getSession이 에러를 반환하도록 설정
     mockSupabase.auth.getSession.mockResolvedValue({ data: { session: null }, error: mockError });
 
-    // console.error를 스파이하여 에러 로깅을 확인
     const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     const result = await verifyAuthJWT();
-    // getSession이 호출되었는지 확인
+
     expect(mockSupabase.auth.getSession).toHaveBeenCalledTimes(1);
-    // console.error가 호출되었는지 확인
     expect(consoleErrorSpy).toHaveBeenCalledWith('Failed to verify JWT session');
-    // null이 반환되었는지 확인
     expect(result).toBeNull();
 
     // 스파이 복원

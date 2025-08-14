@@ -1,6 +1,7 @@
-import { CardObj } from '@/utils/function/generate-card';
+import { CardObj } from '@/features/tab/order/util/generate-card';
+
 import styles from './index.module.css';
-import { getElapsed } from '@/utils/function/get-elapsed';
+import { getElapsed } from '../../util/get-elapsed';
 
 type CardHeaderProps = {
   header: CardObj['header'];

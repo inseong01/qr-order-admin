@@ -1,4 +1,4 @@
-import { CardObj } from '@/utils/function/generate-card';
+import { CardObj } from '@/features/tab/order/util/generate-card';
 
 import CardButton from '../button';
 import styles from './index.module.css';

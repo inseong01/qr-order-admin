@@ -1,3 +1,8 @@
+/**
+ * @file AuthErrorHandler 클래스의 단위 테스트입니다.
+ * @description Zod 유효성 검사 오류, Supabase 인증 오류, 그리고 일반 오류 등
+ *              다양한 유형의 에러를 올바르게 처리하는지 검증합니다.
+ */
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { AuthErrorHandler } from '../../util/error-handler';
 import { ZodError, ZodIssue, ZodIssueCode } from 'zod';

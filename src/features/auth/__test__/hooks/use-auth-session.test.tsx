@@ -1,3 +1,8 @@
+/**
+ * @file useAuthSession 커스텀 훅의 단위 테스트입니다.
+ * @description supabase의 세션 변경(SIGNED_IN, SIGNED_OUT)에 따라
+ *              인증 상태(isLogin)가 올바르게 변경되는지 검증합니다.
+ */
 import { Session } from '@supabase/supabase-js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, renderHook, waitFor } from '@testing-library/react';
@@ -10,21 +15,23 @@ describe('useAuthSession', () => {
     vi.clearAllMocks();
   });
 
-  //  * 초기 세션 유효: 컴포넌트 마운트 시 supabase.auth.getSession이 유효한 세션을 반환할 때 isLogin이 true가 되고 authStatus가 'success'로 설정되는지 확인.
-
-  it('초기 세션 유효', async () => {
+  it('초기 세션이 유효할 경우, isLogin을 true로 설정', async () => {
+    // JWT 유효성 검증 모킹
     vi.doMock('../../util/verify-auth-jwt', () => ({
       verifyAuthJWT: vi.fn().mockResolvedValue(mockSession),
     }));
 
+    // Supabase 세션 조회 API 모킹
     vi.doMock('../../util/auth-supabase-api', () => ({
       getAuthSession: vi.fn().mockResolvedValue({ data: { session: mockSession } }),
     }));
 
+    // 스토리지 클리어 유틸 모킹
     vi.doMock('../../util/clear-storage-key', () => ({
       clearStorageKeys: vi.fn(),
     }));
 
+    // Supabase 클라이언트 모킹
     vi.doMock('@/lib/supabase', () => ({
       default: {
         auth: {
@@ -43,21 +50,23 @@ describe('useAuthSession', () => {
     });
   });
 
-  // * 초기 세션 무효: supabase.auth.getSession이 유효하지 않은 세션을 반환할 때 logoutAndClear가 호출되고 isLogin이 false가 되는지 확인.
-
-  it('초기 세션 무효', async () => {
+  it('초기 세션이 무효할 경우, isLogin을 false로 설정', async () => {
+    // JWT 유효성 검증 모킹 (세션 없음)
     vi.doMock('../../util/verify-auth-jwt', () => ({
       verifyAuthJWT: vi.fn().mockResolvedValue(null),
     }));
 
+    // Supabase 세션 조회 API 모킹 (에러 발생)
     vi.doMock('../../util/auth-supabase-api', () => ({
       getAuthSession: vi.fn().mockRejectedValue({ data: { session: mockSession } }),
     }));
 
+    // 스토리지 클리어 유틸 모킹
     vi.doMock('../../util/clear-storage-key', () => ({
       clearStorageKeys: vi.fn(),
     }));
 
+    // Supabase 클라이언트 모킹
     vi.doMock('@/lib/supabase', () => ({
       default: {
         auth: {
@@ -76,21 +85,23 @@ describe('useAuthSession', () => {
     });
   });
 
-  // * JWT 검증 실패: verifyJWT가 null을 반환할 때 logoutAndClear가 호출되는지 확인.
-
-  it('JWT 검증 실패', async () => {
+  it('JWT 검증에 실패할 경우, isLogin을 false로 설정', async () => {
+    // JWT 유효성 검증 모킹 (검증 실패)
     vi.doMock('../../util/verify-auth-jwt', () => ({
       verifyAuthJWT: vi.fn().mockResolvedValue(null),
     }));
 
+    // Supabase 세션 조회 API 모킹
     vi.doMock('../../util/auth-supabase-api', () => ({
       getAuthSession: vi.fn().mockResolvedValue({ data: { session: mockSession } }),
     }));
 
+    // 스토리지 클리어 유틸 모킹
     vi.doMock('../../util/clear-storage-key', () => ({
       clearStorageKeys: vi.fn(),
     }));
 
+    // Supabase 클라이언트 모킹
     vi.doMock('@/lib/supabase', () => ({
       default: {
         auth: {
@@ -109,20 +120,21 @@ describe('useAuthSession', () => {
     });
   });
 
-  // * `onAuthStateChange` - `SIGNED_OUT`: supabase.auth.onAuthStateChange에서 SIGNED_OUT 이벤트 발생 시 logoutAndClear 호출되는지 확인.
-
-  it('onAuthStateChange - SIGNED_OUT', async () => {
+  it('onAuthStateChange 이벤트가 SIGNED_OUT일 경우, isLogin을 false로 설정하고 스토리지 비움', async () => {
     const mockClearStorageKeys = vi.fn();
-
+    // 스토리지 클리어 유틸 모킹
     vi.doMock('../../util/clear-storage-key', () => ({ clearStorageKeys: mockClearStorageKeys }));
 
+    // JWT 유효성 검증 모킹
     vi.doMock('../../util/verify-auth-jwt', () => ({ verifyAuthJWT: vi.fn().mockResolvedValue(true) }));
 
+    // Supabase 세션 조회 API 모킹 (세션 없음)
     vi.doMock('../../util/auth-supabase-api', () => ({
       getAuthSession: vi.fn().mockResolvedValue({ data: { session: null } }),
     }));
 
     let savedCallback: any;
+    // Supabase 클라이언트 모킹
     vi.doMock('@/lib/supabase', () => ({
       default: {
         auth: {
@@ -145,19 +157,21 @@ describe('useAuthSession', () => {
     expect(mockClearStorageKeys).toHaveBeenCalled();
   });
 
-  // * `onAuthStateChange` - `SIGNED_IN`: SIGNED_IN 이벤트 발생 시 processSession이 호출되는지 확인.
-  it('`onAuthStateChange` - `SIGNED_IN`', async () => {
+  it('onAuthStateChange 이벤트가 SIGNED_IN일 경우, isLogin을 true로 설정', async () => {
     const mockClearStorageKeys = vi.fn();
-
+    // 스토리지 클리어 유틸 모킹
     vi.doMock('../../util/clear-storage-key', () => ({ clearStorageKeys: mockClearStorageKeys }));
 
+    // JWT 유효성 검증 모킹
     vi.doMock('../../util/verify-auth-jwt', () => ({ verifyAuthJWT: vi.fn().mockResolvedValue(true) }));
 
+    // Supabase 세션 조회 API 모킹
     vi.doMock('../../util/auth-supabase-api', () => ({
       getAuthSession: vi.fn().mockResolvedValue({ data: { session: mockSession } }),
     }));
 
     let savedCallback: any;
+    // Supabase 클라이언트 모킹
     vi.doMock('@/lib/supabase', () => ({
       default: {
         auth: {

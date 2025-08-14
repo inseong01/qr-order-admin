@@ -1,3 +1,8 @@
+/**
+ * @file authErrorHandler 유틸리티 함수의 단위 테스트입니다.
+ * @description Supabase 인증 에러 코드에 따라 적절한 사용자 메시지를 반환하고,
+ *              필요 시 캡챠를 새로고침하는지 검증합니다.
+ */
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { authErrorHandler } from '../../util/auth-error-handler';
 
