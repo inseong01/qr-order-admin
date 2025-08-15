@@ -7,7 +7,6 @@ import { languageAtom, themeAtom } from '@/store/settings-atom';
 
 import styles from './index.module.css';
 import GuestLink from '../guest-link';
-import { CAPTCHA_FAIL_TEST_KEY, CAPTCHA_PASS_TEST_KEY } from '../../const';
 import { authStatusAtom, captchaTokenAtom, setCaptchaTokenAtom } from '../../store/auth-atom';
 
 type ConatinerProps = {
@@ -36,9 +35,9 @@ export default function AuthContainer({ children }: ConatinerProps) {
       if (widgetId.current) return;
 
       const id = turnstile.render('.cf-turnstile', {
-        // sitekey: import.meta.env.VITE_SITE_KEY,
+        sitekey: import.meta.env.VITE_SITE_KEY,
         // sitekey:  CAPTCHA_PASS_TEST_KEY,
-        sitekey: CAPTCHA_FAIL_TEST_KEY,
+        // sitekey: CAPTCHA_FAIL_TEST_KEY,
         theme,
         language,
         callback: (token) => {

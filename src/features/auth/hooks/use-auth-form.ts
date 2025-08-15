@@ -15,7 +15,6 @@ import {
 } from '../store/auth-atom';
 import useSuccessRedirect from './use-success-redirect';
 import { AuthErrorHandler } from '../util/error-handler';
-import { AuthError } from '@supabase/supabase-js';
 
 type UseAuthFormProps<T> = {
   formAtom: PrimitiveAtom<T>;

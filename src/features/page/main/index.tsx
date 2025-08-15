@@ -1,9 +1,7 @@
-import { Suspense } from 'react';
 import { useAtomValue } from 'jotai';
 import { AnimatePresence, motion } from 'motion/react';
 
 import { menuAtom } from '@/components/ui/menu/store/atom';
-import { ExceptionText } from '@/components/ui/exception';
 
 import { windowStateAtom } from '@/store/window-atom';
 
