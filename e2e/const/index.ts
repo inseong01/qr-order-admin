@@ -16,3 +16,6 @@ export const TEST_CAPTCHA_WIDGET_ID = 'mock-widget-1';
 
 export const TEST_ACCESS_TOKEN = 'mock-access-token';
 export const TEST_REFRESH_TOKEN = 'mock-refresh-token';
+
+export const CAPTCHA_PASS_TEST_KEY = '1x00000000000000000000AA';
+export const CAPTCHA_FAIL_TEST_KEY = '2x00000000000000000000AB';

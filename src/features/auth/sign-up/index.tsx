@@ -1,4 +1,4 @@
-import { useAtomValue } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 
 import { PATHS } from '@/constants/paths';
 import validate from '@/utils/function/validate';
@@ -16,12 +16,13 @@ import {
   InputCaption,
 } from '../components/layout';
 import useDisabledState from '../hooks/use-disabled';
-import { captchaTokenAtom, errorFormAtom, signupFormAtom } from '../store/auth-atom';
-import { signUpNewUser } from '../util/auth-supabase-api'; // Added
+import { signUpNewUser } from '../util/auth-supabase-api';
+import { authStatusAtom, captchaTokenAtom, errorFormAtom, signupFormAtom } from '../store/auth-atom';
 
 export default function SignUpPage() {
   const captchaToken = useAtomValue(captchaTokenAtom);
   const errorForm = useAtomValue(errorFormAtom);
+  const setAuthStatus = useSetAtom(authStatusAtom);
   const { disabled, authStatus } = useDisabledState();
   const { formState, handleInputChange, handleSubmit } = useAuthForm({
     formAtom: signupFormAtom,
@@ -29,22 +30,20 @@ export default function SignUpPage() {
     onSubmit: async (formData) => {
       // 회원가입
       const { error } = await signUpNewUser(formData.id, formData.password, captchaToken, {
-        signup_origin: 'qr_order_adim',
+        signup_origin: 'qr_order_admin',
         is_approved: false,
       });
 
       if (error) throw error;
+
+      // 성공 UI 지연 등장
+      setTimeout(() => {
+        setAuthStatus('success');
+      }, 300);
     },
   });
 
-  const description =
-    authStatus === 'error'
-      ? '검증 실패'
-      : !captchaToken
-        ? '확인 중...'
-        : authStatus === 'success'
-          ? '가입 성공'
-          : '가입하기';
+  const description = authStatus === 'error' ? '검증 실패' : !captchaToken ? '확인 중...' : '가입하기';
   const idErrorMsg = errorForm.get('id') ?? '';
   const pwdErrorMsg = errorForm.get('password') ?? '';
   const confirmPwdErrorMsg = errorForm.get('confirmPassword') ?? '';

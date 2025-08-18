@@ -15,6 +15,8 @@ interface ImportMeta {
 interface Window {
   onloadTurnstileCallback?: () => void;
   turnstile?: Turnstile;
+  // turnstile 테스트 키 환경변수
+  TEST_SITEKEY?: string;
 }
 
 const turnstile: Turnstile;

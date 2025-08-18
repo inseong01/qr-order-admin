@@ -21,6 +21,7 @@ export default function AuthContainer({ children }: ConatinerProps) {
   const setAuthStatus = useSetAtom(authStatusAtom);
   const { '*': params } = useParams();
   const widgetId = useRef('');
+  const sitekeyToUse = window.TEST_SITEKEY ?? import.meta.env.VITE_SITE_KEY;
 
   /** 캡챠 실행 */
   useEffect(() => {
@@ -35,13 +36,15 @@ export default function AuthContainer({ children }: ConatinerProps) {
       if (widgetId.current) return;
 
       const id = turnstile.render('.cf-turnstile', {
-        sitekey: import.meta.env.VITE_SITE_KEY,
-        // sitekey:  CAPTCHA_PASS_TEST_KEY,
-        // sitekey: CAPTCHA_FAIL_TEST_KEY,
+        sitekey: sitekeyToUse,
         theme,
         language,
         callback: (token) => {
+          if (!token) {
+            setAuthStatus('error');
+          }
           setCaptchaToken(token);
+          setAuthStatus('idle');
         },
         'error-callback': () => {
           setAuthStatus('error');

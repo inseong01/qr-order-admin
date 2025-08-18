@@ -1,5 +1,4 @@
 import { ZodType } from 'zod';
-import { useParams } from 'react-router';
 import { ChangeEvent, FormEvent, useEffect } from 'react';
 import { PrimitiveAtom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 
@@ -37,12 +36,11 @@ export default function useAuthForm<T>({ formAtom, validationSchema, onSubmit }:
   const captchaRefresh = useSetAtom(captchaRefreshAtom);
   const resetForms = useSetAtom(resetAllFormsAtom);
   const showToast = useSetAtom(showToastAtom);
-  const { '*': params } = useParams();
 
-  /** 경로 이동 시 폼 상태 초기화 */
+  /** 경로 이동마다 폼 상태 초기화 */
   useEffect(() => {
     resetForms();
-  }, [params, resetForms]);
+  }, []);
 
   /** 성공 리다이렉트 */
   useSuccessRedirect();

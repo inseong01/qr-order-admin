@@ -36,14 +36,7 @@ export default function LoginPage() {
     },
   });
 
-  const description =
-    authStatus === 'error'
-      ? '검증 실패'
-      : !captchaToken
-        ? '확인 중...'
-        : authStatus === 'success'
-          ? '로그인 성공'
-          : '입력하기';
+  const description = authStatus === 'error' ? '검증 실패' : !captchaToken ? '확인 중...' : '입력하기';
   const idErrorMsg = errorForm.get('id') ?? '';
   const pwdErrorMsg = errorForm.get('password') ?? '';
 

@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { Session } from '@supabase/supabase-js';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom, useStore } from 'jotai';
 
 import supabase from '@/lib/supabase';
 import { verifyAuthJWT } from '../util/verify-auth-jwt';
@@ -10,17 +10,18 @@ import { authStatusAtom, captchaRefreshAtom, isLoggedInAtom, setUserSessionAtom 
 
 export default function useAuthSession() {
   const isLogin = useAtomValue(isLoggedInAtom);
-  const authStatus = useAtomValue(authStatusAtom);
   const setAuthStatus = useSetAtom(authStatusAtom);
   const setSession = useSetAtom(setUserSessionAtom);
   const captchaRefresh = useSetAtom(captchaRefreshAtom);
 
-  /** 로그아웃 및 상태 초기화 */
+  /** 로그아웃 및 스토리지 초기화 */
   const logoutAndClear = useCallback(() => {
     setSession(null);
     clearStorageKeys();
-    setAuthStatus('idle');
-  }, [setSession, setAuthStatus]);
+    captchaRefresh();
+  }, [setSession, captchaRefresh]);
+
+  const store = useStore();
 
   /**
    * 세션 유효성 검사 + 상태 반영
@@ -29,13 +30,15 @@ export default function useAuthSession() {
    */
   const processSession = useCallback(
     async (session: Session | null) => {
-      if (authStatus === 'success') return;
+      const currentAuthStatus = store.get(authStatusAtom);
+      if (currentAuthStatus === 'success' || currentAuthStatus === 'error') return;
 
       if (!session) {
         return logoutAndClear();
       }
 
       setAuthStatus('loading');
+
       try {
         const validSession = await verifyAuthJWT();
         if (!validSession) {
@@ -49,7 +52,7 @@ export default function useAuthSession() {
         logoutAndClear();
       }
     },
-    [logoutAndClear, setAuthStatus, setSession]
+    [store, logoutAndClear, setAuthStatus, setSession]
   );
 
   /** 초기 마운트 시 세션 검증 */
@@ -70,14 +73,13 @@ export default function useAuthSession() {
     } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_OUT') {
         logoutAndClear();
-        captchaRefresh();
       } else {
         processSession(session);
       }
     });
 
     return () => subscription.unsubscribe();
-  }, [processSession, logoutAndClear, captchaRefresh]);
+  }, [processSession, logoutAndClear]);
 
   return { isLogin };
 }

@@ -4,7 +4,7 @@ https://playwright.dev/
 
 ---
 
-## 1. 로그인 성공 시나리오
+## 1. 로그인 성공 시나리오 v
 
 * Fixture: `successTest`
 * 사전 조건: Captcha 성공, Supabase `signInWithPassword` 성공
@@ -19,12 +19,11 @@ https://playwright.dev/
 
 ---
 
-## 2. 로그인 실패 시나리오
+## 2. 로그인 실패 시나리오 v
 
-### 2-1. 잘못된 자격 증명 (Supabase 인증 실패)
+### 2-1. 잘못된 입력 증명 v
 
 * Fixture: `wrongInputTest`
-* 사전 조건: Captcha 성공, Supabase `signInWithPassword` 실패
 * 테스트 흐름:
 
   1. 로그인 페이지 이동
@@ -35,7 +34,20 @@ https://playwright.dev/
   6. 입력 필드 상태 확인(선택 사항)
   7. 페이지 이동 없음
 
-### 2-2. 캡챠 실패
+### 2-2. 잘못된 자격 증명 (Supabase 인증 실패) v
+
+* Fixture: `wrongUserTest` (mock-auth-api.ts)
+* 테스트 흐름:
+
+  1. 로그인 페이지 이동
+  2. 이메일/비밀번호 입력
+  3. 로그인 버튼 클릭
+  4. API 호출 실패 확인
+  5. 토스트 알림 확인 (예: "이메일/비밀번호가 올바르지 않습니다.")
+  6. 입력 필드 상태 확인
+  7. 페이지 이동 없음
+
+### 2-3. 캡챠 실패 v
 
 * Fixture: `wrongVerificationTest`
 * 사전 조건: Captcha 실패, Supabase API 호출 없음
@@ -51,7 +63,7 @@ https://playwright.dev/
 
 ## 3. 회원가입 성공 시나리오
 
-* Fixture: `successTest`
+* Fixture: C:\Users\Inseong\Desktop\folder\project\qr-code-admin\e2e\fixtures\signup.fixture.ts
 * 사전 조건: Captcha 성공, Supabase `signUp` 성공
 * 테스트 흐름:
 
@@ -67,7 +79,7 @@ https://playwright.dev/
 
 ### 4-1. 이미 등록된 이메일 (Supabase 인증 실패)
 
-* Fixture: `wrongInputTest`
+* Fixture: C:\Users\Inseong\Desktop\folder\project\qr-code-admin\e2e\fixtures\signup.fixture.ts
 * 사전 조건: Captcha 성공, Supabase `signUp` 실패
 * 테스트 흐름:
 
@@ -80,7 +92,7 @@ https://playwright.dev/
 
 ### 4-2. 캡챠 실패
 
-* Fixture: `wrongVerificationTest`
+* Fixture: C:\Users\Inseong\Desktop\folder\project\qr-code-admin\e2e\fixtures\signup.fixture.ts
 * 사전 조건: Captcha 실패, Supabase 호출 없음
 * 테스트 흐름:
 

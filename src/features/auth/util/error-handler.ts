@@ -34,7 +34,8 @@ export class AuthErrorHandler {
       }
     }
 
-    this.show(`알 수 없는 오류가 발생했습니다. (${error})`);
+    this.show(`알 수 없는 오류가 발생했습니다.`);
+    console.error(error);
   }
 
   private show = (msg: string) => {

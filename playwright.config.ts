@@ -76,6 +76,7 @@ export default defineConfig({
     command: 'npm run dev',
     // command: 'npm run preview',
     url: 'http://localhost:5173',
+    // url: 'http://localhost:4173',
     reuseExistingServer: !process.env.CI,
   },
 });

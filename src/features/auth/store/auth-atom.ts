@@ -21,7 +21,14 @@ export type FormInputs = {
 // 로그인 상태
 export const isLoggedInAtom = atom((get) => !!get(userSessionAtom));
 
-// 인증 절차 상태
+/**
+ * 인증 절차 상태
+ *
+ * `loading` : 비동기 작업이 진행 중인 상태
+ * `idle`    : 비동기 작업이 없고, 사용자의 입력을 기다리는 유휴 상태
+ * `success` : 인증 작업이 성공적으로 완료된 상태
+ * `error`   : 인증 과정에서 오류가 발생한 상태
+ */
 type AuthStatusAtom = 'idle' | 'loading' | 'success' | 'error';
 export const authStatusAtom = atom<AuthStatusAtom>('loading');
 
@@ -80,5 +87,5 @@ export const setCaptchaTokenAtom = atom(null, (_, set, token: string) => {
 // 토큰 재발급
 export const captchaRefreshAtom = atom(null, (_, set) => {
   set(captchaTokenAtom, '');
-  set(authStatusAtom, 'idle'); // 상태 초기화
+  set(authStatusAtom, 'idle');
 });

@@ -25,7 +25,7 @@ export const productResetPasswordUrl = `${import.meta.env.VITE_CLIENT_URL + PATH
 export const CAPTCHA_TOKEN = 'captcha_token';
 
 /* 리다이렉트 지연 */
-export const REDIRECT_DELAY = 1500;
+export const REDIRECT_DELAY = 2000;
 
 /* 캡챠 테스트 키 */
 export const CAPTCHA_PASS_TEST_KEY = '1x00000000000000000000AA';
