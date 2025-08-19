@@ -42,7 +42,7 @@ export const signupFormAtom = atom<FormInputs>({ id: '', password: '', confirmPa
 export const findPwdFormAtom = atom({ id: '' });
 
 // 비밀번호 수정
-export const resetPwdFormAtom = atom({ password: '' });
+export const resetPwdFormAtom = atom({ password: '', confirmPassword: '' });
 
 /* 입력 에러 */
 type ErrorFormKeys = Map<keyof FormInputs, string>;
@@ -69,7 +69,7 @@ export const resetAllFormsAtom = atom(null, (_, set) => {
   set(loginFormAtom, { id: '', password: '' });
   set(signupFormAtom, { id: '', password: '', confirmPassword: '' });
   set(findPwdFormAtom, { id: '' });
-  set(resetPwdFormAtom, { password: '' });
+  set(resetPwdFormAtom, { password: '', confirmPassword: '' });
   set(errorFormAtom, new Map());
   set(authStatusAtom, 'idle');
 });

@@ -78,6 +78,10 @@
   flex-direction: column;
   gap: 24px;
 }
+.form[data-has-link='false'] {
+  min-height: 230px;
+  justify-content: space-between;
+}
 
 /* AuthFormInputBox */
 .inputBox {

@@ -46,7 +46,7 @@ export default function LoginPage() {
       <AuthFormTitle text='로그인' />
 
       {/* 중간 */}
-      <AuthForm onSubmit={handleSubmit}>
+      <AuthForm onSubmit={handleSubmit} hasLink={true}>
         <AuthFormInputBox>
           <input
             required

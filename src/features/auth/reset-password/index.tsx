@@ -1,21 +1,20 @@
-import { useAtomValue } from 'jotai';
-import { useNavigate } from 'react-router';
+import { useAtomValue, useSetAtom } from 'jotai';
 
-import { PATHS } from '@/constants/paths';
 import validate from '@/utils/function/validate';
 
 import styles from './../common.module.css';
+import { PWD_MAX, PWD_MIN } from '../const';
 import useAuthForm from '../hooks/use-auth-form';
 import AuthContainer from '../components/container';
 import useDisabledState from '../hooks/use-disabled';
 import { updateUserPassword } from '../util/auth-supabase-api';
-import { captchaTokenAtom, errorFormAtom, resetPwdFormAtom } from '../store/auth-atom';
+import { authStatusAtom, captchaTokenAtom, errorFormAtom, resetPwdFormAtom } from '../store/auth-atom';
 import { AuthForm, AuthFormInputBox, AuthFormSubmitButton, AuthFormTitle, InputCaption } from '../components/layout';
 
 export default function ResetPasswordPage() {
   const captchaToken = useAtomValue(captchaTokenAtom);
   const errorForm = useAtomValue(errorFormAtom);
-  const navigate = useNavigate();
+  const setAuthStatus = useSetAtom(authStatusAtom);
   const { disabled, authStatus } = useDisabledState();
   const { formState, handleInputChange, handleSubmit } = useAuthForm({
     formAtom: resetPwdFormAtom,
@@ -24,28 +23,18 @@ export default function ResetPasswordPage() {
       // 비밀번호 수정
       const { error } = await updateUserPassword(formData.password);
 
-      // 지연
-      await new Promise((resolve) => setTimeout(resolve, 700));
-
       if (error) throw error;
 
-      // 알림
-      alert('수정되었습니다!');
-
-      // 리다이렉트
-      navigate(PATHS.AUTH.LOGIN, { replace: true });
+      // 성공 UI 지연 등장
+      setTimeout(() => {
+        setAuthStatus('success');
+      }, 300);
     },
   });
 
-  const description =
-    authStatus === 'error'
-      ? '검증 실패'
-      : !captchaToken
-        ? '확인 중...'
-        : authStatus === 'success'
-          ? '수정 성공'
-          : '수정하기';
+  const description = authStatus === 'error' ? '검증 실패' : !captchaToken ? '확인 중...' : '수정하기';
   const pwdErrorMsg = errorForm.get('password') ?? '';
+  const confirmPwdErrorMsg = errorForm.get('confirmPassword') ?? '';
 
   return (
     <AuthContainer>
@@ -53,7 +42,7 @@ export default function ResetPasswordPage() {
       <AuthFormTitle text='비밀번호 수정' />
 
       {/* 중간 */}
-      <AuthForm onSubmit={handleSubmit}>
+      <AuthForm onSubmit={handleSubmit} hasLink={false}>
         <AuthFormInputBox>
           <input
             required
@@ -61,13 +50,29 @@ export default function ResetPasswordPage() {
             name='password'
             aria-invalid={Boolean(pwdErrorMsg)}
             data-invalid={Boolean(pwdErrorMsg)}
+            minLength={PWD_MIN}
+            maxLength={PWD_MAX}
             className={styles.input}
-            placeholder='새로운 비밀번호를 입력해주세요.'
+            placeholder='비밀번호'
             value={formState.password}
             onChange={handleInputChange}
             disabled={disabled}
           />
           <InputCaption text={pwdErrorMsg} hasError={Boolean(pwdErrorMsg)} />
+
+          <input
+            required
+            type='password'
+            name='confirmPassword'
+            aria-invalid={Boolean(confirmPwdErrorMsg)}
+            data-invalid={Boolean(confirmPwdErrorMsg)}
+            className={styles.input}
+            placeholder='비밀번호 확인'
+            value={formState.confirmPassword}
+            onChange={handleInputChange}
+            disabled={disabled}
+          />
+          <InputCaption text={confirmPwdErrorMsg} hasError={Boolean(confirmPwdErrorMsg)} />
         </AuthFormInputBox>
 
         <AuthFormSubmitButton text={description} disabled={disabled} />

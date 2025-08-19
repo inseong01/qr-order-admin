@@ -1,4 +1,4 @@
-import { useAtomValue } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 
 import { PATHS } from '@/constants/paths';
 import validate from '@/utils/function/validate';
@@ -18,11 +18,12 @@ import {
 import useDisabledState from '../hooks/use-disabled';
 import { requestPasswordResetEmail } from '../util/auth-supabase-api';
 import { localResetPasswordUrl, productResetPasswordUrl } from '../const';
-import { captchaTokenAtom, errorFormAtom, findPwdFormAtom } from '../store/auth-atom';
+import { authStatusAtom, captchaTokenAtom, errorFormAtom, findPwdFormAtom } from '../store/auth-atom';
 
 export default function FindPasswordPage() {
   const captchaToken = useAtomValue(captchaTokenAtom);
   const errorForm = useAtomValue(errorFormAtom);
+  const setAuthStatus = useSetAtom(authStatusAtom);
   const { disabled, authStatus } = useDisabledState();
   const { formState, handleInputChange, handleSubmit } = useAuthForm({
     formAtom: findPwdFormAtom,
@@ -34,8 +35,10 @@ export default function FindPasswordPage() {
 
       if (error) throw error;
 
-      // 알림
-      alert('메일을 확인해주세요.');
+      // 성공 UI 지연 등장
+      setTimeout(() => {
+        setAuthStatus('success');
+      }, 300);
     },
   });
 
@@ -55,7 +58,7 @@ export default function FindPasswordPage() {
       <AuthFormTitle text='비밀번호 찾기' />
 
       {/* 중간 */}
-      <AuthForm onSubmit={handleSubmit}>
+      <AuthForm onSubmit={handleSubmit} hasLink={true}>
         <AuthFormInputBox>
           <input
             required

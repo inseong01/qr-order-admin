@@ -149,26 +149,34 @@ const findPassword = z.object({
 });
 
 /** 비밀번호 수정 스키마 */
-const resetPassword = z.object({
-  // 비밀번호
-  password: z
-    .string()
-    .nonempty({ message: '비밀번호를 입력해주세요.' })
-    .min(PWD_MIN, { message: `최소 ${PWD_MIN}자 이상이어야 합니다.` })
-    .max(PWD_MAX, { message: `최대 ${PWD_MAX}자까지 가능합니다.` })
-    .refine((val) => passwordLetterRegex.test(val), {
-      message: '소문자, 대문자가 포함되어야 합니다.',
-    })
-    .refine((val) => passwordNumberRegex.test(val), {
-      message: '숫자가 포함되어야 합니다.',
-    })
-    .refine((val) => passwordSpecialRegex.test(val), {
-      message: '특수문자가 포함되어야 합니다.',
-    })
-    .refine((val) => !val.includes('\\'), {
-      message: `\\ 특수문자는 사용할 수 없습니다.`,
-    }),
-});
+const resetPassword = z
+  .object({
+    // 비밀번호
+    password: z
+      .string()
+      .nonempty({ message: '비밀번호를 입력해주세요.' })
+      .min(PWD_MIN, { message: `최소 ${PWD_MIN}자 이상이어야 합니다.` })
+      .max(PWD_MAX, { message: `최대 ${PWD_MAX}자까지 가능합니다.` })
+      .refine((val) => passwordLetterRegex.test(val), {
+        message: '소문자, 대문자가 포함되어야 합니다.',
+      })
+      .refine((val) => passwordNumberRegex.test(val), {
+        message: '숫자가 포함되어야 합니다.',
+      })
+      .refine((val) => passwordSpecialRegex.test(val), {
+        message: '특수문자가 포함되어야 합니다.',
+      })
+      .refine((val) => !val.includes('\\'), {
+        message: `\\ 특수문자는 사용할 수 없습니다.`,
+      }),
+
+    // 비밀번호 확인
+    confirmPassword: z.string().nonempty({ message: '비밀번호 확인은 필수 입력 항목입니다.' }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    path: ['confirmPassword'],
+    message: '비밀번호가 일치하지 않습니다.',
+  });
 
 /** 캡챠 토큰 검증 스키마 */
 const captchaToken = z.string().nonempty({ message: '캡챠 토큰이 누락되었습니다.' });

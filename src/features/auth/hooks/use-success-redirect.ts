@@ -22,7 +22,9 @@ export default function useSuccessRedirect() {
         path = PATHS.ROOT;
         break;
       }
-      case PATHS.AUTH.SIGNUP: {
+      case PATHS.AUTH.SIGNUP:
+      case PATHS.AUTH.FIND.PASSWORD:
+      case PATHS.AUTH.RESET.PASSWORD: {
         replace = false;
         path = PATHS.AUTH.LOGIN;
         break;

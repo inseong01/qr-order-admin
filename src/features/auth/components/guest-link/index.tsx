@@ -4,7 +4,7 @@ import styles from './index.module.css';
 import useAuthForm from '../../hooks/use-auth-form';
 import useDisabledState from '../../hooks/use-disabled';
 import { captchaTokenAtom } from '../../store/auth-atom';
-import { signInAnonymously } from '../../util/auth-supabase-api'; // Added
+import { signInAnonymously } from '../../util/auth-supabase-api';
 
 type GuestLinkProps = {
   captchaToken: string;

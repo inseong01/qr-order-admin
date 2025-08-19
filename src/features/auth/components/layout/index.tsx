@@ -57,13 +57,14 @@ export function AuthFormSubmitButton({ text, disabled }: AuthFormSubmitButtonPro
 
 type AuthFormProps = {
   children: ReactNode;
+  hasLink: boolean;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
 };
 
 // AuthForm
-export function AuthForm({ children, onSubmit }: AuthFormProps) {
+export function AuthForm({ children, hasLink, onSubmit }: AuthFormProps) {
   return (
-    <form className={styles.form} onSubmit={onSubmit}>
+    <form className={styles.form} onSubmit={onSubmit} data-has-link={hasLink}>
       {children}
     </form>
   );

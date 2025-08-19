@@ -18,12 +18,22 @@ export default function PublicRoute() {
 
   // 로그인 성공 페이지
   if (isLogin) {
-    return <AuthSuccess text='로그인' page='메인' />;
+    return <AuthSuccess feature='로그인' movePage='메인' />;
   }
 
   // 회원가입 성공 페이지
   if (pathname === PATHS.AUTH.SIGNUP && authStatus === 'success') {
-    return <AuthSuccess text='회원가입' page='로그인' />;
+    return <AuthSuccess feature='회원가입' movePage='로그인' />;
+  }
+
+  // 비밀번호 찾기 성공 페이지
+  if (pathname === PATHS.AUTH.FIND.PASSWORD && authStatus === 'success') {
+    return <AuthSuccess feature='메일 전송' movePage='로그인' />;
+  }
+
+  // 비밀번호 재설정 성공 페이지
+  if (pathname === PATHS.AUTH.RESET.PASSWORD && authStatus === 'success') {
+    return <AuthSuccess feature='비밀번호 재설정' movePage='로그인' />;
   }
 
   return <Outlet />;

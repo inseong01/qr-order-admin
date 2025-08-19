@@ -11,7 +11,7 @@ import styles from './index.module.css';
 export default function ToastNotification() {
   const [alertState, setAlertState] = useAtom(toastStateAtom);
   const { '*': params } = useParams();
-  const titleArr = alertState.title.split('.');
+  const titleArr = alertState.title.split('.').slice(0, -1);
 
   const handleClose = () => {
     // params 있으면 배경 클릭 닫기 제한('/': undefined)
@@ -40,7 +40,7 @@ export default function ToastNotification() {
           {titleArr.map((t, idx: number) => {
             return (
               <div key={idx} className={styles.textBox}>
-                <span>{t}</span>
+                <span>{t}.</span>
               </div>
             );
           })}

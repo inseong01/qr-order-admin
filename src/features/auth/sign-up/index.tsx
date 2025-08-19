@@ -54,7 +54,7 @@ export default function SignUpPage() {
       <AuthFormTitle text='회원가입' />
 
       {/* 중간 */}
-      <AuthForm onSubmit={handleSubmit}>
+      <AuthForm onSubmit={handleSubmit} hasLink={true}>
         <AuthFormInputBox>
           <input
             required

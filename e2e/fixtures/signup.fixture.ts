@@ -8,7 +8,6 @@ let isSupabaseCalled = false;
 
 /**
  * Supabase 회원가입 요청을 모킹하여 성공 응답을 반환합니다.
- * @param page Playwright Page 객체
  */
 async function mockSuccessSignup(page: Page) {
   isSupabaseCalled = false;
@@ -20,7 +19,6 @@ async function mockSuccessSignup(page: Page) {
       body: JSON.stringify({
         user: { id: TEST_ACCOUNT.ID, email: TEST_ACCOUNT.ID },
         session: { access_token: TEST_ACCESS_TOKEN },
-        error: null,
       }),
     });
   });
@@ -28,7 +26,6 @@ async function mockSuccessSignup(page: Page) {
 
 /**
  * Supabase 회원가입 요청을 모킹하여 실패 응답 (이미 가입된 사용자)을 반환합니다.
- * @param page Playwright Page 객체
  */
 async function mockFailSignup(page: Page) {
   isSupabaseCalled = false;
@@ -37,11 +34,15 @@ async function mockFailSignup(page: Page) {
     route.fulfill({
       status: 400,
       contentType: 'application/json',
-      body: JSON.stringify({
-        user: null,
-        sesstion: null,
-        error: { message: 'User already registered', status: 400 },
-      }),
+      headers: {
+        'access-control-expose-headers': 'X-Total-Count, Link, X-Supabase-Api-Version',
+        'x-supabase-api-version': '2024-01-01',
+        'x-sb-error-code': 'email_exists', // 선택
+      },
+      json: {
+        code: 'email_exists',
+        message: 'Email address already exists in the system.',
+      },
     });
   });
 }

@@ -2,11 +2,11 @@ import styles from './index.module.css';
 import useSuccessRedirect from '../../hooks/use-success-redirect';
 
 type AuthSuccessProps = {
-  text: string;
-  page: string;
+  feature: string;
+  movePage: string;
 };
 
-export default function AuthSuccess({ text, page }: AuthSuccessProps) {
+export default function AuthSuccess({ feature, movePage }: AuthSuccessProps) {
   // 지연 후 리다이렉트 처리
   useSuccessRedirect();
 
@@ -17,8 +17,8 @@ export default function AuthSuccess({ text, page }: AuthSuccessProps) {
         <div className={styles.icon}>✔️</div>
 
         {/* 내용 */}
-        <h1 className={styles.title}>{text} 성공!</h1>
-        <p className={styles.message}>잠시 후 {page} 페이지로 이동합니다.</p>
+        <h1 className={styles.title}>{feature} 성공!</h1>
+        <p className={styles.message}>잠시 후 {movePage} 페이지로 이동합니다.</p>
       </div>
     </div>
   );

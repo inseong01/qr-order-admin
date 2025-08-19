@@ -1,5 +1,5 @@
 import { ZodError, ZodIssue } from 'zod';
-import { AuthError } from '@supabase/supabase-js';
+import { isAuthError } from '@supabase/supabase-js';
 
 import { authErrorHandler } from './auth-error-handler';
 
@@ -20,13 +20,13 @@ export class AuthErrorHandler {
 
   public handle(error: unknown) {
     // Zod
-    if (error instanceof ZodError) {
+    if (error instanceof ZodError && error.name === 'ZodError') {
       this.setInputMessage(error.issues);
       return;
     }
 
     // Supabase Auth
-    if (error instanceof AuthError) {
+    if (isAuthError(error)) {
       const handler = this.authHandler[String(error.code)];
       if (handler) {
         handler();

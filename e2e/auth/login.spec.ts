@@ -8,6 +8,8 @@ import {
   loginSuccessTest,
 } from '../fixtures/login.fixture';
 
+// button[type="submit"] 단일 선택 불가능 - 방문자 입장, 입력하기 버튼 중복
+
 test.describe('로그인', () => {
   test.describe('성공 시나리오', () => {
     loginSuccessTest('로그인 성공 후 메인 페이지로 이동', async ({ page }) => {
@@ -97,18 +99,24 @@ test.describe('로그인', () => {
 
       const idInput = page.locator('input[name="id"]');
       const pwdInput = page.locator('input[name="password"]');
+      const loginButton = page.getByText('입력하기', { exact: true });
 
-      // 2. 이메일, 비밀번호 입력
+      // 2. 로그인 버튼 상태 확인
+      expect(loginButton).toBeVisible();
+
+      // 3. 이메일, 비밀번호 입력
+      await idInput.click();
       await idInput.fill(TEST_ACCOUNT.ID);
+
+      await pwdInput.click();
       await pwdInput.fill(TEST_ACCOUNT.PASSWORD);
 
-      // 3. 로그인 버튼 클릭
-      const loginButton = page.getByText('입력하기', { exact: true });
+      // 4. 로그인 버튼 클릭
       await loginButton.click();
 
-      // 4. 에러 모달 메시지 확인
-      const errorMessage = page.getByText('알 수 없는 오류가 발생했습니다');
-      await expect(errorMessage).toBeVisible({ timeout: 500 }); // 모달 감지 대기 시간 설정
+      // 5. 에러 모달 메시지 확인
+      const errorMessage = page.getByText('이메일/비밀번호가 올바르지 않습니다.');
+      await expect(errorMessage).toBeVisible();
 
       // 6. 로그인 버튼 스타일 변화 확인 (오류 문구 발생)
       const changedLoginButton = page.getByText('검증 실패', { exact: true });

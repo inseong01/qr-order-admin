@@ -8,7 +8,6 @@ let isSupabaseCalled = false;
 
 /**
  * Supabase 로그인 요청을 모킹하여 성공 응답을 반환합니다.
- * @param page Playwright Page 객체
  */
 async function mockSuccessLogin(page: Page) {
   isSupabaseCalled = false;
@@ -41,7 +40,6 @@ async function mockSuccessLogin(page: Page) {
 
 /**
  * Supabase 로그인 요청을 모킹하여 실패 응답(400)을 반환합니다.
- * @param page Playwright Page 객체
  */
 async function mockFailLogin(page: Page) {
   isSupabaseCalled = false;
@@ -50,11 +48,15 @@ async function mockFailLogin(page: Page) {
     route.fulfill({
       status: 400,
       contentType: 'application/json',
-      body: JSON.stringify({
-        user: null,
-        session: null,
-        error: { code: 'bad_json', status: 400 },
-      }),
+      headers: {
+        'access-control-expose-headers': 'X-Total-Count, Link, X-Supabase-Api-Version',
+        'x-supabase-api-version': '2024-01-01',
+        'x-sb-error-code': 'invalid_credentials', // 선택
+      },
+      json: {
+        code: 'invalid_credentials',
+        message: 'Login credentials or grant type not recognized.',
+      },
     });
   });
 }
