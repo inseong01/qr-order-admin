@@ -4,7 +4,7 @@ export const ROUTES = {
   SIGNUP: 'signup',
   FIND: 'find',
   AUTH: 'auth',
-  RESET: 'reset',
+  CHANGE: 'change',
   PASSWORD: 'password',
   ROOT: '/',
   ALL: '*',

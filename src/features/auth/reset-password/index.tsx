@@ -21,14 +21,14 @@ export default function ResetPasswordPage() {
     validationSchema: validate.schema.resetPassword,
     onSubmit: async (formData) => {
       // 비밀번호 수정
-      const { error } = await updateUserPassword(formData.password);
+      const updatePwd = await updateUserPassword(formData.password);
 
-      if (error) throw error;
+      if (updatePwd.error) throw updatePwd.error;
 
       // 성공 UI 지연 등장
       setTimeout(() => {
         setAuthStatus('success');
-      }, 300);
+      }, 500);
     },
   });
 

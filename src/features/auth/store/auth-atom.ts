@@ -87,5 +87,4 @@ export const setCaptchaTokenAtom = atom(null, (_, set, token: string) => {
 // 토큰 재발급
 export const captchaRefreshAtom = atom(null, (_, set) => {
   set(captchaTokenAtom, '');
-  set(authStatusAtom, 'idle');
 });

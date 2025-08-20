@@ -5,8 +5,8 @@ export async function verifyAuthJWT() {
 
   if (error) {
     console.error(error.message);
-    return null;
+    throw error;
   }
 
-  return data.session;
+  return data;
 }

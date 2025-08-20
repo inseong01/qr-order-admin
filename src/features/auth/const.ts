@@ -18,8 +18,8 @@ export const passwordSpecialRegex = new RegExp(`(?=.*[${ESCAPED}])`);
 export const passwordRegex = new RegExp(`^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[${ESCAPED}])[a-zA-Z\\d${ESCAPED}]+$`);
 
 /* 리다이렉트 경로 */
-export const localResetPasswordUrl = `http://localhost:5173${PATHS.AUTH.RESET.PASSWORD}`;
-export const productResetPasswordUrl = `${import.meta.env.VITE_CLIENT_URL + PATHS.AUTH.RESET.PASSWORD}`;
+export const localResetPasswordUrl = `http://localhost:5173${PATHS.ROOT.CHANGE.PASSWORD}` as const;
+export const productResetPasswordUrl = `${import.meta.env.VITE_CLIENT_URL + PATHS.ROOT.CHANGE.PASSWORD}`;
 
 /* 토큰명 */
 export const CAPTCHA_TOKEN = 'captcha_token';

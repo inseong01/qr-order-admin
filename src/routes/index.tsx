@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router';
 import App from '@/App';
 import NotFound from '@/Not-found';
 import { ROUTES } from '@/constants/routes';
+import ResetPasswordPage from '@/features/auth/reset-password';
 import GlobalSettingsHandler from '@/components/layout/global-settings-handler';
 
 import ProtectedRoute from './protected-route';
@@ -22,8 +23,14 @@ export default function RootRouter() {
 
       <Routes>
         {/* 인증 필요 라우트 */}
-        <Route element={<ProtectedRoute />}>
-          <Route path={ROUTES.ROOT} index element={<App />} />
+        <Route path={ROUTES.ROOT} element={<ProtectedRoute />}>
+          {/* 메인 */}
+          <Route index element={<App />} />
+
+          {/* 정보 수정 */}
+          <Route path={ROUTES.CHANGE}>
+            <Route path={ROUTES.PASSWORD} element={<ResetPasswordPage />} />
+          </Route>
         </Route>
 
         {/* 인증 불필요 라우트 */}

@@ -25,11 +25,6 @@ export default function AuthRoutes() {
         <Route path={ROUTES.PASSWORD} element={<FindPasswordPage />} />
       </Route>
 
-      {/* 비밀번호 수정 */}
-      <Route path={ROUTES.RESET}>
-        <Route path={ROUTES.PASSWORD} element={<ResetPasswordPage />} />
-      </Route>
-
       {/* 잘못된 경로 */}
       <Route path={ROUTES.ALL} element={<NotFound />} />
     </Routes>

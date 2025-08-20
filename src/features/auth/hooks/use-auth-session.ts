@@ -1,10 +1,11 @@
+import { useLocation } from 'react-router';
 import { useCallback, useEffect } from 'react';
 import { Session } from '@supabase/supabase-js';
 import { useAtomValue, useSetAtom, useStore } from 'jotai';
 
 import supabase from '@/lib/supabase';
+import { PATHS } from '@/constants/paths';
 import { verifyAuthJWT } from '../util/verify-auth-jwt';
-import { getAuthSession } from '../util/auth-supabase-api';
 import { clearStorageKeys } from '../util/clear-storage-key';
 import { authStatusAtom, captchaRefreshAtom, isLoggedInAtom, setUserSessionAtom } from '../store/auth-atom';
 
@@ -14,14 +15,15 @@ export default function useAuthSession() {
   const setSession = useSetAtom(setUserSessionAtom);
   const captchaRefresh = useSetAtom(captchaRefreshAtom);
 
+  const store = useStore();
+  const { pathname } = useLocation();
+
   /** 로그아웃 및 스토리지 초기화 */
   const logoutAndClear = useCallback(() => {
     setSession(null);
     clearStorageKeys();
     captchaRefresh();
   }, [setSession, captchaRefresh]);
-
-  const store = useStore();
 
   /**
    * 세션 유효성 검사 + 상태 반영
@@ -45,7 +47,11 @@ export default function useAuthSession() {
           logoutAndClear();
         } else {
           setSession(session);
-          setAuthStatus('success');
+
+          // 인증 필요한 라우터에서만 success 할당
+          // 이외 라우터에서 success 할당하는 경우 접속 즉시 리다이렉트 발생
+          const isAuthPage = pathname.includes(PATHS.AUTH.MAIN);
+          setAuthStatus(isAuthPage ? 'success' : 'idle');
         }
       } catch (err) {
         console.error(err);
@@ -57,14 +63,25 @@ export default function useAuthSession() {
 
   /** 초기 마운트 시 세션 검증 */
   useEffect(() => {
-    getAuthSession()
+    verifyAuthJWT()
       .then((res) => {
-        processSession(res.data.session);
+        const currentAuthStatus = store.get(authStatusAtom);
+        if (currentAuthStatus === 'success' || currentAuthStatus === 'error') return;
+
+        setAuthStatus('loading');
+
+        if (!res.session) {
+          return logoutAndClear();
+        }
+
+        setSession(res.session);
+
+        setAuthStatus('success');
       })
       .catch(() => {
         setAuthStatus('error');
       });
-  }, [processSession]);
+  }, [store, logoutAndClear, setAuthStatus, setSession]);
 
   /** 인증 상태 변경 감지 */
   useEffect(() => {

@@ -1,10 +1,10 @@
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 
-import supabase from '@/lib/supabase';
 import Timer from '@/features/timer';
 import { userSessionAtom } from '@/features/auth/store/auth-atom';
 import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
 import { showToastAtom } from '@/features/alert/toast/store/atom';
+import { signOutUser } from '@/features/auth/util/auth-supabase-api';
 
 import { footerAtom } from '../footer';
 import HeaderMenuTab from './header-menu';
@@ -30,7 +30,7 @@ export default function Header() {
     /* 비즈니스 로직 */
     const onConfirm = async () => {
       // 로그아웃
-      const { error } = await supabase.auth.signOut();
+      const { error } = await signOutUser();
 
       // 에러 처리
       if (error) {

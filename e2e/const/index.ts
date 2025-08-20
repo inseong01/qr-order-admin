@@ -25,12 +25,16 @@ export const CAPTCHA_FAIL_TEST_KEY = '2x00000000000000000000AB';
   - 현재 프로젝트 아이디 넣을 시 로그인 페이지 이동
   - 임의 프로젝트 아이디 넣을 시 Auth session missing! 발생  
 */
-export const FAKE_PROJECT_REF = 'test-project-ref';
-export const TEST_SESSION_KEY = `sb-${FAKE_PROJECT_REF}-auth-token`;
+export const PROJECT_REF = 'onofrsiptqngmwfzenlr';
+export const TEST_SESSION_KEY = `sb-${PROJECT_REF}-auth-token`;
 export const TEST_SESSION_VALUE = {
   access_token: TEST_ACCESS_TOKEN,
-  token_type: 'bearer',
+  refresh_token: TEST_REFRESH_TOKEN,
   expires_in: 3600,
   expires_at: Date.now() + 36000,
-  refresh_token: TEST_REFRESH_TOKEN,
 };
+
+export const TEST_TOKEN_HASH = 'c2a2f3f9b9e6e2d3a4c5b6e7f8a9d0c1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7';
+
+export const REDIRECT_URL = `https://${PROJECT_REF}.supabase.co/auth/v1/verify?token=${TEST_TOKEN_HASH}&type=recovery&redirect_to=http://localhost:5173/change/password`;
+export const TEST_ORIGN_URL = 'http://localhost:5173';
