@@ -1,5 +1,5 @@
 import { ZodType } from 'zod';
-import { ChangeEvent, FormEvent, useEffect } from 'react';
+import { ChangeEvent, FormEvent } from 'react';
 import { PrimitiveAtom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 
 import { showToastAtom } from '@/features/alert/toast/store/atom';
@@ -9,11 +9,11 @@ import {
   captchaRefreshAtom,
   clearErrorFormAtom,
   FormInputs,
-  resetAllFormsAtom,
   setErrorFormAtom,
 } from '../store/auth-atom';
 import useSuccessRedirect from './use-success-redirect';
 import { AuthErrorHandler } from '../util/error-handler';
+import useResetAuthForm from './use-reset-form';
 
 type UseAuthFormProps<T> = {
   formAtom: PrimitiveAtom<T>;
@@ -34,13 +34,10 @@ export default function useAuthForm<T>({ formAtom, validationSchema, onSubmit }:
   const setErrorForm = useSetAtom(setErrorFormAtom);
   const clearErrorForm = useSetAtom(clearErrorFormAtom);
   const captchaRefresh = useSetAtom(captchaRefreshAtom);
-  const resetForms = useSetAtom(resetAllFormsAtom);
   const showToast = useSetAtom(showToastAtom);
 
-  /** 경로 이동마다 폼 상태 초기화 */
-  useEffect(() => {
-    resetForms();
-  }, []);
+  /** 폼 초기화 */
+  useResetAuthForm();
 
   /** 성공 리다이렉트 */
   useSuccessRedirect();

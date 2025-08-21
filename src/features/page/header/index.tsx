@@ -22,9 +22,8 @@ export default function Header() {
     order: HeaderOrderTab,
   };
   const HeaderTabList = component[footerTab];
-  const { showConfirmModal } = useConfirmModal();
   const showToast = useSetAtom(showToastAtom);
-
+  const { showConfirmModal } = useConfirmModal();
   const handleLogout = async () => {
     const title = '로그아웃 하시겠습니까?';
     /* 비즈니스 로직 */
@@ -34,8 +33,8 @@ export default function Header() {
 
       // 에러 처리
       if (error) {
-        console.error('Error logging out:', error);
-        showToast('로그아웃 과정에서 오류가 발생했습니다');
+        console.error('Error logging out:', error.message);
+        showToast('로그아웃 과정에서 오류가 발생했습니다.');
         return;
       }
     };

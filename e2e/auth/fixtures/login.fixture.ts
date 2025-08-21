@@ -67,7 +67,7 @@ export { isSupabaseCalled };
 
 // --- Fixtures ---
 
-// 시나리오 1: 로그인 완전 성공
+// 시나리오 1: 로그인 성공
 export const loginSuccessTest = base.extend({
   page: async ({ page }, use) => {
     await mockSuccessTurnstile(page);
@@ -76,7 +76,7 @@ export const loginSuccessTest = base.extend({
   },
 });
 
-// 시나리오 2: 캡챠 인증 실패
+// 시나리오 2: 로그인 실패 - 캡챠 인증 실패
 export const loginCaptchaFailTest = base.extend({
   page: async ({ page }, use) => {
     await mockFailTurnstile(page);
@@ -86,7 +86,7 @@ export const loginCaptchaFailTest = base.extend({
   },
 });
 
-// 시나리오 3: 잘못된 자격 증명 입력 (API 실패)
+// 시나리오 3: 로그인 실패 - 잘못된 자격 증명 입력 (API 실패)
 export const loginCredentialFailTest = base.extend({
   page: async ({ page }, use) => {
     await mockSuccessTurnstile(page);

@@ -30,7 +30,6 @@ export default function useSuccessRedirect() {
         break;
       }
       case PATHS.ROOT.CHANGE.PASSWORD: {
-        // 변경되면 로그아웃 시키고 로그인 페이지로 리다이렉트?
         replace = true;
         path = PATHS.AUTH.LOGIN;
         break;

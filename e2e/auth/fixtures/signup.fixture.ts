@@ -62,7 +62,7 @@ export const signupSuccessTest = base.extend({
   },
 });
 
-// 시나리오 2: 캡챠 인증 실패
+// 시나리오 2: 회원가입 실패 - 캡챠 인증 실패
 export const signupCaptchaFailTest = base.extend({
   page: async ({ page }, use) => {
     await mockFailTurnstile(page);
@@ -71,7 +71,7 @@ export const signupCaptchaFailTest = base.extend({
   },
 });
 
-// 시나리오 3: 이미 가입된 이메일 (API 실패)
+// 시나리오 3: 회원가입 실패 - 이미 가입된 이메일 (API 실패)
 export const signupEmailExistsTest = base.extend({
   page: async ({ page }, use) => {
     await mockSuccessTurnstile(page);

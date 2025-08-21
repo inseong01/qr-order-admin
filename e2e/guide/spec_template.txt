@@ -1,0 +1,56 @@
+/**
+ * @file [기능명] E2E 테스트
+ * @description [기능명] 기능의 End-to-End 테스트 시나리오를 정의합니다.
+ *              - 성공: [성공 조건 1], [기대 결과 1]
+ *              - 성공: [성공 조건 2], [기대 결과 2]
+ *              - 실패: [실패 조건 1], [기대 결과 1]
+ *              - 실패: [실패 조건 2], [기대 결과 2]
+ */
+import { test, expect } from '@playwright/test';
+
+import { TEST_ACCOUNT } from '../const';
+
+import {
+  [feature]SuccessTest,
+  [feature]FailTest,
+  isApiCalled, // API 호출 여부를 확인할 변수
+} from '../fixtures/[feature].fixture';
+
+test.describe('[기능명]', () => {
+  // 성공 시나리오 그룹
+  test.describe('성공 시나리오', () => {
+    [feature]SuccessTest('성공: [조건], [기대 결과]', async ({ page, context }) => {
+      // 1. [준비] 테스트를 위한 초기 페이지로 이동합니다.
+      await page.goto('/auth/[feature]');
+
+      // 2. 사용자의 행동을 시뮬레이션합니다 (예: 입력, 클릭).
+      await page.locator('input[name="id"]').fill(TEST_ACCOUNT.ID);
+      await page.locator('button[type="submit"]').click();
+
+      // 3. 행동의 결과를 확인합니다 (예: URL 변경, 특정 텍스트 표시).
+      await expect(page).toHaveURL('/main');
+      await expect(page.getByText('성공 메시지')).toBeVisible();
+
+      // 4. API가 정상적으로 호출되었는지 확인합니다.
+      expect(isApiCalled).toBeTruthy();
+    });
+  });
+
+  test.describe('실패 시나리오', () => {
+    [feature]FailTest('실패: [조건], [기대 결과]', async ({ page }) => {
+      // 1. 테스트를 위한 초기 페이지로 이동합니다.
+      await page.goto('/auth/[feature]');
+
+      // 2. 실패를 유발하는 행동을 시뮬레이션합니다.
+      await page.locator('input[name="id"]').fill(TEST_ACCOUNT.WRONG.ID);
+      await page.locator('button[type="submit"]').click();
+
+      // 3. 실패 결과를 확인합니다 
+      await expect(page.getByText('오류 메시지')).toBeVisible();
+      await expect(page.locator('button[type="submit"]')).toBeDisabled();
+
+      // 4. API 호출 여부를 시나리오에 맞게 확인합니다.
+      expect(isApiCalled).toBeFalsy(); // 또는 .toBeTruthy()
+    });
+  });
+});

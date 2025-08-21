@@ -61,4 +61,3 @@ export async function mockFailTurnstile(page: Page) {
 }
 
 export const test = base;
-export { expect } from '@playwright/test';

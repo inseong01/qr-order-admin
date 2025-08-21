@@ -1,14 +1,7 @@
 import { Page } from '@playwright/test';
 
 import { test as base } from './captcha.fixture';
-import {
-  TEST_ACCESS_TOKEN,
-  TEST_ACCOUNT,
-  TEST_ORIGN_URL,
-  TEST_REFRESH_TOKEN,
-  TEST_SESSION_KEY,
-  TEST_SESSION_VALUE,
-} from '../const';
+import { TEST_ACCOUNT, TEST_ACCESS_TOKEN, TEST_REFRESH_TOKEN } from '../const';
 import { mockFailTurnstile, mockSuccessTurnstile } from './captcha.fixture';
 
 let isSupabaseCalled = false;
@@ -18,12 +11,12 @@ let isSupabaseCalled = false;
  */
 async function mockAnonymousLoginSuccess(page: Page) {
   isSupabaseCalled = false;
-  await page.route('**/auth/v1/token**', (route) => {
+  await page.route('**/auth/v1/signup**', (route) => {
     isSupabaseCalled = true;
     route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify({
+      json: {
         access_token: TEST_ACCESS_TOKEN,
         expires_in: 3600,
         refresh_token: TEST_REFRESH_TOKEN,
@@ -35,21 +28,7 @@ async function mockAnonymousLoginSuccess(page: Page) {
           expires_at: Date.now() + 3600,
           user: { email: TEST_ACCOUNT.ID },
         },
-      }),
-    });
-  });
-
-  await page.route('**/auth/v1/signup**', (route) => {
-    isSupabaseCalled = true;
-    route.fulfill({
-      status: 200,
-      contentType: 'application/json',
-      body: JSON.stringify({
-        data: {
-          user: { id: TEST_ACCOUNT.ID, email: TEST_ACCOUNT.ID },
-          session: { access_token: TEST_ACCESS_TOKEN },
-        },
-      }),
+      },
     });
   });
 }
@@ -84,21 +63,6 @@ export { isSupabaseCalled };
 
 // 시나리오 1: 익명 로그인 성공
 export const anonymousloginSuccessTest = base.extend({
-  context: async ({ browser }, use) => {
-    const context = await browser.newContext({
-      storageState: {
-        cookies: [],
-        origins: [
-          {
-            origin: TEST_ORIGN_URL,
-            localStorage: [{ name: TEST_SESSION_KEY, value: JSON.stringify(TEST_SESSION_VALUE) }],
-          },
-        ],
-      },
-    });
-    await use(context);
-    await context.close();
-  },
   page: async ({ page }, use) => {
     await mockSuccessTurnstile(page);
     await mockAnonymousLoginSuccess(page);

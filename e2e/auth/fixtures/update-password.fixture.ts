@@ -1,7 +1,8 @@
 import { Page, test as base } from '@playwright/test';
 
-import { PROJECT_REF, TEST_ORIGN_URL, TEST_SESSION_KEY, TEST_SESSION_VALUE } from 'e2e/const';
+import { TEST_SESSION_VALUE } from 'e2e/auth/const';
 import { mockFailTurnstile, mockSuccessTurnstile } from './captcha.fixture';
+import { createAuthContext } from '../util/auth-context';
 
 let isSupabaseCalled = false;
 
@@ -12,8 +13,6 @@ export async function mockUpdatePasswordSuccess(page: Page) {
   await page.route(/.*supabase\.co\/auth\/v1\/verify.*/, async (route, request) => {
     const url = new URL(request.url());
     const redirectTo = url.searchParams.get('redirect_to');
-
-    // ✅ 성공 응답
     await route.fulfill({
       status: 303,
       contentType: 'text/plain',
@@ -51,6 +50,19 @@ export async function mockUpdatePasswordSuccess(page: Page) {
 /** 비밀번호 재설정 실패 모킹 */
 export async function mockUpdatePasswordFail(page: Page) {
   isSupabaseCalled = false;
+
+  await page.route(/.*supabase\.co\/auth\/v1\/verify.*/, async (route, request) => {
+    const url = new URL(request.url());
+    const redirectTo = url.searchParams.get('redirect_to');
+    await route.fulfill({
+      status: 303,
+      contentType: 'text/plain',
+      headers: {
+        location: `${redirectTo}`,
+      },
+    });
+  });
+
   await page.route('**/auth/v1/user**', (route) => {
     isSupabaseCalled = true;
     route.fulfill({
@@ -78,28 +90,7 @@ export { isSupabaseCalled };
 // 시나리오 1: 비밀번호 재설정 성공
 export const updatePasswordSuccessTest = base.extend({
   context: async ({ browser }, use) => {
-    const context = await browser.newContext({
-      storageState: {
-        cookies: [
-          {
-            path: '/',
-            domain: '.supabase.co',
-            expires: 3600,
-            httpOnly: true,
-            name: '__cf_bm',
-            sameSite: 'None',
-            secure: true,
-            value: 'this.is.cookie',
-          },
-        ],
-        origins: [
-          {
-            origin: TEST_ORIGN_URL, // 실제 앱 도메인
-            localStorage: [{ name: TEST_SESSION_KEY, value: JSON.stringify(TEST_SESSION_VALUE) }],
-          },
-        ],
-      },
-    });
+    const context = await createAuthContext(browser);
     await use(context);
     await context.close();
   },
@@ -114,17 +105,7 @@ export const updatePasswordSuccessTest = base.extend({
 // 시나리오 2: 비밀번호 재설정 실패 - 캡챠 토큰 무효
 export const updatePasswordFailInvalidCaptchaTest = base.extend({
   context: async ({ browser }, use) => {
-    const context = await browser.newContext({
-      storageState: {
-        cookies: [],
-        origins: [
-          {
-            origin: TEST_ORIGN_URL, // 실제 앱 도메인
-            localStorage: [{ name: TEST_SESSION_KEY, value: JSON.stringify(TEST_SESSION_VALUE) }],
-          },
-        ],
-      },
-    });
+    const context = await createAuthContext(browser);
     await use(context);
     await context.close();
   },
@@ -139,17 +120,7 @@ export const updatePasswordFailInvalidCaptchaTest = base.extend({
 // 시나리오 3: 비밀번호 재설정 실패 - 잘못된 비밀번호 형식
 export const updatePasswordFailInvalidFormatTest = base.extend({
   context: async ({ browser }, use) => {
-    const context = await browser.newContext({
-      storageState: {
-        cookies: [],
-        origins: [
-          {
-            origin: TEST_ORIGN_URL,
-            localStorage: [{ name: TEST_SESSION_KEY, value: JSON.stringify(TEST_SESSION_VALUE) }],
-          },
-        ],
-      },
-    });
+    const context = await createAuthContext(browser);
     await use(context);
     await context.close();
   },
@@ -164,17 +135,7 @@ export const updatePasswordFailInvalidFormatTest = base.extend({
 // 시나리오 4: 비밀번호 재설정 실패 - 인증 토큰 무효
 export const updatePasswordFailInvalidToken = base.extend({
   context: async ({ browser }, use) => {
-    const context = await browser.newContext({
-      storageState: {
-        cookies: [],
-        origins: [
-          {
-            origin: TEST_ORIGN_URL,
-            localStorage: [{ name: TEST_SESSION_KEY, value: JSON.stringify(TEST_SESSION_VALUE) }],
-          },
-        ],
-      },
-    });
+    const context = await createAuthContext(browser);
     await use(context);
     await context.close();
   },

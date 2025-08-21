@@ -1,74 +1,72 @@
-import test from '@playwright/test';
+/**
+ * @file 방문자 접속 E2E 테스트
+ * @description 방문자 접속 기능의 End-to-End 테스트 시나리오를 정의합니다.
+ *              - 성공: 방문자 접속 시 메인 페이지로 리다이렉트
+ *              - 실패: 캡챠 인증 실패 시 접속 버튼 비활성화
+ *              - 실패: API 오류 발생 시 토스트 알림 표시
+ */
+import { test, expect } from '@playwright/test';
+
 import {
   anonymousloginSuccessTest,
   anonymousLoginCaptchaFailTest,
   anonymousLoginInvalidCaptchaTokenTest,
   isSupabaseCalled,
-  expect,
-} from '../fixtures/anon-login.fixture';
-import { TEST_ORIGN_URL, TEST_SESSION_KEY, TEST_SESSION_VALUE } from 'e2e/const';
+} from './fixtures/anon-login.fixture';
 
-// 방문자 접속 E2E 테스트
+const TEST_PAGE_URL = '/auth/login' as const;
+const REDIRECT_PAGE_URL = '/' as const;
 
 test.describe('방문자 접속', () => {
   test.describe('성공 시나리오', () => {
-    anonymousloginSuccessTest('방문자 접속 성공 후 메인 페이지로 리다이렉트', async ({ page, context }) => {
-      // 1. 페이지 스토리지 확인
-      // const beforeStorage = await context.storageState();
-      // const beforeSession = beforeStorage.origins
-      //   .find((s) => s.origin === TEST_ORIGN_URL)
-      //   ?.localStorage.find((l) => l.name === TEST_SESSION_KEY);
+    anonymousloginSuccessTest('성공: 방문자 접속 시 메인 페이지로 리다이렉트되어야 한다', async ({ page }) => {
+      // 1. 로그인 페이지로 이동합니다.
+      await page.goto(TEST_PAGE_URL);
 
-      // expect(beforeStorage.origins.length).toBeGreaterThanOrEqual(1);
-      // expect(beforeSession).toHaveProperty('name', TEST_SESSION_KEY);
-      // expect(beforeSession).toHaveProperty('value', JSON.stringify(TEST_SESSION_VALUE));
-
-      // 버튼 클릭 이후 인증 세션 삽입 필요
-
-      // 2. 로그인 페이지 이동
-      await page.goto('/auth/login');
-
-      // 3. "방문자로 접속하기" 버튼 클릭
+      // 2. '방문자로 접속하기' 버튼을 클릭합니다.
       const anonButton = page.getByText('방문자로 접속하기');
       await anonButton.click();
 
-      // 4. 메인 페이지로 리다이렉트 확인
-      await expect(page).toHaveURL('/'); // PATHS.ROOT.MAIN
+      // 3. 메인 페이지로 리다이렉트되었는지 확인합니다.
+      await expect(page).toHaveURL(REDIRECT_PAGE_URL);
 
-      // 5. API 호출 확인
+      // 4. Supabase API가 호출되었는지 확인합니다.
       expect(isSupabaseCalled).toBeTruthy();
     });
   });
 
   test.describe('실패 시나리오', () => {
-    anonymousLoginCaptchaFailTest('캡챠 실패 시 방문자 접속 버튼 비활성화 및 API 호출 확인', async ({ page }) => {
-      // 1. 로그인 페이지 이동
-      await page.goto('/auth/login');
+    anonymousLoginCaptchaFailTest(
+      '실패: 캡챠 인증 실패 시, 방문자 접속 버튼은 비활성화되어야 한다',
+      async ({ page }) => {
+        // 1. 로그인 페이지로 이동합니다.
+        await page.goto(TEST_PAGE_URL);
 
-      // 2. "방문자로 접속하기" 버튼 비활성화 확인
-      const anonButton = page.getByText('방문자로 접속하기');
-      await expect(anonButton).toBeDisabled();
+        // 2. '방문자로 접속하기' 버튼이 비활성화 상태인지 확인합니다.
+        const anonButton = page.getByText('방문자로 접속하기');
+        await expect(anonButton).toBeDisabled();
 
-      // 3. API 호출 확인
-      expect(isSupabaseCalled).toBeFalsy();
-    });
+        // 3. Supabase API가 호출되지 않았는지 확인합니다.
+        expect(isSupabaseCalled).toBeFalsy();
+      }
+    );
 
-    anonymousLoginInvalidCaptchaTokenTest('API 호출 실패 시 토스트 알림 확인', async ({ page }) => {
-      // 1. 로그인 페이지 이동
-      await page.goto('/auth/login');
+    anonymousLoginInvalidCaptchaTokenTest('실패: API 오류 발생 시, 토스트 알림이 표시되어야 한다', async ({ page }) => {
+      // 1. 로그인 페이지로 이동합니다.
+      await page.goto(TEST_PAGE_URL);
 
-      // 2. "방문자로 접속하기" 버튼 클릭
+      // 2. '방문자로 접속하기' 버튼을 클릭합니다.
       const anonButton = page.getByText('방문자로 접속하기');
       await anonButton.click();
 
-      // 3. API 호출 확인
-      expect(isSupabaseCalled).toBeTruthy();
-
-      // 4. 토스트 알림 확인
+      // 3. 토스트 알림이 표시되는지 확인합니다.
       await expect(page.getByText('인증 토큰이 유효하지 않습니다.')).toBeVisible();
 
-      // 5. 페이지 이동 없음
-      await expect(page).toHaveURL('/auth/login');
+      // 4. 페이지가 이동하지 않았는지 확인합니다.
+      await expect(page).toHaveURL(TEST_PAGE_URL);
+
+      // 5. Supabase API가 호출되었는지 확인합니다.
+      expect(isSupabaseCalled).toBeTruthy();
     });
   });
 });

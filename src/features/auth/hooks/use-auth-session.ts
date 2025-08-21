@@ -26,9 +26,16 @@ export default function useAuthSession() {
   }, [setSession, captchaRefresh]);
 
   /**
+   * 인증 필요한 라우터에서만 success 할당
+   * 이외 라우터에서 success 할당하는 경우 접속 즉시 리다이렉트 발생
+   * 예: change/password -> auth/login
+   */
+  const isAuthPage = pathname.includes(PATHS.AUTH.MAIN);
+  const processAuthStatus = isAuthPage ? 'success' : 'idle';
+
+  /**
    * 세션 유효성 검사 + 상태 반영
-   *
-   * authStatus 의존성 추가 시 무한루프 적용됨
+   * 주의: authStatus 의존성 추가 시 무한루프 적용됨
    */
   const processSession = useCallback(
     async (session: Session | null) => {
@@ -48,10 +55,7 @@ export default function useAuthSession() {
         } else {
           setSession(session);
 
-          // 인증 필요한 라우터에서만 success 할당
-          // 이외 라우터에서 success 할당하는 경우 접속 즉시 리다이렉트 발생
-          const isAuthPage = pathname.includes(PATHS.AUTH.MAIN);
-          setAuthStatus(isAuthPage ? 'success' : 'idle');
+          setAuthStatus(processAuthStatus);
         }
       } catch (err) {
         console.error(err);
@@ -71,12 +75,14 @@ export default function useAuthSession() {
         setAuthStatus('loading');
 
         if (!res.session) {
-          return logoutAndClear();
+          logoutAndClear();
+          setAuthStatus('idle');
+          return;
         }
 
         setSession(res.session);
 
-        setAuthStatus('success');
+        setAuthStatus(processAuthStatus);
       })
       .catch(() => {
         setAuthStatus('error');

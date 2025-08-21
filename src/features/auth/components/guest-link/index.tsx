@@ -17,7 +17,7 @@ export default function GuestLink({ captchaToken }: GuestLinkProps) {
     validationSchema: validate.schema.captchaToken,
     onSubmit: async () => {
       // 방문자 접속 요청
-      if (authStatus === 'loading') return alert('처리중입니다. 잠시만 기다려주세요.');
+      if (authStatus === 'loading') return;
 
       // 로그인
       const { error } = await signInAnonymously(captchaToken);
