@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { setWidgetAtomState } from '@/features/widget/store/atom';
 import { showToastAtom } from '@/features/alert/toast/store/atom';
 
-import { MENU_CATEGORIES_QUERY_KEY, useQueryMenuCategoryList } from '@/hooks/use-query/query';
+import { MENU_CATEGORIES_QUERY_KEY, useQueryMenuCategoryList, useQueryMenuList } from '@/hooks/use-query/query';
 
 import { deleteMenuCategory, MenuCategory } from '@/lib/supabase/tables/menu-category';
 
@@ -16,6 +16,7 @@ import SubmitButton from '../button/button';
 import { SubmitFormBox, SubmitInfoBox, TitleBox } from '../common';
 import { selectedCategoryIdsAtom } from '../../store/atom';
 import styles from './delete-form.module.css';
+import { deleteImageByFileName, STORE } from '@/lib/supabase/storage/store';
 
 /**
  * 기존 메뉴 분류를 삭제하는 컴포넌트
@@ -24,6 +25,7 @@ export default function DeleteCategoryForm() {
   const categories = useQuery<MenuCategory[]>({ queryKey: MENU_CATEGORIES_QUERY_KEY });
   const [selectedCategories, setSelectedCategories] = useAtom(selectedCategoryIdsAtom);
   const menuCategoriesQuery = useQueryMenuCategoryList();
+  const menuQuery = useQueryMenuList();
   const setWidgetState = useSetAtom(setWidgetAtomState);
   const showToast = useSetAtom(showToastAtom);
   const { showConfirmModal } = useConfirmModal();
@@ -51,15 +53,19 @@ export default function DeleteCategoryForm() {
       // supabase 전달
       try {
         await deleteMenuCategory(data);
+
+        const filePath = menuQuery.data?.map((m) => STORE + m.img_url) ?? [];
+        await deleteImageByFileName({ filePath });
+
         await menuCategoriesQuery.refetch();
       } catch (e) {
         console.error(e);
-        showToast('오류가 발생했습니다');
+        showToast('오류가 발생했습니다.');
         return;
       }
 
       // 데이터 처리 상태 알림
-      showToast('삭제되었습니다');
+      showToast('삭제되었습니다.');
 
       // 초기화
       setSelectedCategories([]);

@@ -16,8 +16,8 @@ function createCategoryValue(value: string) {
   const categorySchema = z
     .string()
     .nonempty({ message: '분류를 입력해주세요.' })
-    .regex(/^[가-힣&]+$/, {
-      message: '한글, &만 입력 가능합니다.',
+    .regex(/^[가-힣&\s]+$/, {
+      message: '한글, &, 띄어쓰기만 입력 가능합니다.',
     });
 
   return categorySchema.safeParseAsync(value);
@@ -31,8 +31,8 @@ function updateCategoryValue(data: MenuCategory[]) {
       title: z
         .string()
         .nonempty({ message: '분류를 입력해주세요.' })
-        .regex(/^[가-힣&]+$/, {
-          message: '한글, &만 입력 가능합니다.',
+        .regex(/^[가-힣&\s]+$/, {
+          message: '한글, &, 띄어쓰기만 입력 가능합니다.',
         }),
     })
   );

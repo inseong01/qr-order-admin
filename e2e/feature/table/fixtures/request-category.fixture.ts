@@ -1,8 +1,6 @@
-import { Page, test as base } from '@playwright/test';
+import { Page } from '@playwright/test';
 
 import mockRequestCategories from '../mock/request_category.test.json' assert { type: 'json' };
-
-let isApiCalled = false;
 
 const API_URL = '**/rest/v1/request_category?select**';
 
@@ -11,7 +9,6 @@ const API_URL = '**/rest/v1/request_category?select**';
  */
 export async function requestCategoryResponseSuccess(page: Page) {
   await page.route(API_URL, async (route) => {
-    isApiCalled = true;
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -25,7 +22,6 @@ export async function requestCategoryResponseSuccess(page: Page) {
  */
 export async function requestCategoryResponseFail(page: Page) {
   await page.route(API_URL, async (route) => {
-    isApiCalled = true;
     await route.fulfill({
       status: 400,
       contentType: 'application/json',
@@ -42,10 +38,4 @@ export async function requestCategoryResponseFail(page: Page) {
   });
 }
 
-base.beforeEach(() => {
-  isApiCalled = false;
-});
-
 // --- Variables ---
-
-export { isApiCalled };

@@ -32,8 +32,8 @@ export default function AddCategoryForm() {
       const { success, data, error } = await validate.createCategoryValue(inputValue);
       if (!success) {
         const message = error?.issues[0].message;
-        alert(message);
-        setInputValue('');
+        showToast(message);
+        // setInputValue('');
         setWidgetState({ option: 'create-menu-category' });
         return;
       }
@@ -44,12 +44,12 @@ export default function AddCategoryForm() {
         await menuCategoriesQuery.refetch();
       } catch (e) {
         console.error(e);
-        showToast('오류가 발생했습니다');
+        showToast('오류가 발생했습니다.');
         return;
       }
 
       // 데이터 처리 상태 알림
-      showToast('추가되었습니다');
+      showToast('추가되었습니다.');
 
       // 초기화
       setInputValue('');

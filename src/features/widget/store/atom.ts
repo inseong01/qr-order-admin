@@ -16,21 +16,15 @@ const initialWidget: Widget = {
 export const widgetAtom = atom<Widget>(initialWidget);
 
 // 위젯 상태 초기화
-export const widgetAtomWithReset = atom(
-  (get) => get(widgetAtom),
-  (_, set) => {
-    set(widgetAtom, initialWidget);
-  }
-);
+export const widgetAtomWithReset = atom(null, (_, set) => {
+  set(widgetAtom, initialWidget);
+});
 
 // 위젯 상태 변경
-export const setWidgetAtomState = atom(
-  (get) => get(widgetAtom).option,
-  (get, set, { isOpen, option }: { isOpen?: boolean; option?: Options }) => {
-    const currentWidget = get(widgetAtom);
-    set(widgetAtom, {
-      isOpen: isOpen ?? currentWidget.isOpen,
-      option: option === '' || option ? option : currentWidget.option,
-    });
-  }
-);
+export const setWidgetAtomState = atom(null, (get, set, { isOpen, option }: { isOpen?: boolean; option?: Options }) => {
+  const currentWidget = get(widgetAtom);
+  set(widgetAtom, {
+    isOpen: isOpen ?? currentWidget.isOpen,
+    option: option === '' || option ? option : currentWidget.option,
+  });
+});

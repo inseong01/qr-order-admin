@@ -3,7 +3,8 @@
  * @returns {boolean} 모바일 사이즈인 경우 true, 그렇지 않은 경우 false 반환
  */
 export function detectMobileSize(): boolean {
-  const isMobile = window.screen.availHeight < 768 || window.screen.availHeight < 1024;
+  const isMobile = window.screen.availHeight < 720 || window.screen.availWidth < 1024;
+  // const isMobile = window.screen.availHeight < 768 || window.screen.availWidth < 1024;
   return isMobile;
 }
 

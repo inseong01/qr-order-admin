@@ -23,7 +23,7 @@ export default function MenuTabView() {
         {!isMenuExist ? (
           <ExceptionText text='위젯에서 메뉴 분류를 생성해주세요.' />
         ) : (
-          menuCategories?.map((category) => (
+          menuCategories.map((category) => (
             <li key={category.id} className={styles.displayRow}>
               {/* 메뉴 카테고리 */}
               <motion.div layout={'position'} className={styles.category}>

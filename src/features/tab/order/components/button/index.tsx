@@ -36,7 +36,7 @@ export default function CardButton({ orderId, type, inavtive = false }: CardButt
         showToast(type === 'complete' ? '완료되었습니다' : '삭제되었습니다.'); // 데이터 처리 상태 알림
       } catch (e) {
         console.error(e);
-        showToast('오류가 발생했습니다');
+        showToast('오류가 발생했습니다.');
       }
     };
 

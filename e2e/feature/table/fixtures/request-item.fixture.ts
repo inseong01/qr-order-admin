@@ -1,8 +1,6 @@
-import { Page, test as base } from '@playwright/test';
+import { Page } from '@playwright/test';
 
 import mockRequestItems from '../mock/request_item.test.json' assert { type: 'json' };
-
-let isApiCalled = false;
 
 const API_URL = '**/rest/v1/request_item?select**';
 
@@ -11,7 +9,6 @@ const API_URL = '**/rest/v1/request_item?select**';
  */
 export async function requestItemResponseSuccess(page: Page) {
   await page.route(API_URL, async (route) => {
-    isApiCalled = true;
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -25,7 +22,6 @@ export async function requestItemResponseSuccess(page: Page) {
  */
 export async function requestItemResponseFail(page: Page) {
   await page.route(API_URL, async (route) => {
-    isApiCalled = true;
     await route.fulfill({
       status: 400,
       contentType: 'application/json',
@@ -42,10 +38,4 @@ export async function requestItemResponseFail(page: Page) {
   });
 }
 
-base.beforeEach(() => {
-  isApiCalled = false;
-});
-
 // --- Variables ---
-
-export { isApiCalled };

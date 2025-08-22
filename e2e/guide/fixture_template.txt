@@ -1,13 +1,10 @@
 import { Page, test as base } from '@playwright/test';
 
-export let isApiCalled = false;
-
 /**
  * [feature] 요청을 모킹하여 성공 응답을 반환합니다.
  */
 async function [feature]Success(page: Page) {
     await page.route('**/auth/v1/token?grant_type=password', async (route) => {
-      isApiCalled = true; // API가 호출되었음을 표시
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -21,7 +18,6 @@ async function [feature]Success(page: Page) {
  */
 async function [feature]Fail(page: Page) {
     await page.route('**/auth/v1/token?grant_type=password', async (route) => {
-      isApiCalled = true; // API가 호출되었음을 표시
       await route.fulfill({
         status: 400,
         contentType: 'application/json',
@@ -30,13 +26,7 @@ async function [feature]Fail(page: Page) {
     });
 };
 
-base.beforeEach(() => {
-  isApiCalled = false;
-});
-
 // --- Variables ---
-
-export { isSupabaseCalled };
 
 // --- Fixtures ---
 

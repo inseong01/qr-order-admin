@@ -40,15 +40,14 @@ function updateImage({ file, fileId }: UpdateImageByFileNameProps) {
 }
 
 type DeleteImageByFileNameProps = {
-  fileId: string;
+  filePath: string[];
 };
 
 /**
  * Supabase 스토리지에서 하나 이상의 이미지 삭제 함수
  */
-function deleteImageByFileName({ fileId }: DeleteImageByFileNameProps) {
-  const filePath = STORE + `/menu_${fileId}`;
-  return supabase.storage.from(BUCKET).remove([filePath]);
+function deleteImageByFileName({ filePath }: DeleteImageByFileNameProps) {
+  return supabase.storage.from(BUCKET).remove(filePath);
 }
 
 export { getImageByFileName, uploadImage, updateImage, deleteImageByFileName };

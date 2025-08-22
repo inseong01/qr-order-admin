@@ -17,7 +17,7 @@ import { showToastAtom } from '@/features/alert/toast/store/atom';
 import { useQueryMenuCategoryList, useQueryMenuList } from '@/hooks/use-query/query';
 
 import { deleteMenu, updateMenu } from '@/lib/supabase/tables/menu';
-import { deleteImageByFileName, updateImage } from '@/lib/supabase/storage/store';
+import { deleteImageByFileName, STORE, updateImage } from '@/lib/supabase/storage/store';
 import { generateNumberId } from '@/features/modal/tab/menu/util/generate-id';
 
 import styles from './../index.module.css';
@@ -66,11 +66,12 @@ export default function UpdateMenuModal() {
         }
 
         if (submitType === 'delete') {
-          await deleteImageByFileName({ fileId: imgFileId });
+          const filePath = [STORE + `/menu_${fileId}`];
+          await deleteImageByFileName({ filePath });
         }
       } catch (err) {
         console.error(e);
-        showToast('이미지 처리 과정에서 오류가 발생했습니다');
+        showToast('이미지 처리 과정에서 오류가 발생했습니다.');
         return;
       }
 
@@ -80,12 +81,12 @@ export default function UpdateMenuModal() {
         await menuListQuery.refetch();
       } catch (e) {
         console.error(e);
-        showToast('메뉴 처리 과정에서 오류가 발생했습니다');
+        showToast('메뉴 처리 과정에서 오류가 발생했습니다.');
         return;
       }
 
       // 데이터 처리 상태 알림
-      showToast(submitType === 'update' ? '수정되었습니다' : '삭제되었습니다.');
+      showToast(submitType === 'update' ? '수정되었습니다.' : '삭제되었습니다.');
 
       // 초기화
       setModalClick(false);

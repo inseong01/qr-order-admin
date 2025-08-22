@@ -61,12 +61,12 @@ export default function UpdateCategoryForm() {
         await menuListQuery.refetch();
       } catch (e) {
         console.error(e);
-        showToast('오류가 발생했습니다');
+        showToast('오류가 발생했습니다.');
         return;
       }
 
       // 데이터 처리 상태 알림
-      showToast('수정되었습니다');
+      showToast('수정되었습니다.');
 
       // 초기화
       setSelectedCategories([]);

@@ -28,35 +28,5 @@
         "priceText": { "width": 400 }
       }
     }
-  },
-  {
-    "id": "table-003",
-    "number": 3,
-    "meta": {
-      "x": 10,
-      "y": 524,
-      "rec": { "width": 170, "height": 130 },
-      "tableText": { "width": 130 },
-      "bottom": {
-        "y": 90,
-        "line": { "points": [0, 0, 130, 0] },
-        "priceText": { "width": 130 }
-      }
-    }
-  },
-  {
-    "id": "table-004",
-    "number": 4,
-    "meta": {
-      "x": 10,
-      "y": 188,
-      "rec": { "width": 170, "height": 130 },
-      "tableText": { "width": 100 },
-      "bottom": {
-        "y": 90,
-        "line": { "points": [0, 0, 130, 0] },
-        "priceText": { "width": 130 }
-      }
-    }
   }
 ]

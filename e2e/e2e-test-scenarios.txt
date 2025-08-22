@@ -10,7 +10,7 @@ https://playwright.dev/
 
 * 1-1-1. 신규 메뉴 카테고리 및 메뉴 항목 추가
 
-  * fixture: menuTabAPISuccessTest
+  * fixture: menuTabAPITest_S1
 
   * 흐름
 
