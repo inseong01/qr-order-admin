@@ -23,13 +23,18 @@ export function getElapsed(header: CardObj['header']): ElapsedResult {
   const endAt = header.updatedAt ? new Date(header.updatedAt).getTime() : now;
 
   const elapsedMs = endAt - startAt;
+
+  if (Math.sign(elapsedMs) === -1) {
+    return { state: 'error', type: '초', elapsed: -1 };
+  }
+
   const seconds = Math.floor(elapsedMs / 1000);
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);
   const days = Math.floor(hours / 24);
 
   if (seconds < 60) {
-    return { state: 'good', type: '초', elapsed: seconds };
+    return { state: 'good', type: '초', elapsed: Number(seconds.toFixed(1)) };
   }
   if (minutes < 60) {
     return { state: minutes > 15 ? 'bad' : 'good', type: '분', elapsed: minutes };

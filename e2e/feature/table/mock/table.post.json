@@ -28,5 +28,20 @@
         "priceText": { "width": 400 }
       }
     }
+  },
+  {
+    "id": "table-003",
+    "number": 3,
+    "meta": {
+      "x": 900,
+      "y": 300,
+      "rec": { "width": 300, "height": 130 },
+      "tableText": { "width": 260 },
+      "bottom": {
+        "y": 90,
+        "line": { "points": [0, 0, 260, 0] },
+        "priceText": { "width": 260 }
+      }
+    }
   }
 ]

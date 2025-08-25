@@ -37,7 +37,7 @@ export default function TableInfoPannel() {
         transition={{ duration: 0.3 }}
         style={{ height: '100%' }}
       >
-        <form className={styles.submitForm} onSubmit={() => {}}>
+        <form className={styles.submitForm} onSubmit={() => {}} data-testid='submitForm'>
           <div className={styles.wrap}>
             <div className={styles.header}>
               {/* 토글 */}
@@ -48,7 +48,7 @@ export default function TableInfoPannel() {
 
               {/* 닫기 */}
               <button type='button' className={styles.close} onClick={handleClose}>
-                <img src={LIGHT_PLUS_ICON} alt='close icon' />
+                <img src={LIGHT_PLUS_ICON} alt='닫기' />
               </button>
             </div>
 

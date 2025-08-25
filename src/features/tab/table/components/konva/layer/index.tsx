@@ -273,6 +273,7 @@ export default function TableLayer({ table, orders }: { table: Table; orders: Or
       {/* 도형 변환기 */}
       {isSelectedTable && (
         <Transformer
+          id='transformer'
           ref={trRef}
           flipEnabled={false}
           keepRatio={false}

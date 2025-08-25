@@ -7,8 +7,8 @@ import { Tween } from 'konva/lib/Tween';
 import { useQueryOrderItems, useQueryTableList } from '@/hooks/use-query/query';
 import { windowStateAtom } from '@/store/window-atom';
 
-import { draftTablesAtom, editModeAtom, selectedTableIdsAtom } from '../../store/table-edit-state';
 import { setTableStageAtom } from '../../store/table-state';
+import { draftTablesAtom, editModeAtom, selectedTableIdsAtom } from '../../store/table-edit-state';
 import { setStagePositionStateAtom, stagePositionStateAtom } from './store/atom';
 import { setEditDescription } from './function/set-edit-description';
 import TableLayer from './layer';

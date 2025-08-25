@@ -1,15 +1,13 @@
-import { useRef } from 'react';
 import { useAtomValue } from 'jotai';
 import { motion, AnimatePresence } from 'motion/react';
 
 import { useQueryRequestList } from '@/hooks/use-query/query';
 
-import { MessageCountPannel, MessagePreview } from './components/message/message';
+import { MessageCountPannel, MessagePreview } from './components/message';
 import { requestAlertAtom } from './store/atom';
 import styles from './index.module.css';
 
 export default function TableRequestAlert() {
-  const reqeustMsgRef = useRef(null);
   const isAlertOn = useAtomValue(requestAlertAtom);
   const requestsQuery = useQueryRequestList();
 
@@ -23,8 +21,7 @@ export default function TableRequestAlert() {
         <motion.div
           key={'reqeustMsgWrap'}
           className={styles.reqeustMsgWrap}
-          ref={reqeustMsgRef}
-          initial={{ opacity: 0 }}
+          initial={{ opacity: 1 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >

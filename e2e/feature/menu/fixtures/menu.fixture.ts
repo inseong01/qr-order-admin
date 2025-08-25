@@ -5,7 +5,6 @@ import { newCategory, newMenu, updatedMenu } from '../const';
 import { MENU_CATEGORY_API_REX } from './menu_category.fixture';
 
 export const MENU_API_REX = /.*supabase\.co\/rest\/v1\/menu(?:\/.*|\?.*|$)/;
-// const MENU_API_URL = '**/rest/v1/menu**';
 
 let isCalled = false;
 

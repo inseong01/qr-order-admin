@@ -31,6 +31,15 @@ export default defineConfig({
   },
   timeout: 1000 * 15,
 
+  snapshotPathTemplate: '{testDir}/__screenshots__/{testFilePath}/{arg}{ext}',
+
+  expect: {
+    toHaveScreenshot: {
+      pathTemplate: '{testDir}/__screenshots__/{testFilePath}/{arg}{ext}',
+      maxDiffPixelRatio: 0.05,
+    },
+  },
+
   /* Configure projects for major browsers */
   projects: [
     {

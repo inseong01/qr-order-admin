@@ -1,3 +1,4 @@
+import { useSetAtom } from 'jotai';
 import { motion, AnimatePresence } from 'motion/react';
 import { QueryObserverResult, RefetchOptions } from '@tanstack/react-query';
 
@@ -5,11 +6,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 import { useQueryFirstRequest } from '@/hooks/use-query/query';
+import { showToastAtom } from '@/features/alert/toast/store/atom';
 import { Request, updateRequest } from '@/lib/supabase/tables/request';
 
-import styles from './message.module.css';
-import { showToastAtom } from '@/features/alert/toast/store/atom';
-import { useSetAtom } from 'jotai';
+import styles from './index.module.css';
 
 export function MessageCountPannel({ count }: { count: number }) {
   return (
@@ -49,7 +49,7 @@ export function MessagePreview({ request, requestRefetch }: MessageCountPannelPr
       ?.map(({ quantity, request_category }) => `${request_category.title} ${quantity}개`)
       .join(', ') ?? '';
 
-  /* 좌석 요청 읽음 처리  */
+  /* 좌석 요청 읽음 처리 */
   async function readRequest() {
     try {
       await updateRequest(request.id);

@@ -26,13 +26,13 @@ export default function TableTabView() {
       {isEmpty ? (
         <ExceptionText text='위젯에서 테이블을 생성해주세요.' />
       ) : (
-        <>
+        <li>
           {/* 좌석 현황 */}
           <KonvaSection />
 
           {/* 좌석 요청목록 */}
           <TableRequestAlert />
-        </>
+        </li>
       )}
     </ListUlBox>
   );

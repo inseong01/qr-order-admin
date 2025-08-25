@@ -3,8 +3,8 @@ import { TablesUpdate } from '../database.types';
 
 // request table type
 export type Request = {
-  created_at: string;
   id: string;
+  created_at: string;
   is_read: boolean;
   table: {
     id: string;
@@ -22,8 +22,8 @@ export async function getRequestList(): Promise<Request[]> {
     .from('request')
     .select(
       `
-    created_at,
     id,
+    created_at,
     is_read,
     table(id, number)
     `

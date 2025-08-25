@@ -2,13 +2,13 @@ import { Page } from '@playwright/test';
 
 import mockRequests from '../mock/request.test.json' assert { type: 'json' };
 
-const API_URL = '**/rest/v1/request?select**';
+export const REQUEST_API_REX = /.*supabase\.co\/rest\/v1\/request(?:\/.*|\?.*|$)/;
 
 /**
  * request 요청을 모킹하여 성공 응답을 반환합니다.
  */
 export async function requestResponseSuccess(page: Page) {
-  await page.route(API_URL, async (route) => {
+  await page.route(REQUEST_API_REX, async (route) => {
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -21,7 +21,7 @@ export async function requestResponseSuccess(page: Page) {
  * request 요청을 모킹하여 실패 응답을 반환합니다.
  */
 export async function requestResponseFail(page: Page) {
-  await page.route(API_URL, async (route) => {
+  await page.route(REQUEST_API_REX, async (route) => {
     await route.fulfill({
       status: 400,
       contentType: 'application/json',

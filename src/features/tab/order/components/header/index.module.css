@@ -45,6 +45,10 @@
 }
 
 /* 주문 경과 스타일링 */
+.elapsed[data-state='error'] {
+  color: #424242;
+  background-color: #ffa500;
+}
 .elapsed[data-state='good'] {
   color: #222;
   background-color: #fff;

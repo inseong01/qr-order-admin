@@ -1,12 +1,16 @@
-import { useEffect, useRef, useState } from 'react';
-import { motion } from 'motion/react';
 import QRcode from 'qrcode';
+import { useSetAtom } from 'jotai';
+import { motion } from 'motion/react';
+import { useEffect, useRef, useState } from 'react';
+
+import { showToastAtom } from '@/features/alert/toast/store/atom';
 
 import styles from './index.module.css';
 import { downloadFile } from './util/download-file';
 
 export default function QRPreviewBox({ tableNumber }: { tableNumber?: number }) {
   const [url, getURL] = useState('');
+  const showToast = useSetAtom(showToastAtom);
 
   const qrcodeRef = useRef<HTMLImageElement>(null);
 
@@ -27,7 +31,7 @@ export default function QRPreviewBox({ tableNumber }: { tableNumber?: number }) 
   function onClickDownloadQRcode() {
     if (!url) return;
     if (!tableNumber) {
-      alert('테이블 정보를 불러오지 못했습니다.');
+      showToast('테이블 정보를 불러오지 못했습니다.');
       return;
     }
     downloadFile(url, tableNumber);
@@ -44,7 +48,7 @@ export default function QRPreviewBox({ tableNumber }: { tableNumber?: number }) 
     >
       {/* QR 코드 사진 */}
       <div className={styles.imgBox} onClick={onClickDownloadQRcode}>
-        <img ref={qrcodeRef} alt='테이블 QR 코드' />
+        <img ref={qrcodeRef} alt={`${tableNumber} 테이블 QR 코드`} />
       </div>
 
       {/* 설명 */}

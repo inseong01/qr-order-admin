@@ -14,7 +14,11 @@ export default function ToggleDisplay() {
   }
 
   return (
-    <div className={`${styles.toggleBox} ${isToggled ? '' : styles.off}`} onClick={onClickChangeBox}>
+    <div
+      className={`${styles.toggleBox} ${isToggled ? '' : styles.off}`}
+      onClick={onClickChangeBox}
+      data-testid='toggleBox'
+    >
       <motion.div layout className={styles.toggle}></motion.div>
     </div>
   );

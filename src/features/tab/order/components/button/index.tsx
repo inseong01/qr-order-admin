@@ -33,7 +33,7 @@ export default function CardButton({ orderId, type, inavtive = false }: CardButt
       try {
         type === 'complete' ? await completeOrder(orderId) : await deleteOrder(orderId); // supabase 전달
         await refetch();
-        showToast(type === 'complete' ? '완료되었습니다' : '삭제되었습니다.'); // 데이터 처리 상태 알림
+        showToast(type === 'complete' ? '완료되었습니다.' : '삭제되었습니다.'); // 데이터 처리 상태 알림
       } catch (e) {
         console.error(e);
         showToast('오류가 발생했습니다.');
@@ -49,6 +49,7 @@ export default function CardButton({ orderId, type, inavtive = false }: CardButt
       className={`${styles.btn} ${type === 'delete' ? styles.delete : ''}`}
       onClick={onClickUpdateListState}
       disabled={inavtive}
+      data-testid={`${type}-${orderId}`}
     >
       {type === 'delete' ? '삭제' : '조리 완료'}
     </button>
