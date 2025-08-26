@@ -29,30 +29,19 @@ export default function UpdateCategoryForm() {
   const { showConfirmModal } = useConfirmModal();
   /* 비즈니스 로직 */
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    // 선택 카테고리 확인
-    const updatedCategories = Object.values(selectedCategories);
-    if (!updatedCategories.length) {
-      alert('분류 항목을 선택해주세요.');
-      return e.preventDefault();
-    }
-
-    // 선택 카테고리 입력 확인
-    const isValueEmpty = updatedCategories.some((category) => !category.title);
-    if (isValueEmpty) {
-      alert('새로운 항목 이름을 입력해주세요.');
-      return e.preventDefault();
-    }
+    const title = '선택한 분류를 수정하겠습니까?';
 
     // 값 검증
+    const updatedCategories = Object.values(selectedCategories);
     const { success, data, error } = await validate.updateCategoryValue(updatedCategories);
     if (!success) {
       const message = error?.issues[0].message;
-      alert(message);
+      showToast(message);
       setWidgetState({ option: 'update-menu-category' });
       return e.preventDefault();
     }
 
-    const title = '선택한 분류를 수정하겠습니까?';
+    /* 비즈니스 로직 */
     const onConfirm = async () => {
       // supabase 전달
       try {

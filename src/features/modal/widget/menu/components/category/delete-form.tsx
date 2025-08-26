@@ -31,25 +31,20 @@ export default function DeleteCategoryForm() {
   const { showConfirmModal } = useConfirmModal();
 
   /* 비즈니스 로직 */
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    const updatedCategories = Object.values(selectedCategories);
-    if (!updatedCategories.length) {
-      alert('분류 항목을 선택해주세요.');
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const title = '선택한 분류를 삭제하겠습니까?';
+
+    // 값 검증
+    const { success, data, error } = await validate.deleteCategoryValue(selectedCategories);
+    if (!success) {
+      const message = error?.issues[0].message;
+      showToast(message);
+      setWidgetState({ option: 'delete-menu-category' });
       return e.preventDefault();
     }
 
-    const title = '선택한 분류를 삭제하겠습니까?';
+    /* 비즈니스 로직 */
     const onConfirm = async () => {
-      // 값 검증
-      const { success, data, error } = await validate.deleteCategoryValue(selectedCategories);
-      if (!success) {
-        const message = error?.issues[0].message;
-        alert(message);
-        setSelectedCategories([]);
-        setWidgetState({ option: 'delete-menu-category' });
-        return;
-      }
-
       // supabase 전달
       try {
         await deleteMenuCategory(data);

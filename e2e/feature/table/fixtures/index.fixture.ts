@@ -27,6 +27,17 @@ export async function tableTabAPISuccess(page: Page) {
 }
 
 /**
+ * 좌석 탭 빈 데이터 호출 성공
+ * : table, request, request_item, request_category
+ */
+export async function tableTabAPIEmptySuccess(page: Page) {
+  await tableResponseSuccess(page, []);
+  await requestResponseSuccess(page, []);
+  await requestItemResponseSuccess(page, []);
+  await requestCategoryResponseSuccess(page, []);
+}
+
+/**
  * 좌석 탭 기본 호출 실패
  * : table, request, request_item, request_category
  */
@@ -50,6 +61,8 @@ export const tableTabAPITest_S1 = base.extend({
   },
   page: async ({ context }, use) => {
     const page = await context.newPage();
+    await page.clock.setSystemTime(FIXED_TIME);
+
     // 사전 요청 목킹
     await menuTabAPISuccess(page);
     await orderTabAPISuccess(page);
@@ -75,6 +88,8 @@ export const tableTabAPITest_S2 = base.extend({
   },
   page: async ({ context }, use) => {
     const page = await context.newPage();
+    await page.clock.setSystemTime(FIXED_TIME);
+
     // 사전 요청 목킹
     await menuTabAPISuccess(page);
     await orderTabAPISuccess(page);
@@ -100,6 +115,8 @@ export const tableTabAPITest_S3 = base.extend({
   },
   page: async ({ context }, use) => {
     const page = await context.newPage();
+    await page.clock.setSystemTime(FIXED_TIME);
+
     // 사전 요청 목킹
     await menuTabAPISuccess(page);
     await orderTabAPISuccess(page);

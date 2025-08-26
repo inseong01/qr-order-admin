@@ -12,12 +12,12 @@ let isCalled = false;
  * select menu (success)
  * - menu GET 요청을 모킹하여 성공 기본 응답을 반환합니다.
  */
-export async function menuResponseSuccess(page: Page) {
+export async function menuResponseSuccess(page: Page, data?: []) {
   await page.route(MENU_API_REX, async (route) => {
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify(mockMenus),
+      body: JSON.stringify(data ?? mockMenus),
     });
   });
 }

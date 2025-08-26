@@ -25,19 +25,20 @@ export default function AddCategoryForm() {
   const { showConfirmModal } = useConfirmModal();
 
   /* 비즈니스 로직 */
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     const title = '새로운 분류를 추가하겠습니까?';
-    const onConfirm = async () => {
-      // 값 검증
-      const { success, data, error } = await validate.createCategoryValue(inputValue);
-      if (!success) {
-        const message = error?.issues[0].message;
-        showToast(message);
-        // setInputValue('');
-        setWidgetState({ option: 'create-menu-category' });
-        return;
-      }
 
+    // 값 검증
+    const { success, data, error } = await validate.createCategoryValue(inputValue);
+    if (!success) {
+      const message = error?.issues[0].message;
+      showToast(message);
+      setWidgetState({ option: 'create-menu-category' });
+      return e.preventDefault();
+    }
+
+    /* 비즈니스 로직 */
+    const onConfirm = async () => {
       // supabase 전달
       try {
         await addMenuCategory({ title: data });
@@ -64,7 +65,7 @@ export default function AddCategoryForm() {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
+    setInputValue(e.target.value.trim());
   };
 
   return (

@@ -16,6 +16,15 @@ export async function orderTabAPISuccess(page: Page) {
 }
 
 /**
+ * 주문 탭 빈 데이터 호출 성공
+ * : order, order_item
+ */
+export async function orderTabAPIEmptySuccess(page: Page) {
+  await orderResponseSuccess(page, []);
+  await orderItemResponseSuccess(page, 'GET', true);
+}
+
+/**
  * 주문 탭 기본 호출 실패
  * : order, order_category
  */

@@ -12,12 +12,12 @@ let isCalled = false;
  * select order
  * - order 요청을 모킹하여 성공 응답을 반환합니다.
  */
-export async function orderResponseSuccess(page: Page) {
+export async function orderResponseSuccess(page: Page, data?: []) {
   await page.route(ORDER_API_REX, async (route) => {
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify(mockInitOrders),
+      body: JSON.stringify(data ?? mockInitOrders),
     });
   });
 }

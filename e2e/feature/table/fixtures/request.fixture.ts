@@ -7,12 +7,12 @@ export const REQUEST_API_REX = /.*supabase\.co\/rest\/v1\/request(?:\/.*|\?.*|$)
 /**
  * request 요청을 모킹하여 성공 응답을 반환합니다.
  */
-export async function requestResponseSuccess(page: Page) {
+export async function requestResponseSuccess(page: Page, data?: []) {
   await page.route(REQUEST_API_REX, async (route) => {
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify(mockRequests),
+      body: JSON.stringify(data ?? mockRequests),
     });
   });
 }

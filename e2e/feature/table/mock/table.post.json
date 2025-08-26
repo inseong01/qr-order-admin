@@ -3,8 +3,8 @@
     "id": "table-001",
     "number": 1,
     "meta": {
-      "x": 1602,
-      "y": 20,
+      "x": 0,
+      "y": 0,
       "rec": { "width": 170, "height": 130 },
       "tableText": { "width": 100 },
       "bottom": {
@@ -18,8 +18,8 @@
     "id": "table-002",
     "number": 2,
     "meta": {
-      "x": 220,
-      "y": 520,
+      "x": 100,
+      "y": 350,
       "rec": { "width": 440, "height": 130 },
       "tableText": { "width": 400 },
       "bottom": {
@@ -33,14 +33,14 @@
     "id": "table-003",
     "number": 3,
     "meta": {
-      "x": 900,
-      "y": 300,
-      "rec": { "width": 300, "height": 130 },
-      "tableText": { "width": 260 },
+      "x": 605,
+      "y": 116,
+      "rec": { "width": 170, "height": 130 },
+      "tableText": { "width": 100 },
       "bottom": {
         "y": 90,
-        "line": { "points": [0, 0, 260, 0] },
-        "priceText": { "width": 260 }
+        "line": { "points": [0, 0, 130, 0] },
+        "priceText": { "width": 130 }
       }
     }
   }

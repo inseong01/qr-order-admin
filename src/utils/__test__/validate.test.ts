@@ -39,7 +39,7 @@ describe('menu-validation 모듈', () => {
       const data = [{ id: '', title: '카테고리' }];
       const result = await validate.updateCategoryValue(data);
       expect(result.success).toBe(false);
-      expect(result.error?.issues[0].message).toBe('분류가 선택되지 않았습니다.');
+      expect(result.error?.issues[0].message).toBe('분류를 선택해주세요.');
     });
 
     it('title 누락 시, 오류 반환', async () => {
@@ -86,7 +86,7 @@ describe('menu-validation 모듈', () => {
       };
       const result = await validate.createMenuValue(data);
       expect(result.success).toBe(false);
-      expect(result.error?.issues[0].message).toBe('가격은 양수이어야 합니다.');
+      expect(result.error?.issues[0].message).toBe('가격은 0 이상의 숫자여야 합니다.');
     });
   });
 

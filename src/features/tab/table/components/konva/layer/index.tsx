@@ -83,25 +83,14 @@ export default function TableLayer({ table, orders }: { table: Table; orders: Or
   /** 좌석 편집 모드 여부에 따른 애니메이션 */
   useEffect(() => {
     if (!bottomRef?.current) return;
-    if (editMode) {
-      const fadeOut = new Tween({
-        node: bottomRef.current,
-        duration: 0.3,
-        opacity: 0,
-        easing: Konva.Easings.EaseInOut,
-      });
-      fadeOut.play();
-      return;
-    }
 
     const fadeIn = new Tween({
       node: bottomRef.current,
-      duration: 0.3,
-      opacity: 1,
+      duration: 0.5,
+      opacity: Boolean(editMode) ? 0 : 1,
       easing: Konva.Easings.EaseInOut,
     });
     fadeIn.play();
-    return;
   }, [editMode]);
 
   /* 좌석 선택 */

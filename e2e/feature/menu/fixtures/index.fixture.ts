@@ -29,6 +29,15 @@ export async function menuTabAPISuccess(page: Page) {
 }
 
 /**
+ * 주문 탭 빈 데이터 호출 성공
+ * : menu, menu_category
+ */
+export async function menuTabAPIEmptySuccess(page: Page) {
+  await menuResponseSuccess(page, []);
+  await menuCategoryResponseSuccess(page, []);
+}
+
+/**
  * 주문 탭 기본 호출 실패
  * : menu, menu_category
  */

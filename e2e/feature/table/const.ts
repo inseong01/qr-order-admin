@@ -11,6 +11,8 @@ export const updatedTable = mockPatchedTables.at(-1);
 
 export const deletedTable = mockDeletedTables.at(-1);
 
-export const QR_CODE_DOWNLOAD_URL = 'blob:http://localhost:5173/23063807-9f29-4acf-8da0-43c862ad3549';
-
 export const FIXED_TIME = '2025-08-25T09:39:09.966Z';
+
+export const FIRST_TABLE_POS = { X: 80, Y: 150 };
+export const SECOND_TABLE_POS = { X: 160, Y: 500 };
+export const MODAL_QR_CODE_POS = { X: 1000, Y: 350 };

@@ -15,9 +15,9 @@ import {
 function createCategoryValue(value: string) {
   const categorySchema = z
     .string()
-    .nonempty({ message: '분류를 입력해주세요.' })
+    .nonempty({ message: '분류명을 입력해주세요.' })
     .regex(/^[가-힣&\s]+$/, {
-      message: '한글, &, 띄어쓰기만 입력 가능합니다.',
+      message: '한글만 입력 가능합니다.',
     });
 
   return categorySchema.safeParseAsync(value);
@@ -25,17 +25,19 @@ function createCategoryValue(value: string) {
 
 /** 메뉴 카테고리 수정 데이터 검증 */
 function updateCategoryValue(data: MenuCategory[]) {
-  const categorySchema = z.array(
-    z.object({
-      id: z.string().nonempty({ message: '분류가 선택되지 않았습니다.' }),
-      title: z
-        .string()
-        .nonempty({ message: '분류를 입력해주세요.' })
-        .regex(/^[가-힣&\s]+$/, {
-          message: '한글, &, 띄어쓰기만 입력 가능합니다.',
-        }),
-    })
-  );
+  const categorySchema = z
+    .array(
+      z.object({
+        id: z.string().nonempty({ message: '분류를 선택해주세요.' }),
+        title: z
+          .string()
+          .nonempty({ message: '분류명을 입력해주세요.' })
+          .regex(/^[가-힣&\s]+$/, {
+            message: '한글만 입력 가능합니다.',
+          }),
+      })
+    )
+    .min(1, { message: '분류를 선택해주세요.' });
 
   return categorySchema.safeParseAsync(data);
 }
@@ -52,7 +54,7 @@ function createMenuValue(data: NewMenu) {
   const newMenuSchema = z.object({
     category_id: z.string().nonempty({ message: '메뉴 분류를 선택헤주세요.' }),
     name: z.string().nonempty({ message: '메뉴 이름을 입력해주세요.' }),
-    price: z.number().nonnegative({ message: '가격은 양수이어야 합니다.' }),
+    price: z.number().nonnegative({ message: '가격은 0 이상의 숫자여야 합니다.' }),
     tag: z.string().nonempty({ message: '태그를 선택해주세요.' }),
     img_url: z.string().nonempty({ message: '올바르지 않은 이미지 주소입니다.' }).optional(),
   });

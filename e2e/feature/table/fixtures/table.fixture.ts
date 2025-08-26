@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test';
+import test, { Page } from '@playwright/test';
 
 import mockInitTables from '../mock/table.init.json' assert { type: 'json' };
 import mockPostedTables from '../mock/table.post.json' assert { type: 'json' };
@@ -14,12 +14,12 @@ let isCalled = false;
  * select table
  * - table GET 요청을 모킹하여 성공 응답을 반환합니다.
  */
-export async function tableResponseSuccess(page: Page) {
+export async function tableResponseSuccess(page: Page, data?: []) {
   await page.route(TABLE_ITEM_API_REX, async (route) => {
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify(mockInitTables),
+      body: JSON.stringify(data ?? mockInitTables),
     });
   });
 }
@@ -29,6 +29,7 @@ export async function tableResponseSuccess(page: Page) {
  * - table POST 요청을 모킹하여 성공 응답을 반환합니다.
  */
 export async function creaeteTableSuccess(page: Page) {
+  // isCalled = false;
   await page.route(TABLE_ITEM_API_REX, async (route) => {
     const method = route.request().method();
     if (method === 'POST') {
@@ -53,12 +54,13 @@ export async function creaeteTableSuccess(page: Page) {
 
 /**
  * update table
- * - table PATCH 요청을 모킹하여 성공 응답을 반환합니다.
+ * - table POST 요청을 모킹하여 성공 응답을 반환합니다.
  */
 export async function updateTableSuccess(page: Page) {
+  // isCalled = false;
   await page.route(TABLE_ITEM_API_REX, async (route) => {
     const method = route.request().method();
-    if (method === 'PATCH') {
+    if (method === 'POST') {
       isCalled = true;
       await route.fulfill({
         status: 200,
@@ -83,6 +85,7 @@ export async function updateTableSuccess(page: Page) {
  * - table DELETE 요청을 모킹하여 성공 응답을 반환합니다.
  */
 export async function deleteTableSuccess(page: Page) {
+  // isCalled = false;
   await page.route(TABLE_ITEM_API_REX, async (route) => {
     const method = route.request().method();
     if (method === 'DELETE') {
@@ -127,3 +130,7 @@ export async function tableResponseFail(page: Page) {
 }
 
 // --- Variables ---
+
+test.beforeEach(() => {
+  isCalled = false;
+});

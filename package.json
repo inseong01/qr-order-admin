@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "analyze": "npx vite-bundle-visualizer",
     "commit": "bash ./auto/bash/commit-work-log.sh",
+    "dev:test": "vite --mode test",
     "test": "npx vitest",
     "playwright": "npx playwright test",
     "playwright:ui": "npx playwright test --ui"
