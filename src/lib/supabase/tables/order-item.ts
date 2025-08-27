@@ -47,7 +47,7 @@ export async function getOrderItems(): Promise<OrderItem[]> {
   );
 
   if (error) {
-    console.error(error.message);
+    error.message && console.error(error.message);
     throw new Error(error.message);
   }
 

@@ -4,10 +4,14 @@ import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import validate from '@/utils/function/validate';
 
 import {
+  clearMenuErrorFormAtom,
   initMenu,
   menuAtom,
+  MenuFormInputs,
   menuImageFileAtom,
+  resetMenuErrorAtom,
   resetMenuImageFileAtom,
+  setMenuErrorAtom,
   setMenuImageFileAtom,
 } from '@/components/ui/menu/store/atom';
 
@@ -28,6 +32,8 @@ import { MenuFormFields, MenuImageInput, MenuModalHeader } from '../components/c
 export default function UpdateMenuModal() {
   const [inputValue, setInputValue] = useAtom(menuAtom);
   const menuImageFile = useAtomValue(menuImageFileAtom);
+  const setMenuError = useSetAtom(setMenuErrorAtom);
+  const resetMenuError = useSetAtom(resetMenuErrorAtom);
   const setModalClick = useSetAtom(setModalClickAtom);
   const showToast = useSetAtom(showToastAtom);
   const setMenuImage = useSetAtom(setMenuImageFileAtom);
@@ -35,30 +41,36 @@ export default function UpdateMenuModal() {
   const { showConfirmModal } = useConfirmModal();
   const menuListQuery = useQueryMenuList();
   const menuCategoriesQuery = useQueryMenuCategoryList();
-  const imgFileId = inputValue.img_url.split('menu_').at(-1) ?? '';
 
   /* 비즈니스 로직 */
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const submitter = (e.nativeEvent as SubmitEvent).submitter as HTMLButtonElement;
     const submitType = submitter.name;
     const title = submitType === 'update' ? '메뉴를 수정하겠습니까?' : '메뉴를 삭제하겠습니끼?';
-    const onConfirm = async () => {
-      // 메뉴 데이터 가공
-      const hasImg = !!menuImageFile;
-      const newImgFileId = generateNumberId();
-      const fileId = imgFileId === 'default' ? newImgFileId : imgFileId;
-      const menuCategories = menuCategoriesQuery.data;
-      const menuData = updateMenuData({ fileId, inputValue, menuCategories, hasImg });
 
-      // 값 검증
+    // 메뉴 데이터 가공
+    const newImgFileId = generateNumberId();
+
+    const imgFileId = inputValue.img_url.split('menu_').at(-1) ?? '';
+    const fileId = imgFileId === 'default' ? newImgFileId : imgFileId;
+
+    const hasImg = !!menuImageFile;
+
+    const menuCategories = menuCategoriesQuery.data;
+    const menuData = updateMenuData({ fileId, inputValue, menuCategories, hasImg });
+
+    // 값 검증
+    if (submitType === 'update') {
       const valid = await validate.updateMenuValue(menuData);
       if (!valid.success) {
-        const message = valid.error.issues[0].message;
-        alert(message);
-        return;
+        setMenuError(valid.error.issues);
+        return e.preventDefault();
       }
+    }
 
+    // 제출
+    const onConfirm = async () => {
       // 이미지 스토리지 업데이트
       try {
         if (menuImageFile) {
@@ -72,17 +84,17 @@ export default function UpdateMenuModal() {
       } catch (err) {
         console.error(e);
         showToast('이미지 처리 과정에서 오류가 발생했습니다.');
-        return;
+        return e.preventDefault();
       }
 
       // 메뉴 업데이트
       try {
-        submitType === 'update' ? await updateMenu(menuData.id, menuData) : await deleteMenu(menuData.id);
+        submitType === 'update' ? await updateMenu(menuData.id, menuData) : await deleteMenu(inputValue.id);
         await menuListQuery.refetch();
-      } catch (e) {
-        console.error(e);
+      } catch (err) {
+        console.error(err);
         showToast('메뉴 처리 과정에서 오류가 발생했습니다.');
-        return;
+        return e.preventDefault();
       }
 
       // 데이터 처리 상태 알림
@@ -92,10 +104,13 @@ export default function UpdateMenuModal() {
       setModalClick(false);
       setInputValue(initMenu);
       resetMenuImage();
+      resetMenuError();
     };
 
     showConfirmModal({ title, onConfirm });
   };
+
+  const clearMenuErrorForm = useSetAtom(clearMenuErrorFormAtom);
 
   /** 입력값 수신 */
   const getInputValue = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -112,6 +127,8 @@ export default function UpdateMenuModal() {
 
       return { ...prev, [name]: value };
     });
+
+    clearMenuErrorForm(name as keyof MenuFormInputs);
   };
 
   /** 폼 창 닫기 */
@@ -132,7 +149,7 @@ export default function UpdateMenuModal() {
     <form className={styles.menuModal} onSubmit={handleSubmit}>
       <div className={styles.wrap}>
         {/* 모달 주제 */}
-        <MenuModalHeader title='음식 수정' onClose={handleClose} />
+        <MenuModalHeader title='메뉴 수정' onClose={handleClose} />
 
         {/* 사진 첨부 */}
         <MenuImageInput mode='update' imageUrl={inputValue.img_url} onChange={setImgFile} />

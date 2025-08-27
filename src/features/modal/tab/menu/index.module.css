@@ -11,6 +11,7 @@
   background-color: white;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
 
+  overflow-y: auto;
   cursor: default;
 
   padding: 25px;
@@ -96,19 +97,6 @@
   gap: 30px;
 }
 
-.inputWrapper {
-  width: 100%;
-
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-}
-.inputWrapper input {
-  text-align: end;
-}
-
 .inputTitle {
   font-size: var(--fz-r);
   min-width: 100px;
@@ -143,6 +131,13 @@
   font-weight: var(--fw-b);
 
   padding: 15px 0;
+}
+
+.priceBox input[data-invalid='true'],
+.inputTitle ~ input[data-invalid='true'],
+.inputTitle ~ select[data-invalid='true'] {
+  outline: none;
+  border-color: var(--error-color);
 }
 
 @media (max-height: 768px) {

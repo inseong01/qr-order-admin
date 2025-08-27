@@ -1,5 +1,5 @@
 import { Browser } from '@playwright/test';
-import { TEST_ORIGN_URL, TEST_SESSION_KEY, TEST_SESSION_VALUE } from '../const';
+import { TEST_ORIGN_URL, TEST_SESSION_KEY, TEST_SESSION_VALUE } from '../common/const';
 
 export async function createAuthContext(browser: Browser) {
   return await browser.newContext({

@@ -36,24 +36,44 @@ export function useQueryClientTable(method: REALTIME_POSTGRES_CHANGES_LISTEN_EVE
         queryFn: getRequestList,
         staleTime: Infinity,
         refetchOnWindowFocus: false,
+        retry: (failureCount) => {
+          if (import.meta.env.MODE === 'test') return false;
+          if (failureCount > 3) return false;
+          return true;
+        },
       },
       {
         queryKey: ALL_ORDER_LIST_QUERY_KEY,
         queryFn: getOrderList,
         staleTime: Infinity,
         refetchOnWindowFocus: false,
+        retry: (failureCount) => {
+          if (import.meta.env.MODE === 'test') return false;
+          if (failureCount > 3) return false;
+          return true;
+        },
       },
       {
         queryKey: MENU_CATEGORIES_QUERY_KEY,
         queryFn: getMenuCategory,
         staleTime: Infinity,
         refetchOnWindowFocus: false,
+        retry: (failureCount) => {
+          if (import.meta.env.MODE === 'test') return false;
+          if (failureCount > 3) return false;
+          return true;
+        },
       },
       {
         queryKey: MENU_LIST_QUERY_KEY,
         queryFn: getMenuList,
         staleTime: Infinity,
         refetchOnWindowFocus: false,
+        retry: (failureCount) => {
+          if (import.meta.env.MODE === 'test') return false;
+          if (failureCount > 3) return false;
+          return true;
+        },
       },
     ],
     combine: (results) => {

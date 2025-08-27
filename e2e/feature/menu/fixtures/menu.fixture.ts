@@ -1,12 +1,15 @@
 import { Page } from '@playwright/test';
 
-import mockMenus from './../mock/menu.test.json' assert { type: 'json' };
+import mockMenus from './../mock/menu.init.json' assert { type: 'json' };
+import mockMenuCategories from '../mock/menu_category.init.json' assert { type: 'json' };
 import { newCategory, newMenu, updatedMenu } from '../const';
 import { MENU_CATEGORY_API_REX } from './menu_category.fixture';
 
 export const MENU_API_REX = /.*supabase\.co\/rest\/v1\/menu(?:\/.*|\?.*|$)/;
 
 let isCalled = false;
+
+/* SUCCESS */
 
 /**
  * select menu (success)
@@ -26,7 +29,7 @@ export async function menuResponseSuccess(page: Page, data?: []) {
  * create menu
  * - menu POST 요청을 모킹하여 성공 응답을 반환합니다.
  */
-export async function creaeteMenuSuccess(page: Page) {
+export async function createMenuSuccess(page: Page) {
   isCalled = false;
 
   await page.route(MENU_API_REX, async (route) => {
@@ -119,6 +122,8 @@ export async function deleteMenuSuccess(page: Page) {
   });
 }
 
+/* FAIL */
+
 /**
  * select menu (fail)
  * - menu GET 요청을 모킹하여 실패 응답을 반환합니다.
@@ -126,19 +131,111 @@ export async function deleteMenuSuccess(page: Page) {
 export async function menuResponseFail(page: Page) {
   await page.route(MENU_API_REX, async (route) => {
     await route.fulfill({
-      status: 400,
+      status: 405,
       contentType: 'application/json',
       headers: {
         'access-control-expose-headers': 'X-Total-Count, Link, X-Supabase-Api-Version',
         'x-supabase-api-version': '2024-01-01',
-        'x-sb-error-code': 'bad_jwt', // 선택
-      },
-      json: {
-        code: 'bad_jwt',
-        message: 'JWT sent in the Authorization header is not valid.',
       },
     });
   });
 }
 
-// --- Variables ---
+/**
+ * create menu (fail)
+ * - menu POST 요청을 모킹하여 실패 응답을 반환합니다.
+ */
+export async function createMenuFail(page: Page) {
+  await page.route(MENU_API_REX, async (route) => {
+    const method = route.request().method();
+    if (method === 'POST') {
+      await route.fulfill({
+        status: 405,
+        contentType: 'application/json',
+        headers: {
+          'access-control-expose-headers': 'X-Total-Count, Link, X-Supabase-Api-Version',
+          'x-supabase-api-version': '2024-01-01',
+        },
+      });
+    } else {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(mockMenus),
+      });
+    }
+  });
+}
+
+/**
+ * update menu (fail)
+ * - menu PATCH 요청을 모킹하여 실패 응답을 반환합니다.
+ */
+export async function updateMenuFail(page: Page) {
+  isCalled = false;
+  // select menu_category
+  await page.route(MENU_CATEGORY_API_REX, async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(mockMenuCategories),
+    });
+  });
+
+  await page.route(MENU_API_REX, async (route) => {
+    const method = route.request().method();
+    if (method === 'PATCH') {
+      isCalled = true;
+      await route.fulfill({
+        status: 405,
+        contentType: 'application/json',
+        headers: {
+          'access-control-expose-headers': 'X-Total-Count, Link, X-Supabase-Api-Version',
+          'x-supabase-api-version': '2024-01-01',
+        },
+      });
+    } else {
+      const mockData = isCalled ? [...mockMenus] : [...mockMenus];
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(mockData),
+      });
+    }
+  });
+}
+
+/**
+ * delete menu (fail)
+ * - menu DELETE 요청을 모킹하여 실패 응답을 반환합니다.
+ */
+export async function deleteMenuFail(page: Page) {
+  isCalled = false;
+  // select menu_category
+  await page.route(MENU_CATEGORY_API_REX, async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(mockMenuCategories),
+    });
+  });
+
+  await page.route(MENU_API_REX, async (route) => {
+    const method = route.request().method();
+    if (method === 'DELETE') {
+      isCalled = true;
+      await route.fulfill({
+        status: 405,
+        contentType: 'application/json',
+        // header
+      });
+    } else {
+      const mockData = isCalled ? [...mockMenus] : [...mockMenus];
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(mockData),
+      });
+    }
+  });
+}

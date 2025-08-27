@@ -1,8 +1,8 @@
 import { Page } from '@playwright/test';
 
-import { test as base } from './captcha.fixture';
-import { TEST_ACCESS_TOKEN, TEST_ACCOUNT, TEST_REFRESH_TOKEN } from '../const';
-import { mockFailTurnstile, mockSuccessTurnstile } from './captcha.fixture';
+import { test as base } from '../../common/fixtures/captcha.fixture';
+import { TEST_ACCESS_TOKEN, TEST_ACCOUNT, TEST_REFRESH_TOKEN } from '../../common/const';
+import { mockFailTurnstile, mockSuccessTurnstile } from '../../common/fixtures/captcha.fixture';
 
 let isSupabaseCalled = false;
 

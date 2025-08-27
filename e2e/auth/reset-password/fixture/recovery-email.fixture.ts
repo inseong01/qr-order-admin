@@ -1,5 +1,5 @@
 import { Page, test as base } from '@playwright/test';
-import { mockFailTurnstile, mockSuccessTurnstile } from './captcha.fixture';
+import { mockFailTurnstile, mockSuccessTurnstile } from '../../common/fixtures/captcha.fixture';
 
 let isSupabaseCalled = false;
 

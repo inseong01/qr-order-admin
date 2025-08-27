@@ -14,7 +14,7 @@ export async function getTableList(): Promise<Table[]> {
   const { data, error } = await supabase.from('table').select('*').order('number', { ascending: true });
 
   if (error) {
-    console.error(error.message);
+    error.message && console.error(error.message);
     throw new Error(error.message);
   }
 
@@ -30,7 +30,7 @@ export const upsertTable = async (updatedTables: UpsertTable[]) => {
   const { error } = await supabase.from('table').upsert(updatedTables, { ignoreDuplicates: false });
 
   if (error) {
-    console.error(error.message);
+    error.message && console.error(error.message);
     throw new Error(error.message);
   }
 
@@ -46,7 +46,7 @@ export const deleteTable = async (ids: string[]) => {
   const { error, data } = await supabase.from('table').delete().in('id', ids).select();
 
   if (error) {
-    console.error(error.message);
+    error.message && console.error(error.message);
     throw new Error(error.message);
   }
 

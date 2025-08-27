@@ -24,7 +24,6 @@ export function useQueryTableList() {
     queryKey: TABLE_LIST_QUERY_KEY,
     queryFn: getTableList,
     staleTime: Infinity,
-    throwOnError: true,
     refetchOnWindowFocus: false,
   });
 

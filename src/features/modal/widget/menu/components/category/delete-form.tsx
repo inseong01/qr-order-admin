@@ -43,14 +43,13 @@ export default function DeleteCategoryForm() {
       return e.preventDefault();
     }
 
-    /* 비즈니스 로직 */
     const onConfirm = async () => {
       // supabase 전달
       try {
-        await deleteMenuCategory(data);
-
         const filePath = menuQuery.data?.map((m) => STORE + m.img_url) ?? [];
         await deleteImageByFileName({ filePath });
+
+        await deleteMenuCategory(data);
 
         await menuCategoriesQuery.refetch();
       } catch (e) {

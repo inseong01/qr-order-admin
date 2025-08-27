@@ -41,7 +41,6 @@ export default function UpdateCategoryForm() {
       return e.preventDefault();
     }
 
-    /* 비즈니스 로직 */
     const onConfirm = async () => {
       // supabase 전달
       try {

@@ -1,8 +1,8 @@
 import { Page, test as base } from '@playwright/test';
 
-import { TEST_SESSION_VALUE } from 'e2e/auth/const';
-import { mockFailTurnstile, mockSuccessTurnstile } from './captcha.fixture';
-import { createAuthContext } from '../util/auth-context';
+import { TEST_SESSION_VALUE } from 'e2e/auth/common/const';
+import { mockFailTurnstile, mockSuccessTurnstile } from '../../common/fixtures/captcha.fixture';
+import { createAuthContext } from '../../util/auth-context';
 
 let isSupabaseCalled = false;
 

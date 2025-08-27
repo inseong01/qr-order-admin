@@ -68,7 +68,7 @@ function updateMenuValue(data: UpdateMenu) {
     id: z.string().nonempty({ message: '메뉴 아이디는 포함되어야 합니다.' }),
     category_id: z.string().nonempty({ message: '메뉴 분류를 선택헤주세요.' }),
     name: z.string().nonempty({ message: '메뉴 이름을 입력해주세요.' }),
-    price: z.number().nonnegative({ message: '가격을 입력해주세요.' }),
+    price: z.number().nonnegative({ message: '가격은 0 이상의 숫자여야 합니다.' }),
     tag: z.string().nonempty({ message: '태그를 선택해주세요.' }),
     img_url: z.string().nonempty({ message: '올바르지 않은 이미지 주소입니다.' }),
   });

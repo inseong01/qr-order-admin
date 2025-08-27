@@ -32,7 +32,7 @@ export async function getOrderList(): Promise<Order[]> {
     .order('created_at', { ascending: true });
 
   if (error) {
-    console.error(error.message);
+    error.message && console.error(error.message);
     throw new Error(error.message);
   }
 
@@ -51,7 +51,7 @@ export const completeOrder = async (id: string) => {
     .eq('id', id);
 
   if (error) {
-    console.error(error.message);
+    error.message && console.error(error.message);
     throw new Error(error.message);
   }
 
@@ -67,7 +67,7 @@ export const deleteOrder = async (id: string) => {
   const { error } = await supabase.from('order').delete().eq('id', id);
 
   if (error) {
-    console.error(error.message);
+    error.message && console.error(error.message);
     throw new Error(error.message);
   }
 

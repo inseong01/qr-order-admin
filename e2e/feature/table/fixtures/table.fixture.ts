@@ -11,7 +11,7 @@ export const TABLE_ITEM_API_REX = /.*supabase\.co\/rest\/v1\/table(?:\/.*|\?.*|$
 let isCalled = false;
 
 /**
- * select table
+ * select table (success)
  * - table GET 요청을 모킹하여 성공 응답을 반환합니다.
  */
 export async function tableResponseSuccess(page: Page, data?: []) {
@@ -25,7 +25,7 @@ export async function tableResponseSuccess(page: Page, data?: []) {
 }
 
 /**
- * creaete table
+ * creaete table (success)
  * - table POST 요청을 모킹하여 성공 응답을 반환합니다.
  */
 export async function creaeteTableSuccess(page: Page) {
@@ -53,7 +53,7 @@ export async function creaeteTableSuccess(page: Page) {
 }
 
 /**
- * update table
+ * update table (success)
  * - table POST 요청을 모킹하여 성공 응답을 반환합니다.
  */
 export async function updateTableSuccess(page: Page) {
@@ -81,7 +81,7 @@ export async function updateTableSuccess(page: Page) {
 }
 
 /**
- * delete table
+ * delete table (success)
  * - table DELETE 요청을 모킹하여 성공 응답을 반환합니다.
  */
 export async function deleteTableSuccess(page: Page) {
@@ -108,22 +108,20 @@ export async function deleteTableSuccess(page: Page) {
   });
 }
 
+/* FAIL */
+
 /**
- * table 요청을 모킹하여 실패 응답을 반환합니다.
+ * select table (fail)
+ * - table 요청을 모킹하여 실패 응답을 반환합니다.
  */
 export async function tableResponseFail(page: Page) {
   await page.route(TABLE_ITEM_API_REX, async (route) => {
     await route.fulfill({
-      status: 400,
+      status: 405,
       contentType: 'application/json',
       headers: {
         'access-control-expose-headers': 'X-Total-Count, Link, X-Supabase-Api-Version',
         'x-supabase-api-version': '2024-01-01',
-        'x-sb-error-code': 'bad_jwt', // 선택
-      },
-      json: {
-        code: 'bad_jwt',
-        message: 'JWT sent in the Authorization header is not valid.',
       },
     });
   });

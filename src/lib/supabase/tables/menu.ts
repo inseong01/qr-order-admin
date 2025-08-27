@@ -21,7 +21,7 @@ export async function getMenuList(): Promise<Menu[]> {
   const { data, error } = await supabase.from('menu').select(`id, img_url, name, price, tag, menu_category (id,title)`);
 
   if (error) {
-    console.error(error.message);
+    error.message && console.error(error.message);
     throw new Error(error.message);
   }
 
@@ -37,7 +37,7 @@ export const addMenu = async (newMenu: NewMenu) => {
   const { error } = await supabase.from('menu').insert(newMenu);
 
   if (error) {
-    console.error(error.message);
+    error.message && console.error(error.message);
     throw new Error(error.message);
   }
 
@@ -95,7 +95,7 @@ export const deleteMenu = async (id: string) => {
 export const uploadImage = async (file: File) => {
   const { data, error } = await supabase.storage.from('images').upload(`menu/${file.name}`, file);
   if (error) {
-    console.error(error.message);
+    error.message && console.error(error.message);
     throw new Error(error.message);
   }
   return data.path;

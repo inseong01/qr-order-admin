@@ -32,7 +32,7 @@ export async function getRequestList(): Promise<Request[]> {
     .order('created_at', { ascending: true });
 
   if (error) {
-    console.error(error.message);
+    error.message && console.error(error.message);
     throw new Error(error.message);
   }
 
@@ -48,7 +48,7 @@ export const updateRequest = async (id: string) => {
   const { error, data } = await supabase.from('request').update({ is_read: true }).eq('id', id).select();
 
   if (error) {
-    console.error(error.message);
+    error.message && console.error(error.message);
     throw new Error(error.message);
   }
 

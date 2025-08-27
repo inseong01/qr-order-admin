@@ -1,6 +1,6 @@
 import { Page, test as base } from '@playwright/test';
 
-import { createAuthContext } from '../util/auth-context';
+import { createAuthContext } from '../../util/auth-context';
 
 let isSupabaseCalled = false;
 

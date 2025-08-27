@@ -1,9 +1,18 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, FormEvent } from 'react';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
 import validate from '@/utils/function/validate';
 
-import { initMenu, menuAtom, menuImageFileAtom, setMenuImageFileAtom } from '@/components/ui/menu/store/atom';
+import {
+  clearMenuErrorFormAtom,
+  initMenu,
+  menuAtom,
+  MenuFormInputs,
+  menuImageFileAtom,
+  resetMenuErrorAtom,
+  setMenuErrorAtom,
+  setMenuImageFileAtom,
+} from '@/components/ui/menu/store/atom';
 
 import { useQueryMenuCategoryList, useQueryMenuList } from '@/hooks/use-query/query';
 
@@ -22,6 +31,8 @@ import { MenuFormFields, MenuImageInput, MenuModalHeader } from '../components/c
 export default function CreateMenuModal() {
   const [inputValue, setInputValue] = useAtom(menuAtom);
   const menuImage = useAtomValue(menuImageFileAtom);
+  const setMenuError = useSetAtom(setMenuErrorAtom);
+  const resetMenuError = useSetAtom(resetMenuErrorAtom);
   const setModalClick = useSetAtom(setModalClickAtom);
   const showToast = useSetAtom(showToastAtom);
   const setMenuImage = useSetAtom(setMenuImageFileAtom);
@@ -30,24 +41,25 @@ export default function CreateMenuModal() {
   const menuCategoriesQuery = useQueryMenuCategoryList();
 
   /* 비즈니스 로직 */
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const title = '메뉴를 추가하겠습니까?';
+
+    // 메뉴 데이터 가공
+    const newId = generateNumberId();
+    const fileId = menuImage ? newId : '';
+    const menuCategories = menuCategoriesQuery.data;
+    const menuData = buildMenuData({ fileId, inputValue, menuCategories });
+
+    // 메뉴 데이터 검증
+    const valid = await validate.createMenuValue(menuData);
+    if (!valid.success) {
+      setMenuError(valid.error.issues);
+      return e.preventDefault();
+    }
+
+    // 제출
     const onConfirm = async () => {
-      // 메뉴 데이터 가공
-      const newId = generateNumberId();
-      const fileId = menuImage ? newId : '';
-      const menuCategories = menuCategoriesQuery.data;
-      const menuData = buildMenuData({ fileId, inputValue, menuCategories });
-
-      // 메뉴 데이터 검증
-      const valid = await validate.createMenuValue(menuData);
-      if (!valid.success) {
-        const message = valid.error.issues[0].message;
-        alert(message);
-        return;
-      }
-
       // 이미지 스토리지 삽입
       try {
         if (menuImage) {
@@ -55,18 +67,18 @@ export default function CreateMenuModal() {
         }
       } catch (err) {
         console.error(e);
-        showToast('이미지 첨부 과정에서 오류가 발생했습니다');
-        return;
+        showToast('이미지 처리 과정에서 오류가 발생했습니다.');
+        return e.preventDefault();
       }
 
       // 메뉴 데이터 발신
       try {
         await addMenu(menuData); // 메뉴 삽입
         await menuListQuery.refetch(); // 메뉴 리패치
-      } catch (e) {
-        console.error(e);
-        showToast('메뉴 추가 과정에서 오류가 발생했습니다');
-        return;
+      } catch (err) {
+        console.error(err);
+        showToast('메뉴 처리 과정에서 오류가 발생했습니다.');
+        return e.preventDefault();
       }
 
       // 데이터 처리 상태 알림
@@ -75,10 +87,13 @@ export default function CreateMenuModal() {
       // 초기화
       setModalClick(false);
       setInputValue(initMenu);
+      resetMenuError();
     };
 
     showConfirmModal({ title, onConfirm });
   };
+
+  const clearMenuErrorForm = useSetAtom(clearMenuErrorFormAtom);
 
   /** 입력값 수신 */
   const getInputValue = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -94,6 +109,8 @@ export default function CreateMenuModal() {
       }
       return { ...prev, [name]: value };
     });
+
+    clearMenuErrorForm(name as keyof MenuFormInputs);
   };
 
   /** 폼 창 닫기 */
@@ -113,10 +130,10 @@ export default function CreateMenuModal() {
     <form className={styles.menuModal} onSubmit={handleSubmit}>
       <div className={styles.wrap}>
         {/* 모달 주제 */}
-        <MenuModalHeader title='음식 추가' onClose={handleClose} />
+        <MenuModalHeader title='메뉴 추가' onClose={handleClose} />
 
         {/* 사진 첨부 */}
-        <MenuImageInput mode='create' imageUrl={''} onChange={setImgFile} />
+        <MenuImageInput mode='create' onChange={setImgFile} />
 
         {/* 입력 필드 */}
         <MenuFormFields inputValue={inputValue} categories={menuCategoriesQuery.data} onInputChange={getInputValue} />

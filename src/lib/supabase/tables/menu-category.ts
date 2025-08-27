@@ -14,7 +14,7 @@ export async function getMenuCategory(): Promise<MenuCategory[]> {
   const { data, error } = await supabase.from('menu_category').select('*').order('id', { ascending: true });
 
   if (error) {
-    console.error(error.message);
+    error.message && console.error(error.message);
     throw new Error(error.message);
   }
 
@@ -30,7 +30,7 @@ export const addMenuCategory = async (newMenuCategory: NewMenuCategory) => {
   const { error } = await supabase.from('menu_category').insert(newMenuCategory);
 
   if (error) {
-    console.error(error.message);
+    error.message && console.error(error.message);
     throw new Error(error.message);
   }
 
@@ -46,7 +46,7 @@ export const updateMenuCategory = async (updatedMenuCategories: UpdateMenuCatego
   const { error } = await supabase.from('menu_category').upsert(updatedMenuCategories);
 
   if (error) {
-    console.error(error.message);
+    error.message && console.error(error.message);
     throw new Error(error.message);
   }
 
@@ -62,7 +62,7 @@ export const deleteMenuCategory = async (id: string[]) => {
   const { error, data } = await supabase.from('menu_category').delete().in('id', id).select();
 
   if (error) {
-    console.error(error.message);
+    error.message && console.error(error.message);
     throw new Error(error.message);
   }
 

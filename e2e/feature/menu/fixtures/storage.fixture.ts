@@ -68,4 +68,54 @@ export async function deleteImageSuccess(page: Page) {
   });
 }
 
-// --- Variables ---
+/* FAIL */
+
+/**
+ * post storage
+ * - storage PUT 요청을 모킹하여 실패 응답을 반환합니다.
+ */
+export async function postImageFail(page: Page) {
+  isCalled = false;
+  await page.route(STORAGE_API_REX, async (route) => {
+    const method = route.request().method();
+    if (method === 'PUT') {
+      isCalled = true;
+      await route.fulfill({
+        status: 405,
+        contentType: 'application/json',
+        // header
+      });
+    } else {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({}), // { id: string; path: string; fullPath: string; }
+      });
+    }
+  });
+}
+
+/**
+ * delete storage
+ * - storage DELETE 요청을 모킹하여 실패 응답을 반환합니다.
+ */
+export async function deleteImageFail(page: Page) {
+  isCalled = false;
+  await page.route(STORAGE_API_REX, async (route) => {
+    const method = route.request().method();
+    if (method === 'DELETE') {
+      isCalled = true;
+      await route.fulfill({
+        status: 405,
+        contentType: 'application/json',
+        // header
+      });
+    } else {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({}), // { id: string; path: string; fullPath: string; }
+      });
+    }
+  });
+}

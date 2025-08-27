@@ -5,10 +5,10 @@ import { PrimitiveAtom, useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { showToastAtom } from '@/features/alert/toast/store/atom';
 
 import {
+  AuthFormInputs,
   authStatusAtom,
   captchaRefreshAtom,
-  clearErrorFormAtom,
-  FormInputs,
+  clearAuthErrorFormAtom,
   setErrorFormAtom,
 } from '../store/auth-atom';
 import useSuccessRedirect from './use-success-redirect';
@@ -32,7 +32,7 @@ export default function useAuthForm<T>({ formAtom, validationSchema, onSubmit }:
   const authStatus = useAtomValue(authStatusAtom);
   const setAuthStatus = useSetAtom(authStatusAtom);
   const setErrorForm = useSetAtom(setErrorFormAtom);
-  const clearErrorForm = useSetAtom(clearErrorFormAtom);
+  const clearErrorForm = useSetAtom(clearAuthErrorFormAtom);
   const captchaRefresh = useSetAtom(captchaRefreshAtom);
   const showToast = useSetAtom(showToastAtom);
 
@@ -52,7 +52,7 @@ export default function useAuthForm<T>({ formAtom, validationSchema, onSubmit }:
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormState((prev: T) => ({ ...prev, [name]: value }));
-    clearErrorForm(name as keyof FormInputs);
+    clearErrorForm(name as keyof AuthFormInputs);
 
     // 에러 상태면 다시 유휴 상태로 변경
     if (authStatus === 'error') {

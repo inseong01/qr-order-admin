@@ -2,21 +2,15 @@ import { useAtomValue, useSetAtom } from 'jotai';
 
 import { PATHS } from '@/constants/paths';
 import validate from '@/utils/function/validate';
+import { FormInputBox, FormInputCaption } from '@/components/ui/exception';
 
 import styles from './../common.module.css';
 import { PWD_MAX, PWD_MIN } from '../const';
 import useAuthForm from '../hooks/use-auth-form';
 import AuthContainer from '../components/container';
-import {
-  AuthForm,
-  AuthFormInputBox,
-  AuthFormSubmitButton,
-  AuthFormTitle,
-  AuthNavLink,
-  InputCaption,
-} from '../components/layout';
 import useDisabledState from '../hooks/use-disabled';
 import { signUpNewUser } from '../util/auth-supabase-api';
+import { AuthForm, AuthFormSubmitButton, AuthFormTitle, AuthNavLink } from '../components/layout';
 import { authStatusAtom, captchaTokenAtom, errorFormAtom, signupFormAtom } from '../store/auth-atom';
 
 export default function SignUpPage() {
@@ -55,7 +49,7 @@ export default function SignUpPage() {
 
       {/* 중간 */}
       <AuthForm onSubmit={handleSubmit} hasLink={true}>
-        <AuthFormInputBox>
+        <FormInputBox>
           <input
             required
             type='email'
@@ -68,7 +62,7 @@ export default function SignUpPage() {
             onChange={handleInputChange}
             disabled={disabled}
           />
-          <InputCaption text={idErrorMsg} hasError={Boolean(idErrorMsg)} />
+          <FormInputCaption text={idErrorMsg} hasError={Boolean(idErrorMsg)} />
 
           <input
             required
@@ -84,7 +78,7 @@ export default function SignUpPage() {
             onChange={handleInputChange}
             disabled={disabled}
           />
-          <InputCaption text={pwdErrorMsg} hasError={Boolean(pwdErrorMsg)} />
+          <FormInputCaption text={pwdErrorMsg} hasError={Boolean(pwdErrorMsg)} />
 
           <input
             required
@@ -98,8 +92,8 @@ export default function SignUpPage() {
             onChange={handleInputChange}
             disabled={disabled}
           />
-          <InputCaption text={confirmPwdErrorMsg} hasError={Boolean(confirmPwdErrorMsg)} />
-        </AuthFormInputBox>
+          <FormInputCaption text={confirmPwdErrorMsg} hasError={Boolean(confirmPwdErrorMsg)} />
+        </FormInputBox>
 
         <AuthFormSubmitButton text={description} disabled={disabled} />
       </AuthForm>

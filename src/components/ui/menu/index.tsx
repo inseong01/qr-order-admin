@@ -7,8 +7,8 @@ import { setModalClickAtom, setTabModalAtomState } from '@/features/modal/tab/st
 
 import LIGHT_PLUS_ICON from '@/assets/icon/light-plus.svg';
 
-import { initMenu, selectMenuAtom } from './store/atom';
 import styles from './index.module.css';
+import { initMenu, resetMenuErrorAtom, selectMenuAtom } from './store/atom';
 
 /**
  * 메뉴 항목 버튼
@@ -17,6 +17,7 @@ export function ListMenu(props: Menu) {
   const setModalClick = useSetAtom(setModalClickAtom);
   const setModalState = useSetAtom(setTabModalAtomState);
   const selectMenu = useSetAtom(selectMenuAtom);
+  const resetMenuError = useSetAtom(resetMenuErrorAtom);
 
   const title = props.name;
   const price = props.price.toLocaleString();
@@ -25,6 +26,7 @@ export function ListMenu(props: Menu) {
     selectMenu(props);
     setModalState('menu-update');
     setModalClick(true);
+    resetMenuError();
   };
 
   return (
@@ -45,11 +47,13 @@ export function ListMenuAdd({ category }: { category: string }) {
   const setModalClick = useSetAtom(setModalClickAtom);
   const setModalState = useSetAtom(setTabModalAtomState);
   const selectMenu = useSetAtom(selectMenuAtom);
+  const resetMenuError = useSetAtom(resetMenuErrorAtom);
 
   const handleClick = () => {
     selectMenu({ ...initMenu, menu_category: { title: category } });
     setModalState('menu-create');
     setModalClick(true);
+    resetMenuError();
   };
 
   return (
@@ -59,7 +63,7 @@ export function ListMenuAdd({ category }: { category: string }) {
           <img src={LIGHT_PLUS_ICON} alt='add icon' />
         </div>
 
-        <span className={styles.title}>상품 추가</span>
+        <span className={styles.title}>메뉴 추가</span>
       </div>
     </ListBox>
   );

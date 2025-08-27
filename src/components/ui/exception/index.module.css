@@ -2,3 +2,17 @@
   color: #b4b4b4;
   font-size: var(--fz-l);
 }
+
+/* FormInputBox */
+.inputBox {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* inputCapton */
+.caption {
+  color: var(--error-color);
+  font-size: var(--fz-s-response);
+  text-align: start;
+}

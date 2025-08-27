@@ -3,6 +3,8 @@ import { ZodIssue } from 'zod';
 import { Session } from '@supabase/supabase-js';
 import { atomWithStorage, createJSONStorage } from 'jotai/utils';
 
+import { clearZodErrorForField, mapZodFieldErrors } from '@/utils/function/input-error';
+
 import { CAPTCHA_TOKEN } from '../const';
 
 /* 사용자 로그인 정보 */
@@ -12,7 +14,7 @@ export const setUserSessionAtom = atom(null, (_, set, session: Session | null) =
 });
 
 /* 폼 */
-export type FormInputs = {
+export type AuthFormInputs = {
   id: string;
   password: string;
   confirmPassword: string;
@@ -36,7 +38,7 @@ export const authStatusAtom = atom<AuthStatusAtom>('loading');
 export const loginFormAtom = atom({ id: '', password: '' });
 
 // 회원가입
-export const signupFormAtom = atom<FormInputs>({ id: '', password: '', confirmPassword: '' });
+export const signupFormAtom = atom<AuthFormInputs>({ id: '', password: '', confirmPassword: '' });
 
 // 비밀번호 찾기
 export const findPwdFormAtom = atom({ id: '' });
@@ -45,23 +47,15 @@ export const findPwdFormAtom = atom({ id: '' });
 export const resetPwdFormAtom = atom({ password: '', confirmPassword: '' });
 
 /* 입력 에러 */
-type ErrorFormKeys = Map<keyof FormInputs, string>;
-export const errorFormAtom = atom<ErrorFormKeys>(new Map());
+type AuthErrorFormKeys = Map<keyof AuthFormInputs, string>;
+export const errorFormAtom = atom<AuthErrorFormKeys>(new Map());
 export const setErrorFormAtom = atom(null, (_, set, issues: ZodIssue[]) => {
-  const issueObj = new Map<keyof FormInputs, string>();
-
-  issues.forEach((i) => {
-    const field = i.path[0].toString() as keyof FormInputs;
-    const message = i.message.toString();
-    issueObj.set(field, message);
-  });
-
-  set(errorFormAtom, issueObj);
+  const errorForm = mapZodFieldErrors<AuthFormInputs>(issues);
+  set(errorFormAtom, errorForm);
 });
-export const clearErrorFormAtom = atom(null, (get, set, field: keyof FormInputs) => {
-  const prevMap = new Map(get(errorFormAtom));
-  prevMap.delete(field);
-  set(errorFormAtom, prevMap);
+export const clearAuthErrorFormAtom = atom(null, (get, set, field: keyof AuthFormInputs) => {
+  const updatedErrorForm = clearZodErrorForField(get(errorFormAtom), field);
+  set(errorFormAtom, updatedErrorForm);
 });
 
 /* 폼 초기화 */

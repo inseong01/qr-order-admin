@@ -31,16 +31,6 @@ export function AuthNavLink({ text, to }: AuthNavLinkProps) {
   );
 }
 
-type InputCaptionProps = {
-  text: string;
-  hasError: boolean;
-};
-
-// InputCaption
-export function InputCaption({ text, hasError }: InputCaptionProps) {
-  return hasError && <span className={styles.caption}>{text}</span>;
-}
-
 type AuthFormSubmitButtonProps = {
   text: string;
   disabled: boolean;
@@ -68,13 +58,4 @@ export function AuthForm({ children, hasLink, onSubmit }: AuthFormProps) {
       {children}
     </form>
   );
-}
-
-type AuthFormInputBoxProps = {
-  children: ReactNode;
-};
-
-// AuthFormInputBox
-export function AuthFormInputBox({ children }: AuthFormInputBoxProps) {
-  return <div className={styles.inputBox}>{children}</div>;
 }

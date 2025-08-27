@@ -2,21 +2,15 @@ import { useAtomValue } from 'jotai';
 
 import { PATHS } from '@/constants/paths';
 import validate from '@/utils/function/validate';
+import { FormInputBox, FormInputCaption } from '@/components/ui/exception';
 
 import styles from './../common.module.css';
-import AuthContainer from '../components/container';
-import {
-  AuthForm,
-  AuthFormInputBox,
-  AuthFormSubmitButton,
-  AuthFormTitle,
-  AuthNavLink,
-  InputCaption,
-} from '../components/layout';
 import useAuthForm from '../hooks/use-auth-form';
+import AuthContainer from '../components/container';
 import useDisabledState from '../hooks/use-disabled';
 import { signInWithEmailAndPassword } from '../util/auth-supabase-api';
 import { captchaTokenAtom, errorFormAtom, loginFormAtom } from '../store/auth-atom';
+import { AuthForm, AuthFormSubmitButton, AuthFormTitle, AuthNavLink } from '../components/layout';
 
 /**
  * 로그인 페이지 전체 UI
@@ -47,7 +41,7 @@ export default function LoginPage() {
 
       {/* 중간 */}
       <AuthForm onSubmit={handleSubmit} hasLink={true}>
-        <AuthFormInputBox>
+        <FormInputBox>
           <input
             required
             type='email'
@@ -60,7 +54,7 @@ export default function LoginPage() {
             onChange={handleInputChange}
             disabled={disabled}
           />
-          <InputCaption text={idErrorMsg} hasError={Boolean(idErrorMsg)} />
+          <FormInputCaption text={idErrorMsg} hasError={Boolean(idErrorMsg)} />
 
           <input
             required
@@ -74,8 +68,8 @@ export default function LoginPage() {
             onChange={handleInputChange}
             disabled={disabled}
           />
-          <InputCaption text={pwdErrorMsg} hasError={Boolean(pwdErrorMsg)} />
-        </AuthFormInputBox>
+          <FormInputCaption text={pwdErrorMsg} hasError={Boolean(pwdErrorMsg)} />
+        </FormInputBox>
 
         <AuthFormSubmitButton text={description} disabled={disabled} />
       </AuthForm>
