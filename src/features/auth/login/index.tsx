@@ -1,4 +1,4 @@
-import { useAtomValue } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 
 import { PATHS } from '@/constants/paths';
 import validate from '@/utils/function/validate';
@@ -9,7 +9,7 @@ import useAuthForm from '../hooks/use-auth-form';
 import AuthContainer from '../components/container';
 import useDisabledState from '../hooks/use-disabled';
 import { signInWithEmailAndPassword } from '../util/auth-supabase-api';
-import { captchaTokenAtom, errorFormAtom, loginFormAtom } from '../store/auth-atom';
+import { authStatusAtom, captchaTokenAtom, errorFormAtom, loginFormAtom } from '../store/auth-atom';
 import { AuthForm, AuthFormSubmitButton, AuthFormTitle, AuthNavLink } from '../components/layout';
 
 /**
@@ -18,6 +18,7 @@ import { AuthForm, AuthFormSubmitButton, AuthFormTitle, AuthNavLink } from '../c
 export default function LoginPage() {
   const captchaToken = useAtomValue(captchaTokenAtom);
   const errorForm = useAtomValue(errorFormAtom);
+  const setAuthStatus = useSetAtom(authStatusAtom);
   const { disabled, authStatus } = useDisabledState();
   const { formState, handleInputChange, handleSubmit } = useAuthForm({
     formAtom: loginFormAtom,
@@ -27,6 +28,11 @@ export default function LoginPage() {
       const { error } = await signInWithEmailAndPassword(formData.id, formData.password, captchaToken);
 
       if (error) throw error;
+
+      // 성공 UI 지연 등장
+      setTimeout(() => {
+        setAuthStatus('success');
+      }, 300);
     },
   });
 

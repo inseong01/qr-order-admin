@@ -22,7 +22,6 @@ import { useQueryMenuCategoryList, useQueryMenuList } from '@/hooks/use-query/qu
 
 import { deleteMenu, updateMenu } from '@/lib/supabase/tables/menu';
 import { deleteImageByFileName, STORE, updateImage } from '@/lib/supabase/storage/store';
-import { generateNumberId } from '@/features/modal/tab/menu/util/generate-id';
 
 import styles from './../index.module.css';
 import { updateMenuData } from '../util/set-menu';
@@ -50,15 +49,9 @@ export default function UpdateMenuModal() {
     const title = submitType === 'update' ? '메뉴를 수정하겠습니까?' : '메뉴를 삭제하겠습니끼?';
 
     // 메뉴 데이터 가공
-    const newImgFileId = generateNumberId();
-
-    const imgFileId = inputValue.img_url.split('menu_').at(-1) ?? '';
-    const fileId = imgFileId === 'default' ? newImgFileId : imgFileId;
-
     const hasImg = !!menuImageFile;
-
     const menuCategories = menuCategoriesQuery.data;
-    const menuData = updateMenuData({ fileId, inputValue, menuCategories, hasImg });
+    const menuData = updateMenuData({ inputValue, menuCategories, hasImg });
 
     // 값 검증
     if (submitType === 'update') {
@@ -71,9 +64,11 @@ export default function UpdateMenuModal() {
 
     // 제출
     const onConfirm = async () => {
+      const fileId = inputValue.img_url.split('menu_').at(-1) ?? '';
+
       // 이미지 스토리지 업데이트
       try {
-        if (menuImageFile) {
+        if (submitType === 'update' && menuImageFile) {
           await updateImage({ file: menuImageFile, fileId });
         }
 

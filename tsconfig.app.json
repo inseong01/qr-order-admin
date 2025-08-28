@@ -28,5 +28,5 @@
     }
   },
   "include": ["src", "auto", "e2e"],
-  "exclude": ["test"]
+  "exclude": ["**/*.test.ts", "**/*.spec.ts", "**/*.fixture.ts", "__test__"]
 }

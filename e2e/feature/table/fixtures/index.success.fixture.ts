@@ -11,10 +11,8 @@ import { requestItemResponseSuccess } from './request-item.fixture';
 import { requestCategoryResponseSuccess } from './request-category.fixture';
 import { creaeteTableSuccess, deleteTableSuccess, updateTableSuccess } from './table.fixture';
 
-/* SUCCESS */
-
 /**
- * 시나리오 1: 신규 좌석 생성
+ * 성공 시나리오 - 신규 좌석 생성
  */
 export const tableTabAPITest_S1 = base.extend({
   context: async ({ browser }, use) => {
@@ -41,7 +39,7 @@ export const tableTabAPITest_S1 = base.extend({
 });
 
 /**
- * 시나리오 2: 좌석 위치 및 크기 변경
+ * 성공 시나리오 - 좌석 위치 및 크기 변경
  */
 export const tableTabAPITest_S2 = base.extend({
   context: async ({ browser }, use) => {
@@ -68,7 +66,7 @@ export const tableTabAPITest_S2 = base.extend({
 });
 
 /**
- * 시나리오 3: 좌석 삭제
+ * 성공 시나리오 - 좌석 삭제
  */
 export const tableTabAPITest_S3 = base.extend({
   context: async ({ browser }, use) => {
@@ -95,7 +93,7 @@ export const tableTabAPITest_S3 = base.extend({
 });
 
 /**
- * 시나리오 4: 좌석 QR 확인 및 다운로드
+ * 성공 시나리오 - 좌석 QR 확인 및 다운로드
  */
 export const tableTabAPITest_S4 = base.extend({
   context: async ({ browser }, use) => {

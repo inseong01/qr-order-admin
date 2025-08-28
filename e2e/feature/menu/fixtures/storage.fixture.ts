@@ -1,8 +1,7 @@
 import { Page } from '@playwright/test';
+import { mockMenu } from '../const';
 
 export const STORAGE_API_REX = /.*supabase\.co\/storage\/v1\/object(\/|\$|\?)./;
-
-let isCalled = false;
 
 /**
  * select strage (success)
@@ -23,11 +22,9 @@ export async function storageResponseSuccess(page: Page) {
  * - storage POST 요청을 모킹하여 성공 응답을 반환합니다.
  */
 export async function postImageSuccess(page: Page) {
-  isCalled = false;
   await page.route(STORAGE_API_REX, async (route) => {
     const method = route.request().method();
     if (method === 'POST') {
-      isCalled = true;
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -48,15 +45,13 @@ export async function postImageSuccess(page: Page) {
  * - storage DELETE 요청을 모킹하여 성공 응답을 반환합니다.
  */
 export async function deleteImageSuccess(page: Page) {
-  isCalled = false;
   await page.route(STORAGE_API_REX, async (route) => {
     const method = route.request().method();
     if (method === 'DELETE') {
-      isCalled = true;
       await route.fulfill({
         status: 204,
         contentType: 'application/json',
-        body: JSON.stringify({}), // FileObject
+        body: JSON.stringify([mockMenu.img_url]), // FileObject
       });
     } else {
       await route.fulfill({
@@ -68,22 +63,41 @@ export async function deleteImageSuccess(page: Page) {
   });
 }
 
-/* FAIL */
-
 /**
  * post storage
  * - storage PUT 요청을 모킹하여 실패 응답을 반환합니다.
  */
 export async function postImageFail(page: Page) {
-  isCalled = false;
   await page.route(STORAGE_API_REX, async (route) => {
     const method = route.request().method();
-    if (method === 'PUT') {
-      isCalled = true;
+    if (method === 'POST') {
       await route.fulfill({
         status: 405,
         contentType: 'application/json',
-        // header
+        body: JSON.stringify({}), // { id: string; path: string; fullPath: string; }
+      });
+    } else {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({}), // { id: string; path: string; fullPath: string; }
+      });
+    }
+  });
+}
+
+/**
+ * PUT storage
+ * - storage PUT 요청을 모킹하여 실패 응답을 반환합니다.
+ */
+export async function putImageFail(page: Page) {
+  await page.route(STORAGE_API_REX, async (route) => {
+    const method = route.request().method();
+    if (method === 'PUT') {
+      await route.fulfill({
+        status: 405,
+        contentType: 'application/json',
+        body: JSON.stringify({}), // { id: string; path: string; fullPath: string; }
       });
     } else {
       await route.fulfill({
@@ -100,15 +114,12 @@ export async function postImageFail(page: Page) {
  * - storage DELETE 요청을 모킹하여 실패 응답을 반환합니다.
  */
 export async function deleteImageFail(page: Page) {
-  isCalled = false;
   await page.route(STORAGE_API_REX, async (route) => {
     const method = route.request().method();
     if (method === 'DELETE') {
-      isCalled = true;
       await route.fulfill({
         status: 405,
         contentType: 'application/json',
-        // header
       });
     } else {
       await route.fulfill({

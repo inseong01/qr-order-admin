@@ -21,7 +21,7 @@ export default function ProtectedRoute() {
   if (!isLogin) return <Navigate to={PATHS.AUTH.LOGIN} replace />;
 
   // 비밀번호 재설정 인증 성공 페이지
-  if (pathname === PATHS.ROOT.CHANGE.PASSWORD && authStatus === 'success') {
+  if (pathname === PATHS.ROOT.UPDATE.PASSWORD && authStatus === 'success') {
     return <AuthSuccess feature='비밀번호 재설정' movePage='로그인' />;
   }
 

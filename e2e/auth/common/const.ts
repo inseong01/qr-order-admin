@@ -39,5 +39,5 @@ export const TEST_SESSION_VALUE = {
 
 export const TEST_TOKEN_HASH = 'c2a2f3f9b9e6e2d3a4c5b6e7f8a9d0c1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7';
 
-export const EMAIL_REDIRECT_URL = `https://${PROJECT_REF}.supabase.co/auth/v1/verify?token=${TEST_TOKEN_HASH}&type=recovery&redirect_to=http://localhost:5173/change/password`;
+export const EMAIL_REDIRECT_URL = `https://${PROJECT_REF}.supabase.co/auth/v1/verify?token=${TEST_TOKEN_HASH}&type=recovery&redirect_to=http://localhost:5173/update/password`;
 export const TEST_ORIGN_URL = 'http://localhost:5173';

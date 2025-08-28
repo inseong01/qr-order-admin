@@ -1,5 +1,4 @@
-import Konva from 'konva';
-import { useAtomValue, useSetAtom, useStore } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 
 import { windowStateAtom } from '@/store/window-atom';
 

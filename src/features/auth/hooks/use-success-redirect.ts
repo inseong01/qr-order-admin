@@ -29,7 +29,7 @@ export default function useSuccessRedirect() {
         path = PATHS.AUTH.LOGIN;
         break;
       }
-      case PATHS.ROOT.CHANGE.PASSWORD: {
+      case PATHS.ROOT.UPDATE.PASSWORD: {
         replace = true;
         path = PATHS.AUTH.LOGIN;
         break;
@@ -41,7 +41,7 @@ export default function useSuccessRedirect() {
       return;
     }
 
-    if (pathname === PATHS.ROOT.CHANGE.PASSWORD) {
+    if (pathname === PATHS.ROOT.UPDATE.PASSWORD) {
       setTimeout(() => {
         signOutUser();
       }, REDIRECT_DELAY);

@@ -3,14 +3,14 @@ import { ROUTES } from './routes';
 const ROOT = ROUTES.ROOT;
 const AUTH = `/${ROUTES.AUTH}` as const;
 const FIND = `${AUTH}/${ROUTES.FIND}` as const;
-const CHANGE = `/${ROUTES.CHANGE}` as const;
+const UPDATE = `/${ROUTES.UPDATE}` as const;
 
 export const PATHS = {
   ROOT: {
     MAIN: ROOT,
-    CHANGE: {
-      MAIN: CHANGE,
-      PASSWORD: `${CHANGE}/password`,
+    UPDATE: {
+      MAIN: UPDATE,
+      PASSWORD: `${UPDATE}/password`,
     },
   },
   AUTH: {

@@ -1,7 +1,6 @@
 import { Route, Routes } from 'react-router';
 
 import { ROUTES } from '@/constants/routes';
-import ResetPasswordPage from '@/features/auth/reset-password';
 import FindPasswordPage from '@/features/auth/find-password';
 import LoginPage from '@/features/auth/login';
 import SignUpPage from '@/features/auth/sign-up';

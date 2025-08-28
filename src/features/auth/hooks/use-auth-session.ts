@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { Session } from '@supabase/supabase-js';
 import { useAtomValue, useSetAtom, useStore } from 'jotai';
 
@@ -28,10 +28,17 @@ export default function useAuthSession() {
   /**
    * 인증 필요한 라우터에서만 success 할당
    * 이외 라우터에서 success 할당하는 경우 접속 즉시 리다이렉트 발생
-   * 예: change/password -> auth/login
+   * 예: update/password -> auth/login
    */
   const isAuthPage = pathname.includes(PATHS.AUTH.MAIN);
   const processAuthStatus = isAuthPage ? 'success' : 'idle';
+
+  /**
+   * 첫 마운트 때 processSession 중복 실행 방지 역할
+   *
+   * useEffect: verifyAuthJWT, onAuthStateChange
+   */
+  const isFirstMounted = useRef(true);
 
   /**
    * 세션 유효성 검사 + 상태 반영
@@ -39,13 +46,15 @@ export default function useAuthSession() {
    */
   const processSession = useCallback(
     async (session: Session | null) => {
+      if (isFirstMounted.current) return;
+
       const currentAuthStatus = store.get(authStatusAtom);
+
       if (currentAuthStatus === 'success' || currentAuthStatus === 'error') return;
 
       if (!session) {
         return logoutAndClear();
       }
-
       setAuthStatus('loading');
 
       try {
@@ -83,6 +92,8 @@ export default function useAuthSession() {
         setSession(res.session);
 
         setAuthStatus(processAuthStatus);
+
+        isFirstMounted.current = false;
       })
       .catch(() => {
         setAuthStatus('error');

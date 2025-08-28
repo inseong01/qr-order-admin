@@ -36,3 +36,5 @@ export async function generateFakeImage() {
     buffer,
   };
 }
+
+export const TEST_PAGE_URL = '/';

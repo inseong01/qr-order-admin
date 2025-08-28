@@ -10,3 +10,5 @@ export const setFormattedTime = (startAt: string) =>
     hour: '2-digit',
     minute: '2-digit',
   });
+
+export const TEST_PAGE_URL = '/';

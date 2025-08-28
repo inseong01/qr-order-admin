@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router';
 import App from '@/App';
 import NotFound from '@/Not-found';
 import { ROUTES } from '@/constants/routes';
-import ResetPasswordPage from '@/features/auth/reset-password';
+import UpdatePasswordPage from '@/features/auth/update-password';
 import GlobalSettingsHandler from '@/components/layout/global-settings-handler';
 
 import ProtectedRoute from './protected-route';
@@ -28,8 +28,8 @@ export default function RootRouter() {
           <Route index element={<App />} />
 
           {/* 정보 수정 */}
-          <Route path={ROUTES.CHANGE}>
-            <Route path={ROUTES.PASSWORD} element={<ResetPasswordPage />} />
+          <Route path={ROUTES.UPDATE}>
+            <Route path={ROUTES.PASSWORD} element={<UpdatePasswordPage />} />
           </Route>
         </Route>
 

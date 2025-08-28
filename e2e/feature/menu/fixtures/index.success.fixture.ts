@@ -11,10 +11,8 @@ import {
 } from './menu_category.fixture';
 import { deleteImageSuccess } from './storage.fixture';
 
-/* SUCCESS */
-
 /**
- * 시나리오 1: 신규 메뉴 카테고리 및 메뉴 항목 추가
+ * 성공 시나리오 - 신규 메뉴 카테고리 및 메뉴 항목 추가
  */
 export const menuTabAPITest_S1 = base.extend({
   context: async ({ browser }, use) => {
@@ -25,11 +23,9 @@ export const menuTabAPITest_S1 = base.extend({
   page: async ({ context }, use) => {
     const page = await context.newPage();
 
-    // 사전 요청 목킹
     await tableTabAPISuccess(page);
     await orderTabAPISuccess(page);
 
-    // 사용자 설정 요청 모킹
     await createMenuSuccess(page);
     await createMenuCategorySuccess(page);
 
@@ -38,7 +34,7 @@ export const menuTabAPITest_S1 = base.extend({
 });
 
 /**
- * 시나리오 2: 메뉴 항목 수정
+ * 성공 시나리오 - 메뉴 항목 수정
  */
 export const menuTabAPITest_S2 = base.extend({
   context: async ({ browser }, use) => {
@@ -49,11 +45,9 @@ export const menuTabAPITest_S2 = base.extend({
   page: async ({ context }, use) => {
     const page = await context.newPage();
 
-    // 사전 요청 목킹
     await tableTabAPISuccess(page);
     await orderTabAPISuccess(page);
 
-    // 사용자 설정 요청 모킹
     await updateMenuSuccess(page);
 
     await use(page);
@@ -61,7 +55,7 @@ export const menuTabAPITest_S2 = base.extend({
 });
 
 /**
- * 시나리오 3: 메뉴 카테고리 수정
+ * 성공 시나리오 - 메뉴 카테고리 수정
  */
 export const menuTabAPITest_S3 = base.extend({
   context: async ({ browser }, use) => {
@@ -72,11 +66,9 @@ export const menuTabAPITest_S3 = base.extend({
   page: async ({ context }, use) => {
     const page = await context.newPage();
 
-    // 사전 요청 목킹
     await tableTabAPISuccess(page);
     await orderTabAPISuccess(page);
 
-    // 사용자 설정 요청 모킹
     await updateMenuCategorySuccess(page);
 
     await use(page);
@@ -84,7 +76,7 @@ export const menuTabAPITest_S3 = base.extend({
 });
 
 /**
- * 시나리오 4: 메뉴 항목 삭제
+ * 성공 시나리오 - 메뉴 항목 삭제
  */
 export const menuTabAPITest_S4 = base.extend({
   context: async ({ browser }, use) => {
@@ -95,11 +87,9 @@ export const menuTabAPITest_S4 = base.extend({
   page: async ({ context }, use) => {
     const page = await context.newPage();
 
-    // 사전 요청 목킹
     await tableTabAPISuccess(page);
     await orderTabAPISuccess(page);
 
-    // 사용자 설정 요청 모킹
     await deleteMenuSuccess(page);
     await deleteImageSuccess(page);
 
@@ -108,7 +98,7 @@ export const menuTabAPITest_S4 = base.extend({
 });
 
 /**
- * 시나리오 5: 메뉴 카테고리 삭제
+ * 성공 시나리오 - 메뉴 카테고리 삭제
  */
 export const menuTabAPITest_S5 = base.extend({
   context: async ({ browser }, use) => {
@@ -119,11 +109,9 @@ export const menuTabAPITest_S5 = base.extend({
   page: async ({ context }, use) => {
     const page = await context.newPage();
 
-    // 사전 요청 목킹
     await tableTabAPISuccess(page);
     await orderTabAPISuccess(page);
 
-    // 사용자 설정 요청 모킹
     await deleteMenuCategorySuccess(page);
     await deleteImageSuccess(page);
 

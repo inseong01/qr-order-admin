@@ -5,13 +5,13 @@ import mockUpdatedOrderItems from '../mock/order-item.update.json' assert { type
 
 export const ORDER_ITEM_API_REX = /.*supabase\.co\/rest\/v1\/order_item(?:\/.*|\?.*|$)/;
 
-let mockMethodData: typeof mockUpdatedOrderItems;
-
 /**
  * select orderItem (success)
  * - orderItem GET 요청을 모킹하여 성공 기본 응답을 반환합니다.
  */
 export async function orderItemResponseSuccess(page: Page, method: string, isCalled: boolean) {
+  let mockMethodData: typeof mockUpdatedOrderItems;
+
   switch (method) {
     case 'PATCH': {
       mockMethodData = mockUpdatedOrderItems;
@@ -36,8 +36,6 @@ export async function orderItemResponseSuccess(page: Page, method: string, isCal
   });
 }
 
-/* FAIL */
-
 /**
  * select orderItem (fail)
  * - orderItem 요청을 모킹하여 실패 응답을 반환합니다.
@@ -47,12 +45,6 @@ export async function orderItemResponseFail(page: Page) {
     await route.fulfill({
       status: 405,
       contentType: 'application/json',
-      headers: {
-        'access-control-expose-headers': 'X-Total-Count, Link, X-Supabase-Api-Version',
-        'x-supabase-api-version': '2024-01-01',
-      },
     });
   });
 }
-
-// --- Variables ---

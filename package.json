@@ -55,6 +55,7 @@
     "jsdom": "^26.1.0",
     "prettier": "^3.6.2",
     "vite": "^6.0.1",
+    "vite-plugin-remove-console": "^2.2.0",
     "vitest": "^3.2.4"
   }
 }

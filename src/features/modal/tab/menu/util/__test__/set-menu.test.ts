@@ -53,7 +53,7 @@ describe('updateMenuData', () => {
     const fileId = 'file123';
     const hasImg = true;
 
-    const result = updateMenuData({ inputValue, menuCategories, fileId, hasImg });
+    const result = updateMenuData({ inputValue, menuCategories, hasImg });
 
     expect(result.img_url).toBe(`mock-url/${fileId}`);
     expect(result.id).toBe('1');
@@ -74,10 +74,9 @@ describe('updateMenuData', () => {
     } as any;
 
     const menuCategories = [{ id: 'cat1', title: '카테고리1' }];
-    const fileId = 'file123';
     const hasImg = false;
 
-    const result = updateMenuData({ inputValue, menuCategories, fileId, hasImg });
+    const result = updateMenuData({ inputValue, menuCategories, hasImg });
 
     // 이미지 URL이 기존 값 유지
     expect(result.img_url).toBe('old-url');

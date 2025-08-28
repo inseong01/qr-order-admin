@@ -1,16 +1,19 @@
+import { useSetAtom } from 'jotai';
+
 import validate from '@/utils/function/validate';
 
 import styles from './index.module.css';
 import useAuthForm from '../../hooks/use-auth-form';
 import useDisabledState from '../../hooks/use-disabled';
-import { captchaTokenAtom } from '../../store/auth-atom';
 import { signInAnonymously } from '../../util/auth-supabase-api';
+import { authStatusAtom, captchaTokenAtom } from '../../store/auth-atom';
 
 type GuestLinkProps = {
   captchaToken: string;
 };
 
 export default function GuestLink({ captchaToken }: GuestLinkProps) {
+  const setAuthStatus = useSetAtom(authStatusAtom);
   const { disabled, authStatus } = useDisabledState();
   const { handleSubmit } = useAuthForm({
     formAtom: captchaTokenAtom,
@@ -23,6 +26,11 @@ export default function GuestLink({ captchaToken }: GuestLinkProps) {
       const { error } = await signInAnonymously(captchaToken);
 
       if (error) throw error;
+
+      // 성공 UI 지연 등장
+      setTimeout(() => {
+        setAuthStatus('success');
+      }, 300);
     },
   });
 

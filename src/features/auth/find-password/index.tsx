@@ -24,7 +24,7 @@ export default function FindPasswordPage() {
     validationSchema: validate.schema.findPassword,
     onSubmit: async (formData) => {
       // 비밀번호 초기화 요청
-      const redirectTo = import.meta.env.DEV ? localResetPasswordUrl : productResetPasswordUrl;
+      const redirectTo = import.meta.env.MODE === 'production' ? productResetPasswordUrl : localResetPasswordUrl;
       const { error } = await requestPasswordResetEmail(formData.id, captchaToken, redirectTo);
 
       if (error) throw error;

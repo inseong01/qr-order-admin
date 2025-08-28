@@ -8,8 +8,6 @@ import { deletedTable, newestTable, updatedTable } from '../const';
 
 export const TABLE_ITEM_API_REX = /.*supabase\.co\/rest\/v1\/table(?:\/.*|\?.*|$)/;
 
-let isCalled = false;
-
 /**
  * select table (success)
  * - table GET 요청을 모킹하여 성공 응답을 반환합니다.
@@ -29,7 +27,7 @@ export async function tableResponseSuccess(page: Page, data?: []) {
  * - table POST 요청을 모킹하여 성공 응답을 반환합니다.
  */
 export async function creaeteTableSuccess(page: Page) {
-  // isCalled = false;
+  let isCalled = false;
   await page.route(TABLE_ITEM_API_REX, async (route) => {
     const method = route.request().method();
     if (method === 'POST') {
@@ -57,7 +55,7 @@ export async function creaeteTableSuccess(page: Page) {
  * - table POST 요청을 모킹하여 성공 응답을 반환합니다.
  */
 export async function updateTableSuccess(page: Page) {
-  // isCalled = false;
+  let isCalled = false;
   await page.route(TABLE_ITEM_API_REX, async (route) => {
     const method = route.request().method();
     if (method === 'POST') {
@@ -85,7 +83,7 @@ export async function updateTableSuccess(page: Page) {
  * - table DELETE 요청을 모킹하여 성공 응답을 반환합니다.
  */
 export async function deleteTableSuccess(page: Page) {
-  // isCalled = false;
+  let isCalled = false;
   await page.route(TABLE_ITEM_API_REX, async (route) => {
     const method = route.request().method();
     if (method === 'DELETE') {
@@ -108,8 +106,6 @@ export async function deleteTableSuccess(page: Page) {
   });
 }
 
-/* FAIL */
-
 /**
  * select table (fail)
  * - table 요청을 모킹하여 실패 응답을 반환합니다.
@@ -119,16 +115,87 @@ export async function tableResponseFail(page: Page) {
     await route.fulfill({
       status: 405,
       contentType: 'application/json',
-      headers: {
-        'access-control-expose-headers': 'X-Total-Count, Link, X-Supabase-Api-Version',
-        'x-supabase-api-version': '2024-01-01',
-      },
     });
   });
 }
 
-// --- Variables ---
+/**
+ * creaete table (fail)
+ * - table POST 요청을 모킹하여 실패 응답을 반환합니다.
+ */
+export async function creaeteTableFail(page: Page) {
+  let isCalled = false;
+  await page.route(TABLE_ITEM_API_REX, async (route) => {
+    const method = route.request().method();
+    if (method === 'POST') {
+      isCalled = true;
+      await route.fulfill({
+        status: 405,
+        contentType: 'application/json',
+      });
+    } else if (method === 'GET') {
+      const mockData = isCalled ? mockInitTables : mockInitTables;
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(mockData),
+      });
+    } else {
+      console.error('Unexpected Error: method is not defined.');
+    }
+  });
+}
 
-test.beforeEach(() => {
-  isCalled = false;
-});
+/**
+ * update table (fail)
+ * - table POST 요청을 모킹하여 실패 응답을 반환합니다.
+ */
+export async function updateTableFail(page: Page) {
+  let isCalled = false;
+  await page.route(TABLE_ITEM_API_REX, async (route) => {
+    const method = route.request().method();
+    if (method === 'POST') {
+      isCalled = true;
+      await route.fulfill({
+        status: 405,
+        contentType: 'application/json',
+      });
+    } else if (method === 'GET') {
+      const mockData = isCalled ? mockInitTables : mockInitTables;
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(mockData),
+      });
+    } else {
+      console.error('Unexpected Error: method is not defined.');
+    }
+  });
+}
+
+/**
+ * delete table (fail)
+ * - table DELETE 요청을 모킹하여 실패 응답을 반환합니다.
+ */
+export async function deleteTableFail(page: Page) {
+  let isCalled = false;
+  await page.route(TABLE_ITEM_API_REX, async (route) => {
+    const method = route.request().method();
+    if (method === 'DELETE') {
+      isCalled = true;
+      await route.fulfill({
+        status: 405,
+        contentType: 'application/json',
+      });
+    } else if (method === 'GET') {
+      const mockData = isCalled ? mockInitTables : mockInitTables;
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(mockData),
+      });
+    } else {
+      console.error('Unexpected Error: method is not defined.');
+    }
+  });
+}

@@ -16,3 +16,5 @@ export const FIXED_TIME = '2025-08-25T09:39:09.966Z';
 export const FIRST_TABLE_POS = { X: 80, Y: 150 };
 export const SECOND_TABLE_POS = { X: 160, Y: 500 };
 export const MODAL_QR_CODE_POS = { X: 1000, Y: 350 };
+
+export const TEST_PAGE_URL = '/';

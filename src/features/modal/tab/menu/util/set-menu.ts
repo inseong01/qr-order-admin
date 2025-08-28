@@ -1,6 +1,7 @@
 import { Menu } from '@/lib/supabase/tables/menu';
 import { MenuCategory } from '@/lib/supabase/tables/menu-category';
 import { createImgPath } from '@/utils/function/image-path';
+import { generateNumberId } from './generate-id';
 
 type BuildMenuDataProps = {
   inputValue: Menu;
@@ -23,11 +24,14 @@ export function buildMenuData({ inputValue, menuCategories, fileId }: BuildMenuD
 type UpdateMenuDataProps = {
   inputValue: Menu;
   menuCategories?: MenuCategory[];
-  fileId: string;
   hasImg: boolean;
 };
 
-export function updateMenuData({ inputValue, menuCategories, fileId, hasImg }: UpdateMenuDataProps) {
+export function updateMenuData({ inputValue, menuCategories, hasImg }: UpdateMenuDataProps) {
+  const newImgFileId = generateNumberId();
+
+  const imgFileId = inputValue.img_url.split('menu_').at(-1) ?? '';
+  const fileId = imgFileId === 'default' ? newImgFileId : imgFileId;
   const img_url = hasImg ? createImgPath({ fileId }) : inputValue.img_url;
 
   return {

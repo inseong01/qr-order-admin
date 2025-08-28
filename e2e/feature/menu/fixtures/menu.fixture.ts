@@ -7,10 +7,6 @@ import { MENU_CATEGORY_API_REX } from './menu_category.fixture';
 
 export const MENU_API_REX = /.*supabase\.co\/rest\/v1\/menu(?:\/.*|\?.*|$)/;
 
-let isCalled = false;
-
-/* SUCCESS */
-
 /**
  * select menu (success)
  * - menu GET 요청을 모킹하여 성공 기본 응답을 반환합니다.
@@ -30,7 +26,7 @@ export async function menuResponseSuccess(page: Page, data?: []) {
  * - menu POST 요청을 모킹하여 성공 응답을 반환합니다.
  */
 export async function createMenuSuccess(page: Page) {
-  isCalled = false;
+  let isCalled = false;
 
   await page.route(MENU_API_REX, async (route) => {
     const method = route.request().method();
@@ -57,7 +53,8 @@ export async function createMenuSuccess(page: Page) {
  * - menu PATCH 요청을 모킹하여 성공 응답을 반환합니다.
  */
 export async function updateMenuSuccess(page: Page) {
-  isCalled = false;
+  let isCalled = false;
+
   // select menu_category
   await page.route(MENU_CATEGORY_API_REX, async (route) => {
     await route.fulfill({
@@ -92,7 +89,8 @@ export async function updateMenuSuccess(page: Page) {
  * - menu DELETE 요청을 모킹하여 성공 응답을 반환합니다.
  */
 export async function deleteMenuSuccess(page: Page) {
-  isCalled = false;
+  let isCalled = false;
+
   // select menu_category
   await page.route(MENU_CATEGORY_API_REX, async (route) => {
     await route.fulfill({
@@ -122,8 +120,6 @@ export async function deleteMenuSuccess(page: Page) {
   });
 }
 
-/* FAIL */
-
 /**
  * select menu (fail)
  * - menu GET 요청을 모킹하여 실패 응답을 반환합니다.
@@ -133,10 +129,6 @@ export async function menuResponseFail(page: Page) {
     await route.fulfill({
       status: 405,
       contentType: 'application/json',
-      headers: {
-        'access-control-expose-headers': 'X-Total-Count, Link, X-Supabase-Api-Version',
-        'x-supabase-api-version': '2024-01-01',
-      },
     });
   });
 }
@@ -152,10 +144,6 @@ export async function createMenuFail(page: Page) {
       await route.fulfill({
         status: 405,
         contentType: 'application/json',
-        headers: {
-          'access-control-expose-headers': 'X-Total-Count, Link, X-Supabase-Api-Version',
-          'x-supabase-api-version': '2024-01-01',
-        },
       });
     } else {
       await route.fulfill({
@@ -172,7 +160,8 @@ export async function createMenuFail(page: Page) {
  * - menu PATCH 요청을 모킹하여 실패 응답을 반환합니다.
  */
 export async function updateMenuFail(page: Page) {
-  isCalled = false;
+  let isCalled = false;
+
   // select menu_category
   await page.route(MENU_CATEGORY_API_REX, async (route) => {
     await route.fulfill({
@@ -189,10 +178,6 @@ export async function updateMenuFail(page: Page) {
       await route.fulfill({
         status: 405,
         contentType: 'application/json',
-        headers: {
-          'access-control-expose-headers': 'X-Total-Count, Link, X-Supabase-Api-Version',
-          'x-supabase-api-version': '2024-01-01',
-        },
       });
     } else {
       const mockData = isCalled ? [...mockMenus] : [...mockMenus];
@@ -210,7 +195,8 @@ export async function updateMenuFail(page: Page) {
  * - menu DELETE 요청을 모킹하여 실패 응답을 반환합니다.
  */
 export async function deleteMenuFail(page: Page) {
-  isCalled = false;
+  let isCalled = false;
+
   // select menu_category
   await page.route(MENU_CATEGORY_API_REX, async (route) => {
     await route.fulfill({
@@ -227,7 +213,6 @@ export async function deleteMenuFail(page: Page) {
       await route.fulfill({
         status: 405,
         contentType: 'application/json',
-        // header
       });
     } else {
       const mockData = isCalled ? [...mockMenus] : [...mockMenus];
