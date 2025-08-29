@@ -69,6 +69,7 @@ export function TableWidget() {
           resetTableState();
           await tablesQuery.refetch();
           showToast('삭제되었습니다.');
+          fadeBackgroundLayer(tableEditLayerRef, false).play();
         } catch (err) {
           console.error(err);
           showToast('오류가 발생했습니다.');
@@ -76,7 +77,6 @@ export function TableWidget() {
       };
 
       showConfirmModal({ title, onConfirm });
-      fadeBackgroundLayer(tableEditLayerRef, false).play();
       return;
     }
 
@@ -101,6 +101,7 @@ export function TableWidget() {
           resetTableState();
           await tablesQuery.refetch();
           showToast('수정되었습니다.');
+          fadeBackgroundLayer(tableEditLayerRef, false).play();
         } catch (err) {
           console.error(err);
           showToast('오류가 발생했습니다.');
@@ -108,7 +109,6 @@ export function TableWidget() {
       };
 
       showConfirmModal({ title, onConfirm });
-      fadeBackgroundLayer(tableEditLayerRef, false).play();
       return;
     }
 
@@ -133,6 +133,7 @@ export function TableWidget() {
           resetTableState();
           await tablesQuery.refetch();
           showToast('추가되었습니다.');
+          fadeBackgroundLayer(tableEditLayerRef, false).play();
         } catch (err) {
           console.error(err);
           showToast('오류가 발생했습니다.');
@@ -140,7 +141,6 @@ export function TableWidget() {
       };
 
       showConfirmModal({ title, onConfirm });
-      fadeBackgroundLayer(tableEditLayerRef, false).play();
       return;
     }
 

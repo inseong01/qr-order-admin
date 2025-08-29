@@ -1,22 +1,24 @@
 import { ChangeEvent } from 'react';
-import { useAtom, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useQuery } from '@tanstack/react-query';
 
 import { setWidgetAtomState } from '@/features/widget/store/atom';
 import { showToastAtom } from '@/features/alert/toast/store/atom';
 
+import { FormInputBox, FormInputCaption } from '@/components/ui/exception';
+
 import { MENU_CATEGORIES_QUERY_KEY, useQueryMenuCategoryList, useQueryMenuList } from '@/hooks/use-query/query';
 
 import { deleteMenuCategory, MenuCategory } from '@/lib/supabase/tables/menu-category';
+import { deleteImageByFileName, STORE } from '@/lib/supabase/storage/store';
 
 import validate from '@/utils/function/validate';
 
 import { useConfirmModal } from '../../../../confirm/hook/use-confirm-modal';
-import SubmitButton from '../button/button';
+import { categoryErrorAtom, selectedCategoryIdsAtom, setCategoryErrorAtom } from '../../store/atom';
 import { SubmitFormBox, SubmitInfoBox, TitleBox } from '../common';
-import { selectedCategoryIdsAtom } from '../../store/atom';
+import SubmitButton from '../button/button';
 import styles from './delete-form.module.css';
-import { deleteImageByFileName, STORE } from '@/lib/supabase/storage/store';
 
 /**
  * 기존 메뉴 분류를 삭제하는 컴포넌트
@@ -25,9 +27,11 @@ export default function DeleteCategoryForm() {
   const categories = useQuery<MenuCategory[]>({ queryKey: MENU_CATEGORIES_QUERY_KEY });
   const [selectedCategories, setSelectedCategories] = useAtom(selectedCategoryIdsAtom);
   const menuCategoriesQuery = useQueryMenuCategoryList();
+  const categoryError = useAtomValue(categoryErrorAtom);
   const menuQuery = useQueryMenuList();
   const setWidgetState = useSetAtom(setWidgetAtomState);
   const showToast = useSetAtom(showToastAtom);
+  const setCategoryError = useSetAtom(setCategoryErrorAtom);
   const { showConfirmModal } = useConfirmModal();
 
   /* 비즈니스 로직 */
@@ -38,7 +42,7 @@ export default function DeleteCategoryForm() {
     const { success, data, error } = await validate.deleteCategoryValue(selectedCategories);
     if (!success) {
       const message = error?.issues[0].message;
-      showToast(message);
+      setCategoryError(message);
       setWidgetState({ option: 'delete-menu-category' });
       return e.preventDefault();
     }
@@ -46,7 +50,7 @@ export default function DeleteCategoryForm() {
     const onConfirm = async () => {
       // supabase 전달
       try {
-        const filePath = menuQuery.data?.map((m) => STORE + m.img_url) ?? [];
+        const filePath = menuQuery.data?.map((m) => (!m.img_url.includes('default') ? '' : STORE + m.img_url)) ?? [];
         await deleteImageByFileName({ filePath });
 
         await deleteMenuCategory(data);
@@ -69,6 +73,7 @@ export default function DeleteCategoryForm() {
     };
 
     e.preventDefault();
+    setCategoryError('');
     setWidgetState({ option: '' });
     showConfirmModal({ title, onConfirm, onCancle });
   };
@@ -82,6 +87,7 @@ export default function DeleteCategoryForm() {
         return selectedCategories.filter((c) => c !== id);
       }
     });
+    setCategoryError('');
   }
 
   return (
@@ -109,8 +115,13 @@ export default function DeleteCategoryForm() {
         ))}
       </SubmitInfoBox>
 
-      {/* 제출 */}
-      <SubmitButton value='삭제하기' />
+      <FormInputBox>
+        {/* 오류 메시지 */}
+        <FormInputCaption hasError={Boolean(categoryError)} text={categoryError} align='center' />
+
+        {/* 제출 */}
+        <SubmitButton value='삭제하기' />
+      </FormInputBox>
     </SubmitFormBox>
   );
 }

@@ -57,7 +57,7 @@ export function MessagePreview({ request, requestRefetch }: MessageCountPannelPr
       await firstRequestQuery.refetch();
     } catch (err) {
       console.error(err);
-      showToast('요청 처리 과정에서 오류가 발생했습니다');
+      showToast('요청 처리 과정에서 오류가 발생했습니다.');
     }
   }
 

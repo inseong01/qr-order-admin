@@ -29,10 +29,7 @@ export default function LoginPage() {
 
       if (error) throw error;
 
-      // 성공 UI 지연 등장
-      setTimeout(() => {
-        setAuthStatus('success');
-      }, 300);
+      setAuthStatus('success');
     },
   });
 

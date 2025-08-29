@@ -1,9 +1,11 @@
 import { ChangeEvent, FormEvent } from 'react';
-import { useAtom, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useQuery } from '@tanstack/react-query';
 
 import { showToastAtom } from '@/features/alert/toast/store/atom';
 import { setWidgetAtomState } from '@/features/widget/store/atom';
+
+import { FormInputBox, FormInputCaption } from '@/components/ui/exception';
 
 import { MENU_CATEGORIES_QUERY_KEY, useQueryMenuCategoryList, useQueryMenuList } from '@/hooks/use-query/query';
 
@@ -11,9 +13,9 @@ import { MenuCategory, updateMenuCategory } from '@/lib/supabase/tables/menu-cat
 import validate from '@/utils/function/validate';
 
 import { useConfirmModal } from '../../../../confirm/hook/use-confirm-modal';
-import SubmitButton from '../button/button';
+import { categoryErrorAtom, selectedCategoriesAtom, setCategoryErrorAtom } from '../../store/atom';
 import { SubmitFormBox, SubmitInfoBox, TitleBox } from '../common';
-import { selectedCategoriesAtom } from '../../store/atom';
+import SubmitButton from '../button/button';
 import styles from './update-form.module.css';
 
 /**
@@ -24,8 +26,10 @@ export default function UpdateCategoryForm() {
   const [selectedCategories, setSelectedCategories] = useAtom(selectedCategoriesAtom);
   const menuListQuery = useQueryMenuList();
   const menuCategoriesQuery = useQueryMenuCategoryList();
+  const categoryError = useAtomValue(categoryErrorAtom);
   const setWidgetState = useSetAtom(setWidgetAtomState);
   const showToast = useSetAtom(showToastAtom);
+  const setCategoryError = useSetAtom(setCategoryErrorAtom);
   const { showConfirmModal } = useConfirmModal();
   /* 비즈니스 로직 */
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -36,7 +40,7 @@ export default function UpdateCategoryForm() {
     const { success, data, error } = await validate.updateCategoryValue(updatedCategories);
     if (!success) {
       const message = error?.issues[0].message;
-      showToast(message);
+      setCategoryError(message);
       setWidgetState({ option: 'update-menu-category' });
       return e.preventDefault();
     }
@@ -82,6 +86,7 @@ export default function UpdateCategoryForm() {
         return updated;
       }
     });
+    setCategoryError('');
   }
 
   function handleTyping(e: ChangeEvent<HTMLInputElement>) {
@@ -92,6 +97,7 @@ export default function UpdateCategoryForm() {
         [id]: { id, title: value },
       };
     });
+    setCategoryError('');
   }
 
   return (
@@ -131,8 +137,13 @@ export default function UpdateCategoryForm() {
         ))}
       </SubmitInfoBox>
 
-      {/* 제출 */}
-      <SubmitButton value='수정하기' />
+      <FormInputBox>
+        {/* 오류 메시지 */}
+        <FormInputCaption hasError={Boolean(categoryError)} text={categoryError} align='center' />
+
+        {/* 제출 */}
+        <SubmitButton value='수정하기' />
+      </FormInputBox>
     </SubmitFormBox>
   );
 }

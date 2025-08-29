@@ -26,10 +26,7 @@ export default function UpdatePasswordPage() {
 
       if (updatePwd.error) throw updatePwd.error;
 
-      // 성공 UI 지연 등장
-      setTimeout(() => {
-        setAuthStatus('success');
-      }, 300);
+      setAuthStatus('success');
     },
   });
 

@@ -1,17 +1,19 @@
-import { useAtom, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
 import { useQueryMenuCategoryList } from '@/hooks/use-query/query';
 
 import { showToastAtom } from '@/features/alert/toast/store/atom';
 import { setWidgetAtomState } from '@/features/widget/store/atom';
 
+import { FormInputBox, FormInputCaption } from '@/components/ui/exception';
+
 import { addMenuCategory } from '@/lib/supabase/tables/menu-category';
 import validate from '@/utils/function/validate';
 
 import { useConfirmModal } from '../../../../confirm/hook/use-confirm-modal';
-import SubmitButton from '../button/button';
+import { categoryErrorAtom, categoryInputAtom, setCategoryErrorAtom } from '../../store/atom';
 import { SubmitFormBox, SubmitInfoBox, TitleBox } from '../common';
-import { categoryInputAtom } from '../../store/atom';
+import SubmitButton from '../button/button';
 import styles from './add-form.module.css';
 
 /**
@@ -20,8 +22,10 @@ import styles from './add-form.module.css';
 export default function AddCategoryForm() {
   const [inputValue, setInputValue] = useAtom(categoryInputAtom);
   const menuCategoriesQuery = useQueryMenuCategoryList();
+  const categoryError = useAtomValue(categoryErrorAtom);
   const setWidgetState = useSetAtom(setWidgetAtomState);
   const showToast = useSetAtom(showToastAtom);
+  const setCategoryError = useSetAtom(setCategoryErrorAtom);
   const { showConfirmModal } = useConfirmModal();
 
   /* 비즈니스 로직 */
@@ -32,7 +36,7 @@ export default function AddCategoryForm() {
     const { success, data, error } = await validate.createCategoryValue(inputValue);
     if (!success) {
       const message = error?.issues[0].message;
-      showToast(message);
+      setCategoryError(message);
       setWidgetState({ option: 'create-menu-category' });
       return e.preventDefault();
     }
@@ -65,6 +69,7 @@ export default function AddCategoryForm() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value.trim());
+    setCategoryError('');
   };
 
   return (
@@ -87,8 +92,13 @@ export default function AddCategoryForm() {
         </li>
       </SubmitInfoBox>
 
-      {/* 제출 */}
-      <SubmitButton value='추가하기' />
+      <FormInputBox>
+        {/* 오류 메시지 */}
+        <FormInputCaption hasError={Boolean(categoryError)} text={categoryError} align='center' />
+
+        {/* 제출 */}
+        <SubmitButton value='추가하기' />
+      </FormInputBox>
     </SubmitFormBox>
   );
 }

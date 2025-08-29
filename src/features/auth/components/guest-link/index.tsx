@@ -27,10 +27,7 @@ export default function GuestLink({ captchaToken }: GuestLinkProps) {
 
       if (error) throw error;
 
-      // 성공 UI 지연 등장
-      setTimeout(() => {
-        setAuthStatus('success');
-      }, 300);
+      setAuthStatus('success');
     },
   });
 

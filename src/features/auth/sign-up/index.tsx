@@ -9,7 +9,7 @@ import { PWD_MAX, PWD_MIN } from '../const';
 import useAuthForm from '../hooks/use-auth-form';
 import AuthContainer from '../components/container';
 import useDisabledState from '../hooks/use-disabled';
-import { signUpNewUser } from '../util/auth-supabase-api';
+import { signOutUser, signUpNewUser } from '../util/auth-supabase-api';
 import { AuthForm, AuthFormSubmitButton, AuthFormTitle, AuthNavLink } from '../components/layout';
 import { authStatusAtom, captchaTokenAtom, errorFormAtom, signupFormAtom } from '../store/auth-atom';
 
@@ -25,15 +25,13 @@ export default function SignUpPage() {
       // 회원가입
       const { error } = await signUpNewUser(formData.id, formData.password, captchaToken, {
         signup_origin: 'qr_order_admin',
-        is_approved: false,
       });
 
       if (error) throw error;
 
-      // 성공 UI 지연 등장
-      setTimeout(() => {
-        setAuthStatus('success');
-      }, 300);
+      await signOutUser();
+
+      setAuthStatus('success');
     },
   });
 

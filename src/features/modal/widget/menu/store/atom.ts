@@ -15,3 +15,11 @@ export const resetCategoriesAtom = atom(null, (_, set) => {
   set(selectedCategoriesAtom, {});
   set(selectedCategoryIdsAtom, []);
 });
+
+// 카테고리 제출 오류 상태
+export const categoryErrorAtom = atom('');
+
+// 카테고리 제출 오류 메시지 설정
+export const setCategoryErrorAtom = atom(null, (_, set, message: string) => {
+  set(categoryErrorAtom, message);
+});

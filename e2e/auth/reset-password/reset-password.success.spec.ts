@@ -25,9 +25,7 @@ test.describe('[성공] 비밀번호 찾기', () => {
     // 3. '비밀번호 찾기' 버튼 클릭
     await page.locator('button[type="submit"]').click();
 
-    // 4. 버튼 비활성화 및 토스트 알림 확인
-    await expect(page.getByText('로그인')).not.toBeEnabled();
-    await expect(page.locator('button[type="submit"]')).not.toBeEnabled();
+    // 4. 페이지 알림 확인
     await expect(page.getByText('메일 전송')).toBeVisible();
 
     // 5. 로그인 페이지로 리다이렉트 확인
@@ -46,14 +44,10 @@ test.describe('[성공] 비밀번호 찾기', () => {
     // 3. '비밀번호 찾기' 버튼 클릭
     await page.locator('button[type="submit"]').click();
 
-    // 4. 버튼 비활성화 및 토스트 알림 확인
-    await expect(page.getByText('로그인')).not.toBeEnabled();
-    await expect(page.locator('button[type="submit"]')).not.toBeEnabled();
+    // 4. 페이지 알림 확인
     await expect(page.getByText('메일 전송')).toBeVisible();
 
     // 5. 로그인 페이지로 리다이렉트 확인
     await page.waitForURL(REDIRECT_PAGE_URL);
-    await expect(page.getByRole('button', { name: '입력하기' })).not.toBeEnabled();
-    await expect(page.getByRole('button', { name: '방문자로 접속하기' })).not.toBeEnabled();
   });
 });

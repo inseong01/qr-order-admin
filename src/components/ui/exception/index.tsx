@@ -32,9 +32,16 @@ export function FormInputBox({ children, htmlFor }: FormInputBoxProps) {
 type InputCaptionProps = {
   text: string;
   hasError: boolean;
+  align?: string;
 };
 
 // FormInputCaption
-export function FormInputCaption({ text, hasError }: InputCaptionProps) {
-  return hasError && <span className={styles.caption}>{text}</span>;
+export function FormInputCaption({ text, hasError, align }: InputCaptionProps) {
+  return (
+    hasError && (
+      <span className={styles.caption} data-align={align}>
+        {text}
+      </span>
+    )
+  );
 }

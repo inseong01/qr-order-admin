@@ -21,7 +21,7 @@ export async function signInWithEmailAndPassword(email: string, password: string
  */
 export async function signInAnonymously(captchaToken: string) {
   const res = await supabase.auth.signInAnonymously({
-    options: { captchaToken },
+    options: { captchaToken, data: { signup_origin: 'qr_order_admin' } },
   });
   return res;
 }

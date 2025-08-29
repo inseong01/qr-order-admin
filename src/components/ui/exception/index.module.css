@@ -16,3 +16,6 @@
   font-size: var(--fz-s-response);
   text-align: start;
 }
+.caption[data-align='center'] {
+  text-align: center;
+}

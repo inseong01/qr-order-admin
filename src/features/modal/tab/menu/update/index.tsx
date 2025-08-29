@@ -72,7 +72,7 @@ export default function UpdateMenuModal() {
           await updateImage({ file: menuImageFile, fileId });
         }
 
-        if (submitType === 'delete') {
+        if (submitType === 'delete' && fileId !== 'default') {
           const filePath = [STORE + `/menu_${fileId}`];
           await deleteImageByFileName({ filePath });
         }

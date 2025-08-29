@@ -7,6 +7,7 @@ import { setWidgetAtomState, widgetAtom } from '@/features/widget/store/atom';
 import AddCategoryForm from './menu/components/category/add-form';
 import UpdateCategoryForm from './menu/components/category/update-form';
 import DeleteCategoryForm from './menu/components/category/delete-form';
+import { setCategoryErrorAtom } from './menu/store/atom';
 
 /**
  * 위젯 모달 전용 컴포넌트
@@ -18,6 +19,7 @@ import DeleteCategoryForm from './menu/components/category/delete-form';
 export default function WidgetCateogryModal() {
   const widgetState = useAtomValue(widgetAtom);
   const setWidgetState = useSetAtom(setWidgetAtomState);
+  const setCategoryError = useSetAtom(setCategoryErrorAtom);
 
   const component = {
     'create-menu-category': AddCategoryForm,
@@ -28,6 +30,7 @@ export default function WidgetCateogryModal() {
 
   function handleClose() {
     setWidgetState({ option: '' }); // 모달 닫기
+    setCategoryError('');
   }
 
   return (
