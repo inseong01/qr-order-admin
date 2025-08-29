@@ -1,0 +1,44 @@
+import { ZodError, ZodIssue } from 'zod';
+import { isAuthError } from '@supabase/supabase-js';
+
+import { authErrorHandler } from './auth-error-handler';
+
+export type ShowMessage = (msg: string) => void;
+type setInputMessage = (issues: ZodIssue[]) => void;
+export type ActionFn = () => void;
+
+export class AuthErrorHandler {
+  private authHandler: Record<string, () => void>;
+
+  constructor(
+    private showMessage: ShowMessage,
+    private setInputMessage: setInputMessage,
+    private captchaRefresh: ActionFn
+  ) {
+    this.authHandler = authErrorHandler({ showMessage: this.show, captchaRefresh: this.captchaRefresh });
+  }
+
+  public handle(error: unknown) {
+    // Zod
+    if (error instanceof ZodError && error.name === 'ZodError') {
+      this.setInputMessage(error.issues);
+      return;
+    }
+
+    // Supabase Auth
+    if (isAuthError(error)) {
+      const handler = this.authHandler[String(error.code)];
+      if (handler) {
+        handler();
+        return;
+      }
+    }
+
+    this.show(`알 수 없는 오류가 발생했습니다.`);
+    console.error(error);
+  }
+
+  private show = (msg: string) => {
+    this.showMessage(msg);
+  };
+}

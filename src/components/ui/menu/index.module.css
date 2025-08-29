@@ -1,0 +1,67 @@
+.list {
+  width: 165px;
+  height: 130px;
+
+  background-color: white;
+  border-radius: 8px;
+
+  padding: 20px;
+
+  cursor: pointer;
+}
+
+.title {
+  text-align: start;
+  color: var(--main-color);
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.price {
+  text-align: end;
+  color: var(--sub-color);
+}
+
+.iconBox {
+  width: 20px;
+  height: 20px;
+
+  display: flex;
+}
+
+/* 메뉴 항목 */
+.listMenu {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  font-size: var(--fz-m);
+}
+
+/* 메뉴 추가 */
+.menuAdd {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+
+  color: var(--sub-color);
+  font-size: var(--fz-m);
+}
+
+@media (max-height: 768px) {
+  .list {
+    height: 120px;
+  }
+  .listMenu {
+    font-size: var(--fz-m-response);
+  }
+  .menuAdd {
+    font-size: var(--fz-m-response);
+  }
+}

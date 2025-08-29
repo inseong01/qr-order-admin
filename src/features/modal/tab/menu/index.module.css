@@ -1,0 +1,151 @@
+.menuModal {
+  width: var(--tab-modal-width);
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 30px;
+
+  border-radius: 12px;
+  background-color: white;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+
+  overflow-y: auto;
+  cursor: default;
+
+  padding: 25px;
+}
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.header {
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
+}
+.modalTitle {
+  color: var(--main-color);
+  font-size: var(--fz-l);
+}
+.close {
+  width: 25px;
+  height: 25px;
+
+  display: flex;
+
+  position: absolute;
+  top: 50%;
+  right: 0;
+  box-sizing: content-box;
+
+  transform: translateY(-50%);
+
+  padding: 5px;
+}
+.close img {
+  transform: rotateZ(45deg);
+}
+
+.imgInput {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 15px;
+
+  cursor: pointer;
+}
+
+.imgBox {
+  width: 300px;
+  height: 80px;
+
+  color: var(--sub-color);
+  font-size: var(--fz-s);
+
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.iconBox {
+  width: 15px;
+  height: 15px;
+
+  display: flex;
+
+  box-sizing: content-box;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.inputTitle {
+  font-size: var(--fz-r);
+  min-width: 100px;
+  text-align: start;
+}
+
+.priceBox {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.options {
+  font-size: var(--fz-s);
+}
+
+.submitBox {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.submit {
+  flex: 1;
+
+  border-radius: 8px;
+  background-color: var(--key-color);
+
+  color: white;
+  font-size: var(--fz-r);
+  font-weight: var(--fw-b);
+
+  padding: 15px 0;
+}
+
+.priceBox input[data-invalid='true'],
+.inputTitle ~ input[data-invalid='true'],
+.inputTitle ~ select[data-invalid='true'] {
+  outline: none;
+  border-color: var(--error-color);
+}
+
+@media (max-height: 768px) {
+  .addMenuModal {
+    gap: 10px;
+  }
+
+  .modalTitle {
+    font-size: var(--fz-l-response);
+  }
+}

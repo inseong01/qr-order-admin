@@ -1,0 +1,39 @@
+/* confirm modal */
+.title {
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 4px;
+
+  font-size: var(--fz-l-response);
+  border-bottom: 1px solid #c9c9c9;
+
+  padding: 28px;
+}
+
+.btnBox {
+  width: 100%;
+  height: 35%;
+  color: #8d8d8d;
+
+  display: flex;
+}
+
+.btn {
+  width: 50%;
+  height: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+  padding: 16px;
+}
+
+.btn:nth-child(1) {
+  border-right: 1px solid #c9c9c9;
+}

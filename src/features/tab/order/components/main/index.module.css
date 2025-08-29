@@ -1,0 +1,24 @@
+.middle {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.menuBox {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.menu {
+  display: flex;
+  justify-content: space-between;
+}
+
+.line {
+  width: 100%;
+  height: 1px;
+  background-color: #cccccc;
+}

@@ -1,0 +1,28 @@
+/* Menu Widget, Table Widget */
+.iconBox {
+  width: 25px;
+  height: 25px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+
+  overflow-x: hidden;
+}
+.textBox {
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  position: relative;
+
+  overflow-x: hidden;
+}
+
+@media (max-height: 768px) {
+  .iconBox {
+    width: 20px;
+    height: 20px;
+  }
+}

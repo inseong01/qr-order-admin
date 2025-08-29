@@ -1,0 +1,6 @@
+.textBox {
+  color: var(--sub-color);
+  font-size: var(--fz-m);
+  font-weight: var(--fw-m);
+  line-height: 1.5rem;
+}

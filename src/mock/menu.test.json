@@ -1,0 +1,130 @@
+[
+  {
+    "category_id": "cat-001",
+    "id": "menu-007",
+    "img_url": "https://example.com/baconburger.jpg",
+    "name": "베이컨버거",
+    "price": 7200,
+    "tag": "신규"
+  },
+  {
+    "category_id": "cat-001",
+    "id": "menu-008",
+    "img_url": "https://example.com/hamburger.jpg",
+    "name": "햄버거",
+    "price": 5500,
+    "tag": "품절"
+  },
+  {
+    "category_id": "cat-002",
+    "id": "menu-009",
+    "img_url": "https://example.com/chickenpizza.jpg",
+    "name": "치킨 피자",
+    "price": 13900,
+    "tag": "인기"
+  },
+  {
+    "category_id": "cat-002",
+    "id": "menu-010",
+    "img_url": "https://example.com/creamchicken.jpg",
+    "name": "크림치킨",
+    "price": 16900,
+    "tag": "신규"
+  },
+  {
+    "category_id": "cat-002",
+    "id": "menu-011",
+    "img_url": "https://example.com/sweetpotato.jpg",
+    "name": "고구마피자",
+    "price": 14500,
+    "tag": "품절"
+  },
+  {
+    "category_id": "cat-003",
+    "id": "menu-012",
+    "img_url": "https://example.com/udon.jpg",
+    "name": "우동",
+    "price": 6800,
+    "tag": "신규"
+  },
+  {
+    "category_id": "cat-003",
+    "id": "menu-013",
+    "img_url": "https://example.com/ramen.jpg",
+    "name": "돈코츠라멘",
+    "price": 8800,
+    "tag": "인기"
+  },
+  {
+    "category_id": "cat-003",
+    "id": "menu-014",
+    "img_url": "https://example.com/kimchi.jpg",
+    "name": "김치우동",
+    "price": 7200,
+    "tag": "품절"
+  },
+  {
+    "category_id": "cat-001",
+    "id": "menu-015",
+    "img_url": "https://example.com/spicyburger.jpg",
+    "name": "핫스파이스버거",
+    "price": 7500,
+    "tag": "인기"
+  },
+  {
+    "category_id": "cat-002",
+    "id": "menu-016",
+    "img_url": "https://example.com/onionpizza.jpg",
+    "name": "양파 피자",
+    "price": 13200,
+    "tag": "신규"
+  },
+  {
+    "category_id": "cat-004",
+    "id": "menu-017",
+    "img_url": "https://example.com/shrimppizza.jpg",
+    "name": "쉬림프 피자",
+    "price": 14900,
+    "tag": "인기"
+  },
+  {
+    "category_id": "cat-004",
+    "id": "menu-018",
+    "img_url": "https://example.com/spicychicken.jpg",
+    "name": "매운치킨",
+    "price": 16200,
+    "tag": "신규"
+  },
+  {
+    "category_id": "cat-005",
+    "id": "menu-019",
+    "img_url": "https://example.com/salad.jpg",
+    "name": "시저샐러드",
+    "price": 7200,
+    "tag": "신규"
+  },
+  {
+    "category_id": "cat-005",
+    "id": "menu-020",
+    "img_url": "https://example.com/tofusalad.jpg",
+    "name": "두부 샐러드",
+    "price": 6800,
+    "tag": "품절"
+  },
+  {
+    "category_id": "cat-006",
+    "id": "menu-021",
+    "img_url": "https://example.com/smoothie.jpg",
+    "name": "망고 스무디",
+    "price": 5500,
+    "tag": "인기"
+  },
+  {
+    "category_id": "cat-006",
+    "id": "menu-022",
+    "img_url": "https://example.com/lemonade.jpg",
+    "name": "레몬에이드",
+    "price": 4900,
+    "tag": "품절"
+  }
+]

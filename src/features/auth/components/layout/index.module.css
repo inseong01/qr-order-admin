@@ -1,0 +1,77 @@
+/* AuthFormTitle */
+.title {
+  color: var(--main-color);
+  font-size: var(--fz-xl);
+  line-height: 1.4;
+  font-weight: var(--fw-b);
+  text-align: center;
+}
+
+/* AuthNavLink */
+.link {
+  min-width: 95px;
+
+  color: var(--sub-color);
+  font-size: var(--fz-s);
+  line-height: 1.5;
+
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  position: relative;
+
+  padding: 0 8px;
+}
+
+.link[data-disabled='false']:hover {
+  color: var(--key-color);
+}
+
+.link:not(:last-child)::after {
+  content: '|';
+  color: #e0e0e0;
+
+  position: absolute;
+  top: 0;
+  right: -4px; /* .link padding-x / 2 */
+}
+
+/* AuthFormSubmitButton */
+.button {
+  width: 100%;
+
+  border: none;
+  border-radius: 8px;
+  background-color: var(--key-color);
+
+  color: white;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  font-weight: var(--fw-m);
+
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
+
+  padding: 14px;
+}
+
+.button:hover {
+  background-color: #3a9ce0;
+}
+
+.button:active {
+  transform: scale(0.98);
+}
+
+/* AuthForm */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.form[data-has-link='false'] {
+  min-height: 230px;
+  justify-content: space-between;
+}

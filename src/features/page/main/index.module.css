@@ -1,0 +1,38 @@
+.main {
+  width: 100%;
+  height: calc(100vh - 158px); /* header/footer height */
+
+  display: flex;
+  justify-content: space-between;
+  flex: 1;
+
+  background-color: #f3f3f3;
+  overflow: auto;
+
+  position: relative;
+
+  padding: 35px;
+}
+
+.main[data-empty='true'] {
+  justify-content: center;
+  align-items: center;
+}
+
+.leftBox {
+  width: auto;
+  height: 100%;
+  position: relative;
+}
+
+.rightBox {
+  width: auto;
+  height: 100%;
+
+  display: flex;
+  gap: 16px;
+
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}

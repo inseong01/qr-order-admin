@@ -1,0 +1,37 @@
+.bottom {
+  width: 100%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  color: #8d8d8d;
+  border-top: 1px solid #b4b4b4;
+
+  padding-top: 12px;
+}
+
+.btn {
+  width: 100%;
+
+  color: #fff;
+  background-color: #4caff8;
+
+  font-size: var(--fz-m);
+  font-weight: bold;
+
+  border-radius: 15px;
+  border: none;
+
+  cursor: pointer;
+
+  padding: 16px;
+}
+
+.btn.delete {
+  color: #fb2c2c;
+}
+
+.btn:disabled {
+  cursor: default;
+}

@@ -1,0 +1,23 @@
+.title {
+  font-size: var(--fz-m);
+  font-weight: 600;
+  text-align: center;
+
+  cursor: default;
+}
+
+.category input[placeholder] {
+  text-align: center;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+
+  font-size: var(--fz-r);
+
+  cursor: default;
+}

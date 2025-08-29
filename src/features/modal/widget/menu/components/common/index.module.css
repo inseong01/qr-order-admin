@@ -1,0 +1,43 @@
+/* SubmitInfoBox */
+.submitInfo {
+  max-height: 206px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  font-size: var(--fz-s);
+  overflow-y: auto;
+}
+
+/* TitleBox */
+.title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* submitFormBox */
+.submitForm {
+  width: auto;
+  height: auto;
+
+  background-color: white;
+  overflow: hidden;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.sortModal {
+  height: 100%;
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  gap: 20px;
+}

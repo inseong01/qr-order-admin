@@ -1,0 +1,10 @@
+.widgetWrap {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: 10px;
+
+  position: absolute;
+  left: var(--widget-left);
+  bottom: var(--widget-bottom);
+}

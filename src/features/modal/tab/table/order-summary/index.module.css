@@ -1,0 +1,109 @@
+/* common */
+.list,
+.menuBox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* listBoxWrap */
+.listBoxWrap {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.wrap {
+  width: 100%;
+  height: 80%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 35px;
+}
+
+/* listBox - 주문목록 */
+.listBox {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  overflow-y: auto;
+  -ms-overflow-style: none; /* 인터넷 익스플로러 */
+  scrollbar-width: none; /* 파이어폭스 */
+}
+.list {
+  width: 100%;
+}
+.menuBox {
+  gap: 5px;
+}
+
+/* priceBox */
+.priceBox {
+  min-width: 120px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  text-align: right;
+}
+
+.price {
+  min-width: 76px;
+
+  text-align: end;
+}
+
+/* msg */
+.msg {
+  text-align: center;
+  color: #959595;
+  font-size: 1rem;
+}
+
+/* middle */
+.line {
+  width: 100%;
+  height: 1px;
+
+  background-color: #c9c9c9;
+
+  margin-bottom: 10px;
+}
+
+/* bottom */
+.totalPrice {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* 제출 버튼 */
+.submitBox {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.submit {
+  flex: 1;
+
+  border-radius: 8px;
+  background-color: var(--key-color);
+
+  color: white;
+  font-size: var(--fz-r);
+  font-weight: var(--fw-b);
+
+  padding: 15px 0;
+}

@@ -1,0 +1,23 @@
+.displayRow {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.category {
+  text-align: start;
+  font-size: var(--fz-l);
+}
+
+.menuRow {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+@media (max-height: 768px) {
+  .category {
+    font-size: var(--fz-l-response);
+  }
+}

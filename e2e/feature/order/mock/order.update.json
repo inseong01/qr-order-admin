@@ -1,0 +1,26 @@
+[
+  {
+    "created_at": "2025-08-24T10:00:00.000Z",
+    "id": "order-1",
+    "is_done": true,
+    "order_number": 101,
+    "table": { "id": "table-001", "number": 1 },
+    "updated_at": "2025-08-24T10:05:00.000Z"
+  },
+  {
+    "created_at": "2025-08-24T10:10:00.000Z",
+    "id": "order-2",
+    "is_done": true,
+    "order_number": 102,
+    "table": { "id": "table-002", "number": 2 },
+    "updated_at": "2025-08-24T10:12:00.000Z"
+  },
+  {
+    "created_at": "2025-08-24T10:20:00.000Z",
+    "id": "order-3",
+    "is_done": false,
+    "order_number": 103,
+    "table": { "id": "table-003", "number": 3 },
+    "updated_at": ""
+  }
+]

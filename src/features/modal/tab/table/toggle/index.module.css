@@ -1,0 +1,33 @@
+.toggleBox {
+  position: absolute;
+  top: 50%;
+  left: 0;
+
+  width: 45px;
+  height: 25px;
+  background-color: #4caff8;
+  border-radius: 15px;
+
+  transform: translateY(-50%);
+  transition: 0.3s;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  cursor: pointer;
+
+  padding: 0 2px;
+}
+
+.off {
+  justify-content: flex-end;
+  background-color: #809baf;
+}
+
+.toggle {
+  width: 21px;
+  height: 21px;
+  background-color: aliceblue;
+  border-radius: 50%;
+}

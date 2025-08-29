@@ -1,0 +1,57 @@
+[
+  {
+    "id": "order-item-1",
+    "menu": { "id": "menu-001", "name": "베이컨버거", "price": 7200 },
+    "order": {
+      "id": "order-1",
+      "is_done": true,
+      "order_number": 101,
+      "table": { "id": "table-001", "number": 1 }
+    },
+    "quantity": 2
+  },
+  {
+    "id": "order-item-2",
+    "menu": { "id": "menu-002", "name": "감자튀김", "price": 3500 },
+    "order": {
+      "id": "order-2",
+      "is_done": true,
+      "order_number": 102,
+      "table": { "id": "table-002", "number": 2 }
+    },
+    "quantity": 1
+  },
+  {
+    "id": "order-item-3",
+    "menu": { "id": "menu-003", "name": "치즈버거", "price": 6800 },
+    "order": {
+      "id": "order-2",
+      "is_done": true,
+      "order_number": 102,
+      "table": { "id": "table-002", "number": 2 }
+    },
+    "quantity": 2
+  },
+  {
+    "id": "order-item-4",
+    "menu": { "id": "menu-004", "name": "콜라", "price": 2000 },
+    "order": {
+      "id": "order-3",
+      "is_done": true,
+      "order_number": 103,
+      "table": { "id": "table-003", "number": 3 }
+    },
+    "quantity": 3
+  },
+  {
+    "id": "order-item-5",
+    "menu": { "id": "menu-005", "name": "치킨너겟", "price": 4800 },
+    "order": {
+      "id": "order-3",
+      "is_done": true,
+      "order_number": 103,
+      "table": { "id": "table-003", "number": 3 }
+    },
+    "quantity": 1
+  }
+]

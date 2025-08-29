@@ -1,0 +1,10 @@
+.now {
+  width: auto;
+  height: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 0 10px;
+}

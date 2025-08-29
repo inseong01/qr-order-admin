@@ -1,0 +1,65 @@
+/* topBox: 헤더 */
+.topBox {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  border-radius: 16px;
+  background-color: #222;
+  color: white;
+
+  padding: 16px;
+}
+
+/* 상단 */
+.top {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  font-size: var(--fz-m);
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  font-size: var(--fz-s);
+}
+
+.elapsed {
+  border-radius: 8px;
+  padding: 6px;
+}
+
+/* 하단 */
+.bottom {
+  display: flex;
+  align-items: flex-start;
+
+  font-size: var(--fz-r);
+}
+
+/* 주문 경과 스타일링 */
+.elapsed[data-state='error'] {
+  color: #424242;
+  background-color: #ffa500;
+}
+.elapsed[data-state='good'] {
+  color: #222;
+  background-color: #fff;
+}
+.elapsed[data-state='bad'] {
+  color: #fff;
+  background-color: #e83c3c;
+}
+
+/* 완료된 주문 스타일링 */
+[data-finished='true'] .elapsed[data-state='bad'] {
+  color: var(--inactive-color);
+  background-color: var(--inactive-bg-color);
+}

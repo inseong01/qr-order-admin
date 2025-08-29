@@ -1,0 +1,8 @@
+.footer {
+  display: flex;
+}
+
+[data-finished='true'] button {
+  color: var(--inactive-color);
+  background-color: var(--inactive-bg-color);
+}

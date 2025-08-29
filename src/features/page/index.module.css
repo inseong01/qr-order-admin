@@ -1,0 +1,15 @@
+/* Error */
+.main {
+  width: 100%;
+  height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: var(--fz-xl);
+  font-weight: var(--fw-b);
+  color: var(--main-color);
+
+  cursor: default;
+}

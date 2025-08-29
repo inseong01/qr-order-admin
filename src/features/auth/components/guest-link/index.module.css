@@ -1,0 +1,25 @@
+.box {
+  height: 32px;
+  position: relative;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.guestLink {
+  color: var(--sub-color);
+  font-size: var(--fz-s);
+
+  background: none;
+  border: none;
+
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  padding: 8px;
+}
+
+.guestLink:hover {
+  color: var(--key-color);
+}
