@@ -7,6 +7,7 @@ import { languageAtom, themeAtom } from '@/store/settings-atom';
 
 import styles from './index.module.css';
 import GuestLink from '../guest-link';
+import { CAPTCHA_PASS_TEST_KEY } from '../../const';
 import { authStatusAtom, captchaTokenAtom, setCaptchaTokenAtom } from '../../store/auth-atom';
 
 type ConatinerProps = {
@@ -21,7 +22,8 @@ export default function AuthContainer({ children }: ConatinerProps) {
   const setAuthStatus = useSetAtom(authStatusAtom);
   const { '*': params } = useParams();
   const widgetId = useRef('');
-  const sitekeyToUse = window.TEST_SITEKEY ?? import.meta.env.VITE_SITE_KEY;
+  const sitekeyToUse =
+    import.meta.env.MODE !== 'test' ? import.meta.env.VITE_SITE_KEY : (window.TEST_SITEKEY ?? CAPTCHA_PASS_TEST_KEY);
 
   /** 캡챠 실행 */
   useEffect(() => {

@@ -1199,5 +1199,8 @@ feat: 자동 커밋 및 AI 분석 기능 추가
     - 사용자 목록 관리, auth 연동 테이블 생성
     - 익명 사용자 로그인 주소 반환, raw_user_meta_data 설정
 
+  배포 오류 
+    - siteKey 설정
+    
 <-- util 및 hook 테스트 코드 개선  -->
 
