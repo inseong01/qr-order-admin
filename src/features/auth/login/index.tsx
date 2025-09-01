@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router';
 import { useAtomValue, useSetAtom } from 'jotai';
 
 import { PATHS } from '@/constants/paths';
@@ -19,6 +20,7 @@ export default function LoginPage() {
   const captchaToken = useAtomValue(captchaTokenAtom);
   const errorForm = useAtomValue(errorFormAtom);
   const setAuthStatus = useSetAtom(authStatusAtom);
+  const navigate = useNavigate();
   const { disabled, authStatus } = useDisabledState();
   const { formState, handleInputChange, handleSubmit } = useAuthForm({
     formAtom: loginFormAtom,
@@ -30,6 +32,8 @@ export default function LoginPage() {
       if (error) throw error;
 
       setAuthStatus('success');
+
+      await navigate(PATHS.ROOT.MAIN);
     },
   });
 

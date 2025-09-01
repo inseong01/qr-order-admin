@@ -33,14 +33,7 @@ export default function FindPasswordPage() {
     },
   });
 
-  const description =
-    authStatus === 'error'
-      ? '검증 실패'
-      : !captchaToken
-        ? '확인 중...'
-        : authStatus === 'success'
-          ? '전송 성공'
-          : '입력하기';
+  const description = authStatus === 'error' ? '검증 실패' : !captchaToken ? '확인 중...' : '입력하기';
   const idErrorMsg = errorForm.get('id') ?? '';
 
   return (

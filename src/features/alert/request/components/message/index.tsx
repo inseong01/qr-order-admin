@@ -2,9 +2,7 @@ import { useSetAtom } from 'jotai';
 import { motion, AnimatePresence } from 'motion/react';
 import { QueryObserverResult, RefetchOptions } from '@tanstack/react-query';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
-
+import LIGHT_CLOSE_ICON from '@/assets/icon/light-close-icon.svg';
 import { useQueryFirstRequest } from '@/hooks/use-query/query';
 import { showToastAtom } from '@/features/alert/toast/store/atom';
 import { Request, updateRequest } from '@/lib/supabase/tables/request';
@@ -77,7 +75,7 @@ export function MessagePreview({ request, requestRefetch }: MessageCountPannelPr
             <div className={styles.title}>테이블 {request.table.number}</div>
 
             <div className={styles.closeBtn} onClick={readRequest}>
-              <FontAwesomeIcon icon={faXmark} size='lg' />
+              <img src={LIGHT_CLOSE_ICON} alt='닫기' />
             </div>
           </div>
 

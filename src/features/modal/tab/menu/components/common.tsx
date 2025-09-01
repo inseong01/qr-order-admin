@@ -23,7 +23,7 @@ export function MenuModalHeader({ title, onClose }: MenuModalHeaderProps) {
 
       {/* 닫기 */}
       <button type='button' className={styles.close} onClick={onClose}>
-        <img src={LIGHT_PLUS_ICON} alt='close icon' />
+        <img src={LIGHT_PLUS_ICON} alt='닫기' />
       </button>
     </div>
   );

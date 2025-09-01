@@ -1200,9 +1200,18 @@ feat: 자동 커밋 및 AI 분석 기능 추가
     - 익명 사용자 로그인 주소 반환, raw_user_meta_data 설정
 
   배포 오류 
-    - siteKey 설정
+    - siteKey 설정      
     
   CI/CD 환경변수 설정
 
-<-- util 및 hook 테스트 코드 개선  -->
+25.9.1.
+  - Auth success-redirect 개선
 
+  - FontAwesome 라이브러리 제거
+
+  - DB 커스텀 권한 설정
+  : 'admin', 'member', 'viewer', 'guest'
+
+  - header, footer 높이 고정
+
+<--  기능 개선, util 및 hook 테스트 코드 개선  -->

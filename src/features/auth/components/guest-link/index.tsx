@@ -1,5 +1,7 @@
 import { useSetAtom } from 'jotai';
+import { useNavigate } from 'react-router';
 
+import { PATHS } from '@/constants/paths';
 import validate from '@/utils/function/validate';
 
 import styles from './index.module.css';
@@ -15,6 +17,7 @@ type GuestLinkProps = {
 export default function GuestLink({ captchaToken }: GuestLinkProps) {
   const setAuthStatus = useSetAtom(authStatusAtom);
   const { disabled, authStatus } = useDisabledState();
+  const navigate = useNavigate();
   const { handleSubmit } = useAuthForm({
     formAtom: captchaTokenAtom,
     validationSchema: validate.schema.captchaToken,
@@ -28,6 +31,8 @@ export default function GuestLink({ captchaToken }: GuestLinkProps) {
       if (error) throw error;
 
       setAuthStatus('success');
+
+      await navigate(PATHS.ROOT.MAIN);
     },
   });
 
