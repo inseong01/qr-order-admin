@@ -1,10 +1,12 @@
+import { lazy } from 'react';
 import { Route, Routes } from 'react-router';
 
 import { ROUTES } from '@/constants/routes';
-import FindPasswordPage from '@/features/auth/find-password';
 import LoginPage from '@/features/auth/login';
-import SignUpPage from '@/features/auth/sign-up';
 import NotFound from '@/Not-found';
+
+const LazySignUpPage = lazy(() => import('@/features/auth/sign-up'));
+const LazyFindPasswordPage = lazy(() => import('@/features/auth/find-password'));
 
 /**
  * @description 인증 관련 라우트(로그인, 회원가입 등)를 정의
@@ -17,11 +19,11 @@ export default function AuthRoutes() {
       <Route path={ROUTES.LOGIN} element={<LoginPage />} />
 
       {/* 회원가입 */}
-      <Route path={ROUTES.SIGNUP} element={<SignUpPage />} />
+      <Route path={ROUTES.SIGNUP} element={<LazySignUpPage />} />
 
       {/* 로그인 정보 찾기 */}
       <Route path={ROUTES.FIND}>
-        <Route path={ROUTES.PASSWORD} element={<FindPasswordPage />} />
+        <Route path={ROUTES.PASSWORD} element={<LazyFindPasswordPage />} />
       </Route>
 
       {/* 잘못된 경로 */}

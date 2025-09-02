@@ -4,7 +4,6 @@
 
   display: flex;
   justify-content: space-between;
-  flex: 1;
 
   background-color: #f3f3f3;
   overflow: auto;

@@ -1214,4 +1214,25 @@ feat: 자동 커밋 및 AI 분석 기능 추가
 
   - header, footer 높이 고정
 
+25.9.2.
+  - 개선
+    - local OTF 파일 -> WOFF 웹 폰트 변환
+      - 요청 URL 주소 적용 
+  
+    - svg 용량 최적화
+      - svgo 도입
+  
+    - 라우터 단위 lazy, suspense 적용
+  
+    - 컴포넌트 평탄화
+      - 중첩 컴포넌트 최소화 및 삭제
+  
+    - package.json 라이브러리 정리
+      - zustand, FontAwesome 삭제
+
+  - 빌드
+    - 반환 파일명 지정
+
+    - 리팩토링 개선 이전/이후 네트워크 응답 결과 기록
+
 <--  기능 개선, util 및 hook 테스트 코드 개선  -->

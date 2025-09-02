@@ -4,14 +4,13 @@ import { useAtomValue } from 'jotai';
 import { windowStateAtom } from '@/store/window-atom';
 import { generateCardLayoutArr } from '@/features/tab/order/util/generate-card';
 import { ExceptionText } from '@/components/ui/exception';
-import LoadingSpinner from '@/features/load/spinner';
 
 import { ListUlBox } from '../components/list-box';
 import { useOrderTab } from './hooks/use-order-tab';
 import Card from './components/card';
 
 export default function OrderTabView() {
-  const { orders, orderItems, isLoading } = useOrderTab();
+  const { orders, orderItems } = useOrderTab();
   const { mainSection } = useAtomValue(windowStateAtom);
   const orderCardList = useMemo(() => {
     return generateCardLayoutArr({
@@ -21,8 +20,6 @@ export default function OrderTabView() {
     });
   }, [orders, orderItems, mainSection.height]);
   const isDataEmpty = orders.length === 0;
-
-  if (isLoading) return <LoadingSpinner />;
 
   return (
     <ListUlBox isDataEmpty={isDataEmpty} sectionWidth={mainSection.width} tab='order'>
