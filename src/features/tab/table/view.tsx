@@ -21,7 +21,7 @@ export default function TableTabView() {
   return (
     <ListUlBox isDataEmpty={isEmpty} sectionWidth={mainSection.width} tab='menu'>
       {isEmpty ? (
-        <ExceptionText text='위젯에서 테이블을 생성해주세요.' />
+        <ExceptionText text={tablesQuery.isLoading ? '좌석 배치하는 중..' : '위젯에서 테이블을 생성해주세요.'} />
       ) : (
         <li>
           {/* 좌석 현황 */}

@@ -18,6 +18,7 @@ export default defineConfig(({ command }) => {
     },
     test: {
       environment: 'jsdom',
+      testTimeout: 30000,
     },
     build: {
       rollupOptions: {

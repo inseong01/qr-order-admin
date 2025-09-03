@@ -37,7 +37,7 @@ import { fadeBackgroundLayer } from '../../util/konva-fade-in';
 /**
  * 테이블 탭 위젯
  */
-export function TableWidget() {
+export default function TableWidget() {
   const tablesQuery = useQueryTableList();
   const { mainSection } = useAtomValue(windowStateAtom);
   const editMode = useAtomValue(editModeAtom);

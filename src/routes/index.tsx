@@ -1,3 +1,4 @@
+import { scan } from 'react-scan';
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router';
 
@@ -9,6 +10,10 @@ import GlobalSettingsHandler from '@/components/layout/global-settings-handler';
 import ProtectedRoute from './protected-route';
 import AuthRoutes from './auth-routes';
 import PublicRoute from './public-route';
+
+if (import.meta.env.DEV) {
+  scan({ enabled: true });
+}
 
 const LazyApp = lazy(() => import('@/App'));
 const LazyUpdatePasswordPage = lazy(() => import('@/features/auth/update-password'));
@@ -29,7 +34,6 @@ export default function RootRouter() {
           {/* 인증 필요 라우트 */}
           <Route path={ROUTES.ROOT} element={<ProtectedRoute />}>
             {/* 메인 */}
-            {/* <Route index element={<App />} /> */}
             <Route index element={<LazyApp />} />
 
             {/* 정보 수정 */}

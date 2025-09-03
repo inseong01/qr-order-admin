@@ -1,4 +1,4 @@
-import { CardObj } from './generate-card';
+import { CardObj } from './types';
 
 type ElapsedState = 'good' | 'bad' | 'error';
 type TimeUnit = '초' | '분' | '시간' | '일';

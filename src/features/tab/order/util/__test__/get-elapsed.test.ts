@@ -5,8 +5,8 @@
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
-import { CardObj } from '../generate-card';
 import { getElapsed } from '../get-elapsed';
+import { CardObj } from '../types';
 
 describe('getElapsed', () => {
   const baseStart = new Date('2025-08-14T12:00:00Z').getTime();

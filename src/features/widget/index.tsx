@@ -1,14 +1,15 @@
 import { useAtomValue } from 'jotai';
 import { AnimatePresence, motion } from 'motion/react';
 
-import { footerAtom } from '../page/footer';
-import { MenuWidget } from './components/tab/menu';
-import { TableWidget } from './components/tab/table';
-import { WidgetIconButton } from './components/button';
-import { widgetAtom } from './store/atom';
 import styles from './widget.module.css';
+import { widgetAtom } from './store/atom';
+import { MenuWidget } from './components/tab/menu';
+import { WidgetIconButton } from './components/button';
+import TableWidget from './components/tab/table';
+import { footerAtom } from '../page/footer';
+import { memo } from 'react';
 
-export default function Widget() {
+function Widget() {
   const tab = useAtomValue(footerAtom);
   const { isOpen } = useAtomValue(widgetAtom);
 
@@ -39,3 +40,5 @@ export default function Widget() {
     </>
   );
 }
+
+export default memo(Widget);

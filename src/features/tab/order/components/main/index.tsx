@@ -1,5 +1,5 @@
-import { CardObj } from '@/features/tab/order/util/generate-card';
 import styles from './index.module.css';
+import { CardObj } from '../../util/types';
 
 type CardMainProps = {
   order: CardObj;

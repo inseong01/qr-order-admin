@@ -2,12 +2,12 @@ import { useMemo } from 'react';
 import { useAtomValue } from 'jotai';
 
 import { windowStateAtom } from '@/store/window-atom';
-import { generateCardLayoutArr } from '@/features/tab/order/util/generate-card';
 import { ExceptionText } from '@/components/ui/exception';
 
-import { ListUlBox } from '../components/list-box';
-import { useOrderTab } from './hooks/use-order-tab';
 import Card from './components/card';
+import { useOrderTab } from './hooks/use-order-tab';
+import { generateCardLayoutArr } from './util/generate-card-layout-arr';
+import { ListUlBox } from '../components/list-box';
 
 export default function OrderTabView() {
   const { orders, orderItems } = useOrderTab();

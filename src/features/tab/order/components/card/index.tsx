@@ -1,11 +1,10 @@
 import { ReactNode } from 'react';
 
-import { CardObj } from '@/features/tab/order/util/generate-card';
-
-import CardHeader from '../header';
+import styles from './index.module.css';
 import CardMain from '../main';
 import CardFooter from '../footer';
-import styles from './index.module.css';
+import CardHeader from '../header';
+import { CardObj } from '../../util/types';
 
 type CardProps = {
   order: CardObj;

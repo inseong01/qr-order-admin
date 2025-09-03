@@ -1235,4 +1235,34 @@ feat: 자동 커밋 및 AI 분석 기능 추가
 
     - 리팩토링 개선 이전/이후 네트워크 응답 결과 기록
 
+25.9.3.
+  - 개선
+    - lazy 적용 구체화
+      - 우측 탭 모달 전체 -> 좌석 탭 모달 lazy 적용
+
+    - timer 안정화
+      - setInterval -> setTimeout 적용 
+
+    - SEO 개선
+      - description 추가
+
+  - card 생성 로직 파일 함수 분리
+  
+  - lighthouse 결과
+    - Performance: 97
+
+    - Accessibility: 84
+    : 주요 색상과 글자 회색 색상 대비 원인  
+
+    - Best Practices: 100
+
+    - SEO: 92
+    : robots.txt 부재
+
+  - 렌더링 분석
+    - react scan 도입
+  
+    - 메뉴 탭
+      - useQueryClientTable 훅으로 메뉴 탭 전체 리렌더링 발생 
+
 <--  기능 개선, util 및 hook 테스트 코드 개선  -->
