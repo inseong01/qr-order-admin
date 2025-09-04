@@ -43,7 +43,6 @@ export default function DeleteCategoryForm() {
     if (!success) {
       const message = error?.issues[0].message;
       setCategoryError(message);
-      setWidgetState({ option: 'delete-menu-category' });
       return e.preventDefault();
     }
 

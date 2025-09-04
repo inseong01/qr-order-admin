@@ -177,7 +177,7 @@ test.describe('[성공] 좌석 관리', () => {
     expect(downloadUrl).toBeTruthy();
 
     // 7. 좌석 모달 닫기 버튼 클릭
-    await page.getByAltText('닫기').click();
+    await page.getByRole('button', { name: '닫기' }).click();
 
     // 8. 좌석 모달 닫힘 확인
     await expect(page.getByTestId('submitForm')).not.toBeVisible();

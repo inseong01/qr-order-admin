@@ -7,13 +7,12 @@ import supabase from '@/lib/supabase';
 import { PATHS } from '@/constants/paths';
 import { verifyAuthJWT } from '../util/verify-auth-jwt';
 import { clearStorageKeys } from '../util/clear-storage-key';
-import { authStatusAtom, captchaRefreshAtom, isLoggedInAtom, setUserSessionAtom } from '../store/auth-atom';
+import { authStatusAtom, isLoggedInAtom, setUserSessionAtom } from '../store/auth-atom';
 
 export default function useAuthSession() {
   const isLogin = useAtomValue(isLoggedInAtom);
   const setAuthStatus = useSetAtom(authStatusAtom);
   const setSession = useSetAtom(setUserSessionAtom);
-  const captchaRefresh = useSetAtom(captchaRefreshAtom);
 
   const store = useStore();
   const { pathname } = useLocation();
@@ -22,8 +21,7 @@ export default function useAuthSession() {
   const logoutAndClear = useCallback(() => {
     setSession(null);
     clearStorageKeys();
-    captchaRefresh();
-  }, [setSession, captchaRefresh]);
+  }, [setSession]);
 
   /**
    * 인증 필요한 라우터에서만 success 할당

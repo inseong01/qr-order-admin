@@ -7,7 +7,7 @@ import { FormInputBox, FormInputCaption } from '@/components/ui/exception';
 import styles from './../common.module.css';
 import { PWD_MAX, PWD_MIN } from '../const';
 import useAuthForm from '../hooks/use-auth-form';
-import AuthContainer from '../components/container';
+import CaptchaContainer from '../components/captcha';
 import useDisabledState from '../hooks/use-disabled';
 import { signOutUser, signUpNewUser } from '../util/auth-supabase-api';
 import { AuthForm, AuthFormSubmitButton, AuthFormTitle, AuthNavLink } from '../components/layout';
@@ -41,7 +41,7 @@ export default function SignUpPage() {
   const confirmPwdErrorMsg = errorForm.get('confirmPassword') ?? '';
 
   return (
-    <AuthContainer>
+    <CaptchaContainer>
       {/* 상단 */}
       <AuthFormTitle text='회원가입' />
 
@@ -100,6 +100,6 @@ export default function SignUpPage() {
       <nav>
         <AuthNavLink text='돌아가기' to={PATHS.AUTH.LOGIN} />
       </nav>
-    </AuthContainer>
+    </CaptchaContainer>
   );
 }

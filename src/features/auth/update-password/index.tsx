@@ -6,7 +6,7 @@ import { FormInputBox, FormInputCaption } from '@/components/ui/exception';
 import styles from './../common.module.css';
 import { PWD_MAX, PWD_MIN } from '../const';
 import useAuthForm from '../hooks/use-auth-form';
-import AuthContainer from '../components/container';
+import CaptchaContainer from '../components/captcha';
 import useDisabledState from '../hooks/use-disabled';
 import { updateUserPassword } from '../util/auth-supabase-api';
 import { AuthForm, AuthFormSubmitButton, AuthFormTitle } from '../components/layout';
@@ -35,7 +35,7 @@ export default function UpdatePasswordPage() {
   const confirmPwdErrorMsg = errorForm.get('confirmPassword') ?? '';
 
   return (
-    <AuthContainer>
+    <CaptchaContainer>
       {/* 상단 */}
       <AuthFormTitle text='비밀번호 수정' />
 
@@ -75,6 +75,6 @@ export default function UpdatePasswordPage() {
 
         <AuthFormSubmitButton text={description} disabled={disabled} />
       </AuthForm>
-    </AuthContainer>
+    </CaptchaContainer>
   );
 }

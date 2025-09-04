@@ -7,7 +7,7 @@ import { FormInputBox, FormInputCaption } from '@/components/ui/exception';
 
 import styles from './../common.module.css';
 import useAuthForm from '../hooks/use-auth-form';
-import AuthContainer from '../components/container';
+import CaptchaContainer from '../components/captcha';
 import useDisabledState from '../hooks/use-disabled';
 import { signInWithEmailAndPassword } from '../util/auth-supabase-api';
 import { authStatusAtom, captchaTokenAtom, errorFormAtom, loginFormAtom } from '../store/auth-atom';
@@ -42,7 +42,7 @@ export default function LoginPage() {
   const pwdErrorMsg = errorForm.get('password') ?? '';
 
   return (
-    <AuthContainer>
+    <CaptchaContainer>
       {/* 상단 */}
       <AuthFormTitle text='로그인' />
 
@@ -87,6 +87,6 @@ export default function LoginPage() {
 
         <AuthNavLink text='비밀번호 찾기' to={PATHS.AUTH.FIND.PASSWORD} />
       </nav>
-    </AuthContainer>
+    </CaptchaContainer>
   );
 }

@@ -5,8 +5,8 @@ import validate from '@/utils/function/validate';
 
 import {
   clearMenuErrorFormAtom,
+  draftMenuAtom,
   initMenu,
-  menuAtom,
   MenuFormInputs,
   menuImageFileAtom,
   resetMenuErrorAtom,
@@ -29,7 +29,7 @@ import { setModalClickAtom } from '../../store/atom';
 import { MenuFormFields, MenuImageInput, MenuModalHeader } from '../components/common';
 
 export default function UpdateMenuModal() {
-  const [inputValue, setInputValue] = useAtom(menuAtom);
+  const [inputValue, setInputValue] = useAtom(draftMenuAtom);
   const menuImageFile = useAtomValue(menuImageFileAtom);
   const setMenuError = useSetAtom(setMenuErrorAtom);
   const resetMenuError = useSetAtom(resetMenuErrorAtom);
@@ -129,7 +129,6 @@ export default function UpdateMenuModal() {
   /** 폼 창 닫기 */
   const handleClose = () => {
     setModalClick(false);
-    setInputValue(initMenu);
   };
 
   /** 이미지 파일 설정 */

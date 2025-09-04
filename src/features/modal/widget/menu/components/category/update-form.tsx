@@ -41,7 +41,6 @@ export default function UpdateCategoryForm() {
     if (!success) {
       const message = error?.issues[0].message;
       setCategoryError(message);
-      setWidgetState({ option: 'update-menu-category' });
       return e.preventDefault();
     }
 

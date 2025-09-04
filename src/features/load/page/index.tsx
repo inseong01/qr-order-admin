@@ -9,19 +9,23 @@ import { detectViewportModeAtom, resizeMainSectionAtom } from '@/store/window-at
 
 import { debounce } from '@/utils/function/optimize';
 
-import ConfirmModal from '@/features/modal/confirm';
+import { footerAtom } from '@/features/page/footer/store/atom';
 import WidgetCateogryModal from '@/features/modal/widget';
 import ToastNotification from '@/features/alert/toast';
-import ErrorComponent from '@/features/page/error';
-import Footer, { footerAtom } from '@/features/page/footer';
+import ConfirmModal from '@/features/modal/confirm';
+import Footer from '@/features/page/footer';
 import Header from '@/features/page/header';
 import Main from '@/features/page/main';
 
 export default function LoadPage() {
-  const { dataStatus } = useQueryClientTable(REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.ALL);
   const tab = useAtomValue(footerAtom);
   const resizeMainSection = useSetAtom(resizeMainSectionAtom);
   const detectViewportMode = useSetAtom(detectViewportModeAtom);
+
+  /**
+   * Supabase DB Reatime 구독
+   */
+  useQueryClientTable(REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.ALL);
 
   /**
    * 화면 감지
@@ -48,7 +52,7 @@ export default function LoadPage() {
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
       {/* 페이지 */}
       <Header />
-      {dataStatus === 'rejected' ? <ErrorComponent /> : <Main />}
+      <Main />
       <Footer />
 
       {/* 토스트 알림 */}

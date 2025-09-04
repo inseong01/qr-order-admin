@@ -1,55 +1,32 @@
-import { atom, useAtomValue, useSetAtom } from 'jotai';
+import { useAtomValue } from 'jotai';
+import { lazy, Suspense } from 'react';
 
 import Timer from '@/features/timer';
-import { userSessionAtom } from '@/features/auth/store/auth-atom';
-import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
-import { showToastAtom } from '@/features/alert/toast/store/atom';
-import { signOutUser } from '@/features/auth/util/auth-supabase-api';
 
-import { footerAtom } from '../footer';
-import HeaderMenuTab from './header-menu';
-import HeaderTableTab from './header-table';
-import HeaderOrderTab from './header-order';
 import styles from './index.module.css';
+import HeaderMenuTab from './tab/menu';
+import LogoutButton from './button/logout';
+import { footerAtom } from '../footer/store/atom';
 
-export const headerTabIdxAtom = atom(0);
+const LazyHeaderTableTab = lazy(() => import('./tab/table'));
+const LazyHeaderOrderTab = lazy(() => import('./tab/order'));
 
 export default function Header() {
   const footerTab = useAtomValue(footerAtom);
   const component = {
     menu: HeaderMenuTab,
-    table: HeaderTableTab,
-    order: HeaderOrderTab,
+    table: LazyHeaderTableTab,
+    order: LazyHeaderOrderTab,
   };
   const HeaderTabList = component[footerTab];
-  const showToast = useSetAtom(showToastAtom);
-  const { showConfirmModal } = useConfirmModal();
-  const handleLogout = async () => {
-    const title = '로그아웃 하시겠습니까?';
-    /* 비즈니스 로직 */
-    const onConfirm = async () => {
-      // 로그아웃
-      const { error } = await signOutUser();
-
-      // 에러 처리
-      if (error) {
-        console.error('Error logging out:', error.message);
-        showToast('로그아웃 과정에서 오류가 발생했습니다.');
-        return;
-      }
-    };
-
-    showConfirmModal({ title, onConfirm });
-  };
-
-  const session = useAtomValue(userSessionAtom);
-  const isAnonymous = session?.user.is_anonymous;
 
   return (
     <header className={styles.header}>
       {/* 탭 목록 */}
       <ul className={styles.categories}>
-        <HeaderTabList />
+        <Suspense fallback={null}>
+          <HeaderTabList />
+        </Suspense>
       </ul>
 
       <ul className={styles.rightSection}>
@@ -57,11 +34,7 @@ export default function Header() {
         <Timer />
 
         {/* 로그아웃 */}
-        <li className={styles.logoutBox}>
-          <button onClick={handleLogout} className={styles.logoutButton}>
-            {isAnonymous ? '방문자' : '관리자'} 로그아웃
-          </button>
-        </li>
+        <LogoutButton />
       </ul>
     </header>
   );

@@ -5,17 +5,18 @@ import styles from './widget.module.css';
 import { widgetAtom } from './store/atom';
 import { MenuWidget } from './components/tab/menu';
 import { WidgetIconButton } from './components/button';
-import TableWidget from './components/tab/table';
-import { footerAtom } from '../page/footer';
-import { memo } from 'react';
+import { footerAtom } from '../page/footer/store/atom';
+import { lazy, Suspense } from 'react';
 
-function Widget() {
+const LazyTableWidget = lazy(() => import('./components/tab/table'));
+
+export default function Widget() {
   const tab = useAtomValue(footerAtom);
   const { isOpen } = useAtomValue(widgetAtom);
 
   const components = {
     menu: MenuWidget,
-    table: TableWidget,
+    table: LazyTableWidget,
     order: null,
   };
   const WidgetComponent = components[tab];
@@ -35,10 +36,10 @@ function Widget() {
         <WidgetIconButton />
 
         {/* 위젯 목록 */}
-        <AnimatePresence>{isOpen ? isWidgetComponentOn && <WidgetComponent /> : null}</AnimatePresence>
+        <Suspense fallback={null}>
+          <AnimatePresence>{isOpen ? isWidgetComponentOn && <WidgetComponent /> : null}</AnimatePresence>
+        </Suspense>
       </motion.div>
     </>
   );
 }
-
-export default memo(Widget);

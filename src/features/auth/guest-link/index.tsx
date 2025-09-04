@@ -5,10 +5,10 @@ import { PATHS } from '@/constants/paths';
 import validate from '@/utils/function/validate';
 
 import styles from './index.module.css';
-import useAuthForm from '../../hooks/use-auth-form';
-import useDisabledState from '../../hooks/use-disabled';
-import { signInAnonymously } from '../../util/auth-supabase-api';
-import { authStatusAtom, captchaTokenAtom } from '../../store/auth-atom';
+import useAuthForm from '../hooks/use-auth-form';
+import useDisabledState from '../hooks/use-disabled';
+import { signInAnonymously } from '../util/auth-supabase-api';
+import { authStatusAtom, captchaTokenAtom } from '../store/auth-atom';
 
 type GuestLinkProps = {
   captchaToken: string;

@@ -7,8 +7,8 @@ import { modalOpenAtom } from '@/features/modal/tab/store/atom';
 import TabModalContainer from '@/features/modal/tab';
 import Widget from '@/features/widget';
 
-import { footerAtom } from '../footer';
 import styles from './index.module.css';
+import { footerAtom } from '../footer/store/atom';
 
 /** 모달, 위젯 반환하는 메인 페이지 우측 컴포넌트 */
 export default function MainRightComponent() {

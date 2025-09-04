@@ -37,7 +37,6 @@ export default function AddCategoryForm() {
     if (!success) {
       const message = error?.issues[0].message;
       setCategoryError(message);
-      setWidgetState({ option: 'create-menu-category' });
       return e.preventDefault();
     }
 

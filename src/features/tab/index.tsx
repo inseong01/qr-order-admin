@@ -2,8 +2,8 @@ import { lazy, Suspense } from 'react';
 import { useAtomValue } from 'jotai';
 
 import MenuTabView from './menu/view';
-import { footerAtom } from '../page/footer';
 import LoadingSpinner from '../load/spinner';
+import { footerAtom } from '../page/footer/store/atom';
 
 const LazyTableTabView = lazy(() => import('./table/view'));
 const LazyOrderTabView = lazy(() => import('./order/view'));

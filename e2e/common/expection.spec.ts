@@ -228,10 +228,10 @@ test.describe('[예외/경계] 예외 및 경계 값 테스트', () => {
       // 2. ErrorComponent 등장 확인
       await expect(page.getByText('예기치 않은 오류가 발생했습니다.')).toBeVisible();
 
-      // 3. 탭 비노출 확인
-      await expect(page.getByText('메뉴', { exact: true })).not.toBeVisible();
-      await expect(page.getByText('좌석', { exact: true })).not.toBeVisible();
-      await expect(page.getByText('주문', { exact: true })).not.toBeVisible();
+      // 3. 탭 노출 확인
+      await expect(page.getByText('메뉴', { exact: true })).toBeVisible();
+      await expect(page.getByText('좌석', { exact: true })).toBeVisible();
+      await expect(page.getByText('주문', { exact: true })).toBeVisible();
     });
   });
 });

@@ -5,8 +5,8 @@ import validate from '@/utils/function/validate';
 
 import {
   clearMenuErrorFormAtom,
+  draftMenuAtom,
   initMenu,
-  menuAtom,
   MenuFormInputs,
   menuImageFileAtom,
   resetMenuErrorAtom,
@@ -29,7 +29,7 @@ import { generateNumberId } from '../util/generate-id';
 import { MenuFormFields, MenuImageInput, MenuModalHeader } from '../components/common';
 
 export default function CreateMenuModal() {
-  const [inputValue, setInputValue] = useAtom(menuAtom);
+  const [inputValue, setInputValue] = useAtom(draftMenuAtom);
   const menuImage = useAtomValue(menuImageFileAtom);
   const setMenuError = useSetAtom(setMenuErrorAtom);
   const resetMenuError = useSetAtom(resetMenuErrorAtom);

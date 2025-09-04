@@ -23,6 +23,15 @@ export default defineConfig(({ command }) => {
     build: {
       rollupOptions: {
         output: {
+          manualChunks(id) {
+            // Konva 특정 목적
+            // 적용: konva-[hash].js
+            // 미적용: table-state-[hash].js
+            if (/node_modules\/konva\//.test(id)) {
+              return 'konva';
+            }
+            return null;
+          },
           assetFileNames({ names }) {
             const name = names[0];
             if (/\.(css)$/.test(name)) {

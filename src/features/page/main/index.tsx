@@ -6,7 +6,7 @@ import TabViewContainer from '@/features/tab';
 
 import styles from './index.module.css';
 import MainRightComponent from './right-index';
-import { footerAtom } from '../footer';
+import { footerAtom } from '../footer/store/atom';
 
 export default function Main() {
   const tab = useAtomValue(footerAtom);

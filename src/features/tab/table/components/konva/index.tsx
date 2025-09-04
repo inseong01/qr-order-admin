@@ -3,17 +3,17 @@ import { useEffect, useRef } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { Layer, Rect, Stage, Text } from 'react-konva';
 
-import { useQueryOrderItems, useQueryTableList } from '@/hooks/use-query/query';
+import { useQueryOrderItems } from '@/hooks/use-query/query';
 import { windowStateAtom } from '@/store/window-atom';
 
+import TableLayer from './layer';
+import { setEditDescription } from './function/set-edit-description';
+import { setStagePositionStateAtom, stagePositionStateAtom } from './store/atom';
 import { setTableEditLayerAtom, setTableStageAtom } from '../../store/table-state';
 import { draftTablesAtom, editModeAtom, selectedTableIdsAtom } from '../../store/table-edit-state';
-import { setStagePositionStateAtom, stagePositionStateAtom } from './store/atom';
-import { setEditDescription } from './function/set-edit-description';
-import TableLayer from './layer';
+import { KonvaSectionProps } from '../../types';
 
-export default function KonvaSection() {
-  const tablesQuery = useQueryTableList();
+export default function KonvaSection({ tables }: KonvaSectionProps) {
   const orderList = useQueryOrderItems();
   const editMode = useAtomValue(editModeAtom);
   const draftTables = useAtomValue(draftTablesAtom);
@@ -25,7 +25,7 @@ export default function KonvaSection() {
   const setStagePositionState = useSetAtom(setStagePositionStateAtom);
 
   const needDraft = editMode === 'update' || editMode === 'create';
-  const renderTables = needDraft ? draftTables : (tablesQuery?.data ?? []);
+  const renderTables = needDraft ? draftTables : (tables ?? []);
   const editDescription = setEditDescription(editMode, Boolean(tableIds.length));
 
   const stageRef = useRef<Konva.Stage>(null);

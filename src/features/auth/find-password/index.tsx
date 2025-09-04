@@ -6,7 +6,7 @@ import { FormInputBox, FormInputCaption } from '@/components/ui/exception';
 
 import styles from './../common.module.css';
 import useAuthForm from '../hooks/use-auth-form';
-import AuthContainer from '../components/container';
+import CaptchaContainer from '../components/captcha';
 
 import useDisabledState from '../hooks/use-disabled';
 import { requestPasswordResetEmail } from '../util/auth-supabase-api';
@@ -37,7 +37,7 @@ export default function FindPasswordPage() {
   const idErrorMsg = errorForm.get('id') ?? '';
 
   return (
-    <AuthContainer>
+    <CaptchaContainer>
       {/* 상단 */}
       <AuthFormTitle text='비밀번호 찾기' />
 
@@ -64,8 +64,8 @@ export default function FindPasswordPage() {
 
       {/* 하단 */}
       <nav className={styles.actions}>
-        <AuthNavLink text='로그인' to={PATHS.AUTH.LOGIN} />
+        <AuthNavLink text='돌아가기' to={PATHS.AUTH.LOGIN} />
       </nav>
-    </AuthContainer>
+    </CaptchaContainer>
   );
 }

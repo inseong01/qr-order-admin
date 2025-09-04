@@ -36,6 +36,10 @@
   right: -4px; /* .link padding-x / 2 */
 }
 
+nav {
+  text-align: center;
+}
+
 /* AuthFormSubmitButton */
 .button {
   width: 100%;

@@ -20,14 +20,19 @@ export const MENU_CATEGORIES_QUERY_KEY = ['menuCategoryList'];
  * 테이블 목록을 가져오는 쿼리
  */
 export function useQueryTableList() {
-  const { data, refetch, isLoading } = useQuery<Table[]>({
+  const query = useQuery<Table[]>({
     queryKey: TABLE_LIST_QUERY_KEY,
     queryFn: getTableList,
     staleTime: Infinity,
     refetchOnWindowFocus: false,
+    retry(failureCount) {
+      if (import.meta.env.MODE === 'test') return false;
+      if (failureCount > 2) return false;
+      return true;
+    },
   });
 
-  return { data, refetch, isLoading };
+  return query;
 }
 
 /**
@@ -38,6 +43,11 @@ export function useQueryRequestList() {
     queryKey: REQUEST_LIST_QUERY_KEY,
     queryFn: getRequestList,
     refetchOnWindowFocus: false,
+    retry(failureCount) {
+      if (import.meta.env.MODE === 'test') return false;
+      if (failureCount > 2) return false;
+      return true;
+    },
   });
 
   return { data, refetch };
@@ -51,6 +61,11 @@ export function useQueryFirstRequest(request_id: string) {
     queryKey: FIRST_REQUEST_QUERY_KEY,
     queryFn: () => getRequestItemList(request_id),
     refetchOnWindowFocus: false,
+    retry(failureCount) {
+      if (import.meta.env.MODE === 'test') return false;
+      if (failureCount > 2) return false;
+      return true;
+    },
   });
 
   return { data, refetch };
@@ -60,49 +75,69 @@ export function useQueryFirstRequest(request_id: string) {
  * 메뉴 목록을 가져오는 쿼리
  */
 export function useQueryMenuList() {
-  const { data, refetch, isLoading } = useQuery<Menu[]>({
+  const query = useQuery<Menu[]>({
     queryKey: MENU_LIST_QUERY_KEY,
     queryFn: getMenuList,
     staleTime: Infinity,
+    retry(failureCount) {
+      if (import.meta.env.MODE === 'test') return false;
+      if (failureCount > 2) return false;
+      return true;
+    },
   });
 
-  return { data, refetch, isLoading };
+  return query;
 }
 
 /**
  * 전체 주문 목록을 가져오는 쿼리
  */
 export function useQueryAllOrderList() {
-  const { data, refetch, isLoading } = useQuery<Order[]>({
+  const query = useQuery<Order[]>({
     queryKey: ALL_ORDER_LIST_QUERY_KEY,
     queryFn: getOrderList,
     staleTime: 1000 * 60,
+    retry(failureCount) {
+      if (import.meta.env.MODE === 'test') return false;
+      if (failureCount > 2) return false;
+      return true;
+    },
   });
 
-  return { data, refetch, isLoading };
+  return query;
 }
 
 /**
  * 전체 주문 메뉴 목록을 가져오는 쿼리
  */
 export function useQueryOrderItems() {
-  const { data, isLoading } = useQuery<OrderItem[]>({
+  const query = useQuery<OrderItem[]>({
     queryKey: ORDER_LIST_QUERY_KEY,
     queryFn: getOrderItems,
     staleTime: 1000 * 60,
+    retry(failureCount) {
+      if (import.meta.env.MODE === 'test') return false;
+      if (failureCount > 2) return false;
+      return true;
+    },
   });
 
-  return { data, isLoading };
+  return query;
 }
 
 /**
  * 메뉴 카테고리 목록을 가져오는 쿼리
  */
 export function useQueryMenuCategoryList() {
-  const { data, refetch } = useQuery<MenuCategory[]>({
+  const query = useQuery<MenuCategory[]>({
     queryKey: MENU_CATEGORIES_QUERY_KEY,
     queryFn: getMenuCategory,
+    retry(failureCount) {
+      if (import.meta.env.MODE === 'test') return false;
+      if (failureCount > 2) return false;
+      return true;
+    },
   });
 
-  return { data, refetch };
+  return query;
 }
