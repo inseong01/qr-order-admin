@@ -14,7 +14,8 @@ import {
   setMenuImageFileAtom,
 } from '@/components/ui/menu/store/atom';
 
-import { useQueryMenuCategoryList, useQueryMenuList } from '@/hooks/use-query/query';
+import { useQueryMenuList } from '@/hooks/use-query/menu/query';
+import { useQueryMenuCategoryList } from '@/hooks/use-query/menu-category/query';
 
 import { addMenu } from '@/lib/supabase/tables/menu';
 import { uploadImage } from '@/lib/supabase/storage/store';
@@ -27,6 +28,7 @@ import { buildMenuData } from '../util/set-menu';
 import { setModalClickAtom } from '../../store/atom';
 import { generateNumberId } from '../util/generate-id';
 import { MenuFormFields, MenuImageInput, MenuModalHeader } from '../components/common';
+import { MAX_FILE_SIZE } from '../types';
 
 export default function CreateMenuModal() {
   const [inputValue, setInputValue] = useAtom(draftMenuAtom);
@@ -120,10 +122,18 @@ export default function CreateMenuModal() {
 
   /** 이미지 파일 설정 */
   const setImgFile = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files;
-    if (file) {
-      setMenuImage(file[0]);
+    const file = e.target.files?.[0];
+    if (!file) {
+      // TODO: 오류 출력 - 파일을 선택해주세요.
+      return;
     }
+
+    if (file.size > MAX_FILE_SIZE) {
+      // TODO: 오류 출력 - 파일 크기가 제한을 초과했습니다.
+      return;
+    }
+
+    setMenuImage(file);
   };
 
   return (

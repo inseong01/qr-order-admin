@@ -1,4 +1,6 @@
-import { useQueryMenuCategoryList, useQueryMenuList } from '@/hooks/use-query/query';
+import { useQueryMenuList } from '@/hooks/use-query/menu/query';
+import { useQueryMenuCategoryList } from '@/hooks/use-query/menu-category/query';
+
 import { MenuCategories, MenuGroupByCategory } from '../types';
 
 /**

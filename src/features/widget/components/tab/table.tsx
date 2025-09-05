@@ -19,7 +19,6 @@ import {
   setEditModeAtom,
   setEditStateAtom,
 } from '@/features/tab/table/store/table-edit-state';
-import { tableEditLayerAtom } from '@/features/tab/table/store/table-state';
 
 import { useQueryTableList } from '@/hooks/use-query/query';
 
@@ -29,6 +28,8 @@ import LIGHT_SAVE_ICON from '@/assets/icon/light-save-icon.svg';
 import LIGHT_BACK_ICON from '@/assets/icon/light-back-icon.svg';
 import LIGHT_TABLE_ICON from '@/assets/icon/light-table-icon.svg';
 import LIGHT_ADD_LIST_ICON from '@/assets/icon/light-add-list.svg';
+
+import { tableEditRectAtom, tableEditTextAtom } from '@/features/tab/table/store/table-state';
 
 import styles from './tab.module.css';
 import { AnimatedIconSwitcher, AnimatedTextSwitcher, DetectAnimation, ListBox } from '../motion';
@@ -44,7 +45,8 @@ export default function TableWidget() {
   const isEditing = useAtomValue(isEditingAtom);
   const tableIds = useAtomValue(selectedTableIdsAtom);
   const draftTables = useAtomValue(draftTablesAtom);
-  const tableEditLayerRef = useAtomValue(tableEditLayerAtom);
+  const tableEditRect = useAtomValue(tableEditRectAtom);
+  const tableEditText = useAtomValue(tableEditTextAtom);
   const setTableRequestAlertStatus = useSetAtom(setRequestAlertAtom);
   const setTableEditMode = useSetAtom(setEditModeAtom);
   const selectSingleTable = useSetAtom(selectSingleTableAtom);
@@ -56,7 +58,7 @@ export default function TableWidget() {
 
   /** 좌석 삭제 로직 */
   function clickDeleteTable() {
-    if (!tableEditLayerRef) {
+    if (!tableEditRect || !tableEditText) {
       showToast('위젯 오류가 발생했습니다.');
       return;
     }
@@ -69,7 +71,8 @@ export default function TableWidget() {
           resetTableState();
           await tablesQuery.refetch();
           showToast('삭제되었습니다.');
-          fadeBackgroundLayer(tableEditLayerRef, false).play();
+          fadeBackgroundLayer(tableEditRect, false).play();
+          fadeBackgroundLayer(tableEditText, false).play();
         } catch (err) {
           console.error(err);
           showToast('오류가 발생했습니다.');
@@ -83,12 +86,14 @@ export default function TableWidget() {
     setTableEditMode('delete');
     setDraftTables(tablesQuery.data ?? []);
     setTableRequestAlertStatus(false);
-    fadeBackgroundLayer(tableEditLayerRef, true).play();
+    const re = fadeBackgroundLayer(tableEditRect, true).play();
+    console.log('2, re: ', re);
+    fadeBackgroundLayer(tableEditText, true).play();
   }
 
   /** 좌석 정보 수정 로직 */
   function clickUpdateTable() {
-    if (!tableEditLayerRef) {
+    if (!tableEditRect || !tableEditText) {
       showToast('위젯 오류가 발생했습니다.');
       return;
     }
@@ -101,7 +106,8 @@ export default function TableWidget() {
           resetTableState();
           await tablesQuery.refetch();
           showToast('수정되었습니다.');
-          fadeBackgroundLayer(tableEditLayerRef, false).play();
+          fadeBackgroundLayer(tableEditRect, false).play();
+          fadeBackgroundLayer(tableEditText, false).play();
         } catch (err) {
           console.error(err);
           showToast('오류가 발생했습니다.');
@@ -115,12 +121,13 @@ export default function TableWidget() {
     setTableEditMode('update');
     setDraftTables(tablesQuery.data ?? []);
     setTableRequestAlertStatus(false);
-    fadeBackgroundLayer(tableEditLayerRef, true).play();
+    fadeBackgroundLayer(tableEditRect, true).play();
+    fadeBackgroundLayer(tableEditText, true).play();
   }
 
   /** 좌석 생성 로직 */
   function clickCreateTable() {
-    if (!tableEditLayerRef) {
+    if (!tableEditRect || !tableEditText) {
       showToast('위젯 오류가 발생했습니다.');
       return;
     }
@@ -133,7 +140,8 @@ export default function TableWidget() {
           resetTableState();
           await tablesQuery.refetch();
           showToast('추가되었습니다.');
-          fadeBackgroundLayer(tableEditLayerRef, false).play();
+          fadeBackgroundLayer(tableEditRect, false).play();
+          fadeBackgroundLayer(tableEditText, false).play();
         } catch (err) {
           console.error(err);
           showToast('오류가 발생했습니다.');
@@ -153,19 +161,22 @@ export default function TableWidget() {
     setDraftTables([...(tablesQuery.data ?? []), newTable]);
     selectSingleTable(newTable.id);
     setTableRequestAlertStatus(false);
-    fadeBackgroundLayer(tableEditLayerRef, true).play();
+    fadeBackgroundLayer(tableEditRect, true).play();
+    fadeBackgroundLayer(tableEditText, true).play();
   }
 
   /** 편집 상태 변경 */
   function handleEditMode() {
-    if (!tableEditLayerRef) {
+    if (!tableEditRect || !tableEditText) {
       showToast('위젯 오류가 발생했습니다.');
       return;
     }
 
     if (editMode) {
       resetTableState();
-      fadeBackgroundLayer(tableEditLayerRef, tableEditLayerRef.attrs.opacity === 0).play();
+      const re = fadeBackgroundLayer(tableEditRect, tableEditRect.attrs.opacity === 0).play();
+      fadeBackgroundLayer(tableEditText, tableEditText.attrs.opacity === 0).play();
+      console.log('1, re: ', re);
       return;
     }
 

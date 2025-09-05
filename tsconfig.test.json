@@ -22,10 +22,8 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
 
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    }
+    "baseUrl": "."
   },
-  "include": ["src"]
+  "include": ["auto", "e2e", "__test__"],
+  "exclude": ["*.test.ts", "*.fixture.ts"]
 }

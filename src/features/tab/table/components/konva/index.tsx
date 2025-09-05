@@ -9,7 +9,7 @@ import { windowStateAtom } from '@/store/window-atom';
 import TableLayer from './layer';
 import { setEditDescription } from './function/set-edit-description';
 import { setStagePositionStateAtom, stagePositionStateAtom } from './store/atom';
-import { setTableEditLayerAtom, setTableStageAtom } from '../../store/table-state';
+import { setTableEditRefsAtom, setTableStageAtom } from '../../store/table-state';
 import { draftTablesAtom, editModeAtom, selectedTableIdsAtom } from '../../store/table-edit-state';
 import { KonvaSectionProps } from '../../types';
 
@@ -21,7 +21,7 @@ export default function KonvaSection({ tables }: KonvaSectionProps) {
   const { mainSection } = useAtomValue(windowStateAtom);
   const { x, y } = useAtomValue(stagePositionStateAtom);
   const setTableStage = useSetAtom(setTableStageAtom);
-  const setTableEditLayer = useSetAtom(setTableEditLayerAtom);
+  const setTableEditRefs = useSetAtom(setTableEditRefsAtom);
   const setStagePositionState = useSetAtom(setStagePositionStateAtom);
 
   const needDraft = editMode === 'update' || editMode === 'create';
@@ -29,15 +29,17 @@ export default function KonvaSection({ tables }: KonvaSectionProps) {
   const editDescription = setEditDescription(editMode, Boolean(tableIds.length));
 
   const stageRef = useRef<Konva.Stage>(null);
-  const editLayerRef = useRef<Konva.Layer>(null);
+  const editRectRef = useRef<Konva.Rect>(null);
+  const editTextRef = useRef<Konva.Text>(null);
 
-  /* stageRef, editLayerRef 관리 */
+  /* stageRef 관리 */
   useEffect(() => {
     if (!stageRef.current) return;
-    if (!editLayerRef.current) return;
+    if (!editRectRef.current) return;
+    if (!editTextRef.current) return;
 
     setTableStage(stageRef.current);
-    setTableEditLayer(editLayerRef.current);
+    setTableEditRefs({ rect: editRectRef.current, text: editTextRef.current });
   }, []);
 
   /* 드래그 화면 위치 초기화 */
@@ -67,9 +69,17 @@ export default function KonvaSection({ tables }: KonvaSectionProps) {
       onDragEnd={setLastDragPosition}
     >
       {/* 편집 모드 배경 */}
-      <Layer ref={editLayerRef} opacity={0}>
-        <Rect width={mainSection.width} height={mainSection.height} cornerRadius={0} fill='#b4b4b4' />
+      <Layer>
+        <Rect
+          ref={editRectRef}
+          width={mainSection.width}
+          height={mainSection.height}
+          cornerRadius={0}
+          fill='#b4b4b4'
+          opacity={0}
+        />
         <Text
+          ref={editTextRef}
           text={editDescription}
           width={mainSection.width}
           height={mainSection.height}
@@ -77,6 +87,7 @@ export default function KonvaSection({ tables }: KonvaSectionProps) {
           verticalAlign='middle'
           fontSize={20}
           fill='white'
+          opacity={0}
         />
       </Layer>
 

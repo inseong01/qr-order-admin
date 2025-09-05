@@ -23,6 +23,9 @@ export async function getTableList(): Promise<Table[]> {
 
 /**
  * 테이블 정보를 삽입/수정하는 함수
+ *
+ * TODO: insert, update 2개로 나누기
+ *
  * @param updatedTables - 수정된 테이블 배열
  * @returns
  */

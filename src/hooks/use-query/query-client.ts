@@ -4,14 +4,14 @@ import { REALTIME_LISTEN_TYPES, REALTIME_POSTGRES_CHANGES_LISTEN_EVENT } from '@
 
 import supabase from '@/lib/supabase';
 
-import { ALL_ORDER_LIST_QUERY_KEY, REQUEST_LIST_QUERY_KEY } from './query';
+import { allOrderListQueryOptions, requestListQueryOptions, tableListQueryOptions } from './query-options';
 
 export type DataStatus = 'pending' | 'fulfilled' | 'rejected';
 
 /**
  * 구독 처리하는 커스텀 훅
  *
- * -'order' 및 'request' 테이블 변경이 생기면 쿼리 리패치
+ * - 실시간으로 데이터를 수신 받았을 때 연관된 데이터 리패치 적용
  */
 export function useQueryClientTable(method: REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.ALL) {
   const queryClient = useQueryClient();
@@ -28,8 +28,8 @@ export function useQueryClientTable(method: REALTIME_POSTGRES_CHANGES_LISTEN_EVE
           table: 'order', // 'order' 테이블 변경 감지
         },
         () => {
-          // 주문 목록 쿼리 무효화 및 재요청
-          queryClient.invalidateQueries({ queryKey: ALL_ORDER_LIST_QUERY_KEY });
+          queryClient.invalidateQueries(allOrderListQueryOptions);
+          queryClient.invalidateQueries(tableListQueryOptions);
         }
       )
       .on(
@@ -41,7 +41,7 @@ export function useQueryClientTable(method: REALTIME_POSTGRES_CHANGES_LISTEN_EVE
         },
         () => {
           // 요청 목록 쿼리 무효화 및 재요청
-          queryClient.invalidateQueries({ queryKey: REQUEST_LIST_QUERY_KEY });
+          queryClient.invalidateQueries(requestListQueryOptions);
         }
       )
       .subscribe(() => {});

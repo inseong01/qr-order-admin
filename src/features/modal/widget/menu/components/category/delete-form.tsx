@@ -7,7 +7,9 @@ import { showToastAtom } from '@/features/alert/toast/store/atom';
 
 import { FormInputBox, FormInputCaption } from '@/components/ui/exception';
 
-import { MENU_CATEGORIES_QUERY_KEY, useQueryMenuCategoryList, useQueryMenuList } from '@/hooks/use-query/query';
+import { useQueryMenuList } from '@/hooks/use-query/menu/query';
+import { MENU_CATEGORIES_QUERY_KEY } from '@/hooks/use-query/query-key';
+import { useQueryMenuCategoryList } from '@/hooks/use-query/menu-category/query';
 
 import { deleteMenuCategory, MenuCategory } from '@/lib/supabase/tables/menu-category';
 import { deleteImageByFileName, STORE } from '@/lib/supabase/storage/store';

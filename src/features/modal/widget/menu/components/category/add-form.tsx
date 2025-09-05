@@ -1,6 +1,6 @@
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
-import { useQueryMenuCategoryList } from '@/hooks/use-query/query';
+import { useQueryMenuCategoryList } from '@/hooks/use-query/menu-category/query';
 
 import { showToastAtom } from '@/features/alert/toast/store/atom';
 import { setWidgetAtomState } from '@/features/widget/store/atom';

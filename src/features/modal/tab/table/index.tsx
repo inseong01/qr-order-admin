@@ -3,8 +3,8 @@ import { useAtomValue } from 'jotai';
 import { AnimatePresence, motion } from 'motion/react';
 
 import { idAtom } from '@/store/id-atom';
-import { useQueryTableList } from '@/hooks/use-query/query';
 import LoadingSpinner from '@/features/load/spinner';
+import { useQueryTableList } from '@/hooks/use-query/table/query';
 
 import styles from './index.module.css';
 

@@ -3,8 +3,8 @@ import { Tables, TablesInsert, TablesUpdate } from '../database.types';
 
 // menu_category table type
 export type MenuCategory = Tables<'menu_category'>;
-type NewMenuCategory = TablesInsert<'menu_category'>;
-type UpdateMenuCategory = TablesUpdate<'menu_category'>;
+export type NewMenuCategory = TablesInsert<'menu_category'>;
+export type UpdateMenuCategory = TablesUpdate<'menu_category'>;
 
 /**
  * 메뉴 카테고리를 가져오는 함수

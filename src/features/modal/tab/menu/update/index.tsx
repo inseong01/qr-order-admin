@@ -18,7 +18,8 @@ import {
 import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
 import { showToastAtom } from '@/features/alert/toast/store/atom';
 
-import { useQueryMenuCategoryList, useQueryMenuList } from '@/hooks/use-query/query';
+import { useQueryMenuList } from '@/hooks/use-query/menu/query';
+import { useQueryMenuCategoryList } from '@/hooks/use-query/menu-category/query';
 
 import { deleteMenu, updateMenu } from '@/lib/supabase/tables/menu';
 import { deleteImageByFileName, STORE, updateImage } from '@/lib/supabase/storage/store';

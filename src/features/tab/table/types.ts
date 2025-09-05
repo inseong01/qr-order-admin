@@ -1,4 +1,6 @@
 import { Table } from '@/lib/supabase/tables/table';
+import { Rect } from 'konva/lib/shapes/Rect';
+import { Text } from 'konva/lib/shapes/Text';
 
 export type DataWrapperProps = {
   data: DataComponentProps['data'];
@@ -15,3 +17,5 @@ export type DataComponentProps = {
 export type KonvaSectionProps = {
   tables?: Table[];
 };
+
+export type SetTableEditRefsAtomProps = { rect: Rect; text: Text };

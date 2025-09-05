@@ -1312,4 +1312,32 @@ feat: 자동 커밋 및 AI 분석 기능 추가
         - 모달 유형 지정 코드 삭제: 새로운 참조 반환 리렌더링 원인
         
 
-<--  react query 개선 - 요청, 리패치, 유효, util 및 hook 테스트 코드 개선  -->
+25.9.5.
+  - 개선
+    - layer tween 수정
+      - Layer -> Rect, Text 컴포넌트 애니메이션 적용
+
+      - test 코드 작성
+
+  - 리소스 요청 개선 작업
+    - hooks/use-query 테이블 별 디렉터리 세분화
+
+    - 쿼리 옵션 queryOptions으로 맵핑 (타입 추론 목적)
+
+    - mutations 코드 작성
+
+    - supabase/tables 코드 수정 (setQueryData 활용 목적)
+
+  - 리소스 요청 개선 - 유효성
+    - 최적화 방향
+      - statieTime: Infinity 
+        - 탭 이동 시 재요청 X
+
+      - refetchOnWindowFocus: false
+        - 리프레시는 수정, 생성, 삭제, 실시간 이벤트 수신 경우만
+
+      - gcTime: infinity
+        - 캐시 정리 비활성화
+
+
+<--  react query 개선 - mutation 코드 교체, setQueryData 동작 확인, TODO 작업, util 및 hook 테스트 코드 개선  -->
