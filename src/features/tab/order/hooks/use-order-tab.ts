@@ -1,7 +1,7 @@
 import { useAtomValue } from 'jotai';
 
-import { useQueryAllOrderList, useQueryOrderItems } from '@/hooks/use-query/query';
 import { headerTabAtom } from '@/features/page/header/store/atom';
+import { useQueryAllOrderList, useQueryOrderItems } from '@/hooks/use-query/order/query';
 
 // import orderMock from '@/mock/order.test.json';
 // import orderItemMock from '@/mock/order-item.test.json';

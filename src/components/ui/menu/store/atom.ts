@@ -2,7 +2,7 @@ import { atom } from 'jotai';
 
 import { Menu } from '@/lib/supabase/tables/menu';
 import { ZodIssue } from 'zod';
-import { clearZodErrorForField, mapZodFieldErrors } from '@/utils/function/input-error';
+import { clearZodErrorForField, mapZodFieldErrors } from '@/util/function/input-error';
 
 export const initMenu = {
   menu_category: {

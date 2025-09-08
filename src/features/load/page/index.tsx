@@ -7,7 +7,7 @@ import { useQueryClientTable } from '@/hooks/use-query/query-client';
 
 import { detectViewportModeAtom, resizeMainSectionAtom } from '@/store/window-atom';
 
-import { debounce } from '@/utils/function/optimize';
+import { debounce } from '@/util/function/optimize';
 
 import { footerAtom } from '@/features/page/footer/store/atom';
 import WidgetCateogryModal from '@/features/modal/widget';

@@ -2,8 +2,6 @@ import { useAtomValue, useSetAtom } from 'jotai';
 
 import { windowStateAtom } from '@/store/window-atom';
 
-import { deleteTable, upsertTable } from '@/lib/supabase/tables/table';
-
 import { showToastAtom } from '@/features/alert/toast/store/atom';
 import { setRequestAlertAtom } from '@/features/alert/request/store/atom';
 import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
@@ -20,8 +18,6 @@ import {
   setEditStateAtom,
 } from '@/features/tab/table/store/table-edit-state';
 
-import { useQueryTableList } from '@/hooks/use-query/query';
-
 import LIGHT_EDIT_ICON from '@/assets/icon/light-edit.svg';
 import LIGHT_DELETE_ICON from '@/assets/icon/light-delete.svg';
 import LIGHT_SAVE_ICON from '@/assets/icon/light-save-icon.svg';
@@ -30,6 +26,8 @@ import LIGHT_TABLE_ICON from '@/assets/icon/light-table-icon.svg';
 import LIGHT_ADD_LIST_ICON from '@/assets/icon/light-add-list.svg';
 
 import { tableEditRectAtom, tableEditTextAtom } from '@/features/tab/table/store/table-state';
+
+import { useMutationDeleteTable, useMutationUpsertTable, useQueryTableList } from '@/hooks/use-query/table/query';
 
 import styles from './tab.module.css';
 import { AnimatedIconSwitcher, AnimatedTextSwitcher, DetectAnimation, ListBox } from '../motion';
@@ -40,6 +38,7 @@ import { fadeBackgroundLayer } from '../../util/konva-fade-in';
  */
 export default function TableWidget() {
   const tablesQuery = useQueryTableList();
+
   const { mainSection } = useAtomValue(windowStateAtom);
   const editMode = useAtomValue(editModeAtom);
   const isEditing = useAtomValue(isEditingAtom);
@@ -54,7 +53,10 @@ export default function TableWidget() {
   const setDraftTables = useSetAtom(setDraftTableAtom);
   const resetTableState = useSetAtom(resetTablEditAtom);
   const showToast = useSetAtom(showToastAtom);
+
   const { showConfirmModal } = useConfirmModal();
+  const mutationDeleteTable = useMutationDeleteTable();
+  const mutationUpsertTable = useMutationUpsertTable();
 
   /** 좌석 삭제 로직 */
   function clickDeleteTable() {
@@ -67,16 +69,11 @@ export default function TableWidget() {
       const title = '테이블을 삭제할까요?';
       const onConfirm = async () => {
         try {
-          await deleteTable(tableIds);
+          await mutationDeleteTable.mutateAsync({ ids: tableIds });
           resetTableState();
-          await tablesQuery.refetch();
-          showToast('삭제되었습니다.');
           fadeBackgroundLayer(tableEditRect, false).play();
           fadeBackgroundLayer(tableEditText, false).play();
-        } catch (err) {
-          console.error(err);
-          showToast('오류가 발생했습니다.');
-        }
+        } catch {}
       };
 
       showConfirmModal({ title, onConfirm });
@@ -86,8 +83,7 @@ export default function TableWidget() {
     setTableEditMode('delete');
     setDraftTables(tablesQuery.data ?? []);
     setTableRequestAlertStatus(false);
-    const re = fadeBackgroundLayer(tableEditRect, true).play();
-    console.log('2, re: ', re);
+    fadeBackgroundLayer(tableEditRect, true).play();
     fadeBackgroundLayer(tableEditText, true).play();
   }
 
@@ -102,16 +98,11 @@ export default function TableWidget() {
       const title = '테이블을 수정할까요?';
       const onConfirm = async () => {
         try {
-          await upsertTable(draftTables);
+          await mutationUpsertTable.mutateAsync({ updatedTables: draftTables, editMode });
           resetTableState();
-          await tablesQuery.refetch();
-          showToast('수정되었습니다.');
           fadeBackgroundLayer(tableEditRect, false).play();
           fadeBackgroundLayer(tableEditText, false).play();
-        } catch (err) {
-          console.error(err);
-          showToast('오류가 발생했습니다.');
-        }
+        } catch {}
       };
 
       showConfirmModal({ title, onConfirm });
@@ -136,16 +127,11 @@ export default function TableWidget() {
       const title = '테이블을 추가할까요?';
       const onConfirm = async () => {
         try {
-          await upsertTable(draftTables);
+          await mutationUpsertTable.mutateAsync({ updatedTables: draftTables, editMode });
           resetTableState();
-          await tablesQuery.refetch();
-          showToast('추가되었습니다.');
           fadeBackgroundLayer(tableEditRect, false).play();
           fadeBackgroundLayer(tableEditText, false).play();
-        } catch (err) {
-          console.error(err);
-          showToast('오류가 발생했습니다.');
-        }
+        } catch {}
       };
 
       showConfirmModal({ title, onConfirm });
@@ -174,9 +160,8 @@ export default function TableWidget() {
 
     if (editMode) {
       resetTableState();
-      const re = fadeBackgroundLayer(tableEditRect, tableEditRect.attrs.opacity === 0).play();
+      fadeBackgroundLayer(tableEditRect, tableEditRect.attrs.opacity === 0).play();
       fadeBackgroundLayer(tableEditText, tableEditText.attrs.opacity === 0).play();
-      console.log('1, re: ', re);
       return;
     }
 

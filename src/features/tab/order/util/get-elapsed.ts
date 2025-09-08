@@ -6,7 +6,7 @@ type TimeUnit = '초' | '분' | '시간' | '일';
 interface ElapsedResult {
   state: ElapsedState;
   type: TimeUnit;
-  elapsed: number;
+  time: number;
 }
 
 /**
@@ -15,7 +15,7 @@ interface ElapsedResult {
  */
 export function getElapsed(header: CardObj['header']): ElapsedResult {
   if (!header.startAt) {
-    return { state: 'error', type: '초', elapsed: -1 };
+    return { state: 'error', type: '초', time: -1 };
   }
 
   const now = Date.now();
@@ -25,7 +25,7 @@ export function getElapsed(header: CardObj['header']): ElapsedResult {
   const elapsedMs = endAt - startAt;
 
   if (Math.sign(elapsedMs) === -1) {
-    return { state: 'error', type: '초', elapsed: -1 };
+    return { state: 'error', type: '초', time: -1 };
   }
 
   const seconds = Math.floor(elapsedMs / 1000);
@@ -34,13 +34,13 @@ export function getElapsed(header: CardObj['header']): ElapsedResult {
   const days = Math.floor(hours / 24);
 
   if (seconds < 60) {
-    return { state: 'good', type: '초', elapsed: Number(seconds.toFixed(1)) };
+    return { state: 'good', type: '초', time: Number(seconds.toFixed(1)) };
   }
   if (minutes < 60) {
-    return { state: minutes > 15 ? 'bad' : 'good', type: '분', elapsed: minutes };
+    return { state: minutes >= 15 ? 'bad' : 'good', type: '분', time: minutes };
   }
   if (hours < 24) {
-    return { state: 'bad', type: '시간', elapsed: hours };
+    return { state: 'bad', type: '시간', time: hours };
   }
-  return { state: 'bad', type: '일', elapsed: days };
+  return { state: 'bad', type: '일', time: days };
 }

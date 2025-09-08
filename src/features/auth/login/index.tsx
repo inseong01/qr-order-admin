@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router';
 import { useAtomValue, useSetAtom } from 'jotai';
 
 import { PATHS } from '@/constants/paths';
-import validate from '@/utils/function/validate';
+import validate from '@/util/function/validate';
 import { FormInputBox, FormInputCaption } from '@/components/ui/exception';
 
 import styles from './../common.module.css';

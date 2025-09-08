@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSetAtom } from 'jotai';
 
-import { menuCategoryQueryOptions } from '../query-options';
+import { menuCategoryQueryOptions, menuListQueryOptions } from '../query-options';
 import {
   addMenuCategory,
   deleteMenuCategory,
@@ -9,6 +9,8 @@ import {
   UpdateMenuCategory,
   updateMenuCategory,
 } from '@/lib/supabase/tables/menu-category';
+import { deleteImageByFileName } from '@/lib/supabase/storage/store';
+
 import { showToastAtom } from '@/features/alert/toast/store/atom';
 
 /**
@@ -27,11 +29,13 @@ export function useMutationAddMenuCategory() {
 
   const mutation = useMutation({
     mutationFn: (newMenuCategory: NewMenuCategory) => addMenuCategory(newMenuCategory),
-    onSuccess() {
-      queryClient.invalidateQueries({ queryKey: menuCategoryQueryOptions.queryKey });
+    async onSuccess() {
+      await queryClient.invalidateQueries({ queryKey: menuCategoryQueryOptions.queryKey });
+      showToast('추가되었습니다.');
     },
-    onError() {
-      showToast('메뉴 카테고리 처리 과정에서 오류가 발생했습니다.');
+    onError(error) {
+      console.error(error.message);
+      showToast('오류가 발생했습니다.');
     },
   });
 
@@ -47,11 +51,14 @@ export function useMutationUpdateMenuCategory() {
 
   const mutation = useMutation({
     mutationFn: (updatedMenuCategories: UpdateMenuCategory[]) => updateMenuCategory(updatedMenuCategories),
-    onSuccess() {
-      queryClient.invalidateQueries({ queryKey: menuCategoryQueryOptions.queryKey });
+    async onSuccess() {
+      await queryClient.invalidateQueries({ queryKey: menuCategoryQueryOptions.queryKey });
+      await queryClient.invalidateQueries({ queryKey: menuListQueryOptions.queryKey });
+      showToast('수정되었습니다.');
     },
-    onError() {
-      showToast('메뉴 카테고리 처리 과정에서 오류가 발생했습니다.');
+    onError(error) {
+      console.error(error.message);
+      showToast('오류가 발생했습니다.');
     },
   });
 
@@ -66,14 +73,19 @@ export function useMutationDeleteMenuCategory() {
   const showToast = useSetAtom(showToastAtom);
 
   const mutation = useMutation({
-    mutationFn: ({ ids }: { ids: string[] }) => deleteMenuCategory(ids),
-    onSuccess(_, { ids }) {
-      const oldData = queryClient.getQueryData(menuCategoryQueryOptions.queryKey) || [];
-      const updatedData = oldData.filter((d) => !ids.includes(d.id));
-      queryClient.setQueryData(menuCategoryQueryOptions.queryKey, updatedData);
+    mutationFn: ({ ids }: { ids: string[]; filePath: string[] }) => deleteMenuCategory(ids),
+    async onSuccess(_, { filePath }) {
+      // TODO: Storage Cascade 삭제 Edge Function 적용 또는 직접 카테고리 별 삭제 구현
+      if (filePath.length > 0) {
+        await deleteImageByFileName({ filePath });
+      }
+      await queryClient.invalidateQueries({ queryKey: menuCategoryQueryOptions.queryKey });
+      await queryClient.invalidateQueries({ queryKey: menuListQueryOptions.queryKey });
+      showToast('삭제되었습니다.');
     },
-    onError() {
-      showToast('메뉴 카테고리 처리 과정에서 오류가 발생했습니다.');
+    onError(error) {
+      console.error(error.message);
+      showToast('오류가 발생했습니다.');
     },
   });
 

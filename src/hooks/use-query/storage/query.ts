@@ -18,7 +18,8 @@ export function useMutationUploadImage() {
       // 이미지 업로드 후 메뉴 목록을 다시 불러와서 최신 이미지 URL을 반영
       queryClient.invalidateQueries({ queryKey: MENU_LIST_QUERY_KEY });
     },
-    onError() {
+    onError(error) {
+      console.error(error.message);
       showToast('이미지 업로드 과정에서 오류가 발생했습니다.');
     },
   });
@@ -38,7 +39,8 @@ export function useMutationUpdateImage() {
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: MENU_LIST_QUERY_KEY });
     },
-    onError() {
+    onError(error) {
+      console.error(error.message);
       showToast('이미지 수정 과정에서 오류가 발생했습니다.');
     },
   });
@@ -58,7 +60,8 @@ export function useMutationDeleteImage() {
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: MENU_LIST_QUERY_KEY });
     },
-    onError() {
+    onError(error) {
+      console.error(error.message);
       showToast('이미지 삭제 과정에서 오류가 발생했습니다.');
     },
   });

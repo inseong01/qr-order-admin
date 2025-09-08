@@ -1,6 +1,6 @@
 import { useAtomValue } from 'jotai';
 
-import { useQueryTableList } from '@/hooks/use-query/query';
+import { useQueryTableList } from '@/hooks/use-query/table/query';
 import { draftTablesAtom } from '../store/table-edit-state';
 
 /**

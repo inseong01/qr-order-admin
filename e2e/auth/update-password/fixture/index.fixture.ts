@@ -4,8 +4,6 @@ import { TEST_SESSION_VALUE } from 'e2e/auth/common/const';
 
 /** 비밀번호 재설정 성공 모킹 */
 export async function mockUpdatePasswordSuccess(page: Page, browser: Browser) {
-  let isSupabaseCalled = false;
-
   await page.route(/.*supabase\.co\/auth\/v1\/verify.*/, async (route, request) => {
     const url = new URL(request.url());
     const redirectTo = url.searchParams.get('redirect_to');
@@ -31,7 +29,6 @@ export async function mockUpdatePasswordSuccess(page: Page, browser: Browser) {
   });
 
   await page.route('**/auth/v1/user**', (route) => {
-    isSupabaseCalled = true;
     route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -44,7 +41,6 @@ export async function mockUpdatePasswordSuccess(page: Page, browser: Browser) {
   });
 
   await page.route('**/auth/v1/logout**', (route) => {
-    isSupabaseCalled = true;
     route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -57,8 +53,6 @@ export async function mockUpdatePasswordSuccess(page: Page, browser: Browser) {
 
 /** 비밀번호 재설정 실패 모킹 */
 export async function mockUpdatePasswordFail(page: Page, browser: Browser) {
-  let isSupabaseCalled = false;
-
   await page.route(/.*supabase\.co\/auth\/v1\/verify.*/, async (route, request) => {
     const url = new URL(request.url());
     const redirectTo = url.searchParams.get('redirect_to');
@@ -84,7 +78,6 @@ export async function mockUpdatePasswordFail(page: Page, browser: Browser) {
   });
 
   await page.route('**/auth/v1/user**', (route) => {
-    isSupabaseCalled = true;
     route.fulfill({
       status: 400,
       contentType: 'application/json',

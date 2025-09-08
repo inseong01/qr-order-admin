@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent } from 'react';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
-import validate from '@/utils/function/validate';
+import validate from '@/util/function/validate';
 
 import {
   clearMenuErrorFormAtom,
@@ -16,13 +16,12 @@ import {
 } from '@/components/ui/menu/store/atom';
 
 import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
-import { showToastAtom } from '@/features/alert/toast/store/atom';
 
-import { useQueryMenuList } from '@/hooks/use-query/menu/query';
 import { useQueryMenuCategoryList } from '@/hooks/use-query/menu-category/query';
+import { useMutationDeleteMenu, useMutationUpdateMenu } from '@/hooks/use-query/menu/query';
+import { useMutationDeleteImage, useMutationUpdateImage } from '@/hooks/use-query/storage/query';
 
-import { deleteMenu, updateMenu } from '@/lib/supabase/tables/menu';
-import { deleteImageByFileName, STORE, updateImage } from '@/lib/supabase/storage/store';
+import { STORE } from '@/lib/supabase/storage/store';
 
 import styles from './../index.module.css';
 import { updateMenuData } from '../util/set-menu';
@@ -35,12 +34,15 @@ export default function UpdateMenuModal() {
   const setMenuError = useSetAtom(setMenuErrorAtom);
   const resetMenuError = useSetAtom(resetMenuErrorAtom);
   const setModalClick = useSetAtom(setModalClickAtom);
-  const showToast = useSetAtom(showToastAtom);
   const setMenuImage = useSetAtom(setMenuImageFileAtom);
   const resetMenuImage = useSetAtom(resetMenuImageFileAtom);
+
   const { showConfirmModal } = useConfirmModal();
-  const menuListQuery = useQueryMenuList();
   const menuCategoriesQuery = useQueryMenuCategoryList();
+  const mutationUpdateImage = useMutationUpdateImage();
+  const mutationDeleteImage = useMutationDeleteImage();
+  const mutationUpdateMenu = useMutationUpdateMenu();
+  const mutationDeleteMenu = useMutationDeleteMenu();
 
   /* 비즈니스 로직 */
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -65,36 +67,31 @@ export default function UpdateMenuModal() {
 
     // 제출
     const onConfirm = async () => {
-      const fileId = inputValue.img_url.split('menu_').at(-1) ?? '';
-
       // 이미지 스토리지 업데이트
+      const fileId = inputValue.img_url.split('menu_').at(-1) ?? '';
       try {
         if (submitType === 'update' && menuImageFile) {
-          await updateImage({ file: menuImageFile, fileId });
+          await mutationUpdateImage.mutateAsync({ file: menuImageFile, fileId });
         }
 
         if (submitType === 'delete' && fileId !== 'default') {
           const filePath = [STORE + `/menu_${fileId}`];
-          await deleteImageByFileName({ filePath });
+          await mutationDeleteImage.mutateAsync({ filePath });
         }
       } catch (err) {
-        console.error(e);
-        showToast('이미지 처리 과정에서 오류가 발생했습니다.');
         return e.preventDefault();
       }
 
       // 메뉴 업데이트
       try {
-        submitType === 'update' ? await updateMenu(menuData.id, menuData) : await deleteMenu(inputValue.id);
-        await menuListQuery.refetch();
+        if (submitType === 'update') {
+          await mutationUpdateMenu.mutateAsync({ id: menuData.id, menuData });
+        } else if (submitType === 'delete') {
+          await mutationDeleteMenu.mutateAsync({ id: inputValue.id });
+        }
       } catch (err) {
-        console.error(err);
-        showToast('메뉴 처리 과정에서 오류가 발생했습니다.');
         return e.preventDefault();
       }
-
-      // 데이터 처리 상태 알림
-      showToast(submitType === 'update' ? '수정되었습니다.' : '삭제되었습니다.');
 
       // 초기화
       setModalClick(false);

@@ -33,10 +33,7 @@ export async function mockMainPageAPI(page: Page) {
 
 /** 로그아웃 성공 모킹 */
 export async function mockLogoutSuccess(page: Page) {
-  let isSupabaseCalled = false;
-
   await page.route('**/auth/v1/logout**', (route) => {
-    isSupabaseCalled = true;
     route.fulfill({
       status: 204,
     });
@@ -45,10 +42,7 @@ export async function mockLogoutSuccess(page: Page) {
 
 /** 로그아웃 실패 모킹 */
 export async function mockLogoutFail(page: Page) {
-  let isSupabaseCalled = false;
-
   await page.route('**/auth/v1/logout**', (route) => {
-    isSupabaseCalled = true;
     route.fulfill({
       status: 400,
       headers: {

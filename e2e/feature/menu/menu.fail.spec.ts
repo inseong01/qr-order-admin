@@ -81,7 +81,7 @@ test.describe('[실패] 메뉴 관리', () => {
     await page.getByText('예').click();
 
     // 5. 오류 토스트 알림 확인
-    await expect(page.getByText('메뉴 처리 과정에서 오류가 발생했습니다.', { exact: false })).toBeVisible();
+    await expect(page.getByText('메뉴 수정 과정에서 오류가 발생했습니다.', { exact: false })).toBeVisible();
   });
 
   /**
@@ -125,7 +125,7 @@ test.describe('[실패] 메뉴 관리', () => {
     await page.getByText('예').click();
 
     // 4. 오류 토스트 알림 확인
-    await expect(page.getByText('메뉴 처리 과정에서 오류가 발생했습니다.', { exact: false })).toBeVisible();
+    await expect(page.getByText('메뉴 삭제 과정에서 오류가 발생했습니다.', { exact: false })).toBeVisible();
   });
 
   /**
@@ -176,7 +176,7 @@ test.describe('[실패] 메뉴 관리', () => {
     await page.getByText('예').click();
 
     // 6. 오류 토스트 알림 확인
-    await expect(page.getByText('이미지 처리 과정에서 오류가 발생했습니다.', { exact: false })).toBeVisible();
+    await expect(page.getByText('이미지 업로드 과정에서 오류가 발생했습니다.', { exact: false })).toBeVisible();
   });
 
   /**
@@ -203,7 +203,7 @@ test.describe('[실패] 메뉴 관리', () => {
     await page.getByText('예').click();
 
     // 6. 오류 토스트 알림 확인
-    await expect(page.getByText('이미지 처리 과정에서 오류가 발생했습니다.', { exact: false })).toBeVisible();
+    await expect(page.getByText('이미지 수정 과정에서 오류가 발생했습니다.', { exact: false })).toBeVisible();
   });
 
   /**
@@ -222,6 +222,6 @@ test.describe('[실패] 메뉴 관리', () => {
     await page.getByText('예').click();
 
     // 4. 오류 토스트 알림 확인
-    await expect(page.getByText('이미지 처리 과정에서 오류가 발생했습니다.', { exact: false })).toBeVisible();
+    await expect(page.getByText('이미지 삭제 과정에서 오류가 발생했습니다.', { exact: false })).toBeVisible();
   });
 });

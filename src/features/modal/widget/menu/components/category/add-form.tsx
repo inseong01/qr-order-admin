@@ -1,14 +1,12 @@
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
-import { useQueryMenuCategoryList } from '@/hooks/use-query/menu-category/query';
+import { useMutationAddMenuCategory } from '@/hooks/use-query/menu-category/query';
 
-import { showToastAtom } from '@/features/alert/toast/store/atom';
 import { setWidgetAtomState } from '@/features/widget/store/atom';
 
 import { FormInputBox, FormInputCaption } from '@/components/ui/exception';
 
-import { addMenuCategory } from '@/lib/supabase/tables/menu-category';
-import validate from '@/utils/function/validate';
+import validate from '@/util/function/validate';
 
 import { useConfirmModal } from '../../../../confirm/hook/use-confirm-modal';
 import { categoryErrorAtom, categoryInputAtom, setCategoryErrorAtom } from '../../store/atom';
@@ -21,12 +19,12 @@ import styles from './add-form.module.css';
  */
 export default function AddCategoryForm() {
   const [inputValue, setInputValue] = useAtom(categoryInputAtom);
-  const menuCategoriesQuery = useQueryMenuCategoryList();
   const categoryError = useAtomValue(categoryErrorAtom);
   const setWidgetState = useSetAtom(setWidgetAtomState);
-  const showToast = useSetAtom(showToastAtom);
   const setCategoryError = useSetAtom(setCategoryErrorAtom);
+
   const { showConfirmModal } = useConfirmModal();
+  const mutationAddMenuCategory = useMutationAddMenuCategory();
 
   /* 비즈니스 로직 */
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -41,22 +39,10 @@ export default function AddCategoryForm() {
     }
 
     const onConfirm = async () => {
-      // supabase 전달
-      try {
-        await addMenuCategory({ title: data });
-        await menuCategoriesQuery.refetch();
-      } catch (e) {
-        console.error(e);
-        showToast('오류가 발생했습니다.');
-        return;
-      }
-
-      // 데이터 처리 상태 알림
-      showToast('추가되었습니다.');
-
-      // 초기화
+      mutationAddMenuCategory.mutate({ title: data });
       setInputValue('');
     };
+
     const onCancle = () => {
       setWidgetState({ option: 'create-menu-category' });
     };

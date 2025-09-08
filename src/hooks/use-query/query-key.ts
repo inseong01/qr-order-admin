@@ -9,11 +9,6 @@ export const TABLE_LIST_QUERY_KEY = ['tableList'];
 export const REQUEST_LIST_QUERY_KEY = ['requestList'];
 
 /**
- * 최초 요청 조회용 Query Key
- */
-export const FIRST_REQUEST_QUERY_KEY = ['firstRequest'];
-
-/**
  * 메뉴 목록 조회용 Query Key
  */
 export const MENU_LIST_QUERY_KEY = ['menuList'];

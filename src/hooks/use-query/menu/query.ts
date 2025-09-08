@@ -23,10 +23,12 @@ export function useMutationAddMenu() {
   const mutation = useMutation({
     mutationFn: addMenu,
     onSuccess(data) {
-      const oldData = queryClient.getQueriesData({ queryKey: MENU_LIST_QUERY_KEY }) || [];
+      const oldData = queryClient.getQueryData(menuListQueryOptions.queryKey) || [];
       queryClient.setQueryData(MENU_LIST_QUERY_KEY, [...oldData, ...data]);
+      showToast('추가되었습니다.');
     },
-    onError() {
+    onError(error) {
+      console.error(error.message);
       showToast('메뉴 처리 과정에서 오류가 발생했습니다.');
     },
   });
@@ -42,14 +44,16 @@ export function useMutationUpdateMenu() {
   const showToast = useSetAtom(showToastAtom);
 
   const mutation = useMutation({
-    mutationFn: ({ id, updatedMenu }: { id: string; updatedMenu: UpdateMenu }) => updateMenu(id, updatedMenu),
+    mutationFn: ({ id, menuData }: { id: string; menuData: UpdateMenu }) => updateMenu(id, menuData),
     onSuccess(data) {
       const oldData = queryClient.getQueryData(menuListQueryOptions.queryKey) ?? [];
-      const updatedData = oldData.map((d) => (d.id === data[0].id ? data : d));
-      queryClient.setQueryData(MENU_LIST_QUERY_KEY, [...updatedData]);
+      const updatedData = oldData.map((d) => (d.id === data[0].id ? data[0] : d));
+      queryClient.setQueryData(MENU_LIST_QUERY_KEY, updatedData);
+      showToast('수정되었습니다.');
     },
-    onError() {
-      showToast('메뉴 처리 과정에서 오류가 발생했습니다.');
+    onError(error) {
+      console.error(error.message);
+      showToast('메뉴 수정 과정에서 오류가 발생했습니다.');
     },
   });
 
@@ -69,9 +73,11 @@ export function useMutationDeleteMenu() {
       const oldData = queryClient.getQueryData(menuListQueryOptions.queryKey) || [];
       const updatedData = oldData.filter((d) => d.id !== id);
       queryClient.setQueryData(MENU_LIST_QUERY_KEY, [...updatedData]);
+      showToast('삭제되었습니다.');
     },
-    onError() {
-      showToast('메뉴 처리 과정에서 오류가 발생했습니다.');
+    onError(error) {
+      console.error(error.message);
+      showToast('메뉴 삭제 과정에서 오류가 발생했습니다.');
     },
   });
 

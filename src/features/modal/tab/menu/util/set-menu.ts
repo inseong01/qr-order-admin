@@ -1,6 +1,6 @@
 import { Menu } from '@/lib/supabase/tables/menu';
 import { MenuCategory } from '@/lib/supabase/tables/menu-category';
-import { createImgPath } from '@/utils/function/image-path';
+import { createImgPath } from '@/util/function/image-path';
 import { generateNumberId } from './generate-id';
 
 type BuildMenuDataProps = {

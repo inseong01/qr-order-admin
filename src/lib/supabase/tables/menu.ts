@@ -22,7 +22,7 @@ export async function getMenuList() {
 
   if (error) {
     error.message && console.error(error.message);
-    throw new Error(error.message);
+    throw error;
   }
 
   return data;
@@ -40,7 +40,7 @@ export const addMenu = async (newMenu: NewMenu) => {
     .select(`id, img_url, name, price, tag, menu_category (id,title)`);
 
   if (error) {
-    throw new Error(error.message);
+    throw error;
   }
 
   return data;
@@ -60,7 +60,7 @@ export const updateMenu = async (id: string, updatedMenu: UpdateMenu) => {
     .select(`id, img_url, name, price, tag, menu_category (id,title)`);
 
   if (error) {
-    throw new Error(error.message);
+    throw error;
   }
 
   // 조건에 맞는 행이 없거나 RLS 정책에 의해 접근이 거부된 경우
@@ -81,7 +81,7 @@ export const deleteMenu = async (id: string) => {
   const { error, data } = await supabase.from('menu').delete().eq('id', id).select();
 
   if (error) {
-    throw new Error(error.message);
+    throw error;
   }
 
   // 조건에 맞는 행이 없거나 RLS 정책에 의해 접근이 거부된 경우

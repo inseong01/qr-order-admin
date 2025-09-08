@@ -13,7 +13,7 @@ test.describe('[성공] 로그아웃', () => {
    * [성공] 로그아웃 시 인증 토큰 제거 및 로그인 페이지 리다이렉트
    * - 버튼 클릭, 모달 확인, URL 이동, 토큰 제거
    */
-  logout_S1('인증 토큰 제거 및 로그인 페이지 이동', async ({ page, context }) => {
+  logout_S1('인증 토큰 제거 및 로그인 페이지 이동', async ({ page }) => {
     // 1. 메인 페이지로 이동
     await page.goto(TEST_PAEG_URL);
 

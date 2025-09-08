@@ -2,9 +2,12 @@ import { useSetAtom } from 'jotai';
 
 import { showToastAtom } from '@/features/alert/toast/store/atom';
 import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
-import { completeOrder, deleteOrder, Order } from '@/lib/supabase/tables/order';
-import { useQueryAllOrderList } from '@/hooks/use-query/query';
-import validate from '@/utils/function/validate';
+
+import { Order } from '@/lib/supabase/tables/order';
+
+import { useMutationCompleteOrder } from '@/hooks/use-query/order/query';
+
+import validate from '@/util/function/validate';
 
 import styles from './index.module.css';
 
@@ -15,9 +18,10 @@ interface CardButtonProps {
 }
 
 export default function CardButton({ orderId, type, inavtive = false }: CardButtonProps) {
-  const { showConfirmModal } = useConfirmModal();
-  const { refetch } = useQueryAllOrderList();
   const showToast = useSetAtom(showToastAtom);
+
+  const { showConfirmModal } = useConfirmModal();
+  const mutationCompleteOrder = useMutationCompleteOrder();
 
   /* 비즈니스 로직 */
   function onClickUpdateListState() {
@@ -26,17 +30,12 @@ export default function CardButton({ orderId, type, inavtive = false }: CardButt
       const { success, error } = await validate.orderIdValue(orderId); // 값 검증
       if (!success) {
         const message = error?.issues[0].message;
-        alert(message);
+        showToast(message);
         return;
       }
 
-      try {
-        type === 'complete' ? await completeOrder(orderId) : await deleteOrder(orderId); // supabase 전달
-        await refetch();
-        showToast(type === 'complete' ? '완료되었습니다.' : '삭제되었습니다.'); // 데이터 처리 상태 알림
-      } catch (e) {
-        console.error(e);
-        showToast('오류가 발생했습니다.');
+      if (type === 'complete') {
+        mutationCompleteOrder.mutate({ id: orderId });
       }
     };
 

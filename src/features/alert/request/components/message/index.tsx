@@ -1,13 +1,13 @@
-import { useSetAtom } from 'jotai';
 import { motion, AnimatePresence } from 'motion/react';
-import { QueryObserverResult, RefetchOptions } from '@tanstack/react-query';
 
 import LIGHT_CLOSE_ICON from '@/assets/icon/light-close-icon.svg';
-import { useQueryFirstRequest } from '@/hooks/use-query/query';
-import { showToastAtom } from '@/features/alert/toast/store/atom';
-import { Request, updateRequest } from '@/lib/supabase/tables/request';
+
+import { useMutationUpdateRequest } from '@/hooks/use-query/request/query';
+
+import { RequestItem } from '@/lib/supabase/tables/request-item';
 
 import styles from './index.module.css';
+import { formatRequestText } from '../../util/format-request-text';
 
 export function MessageCountPannel({ count }: { count: number }) {
   return (
@@ -35,28 +35,20 @@ export function MessageCountPannel({ count }: { count: number }) {
 }
 
 type MessageCountPannelProps = {
-  request: Request;
-  requestRefetch: (options?: RefetchOptions) => Promise<QueryObserverResult<Request[], Error>>;
+  request: RequestItem[];
 };
 
-export function MessagePreview({ request, requestRefetch }: MessageCountPannelProps) {
-  const firstRequestQuery = useQueryFirstRequest(request.id);
-  const showToast = useSetAtom(showToastAtom);
-  const summary =
-    firstRequestQuery.data
-      ?.map(({ quantity, request_category }) => `${request_category.title} ${quantity}개`)
-      .join(', ') ?? '';
+export function MessagePreview({ request }: MessageCountPannelProps) {
+  const requestId = request[0].request?.id;
+  const requestTable = request[0].request?.table.number;
+  const summary = request.map(formatRequestText).join(', ') ?? '';
+
+  const mutationUpdateRequest = useMutationUpdateRequest();
 
   /* 좌석 요청 읽음 처리 */
   async function readRequest() {
-    try {
-      await updateRequest(request.id);
-      await requestRefetch();
-      await firstRequestQuery.refetch();
-    } catch (err) {
-      console.error(err);
-      showToast('요청 처리 과정에서 오류가 발생했습니다.');
-    }
+    if (!requestId) return;
+    mutationUpdateRequest.mutate({ id: requestId });
   }
 
   return (
@@ -64,7 +56,7 @@ export function MessagePreview({ request, requestRefetch }: MessageCountPannelPr
       <AnimatePresence mode='popLayout' initial={false}>
         <motion.li
           layout
-          key={request.id}
+          key={requestId}
           className={styles.msg}
           initial={{ x: '-100%', opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
@@ -72,7 +64,7 @@ export function MessagePreview({ request, requestRefetch }: MessageCountPannelPr
         >
           {/* 상단 */}
           <div className={styles.top}>
-            <div className={styles.title}>테이블 {request.table.number}</div>
+            <div className={styles.title}>테이블 {requestTable}</div>
 
             <div className={styles.closeBtn} onClick={readRequest}>
               <img src={LIGHT_CLOSE_ICON} alt='닫기' />

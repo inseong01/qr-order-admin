@@ -15,7 +15,7 @@ export async function getMenuCategory(): Promise<MenuCategory[]> {
 
   if (error) {
     error.message && console.error(error.message);
-    throw new Error(error.message);
+    throw error;
   }
 
   return data;
@@ -30,8 +30,7 @@ export const addMenuCategory = async (newMenuCategory: NewMenuCategory) => {
   const { error } = await supabase.from('menu_category').insert(newMenuCategory);
 
   if (error) {
-    error.message && console.error(error.message);
-    throw new Error(error.message);
+    throw error;
   }
 
   return;
@@ -46,8 +45,7 @@ export const updateMenuCategory = async (updatedMenuCategories: UpdateMenuCatego
   const { error } = await supabase.from('menu_category').upsert(updatedMenuCategories);
 
   if (error) {
-    error.message && console.error(error.message);
-    throw new Error(error.message);
+    throw error;
   }
 
   return;
@@ -62,8 +60,7 @@ export const deleteMenuCategory = async (id: string[]) => {
   const { error, data } = await supabase.from('menu_category').delete().in('id', id).select();
 
   if (error) {
-    error.message && console.error(error.message);
-    throw new Error(error.message);
+    throw error;
   }
 
   // 조건에 맞는 행이 없거나 RLS 정책에 의해 접근이 거부된 경우

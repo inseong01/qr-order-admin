@@ -1,7 +1,6 @@
 import { queryOptions } from '@tanstack/react-query';
 
 import { getTableList } from '@/lib/supabase/tables/table';
-import { getRequestList } from '@/lib/supabase/tables/request';
 import { getMenuList } from '@/lib/supabase/tables/menu';
 import { getOrderList } from '@/lib/supabase/tables/order';
 import { getRequestItemList } from '@/lib/supabase/tables/request-item';
@@ -9,7 +8,6 @@ import { getOrderItems } from '@/lib/supabase/tables/order-item';
 import { getMenuCategory } from '@/lib/supabase/tables/menu-category';
 import {
   ALL_ORDER_LIST_QUERY_KEY,
-  FIRST_REQUEST_QUERY_KEY,
   MENU_CATEGORIES_QUERY_KEY,
   MENU_LIST_QUERY_KEY,
   ORDER_LIST_QUERY_KEY,
@@ -43,11 +41,7 @@ function createQueryOptions<T>(key: readonly unknown[], fn: () => Promise<T>) {
 export const tableListQueryOptions = createQueryOptions(TABLE_LIST_QUERY_KEY, getTableList);
 
 /** 요청 목록 쿼리 옵션 */
-export const requestListQueryOptions = createQueryOptions(REQUEST_LIST_QUERY_KEY, getRequestList);
-
-/** 첫번째 요청 목록 쿼리 옵션 */
-export const firstRequestQueryOptions = (request_id: string) =>
-  createQueryOptions([...FIRST_REQUEST_QUERY_KEY, request_id], () => getRequestItemList(request_id));
+export const requestListQueryOptions = createQueryOptions(REQUEST_LIST_QUERY_KEY, getRequestItemList);
 
 /** 메뉴 목록 쿼리 옵션 */
 export const menuListQueryOptions = createQueryOptions(MENU_LIST_QUERY_KEY, getMenuList);

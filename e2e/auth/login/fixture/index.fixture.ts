@@ -6,10 +6,7 @@ import { TEST_ACCESS_TOKEN, TEST_ACCOUNT, TEST_REFRESH_TOKEN } from '../../commo
  * Supabase 로그인 요청을 모킹하여 성공 응답을 반환합니다.
  */
 export async function mockSuccessLogin(page: Page) {
-  let isSupabaseCalled = false;
-
   await page.route('**/auth/v1/token**', (route) => {
-    isSupabaseCalled = true;
     route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -39,10 +36,7 @@ export async function mockSuccessLogin(page: Page) {
  * Supabase 로그인 요청을 모킹하여 실패 응답(400)을 반환합니다.
  */
 export async function mockFailLogin(page: Page) {
-  let isSupabaseCalled = false;
-
   await page.route('**/auth/v1/token**', (route) => {
-    isSupabaseCalled = true;
     route.fulfill({
       status: 400,
       contentType: 'application/json',

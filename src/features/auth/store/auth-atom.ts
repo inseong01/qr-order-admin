@@ -2,7 +2,7 @@ import { atom } from 'jotai';
 import { ZodIssue } from 'zod';
 import { Session } from '@supabase/supabase-js';
 
-import { clearZodErrorForField, mapZodFieldErrors } from '@/utils/function/input-error';
+import { clearZodErrorForField, mapZodFieldErrors } from '@/util/function/input-error';
 
 /* 사용자 로그인 정보 */
 export const userSessionAtom = atom<Session | null>(null);

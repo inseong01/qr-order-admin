@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { Layer, Rect, Stage, Text } from 'react-konva';
 
-import { useQueryOrderItems } from '@/hooks/use-query/query';
+import { useQueryOrderItems } from '@/hooks/use-query/order/query';
 import { windowStateAtom } from '@/store/window-atom';
 
 import TableLayer from './layer';

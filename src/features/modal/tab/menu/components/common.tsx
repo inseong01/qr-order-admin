@@ -57,7 +57,7 @@ export function MenuImageInput({ mode, imageUrl = '', onChange }: MenuImageInput
               onError={handleImgLoad('rejected')}
               hidden={imageLoadedState !== 'success'}
             />
-
+            {/* TODO: 파일 첨부 여부 표시 */}
             {imageLoadedState === 'pending' && <p>이미지 불러오는 중...</p>}
             {imageLoadedState === 'rejected' && <p>이미지를 불러오지 못했습니다.</p>}
           </>

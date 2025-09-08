@@ -1,6 +1,6 @@
 import { useAtomValue, useSetAtom } from 'jotai';
 
-import validate from '@/utils/function/validate';
+import validate from '@/util/function/validate';
 import { FormInputBox, FormInputCaption } from '@/components/ui/exception';
 
 import styles from './../common.module.css';

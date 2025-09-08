@@ -1,9 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSetAtom } from 'jotai';
 
-import { allOrderListQueryOptions, orderItemsQueryOptions } from '../query-options';
 import { completeOrder, deleteOrder } from '@/lib/supabase/tables/order';
 import { showToastAtom } from '@/features/alert/toast/store/atom';
+
+import { allOrderListQueryOptions, orderItemsQueryOptions } from '../query-options';
 
 /**
  * 전체 주문 목록을 가져오는 쿼리
@@ -13,7 +14,7 @@ export function useQueryAllOrderList() {
 }
 
 /**
- * 전체 주문 메뉴 목록을 가져오는 쿼리
+ * 상세 주문 목록을 가져오는 쿼리
  */
 export function useQueryOrderItems() {
   return useQuery(orderItemsQueryOptions);
@@ -23,17 +24,15 @@ export function useQueryOrderItems() {
  * 주문을 완료 처리하는 쿼리
  */
 export function useMutationCompleteOrder() {
-  const queryClient = useQueryClient();
   const showToast = useSetAtom(showToastAtom);
 
   const mutation = useMutation({
     mutationFn: ({ id }: { id: string }) => completeOrder(id),
-    onSuccess(_, { id }) {
-      const oldData = queryClient.getQueryData(allOrderListQueryOptions.queryKey) || [];
-      const updatedData = oldData.map((order) => (order.id === id ? { ...order, is_done: true } : order));
-      queryClient.setQueryData(allOrderListQueryOptions.queryKey, updatedData);
+    onSuccess(_) {
+      showToast('완료되었습니다.');
     },
-    onError() {
+    onError(error) {
+      console.error(error);
       showToast('주문 처리 과정에서 오류가 발생했습니다.');
     },
   });
@@ -54,8 +53,10 @@ export function useMutationDeleteOrder() {
       const oldData = queryClient.getQueryData(allOrderListQueryOptions.queryKey) || [];
       const updatedData = oldData.filter((d) => d.id !== id);
       queryClient.setQueryData(allOrderListQueryOptions.queryKey, updatedData);
+      showToast('삭제되었습니다.');
     },
-    onError() {
+    onError(error) {
+      console.error(error);
       showToast('주문 처리 과정에서 오류가 발생했습니다.');
     },
   });

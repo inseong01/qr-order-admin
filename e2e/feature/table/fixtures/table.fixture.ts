@@ -1,4 +1,4 @@
-import test, { Page } from '@playwright/test';
+import { Page } from '@playwright/test';
 
 import mockInitTables from '../mock/table.init.json' assert { type: 'json' };
 import mockPostedTables from '../mock/table.post.json' assert { type: 'json' };

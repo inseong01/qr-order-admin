@@ -2,9 +2,11 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { AnimatePresence } from 'motion/react';
 
 import { idAtom } from '@/store/id-atom';
-import { useQueryOrderItems, useQueryTableList } from '@/hooks/use-query/query';
 
 import LIGHT_PLUS_ICON from '@/assets/icon/light-plus.svg';
+
+import { useQueryTableList } from '@/hooks/use-query/table/query';
+import { useQueryOrderItems } from '@/hooks/use-query/order/query';
 
 import { setModalClickAtom, tableToggleAtom } from '../store/atom';
 import QRPreviewBox from './qr-code';
