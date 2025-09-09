@@ -1369,4 +1369,7 @@ feat: 자동 커밋 및 AI 분석 기능 추가
   - 테스트 코드 수정
     - 주문 탭 Reatime invalidateQueries 부분 UI 반영 어려움  
 
+25.9.9.
+  - 패키지 버전 수정
+
 <--  TODO 작업, util 및 hook 테스트 코드 개선  -->
