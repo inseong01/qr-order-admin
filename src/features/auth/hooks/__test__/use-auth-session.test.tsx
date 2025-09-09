@@ -42,7 +42,7 @@ describe('useAuthSession', () => {
       },
     }));
 
-    const { default: useAuthSession } = await import('../../hooks/use-auth-session');
+    const { default: useAuthSession } = await import('../use-auth-session');
     const { result } = renderHook(() => useAuthSession());
 
     await waitFor(() => {
@@ -77,7 +77,7 @@ describe('useAuthSession', () => {
       },
     }));
 
-    const { default: useAuthSession } = await import('../../hooks/use-auth-session');
+    const { default: useAuthSession } = await import('../use-auth-session');
     const { result } = renderHook(() => useAuthSession());
 
     await waitFor(() => {
@@ -112,7 +112,7 @@ describe('useAuthSession', () => {
       },
     }));
 
-    const { default: useAuthSession } = await import('../../hooks/use-auth-session');
+    const { default: useAuthSession } = await import('../use-auth-session');
     const { result } = renderHook(() => useAuthSession());
 
     await waitFor(() => {
@@ -146,7 +146,7 @@ describe('useAuthSession', () => {
       },
     }));
 
-    const { default: useAuthSession } = await import('../../hooks/use-auth-session');
+    const { default: useAuthSession } = await import('../use-auth-session');
     const { result } = renderHook(() => useAuthSession());
 
     await act(async () => {
@@ -183,7 +183,7 @@ describe('useAuthSession', () => {
       },
     }));
 
-    const { default: useAuthSession } = await import('../../hooks/use-auth-session');
+    const { default: useAuthSession } = await import('../use-auth-session');
     const { result } = renderHook(() => useAuthSession());
 
     await act(async () => {

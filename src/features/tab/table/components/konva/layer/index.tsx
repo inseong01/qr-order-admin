@@ -106,6 +106,8 @@ export default function TableLayer({ table, orders }: { table: Table; orders: Or
 
     if (editMode === 'update') {
       selectSingleTable(table.id);
+
+      changePointerCursor();
       return;
     }
 

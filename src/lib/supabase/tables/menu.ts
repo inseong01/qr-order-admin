@@ -3,7 +3,7 @@ import { TablesInsert, TablesUpdate } from '../database.types';
 
 // menu table type
 export type Menu = {
-  menu_category: { title: string };
+  menu_category: { id: string; title: string };
   id: string;
   img_url: string;
   name: string;

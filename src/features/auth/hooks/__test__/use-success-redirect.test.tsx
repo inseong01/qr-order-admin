@@ -9,7 +9,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { TestProvider } from './components/atom-provider';
 import { REDIRECT_DELAY } from '../../const';
-import useSuccessRedirect from '../../hooks/use-success-redirect';
+import useSuccessRedirect from '../use-success-redirect';
 import { authStatusAtom } from '../../store/auth-atom';
 
 // useNavigate 훅 모킹

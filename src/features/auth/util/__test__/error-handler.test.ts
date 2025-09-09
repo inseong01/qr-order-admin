@@ -4,7 +4,7 @@
  *              다양한 유형의 에러를 올바르게 처리하는지 검증합니다.
  */
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { AuthErrorHandler } from '../../util/error-handler';
+import { AuthErrorHandler } from '../error-handler';
 import { ZodError, ZodIssue, ZodIssueCode } from 'zod';
 import { AuthError } from '@supabase/supabase-js';
 
@@ -77,4 +77,3 @@ describe('AuthErrorHandler', () => {
     });
   });
 });
-

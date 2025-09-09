@@ -7,7 +7,7 @@ import { AuthError, Session } from '@supabase/supabase-js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import supabase from '@/lib/supabase';
-import { verifyAuthJWT } from '../../util/verify-auth-jwt';
+import { verifyAuthJWT } from '../verify-auth-jwt';
 
 /* Supabase 클라이언트 모킹 */
 vi.mock('@/lib/supabase', () => {

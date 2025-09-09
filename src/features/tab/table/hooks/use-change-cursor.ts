@@ -17,8 +17,10 @@ export default function useOnMouseChangeCursor(stageRef: Konva.Stage | null, tab
   function changePointerCursor() {
     if (!stageRef) return;
 
-    const iseditingTable = tableId === selectTableIds[0] && editMode !== 'delete';
-    if (iseditingTable) {
+    const isClickedTable = tableId === selectTableIds[0];
+    const isNotDeleteMode = editMode !== 'delete';
+
+    if (isClickedTable && isNotDeleteMode) {
       stageRef.container().style.cursor = 'move';
       return;
     }

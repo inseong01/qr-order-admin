@@ -5,7 +5,7 @@
  */
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { clearStorageKeys } from '../../util/clear-storage-key';
+import { clearStorageKeys } from '../clear-storage-key';
 
 /* clearStorageKeys 테스트 */
 describe('clearStorageKeys', () => {

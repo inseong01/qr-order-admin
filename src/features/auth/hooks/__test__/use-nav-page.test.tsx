@@ -8,8 +8,8 @@ import { useSetAtom } from 'jotai';
 import { renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 
-import useDisabled from '../../hooks/use-disabled';
-import useNavPage from '../../hooks/use-nav-page';
+import useDisabled from '../use-disabled';
+import useNavPage from '../use-nav-page';
 
 // Jotai의 useSetAtom 훅 모킹
 vi.mock('jotai', async (importOriginal) => {

@@ -15,7 +15,7 @@ import {
   updateUserPassword,
   signOutUser,
   getAuthSession,
-} from '../../util/auth-supabase-api';
+} from '../auth-supabase-api';
 
 /* Supabase 클라이언트 모킹 */
 vi.mock('@/lib/supabase', () => {

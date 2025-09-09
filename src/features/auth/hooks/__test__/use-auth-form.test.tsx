@@ -12,8 +12,8 @@ import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
 
 import { TestProvider } from './components/atom-provider';
-import useAuthForm from '../../hooks/use-auth-form';
-import * as redirectHook from '../../hooks/use-success-redirect';
+import useAuthForm from '../use-auth-form';
+import * as redirectHook from '../use-success-redirect';
 import { authStatusAtom, resetAllFormsAtom } from '../../store/auth-atom';
 
 // useParams 훅 모킹
