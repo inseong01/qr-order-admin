@@ -6,6 +6,11 @@ on:
   push:
     branches:
       - '**' # all branches
+    paths-ignore:
+      - 'docs/**'
+      - 'README.md'
+      - '.github/**'
+      - 'auto/**'
 
 jobs:
   check-work-log-file:
