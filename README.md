@@ -1,151 +1,124 @@
-![qr-order-admin-img](./docs/src/img/qr-order-admin.png)
+# QR-ORDER-ADMIN
 
-## QR-Order-Admin
-매장/메뉴 관리와 고객 주문을 처리할 수 있는 **매장 관리자 웹 애플리케이션**입니다.
+## 프로젝트 소개
 
-이 웹 애플리케이션은 [QR-order-customer 프로젝트](https://github.com/inseong01/QR-order-customer)와 연계됩니다.
+### 배경
 
-## 프로젝트
-### 목표
-#### "효율적인 매장 관리"  
-메뉴/주문/좌석 관리를 하나의 웹에서 통합적으로 처리하여 운영 효율 향상
+QR 주문 경험에서 복잡한 UI 문제를 발견하여 단순한 QR 주문 서비스를 개발했습니다. 이후 주문 데이터를 연계하기 위해 **관리자 전용** 서비스를 추가로 구축했습니다. 또한, 향후 **소규모 매장 운영을 위한 실무 테스트** 목적으로도 활용했습니다.
 
-#### "관리자 만족도 향상"    
-좌석 수정 기능을 통해 자유도 높은 웹 애플리케이션으로 사용자 만족 기대
+### 지향점
 
-### 주요 기능 
-메뉴 관리
-  1. 메뉴 생성, 수정, 삭제
-  2. 이미지 첨부    
+- DB 엔드포인트만 변경하면 **구독 서비스 모델**로 확장 가능하도록 설계
+- **유연하고 확장성 있는 관리자 플랫폼 구축** 목표
 
-주문 관리
-  1. 주문 완료/삭제 처리
-  2. 미완료/완료 주문 확인
-  3. 실시간 주문 수신
+## 1. 설명
 
-좌석 관리
-  1. 좌석 생성, 크기/위치 수정, 삭제
-  2. 좌석 주문 목록 확인
-  3. 좌석 QR 코드 다운로드
-  4. 실시간 요청 수신
+### 1-1. 핵심 기능 요약
 
-### 기술 스택
-`React` `TypeScript` `Tanstack React Query` `Zustand` `Supabase` `Konva`
+- **RLS 적용**: 시제품 체험 시 데이터 권한 보호를 위해 Row-Level Security 적용
+- **Motion 애니메이션**: 사용자 경험 향상을 위해 Motion 애니메이션 도입
+- **Konva 활용**: 좌석 관리 기능을 Canvas 라이브러리로 구현
 
-## 미리보기
-<details>
-<summary>메뉴 탭</summary>
+### 1-2. 기술 스택
 
---- 
-**카테고리 생성**
+- **Frontend**: React, TypeScript (UI 구성 및 안정성 확보)
+- **State Management**: Jotai (단순·가벼운 단위 상태 관리)
+- **Backend**: Supabase (인증 · 실시간 · DB 통합 제공)
+- **Infra**: Vercel (프론트엔드 배포 자동화)
 
-![](./docs/src/gif/menu/menu-1-create%20category-1.gif)
+### 1-3. 시스템 흐름
 
-**지정된 카테고리에서 메뉴 생성 (+사진첨부)**
+#### 인증 & 권한
 
-![](./docs/src/gif/menu/menu-2-create%20menu-1.gif)
+![인증 & 권한 흐름 사진](./docs/src/img/1-auth-flow.png)
 
-**메뉴 삭제**
+- 권한 역할 분류
+  - **guest**: 익명 로그인, 조회만 가능
+  - **viewer**: 단순 회원가입, 관리자 허가 이전 조회만 가능
+  - **member**: 생성/수정/삭제 가능
 
-![](./docs/src/gif/menu/menu-3-update%20delete-1.gif)
+#### 관리자 UI 흐름
 
-**전체메뉴에서 메뉴 생성**
+![관리자 UI 흐름 사진](./docs/src/img/2-admin-ui-flow.png)
 
-![](./docs/src/gif/menu/menu-4-create%20menu-1.gif)
+#### 데이터 흐름
 
-**카테고리 이름 변경**
+![데이터 흐름 사진](./docs/src/img/3-data-flow.png)
 
-![](./docs/src/gif/menu/menu-5-update%20category-1.gif)
+### 1-4. 미리보기
 
-**카테고리 삭제**
+- **로그인 및 권한 확인 (인증 흐름)**  
+  캡챠 인증 → 익명 로그인 → 메뉴 선택
 
-![](./docs/src/gif/menu/menu-6-delete%20category-1.gif)
+  ![로그인 및 권한 확인 GIF](./docs/src/gif/admin_flows_1.gif)
 
-[올라가기](#미리보기)
+- **좌석 선택과 주문 확인 (관리자 UI 흐름)**  
+  주문 탭 → 테이블 선택 → 모달 등장 / 주문 목록, 좌석 QR 확인
 
-</details>
+  ![좌석 선택과 주문 확인 GIF](./docs/src/gif/admin_flows_2.gif)
 
-<details>
-<summary>좌석 탭</summary>
+- **주문 데이터 실시간 반영 (데이터/API 흐름)**  
+  주문 탭 → 주문 실시간 업데이트 / UI 리렌더링 확인
 
----
-**좌석 정보 확인 (+QR 다운로드)**
+  ![주문 데이터 실시간 반영](./docs/src/gif/admin_flows_3.gif)
 
-![](./docs/src/gif/table/table-7-click%20table-1.gif)
+  ※ 주문 발신은 고객 서비스 리팩토링 예정이며, 현재는 상태 변경을 통해 실시간 반영 기능을 확인할 수 있습니다.
 
-**좌석 요청 수신**
+## 2. 기술적 도전 & 해결 과정
 
-![](./docs/src/gif/table/request/table-1-request%20reception-1.gif)
+### RLS 적용 중 `UPDATE`, `DELETE` 에러 미반환 해결
 
-**좌석 요청 읽음**
+**문제 상황**: `UPDATE`/`DELETE` 시 권한 에러(RLS)가 반환되지 않아 오류 처리가 어려웠습니다.
 
-![](./docs/src/gif/table/request/table-2-request%20read-1.gif)
+**해결 방법**: `UPDATE`는 `using true, with check false` SQL문을 적용하여 에러가 반환되도록 했으며, `DELETE`는 Supabase 응답값을 활용하여 처리된 데이터 여부를 조건문으로 판단했습니다.
 
-**좌석 요청 숨김**
+**결과**: 토스트 에러 알림을 구현하여 사용자 경험을 개선했습니다.
 
-![](./docs/src/gif/table/request/table-3-request%20toggle-1.gif)
+> 상세 내용은 [블로그 글](https://inseong1204.tistory.com/158)에서 확인할 수 있습니다.
 
-**좌석 생성**
+### Motion `AnimatePresence mode="poplayout"` 애니메이션 뒤틀림 해결
 
-![](./docs/src/gif/table/edit/table-4-create%20table-2.gif)
+**문제 상황**: 위젯 토글 시 글자 전환 애니메이션이 뒤틀려 UX에 문제가 발생했습니다.
 
-**좌석 수정**
+**해결 방법**: `Motion` 라이브러리 `AnimatePresence` 코드를 파헤쳐보고 부모 요소에 `position: relative`를 적용했습니다.
 
-![](./docs/src/gif/table/edit/table-5-update%20table-2.gif)
+**결과**: 글자 애니메이션의 튀어오름을 개선하고 UX 안정성을 확보했습니다.
 
-**좌석 삭제**
+> 상세 내용은 [블로그 글](https://inseong1204.tistory.com/157)에서 확인할 수 있습니다.
 
-![](./docs/src/gif/table/edit/table-6-delete%20table-2.gif)
+### Playwright E2E 테스트로 사용자 흐름 검증
 
-[올라가기](#미리보기)
+**문제 상황**: 리팩토링 이후 코드 동작의 안정성을 보장하기 어려웠습니다.
 
-</details>
+**해결 방법**: Playwright 기반으로 로그인 및 기능 시나리오를 위한 테스트 환경을 구성하고, 빠른 테스트 작성을 위해 MCP를 활용했습니다.
 
-<details>
-<summary>주문 탭</summary>
+**결과**: 사용자 흐름을 안정적으로 보장하고 사이드 이펙트 오류를 조기에 발견할 수 있었습니다.
 
----
-**주문 수신**
+## 3. 한계와 개선 방향
 
-![](./docs/src/gif/order/order-1-reception-1.gif)
+- **외국인 사용 편의성 저하** → 다국어 i18n 도입 예정
+- **통계 기능 부재** → 선호 메뉴 및 주문 데이터 시각화 예정
+- **좌석 관리 사용 편의성 제한** → Konva snap 기능 구현 예정
 
-**주문 완료 처리**
+## 4. 설치 및 실행 방법
 
-![](./docs/src/gif/order/order-2-complete-1.gif)
+### 체험하기
 
-**주문 삭제 처리**
+[QR-ORDER Admin 접속하기](https://qr-code-admin-tau.vercel.app/)  
+웹 브라우저에서 바로 체험 가능합니다. (PC 또는 태블릿 접속 권장)
 
-![](./docs/src/gif/order/order-3-delete%20order-1.gif)
+### 설치하기
 
-[올라가기](#미리보기)
-
-</details>
-
-
-## 체험하기
-
-클릭하면 [QR-ORDER Admin 전용 서비스](https://qr-code-admin-inseong01-inseongs-projects-ab5eeeed.vercel.app/)를 웹 브라우저에서 경험할 수 있어요.   
-
-PC 또는 태블릿 접속을 권장드려요 😊
-
-## 설치하기
 ```bash
-# 리포지토리를 클론합니다
+# 리포지토리 클론
 git clone https://github.com/inseong01/QR-order-admin.git
 
-# 프로젝트 디렉터리로 이동합니다
+# 프로젝트 디렉토리 이동
 cd qr-order-admin
 
-# 필요한 패키지를 설치합니다
+# 패키지 설치
 npm install
 ```
-
-### 서버 접속
-```bash
-# .env 파일 미첨부로 서버 생성은 되지만 데이터를 불러올 수 없어요 :(
-```
-
-<br />
 
 ---
 
