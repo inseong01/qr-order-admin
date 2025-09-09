@@ -2,15 +2,16 @@ import { ChangeEvent, FormEvent } from 'react';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useQuery } from '@tanstack/react-query';
 
-import { showToastAtom } from '@/features/alert/toast/store/atom';
 import { setWidgetAtomState } from '@/features/widget/store/atom';
 
 import { FormInputBox, FormInputCaption } from '@/components/ui/exception';
 
-import { MENU_CATEGORIES_QUERY_KEY, useQueryMenuCategoryList, useQueryMenuList } from '@/hooks/use-query/query';
+import { MENU_CATEGORIES_QUERY_KEY } from '@/hooks/use-query/query-key';
+import { useMutationUpdateMenuCategory } from '@/hooks/use-query/menu-category/query';
 
-import { MenuCategory, updateMenuCategory } from '@/lib/supabase/tables/menu-category';
-import validate from '@/utils/function/validate';
+import { MenuCategory } from '@/lib/supabase/tables/menu-category';
+
+import validate from '@/util/function/validate';
 
 import { useConfirmModal } from '../../../../confirm/hook/use-confirm-modal';
 import { categoryErrorAtom, selectedCategoriesAtom, setCategoryErrorAtom } from '../../store/atom';
@@ -23,14 +24,15 @@ import styles from './update-form.module.css';
  */
 export default function UpdateCategoryForm() {
   const categories = useQuery<MenuCategory[]>({ queryKey: MENU_CATEGORIES_QUERY_KEY });
+
   const [selectedCategories, setSelectedCategories] = useAtom(selectedCategoriesAtom);
-  const menuListQuery = useQueryMenuList();
-  const menuCategoriesQuery = useQueryMenuCategoryList();
   const categoryError = useAtomValue(categoryErrorAtom);
   const setWidgetState = useSetAtom(setWidgetAtomState);
-  const showToast = useSetAtom(showToastAtom);
   const setCategoryError = useSetAtom(setCategoryErrorAtom);
+
   const { showConfirmModal } = useConfirmModal();
+  const mutationUpdateMenuCategory = useMutationUpdateMenuCategory();
+
   /* 비즈니스 로직 */
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     const title = '선택한 분류를 수정하겠습니까?';
@@ -41,28 +43,14 @@ export default function UpdateCategoryForm() {
     if (!success) {
       const message = error?.issues[0].message;
       setCategoryError(message);
-      setWidgetState({ option: 'update-menu-category' });
       return e.preventDefault();
     }
 
     const onConfirm = async () => {
-      // supabase 전달
-      try {
-        await updateMenuCategory(data);
-        await menuCategoriesQuery.refetch();
-        await menuListQuery.refetch();
-      } catch (e) {
-        console.error(e);
-        showToast('오류가 발생했습니다.');
-        return;
-      }
-
-      // 데이터 처리 상태 알림
-      showToast('수정되었습니다.');
-
-      // 초기화
+      mutationUpdateMenuCategory.mutate(data);
       setSelectedCategories([]);
     };
+
     const onCancle = () => {
       setWidgetState({ option: 'update-menu-category' });
     };

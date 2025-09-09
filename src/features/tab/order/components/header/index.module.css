@@ -32,6 +32,7 @@
 }
 
 .elapsed {
+  width: 80px;
   border-radius: 8px;
   padding: 6px;
 }

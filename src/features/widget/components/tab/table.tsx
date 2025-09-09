@@ -2,8 +2,6 @@ import { useAtomValue, useSetAtom } from 'jotai';
 
 import { windowStateAtom } from '@/store/window-atom';
 
-import { deleteTable, upsertTable } from '@/lib/supabase/tables/table';
-
 import { showToastAtom } from '@/features/alert/toast/store/atom';
 import { setRequestAlertAtom } from '@/features/alert/request/store/atom';
 import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
@@ -19,9 +17,6 @@ import {
   setEditModeAtom,
   setEditStateAtom,
 } from '@/features/tab/table/store/table-edit-state';
-import { tableEditLayerAtom } from '@/features/tab/table/store/table-state';
-
-import { useQueryTableList } from '@/hooks/use-query/query';
 
 import LIGHT_EDIT_ICON from '@/assets/icon/light-edit.svg';
 import LIGHT_DELETE_ICON from '@/assets/icon/light-delete.svg';
@@ -30,6 +25,10 @@ import LIGHT_BACK_ICON from '@/assets/icon/light-back-icon.svg';
 import LIGHT_TABLE_ICON from '@/assets/icon/light-table-icon.svg';
 import LIGHT_ADD_LIST_ICON from '@/assets/icon/light-add-list.svg';
 
+import { tableEditRectAtom, tableEditTextAtom } from '@/features/tab/table/store/table-state';
+
+import { useMutationDeleteTable, useMutationUpsertTable, useQueryTableList } from '@/hooks/use-query/table/query';
+
 import styles from './tab.module.css';
 import { AnimatedIconSwitcher, AnimatedTextSwitcher, DetectAnimation, ListBox } from '../motion';
 import { fadeBackgroundLayer } from '../../util/konva-fade-in';
@@ -37,14 +36,16 @@ import { fadeBackgroundLayer } from '../../util/konva-fade-in';
 /**
  * 테이블 탭 위젯
  */
-export function TableWidget() {
+export default function TableWidget() {
   const tablesQuery = useQueryTableList();
+
   const { mainSection } = useAtomValue(windowStateAtom);
   const editMode = useAtomValue(editModeAtom);
   const isEditing = useAtomValue(isEditingAtom);
   const tableIds = useAtomValue(selectedTableIdsAtom);
   const draftTables = useAtomValue(draftTablesAtom);
-  const tableEditLayerRef = useAtomValue(tableEditLayerAtom);
+  const tableEditRect = useAtomValue(tableEditRectAtom);
+  const tableEditText = useAtomValue(tableEditTextAtom);
   const setTableRequestAlertStatus = useSetAtom(setRequestAlertAtom);
   const setTableEditMode = useSetAtom(setEditModeAtom);
   const selectSingleTable = useSetAtom(selectSingleTableAtom);
@@ -52,11 +53,14 @@ export function TableWidget() {
   const setDraftTables = useSetAtom(setDraftTableAtom);
   const resetTableState = useSetAtom(resetTablEditAtom);
   const showToast = useSetAtom(showToastAtom);
+
   const { showConfirmModal } = useConfirmModal();
+  const mutationDeleteTable = useMutationDeleteTable();
+  const mutationUpsertTable = useMutationUpsertTable();
 
   /** 좌석 삭제 로직 */
   function clickDeleteTable() {
-    if (!tableEditLayerRef) {
+    if (!tableEditRect || !tableEditText) {
       showToast('위젯 오류가 발생했습니다.');
       return;
     }
@@ -65,15 +69,11 @@ export function TableWidget() {
       const title = '테이블을 삭제할까요?';
       const onConfirm = async () => {
         try {
-          await deleteTable(tableIds);
+          await mutationDeleteTable.mutateAsync({ ids: tableIds });
           resetTableState();
-          await tablesQuery.refetch();
-          showToast('삭제되었습니다.');
-          fadeBackgroundLayer(tableEditLayerRef, false).play();
-        } catch (err) {
-          console.error(err);
-          showToast('오류가 발생했습니다.');
-        }
+          fadeBackgroundLayer(tableEditRect, false).play();
+          fadeBackgroundLayer(tableEditText, false).play();
+        } catch {}
       };
 
       showConfirmModal({ title, onConfirm });
@@ -83,12 +83,13 @@ export function TableWidget() {
     setTableEditMode('delete');
     setDraftTables(tablesQuery.data ?? []);
     setTableRequestAlertStatus(false);
-    fadeBackgroundLayer(tableEditLayerRef, true).play();
+    fadeBackgroundLayer(tableEditRect, true).play();
+    fadeBackgroundLayer(tableEditText, true).play();
   }
 
   /** 좌석 정보 수정 로직 */
   function clickUpdateTable() {
-    if (!tableEditLayerRef) {
+    if (!tableEditRect || !tableEditText) {
       showToast('위젯 오류가 발생했습니다.');
       return;
     }
@@ -97,15 +98,11 @@ export function TableWidget() {
       const title = '테이블을 수정할까요?';
       const onConfirm = async () => {
         try {
-          await upsertTable(draftTables);
+          await mutationUpsertTable.mutateAsync({ updatedTables: draftTables, editMode });
           resetTableState();
-          await tablesQuery.refetch();
-          showToast('수정되었습니다.');
-          fadeBackgroundLayer(tableEditLayerRef, false).play();
-        } catch (err) {
-          console.error(err);
-          showToast('오류가 발생했습니다.');
-        }
+          fadeBackgroundLayer(tableEditRect, false).play();
+          fadeBackgroundLayer(tableEditText, false).play();
+        } catch {}
       };
 
       showConfirmModal({ title, onConfirm });
@@ -115,12 +112,13 @@ export function TableWidget() {
     setTableEditMode('update');
     setDraftTables(tablesQuery.data ?? []);
     setTableRequestAlertStatus(false);
-    fadeBackgroundLayer(tableEditLayerRef, true).play();
+    fadeBackgroundLayer(tableEditRect, true).play();
+    fadeBackgroundLayer(tableEditText, true).play();
   }
 
   /** 좌석 생성 로직 */
   function clickCreateTable() {
-    if (!tableEditLayerRef) {
+    if (!tableEditRect || !tableEditText) {
       showToast('위젯 오류가 발생했습니다.');
       return;
     }
@@ -129,15 +127,11 @@ export function TableWidget() {
       const title = '테이블을 추가할까요?';
       const onConfirm = async () => {
         try {
-          await upsertTable(draftTables);
+          await mutationUpsertTable.mutateAsync({ updatedTables: draftTables, editMode });
           resetTableState();
-          await tablesQuery.refetch();
-          showToast('추가되었습니다.');
-          fadeBackgroundLayer(tableEditLayerRef, false).play();
-        } catch (err) {
-          console.error(err);
-          showToast('오류가 발생했습니다.');
-        }
+          fadeBackgroundLayer(tableEditRect, false).play();
+          fadeBackgroundLayer(tableEditText, false).play();
+        } catch {}
       };
 
       showConfirmModal({ title, onConfirm });
@@ -153,19 +147,21 @@ export function TableWidget() {
     setDraftTables([...(tablesQuery.data ?? []), newTable]);
     selectSingleTable(newTable.id);
     setTableRequestAlertStatus(false);
-    fadeBackgroundLayer(tableEditLayerRef, true).play();
+    fadeBackgroundLayer(tableEditRect, true).play();
+    fadeBackgroundLayer(tableEditText, true).play();
   }
 
   /** 편집 상태 변경 */
   function handleEditMode() {
-    if (!tableEditLayerRef) {
+    if (!tableEditRect || !tableEditText) {
       showToast('위젯 오류가 발생했습니다.');
       return;
     }
 
     if (editMode) {
       resetTableState();
-      fadeBackgroundLayer(tableEditLayerRef, tableEditLayerRef.attrs.opacity === 0).play();
+      fadeBackgroundLayer(tableEditRect, tableEditRect.attrs.opacity === 0).play();
+      fadeBackgroundLayer(tableEditText, tableEditText.attrs.opacity === 0).play();
       return;
     }
 

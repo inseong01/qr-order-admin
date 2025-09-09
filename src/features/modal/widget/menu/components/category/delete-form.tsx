@@ -3,16 +3,16 @@ import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { useQuery } from '@tanstack/react-query';
 
 import { setWidgetAtomState } from '@/features/widget/store/atom';
-import { showToastAtom } from '@/features/alert/toast/store/atom';
 
 import { FormInputBox, FormInputCaption } from '@/components/ui/exception';
 
-import { MENU_CATEGORIES_QUERY_KEY, useQueryMenuCategoryList, useQueryMenuList } from '@/hooks/use-query/query';
+import { useQueryMenuList } from '@/hooks/use-query/menu/query';
+import { MENU_CATEGORIES_QUERY_KEY } from '@/hooks/use-query/query-key';
+import { useMutationDeleteMenuCategory } from '@/hooks/use-query/menu-category/query';
 
-import { deleteMenuCategory, MenuCategory } from '@/lib/supabase/tables/menu-category';
-import { deleteImageByFileName, STORE } from '@/lib/supabase/storage/store';
+import { MenuCategory } from '@/lib/supabase/tables/menu-category';
 
-import validate from '@/utils/function/validate';
+import validate from '@/util/function/validate';
 
 import { useConfirmModal } from '../../../../confirm/hook/use-confirm-modal';
 import { categoryErrorAtom, selectedCategoryIdsAtom, setCategoryErrorAtom } from '../../store/atom';
@@ -25,14 +25,15 @@ import styles from './delete-form.module.css';
  */
 export default function DeleteCategoryForm() {
   const categories = useQuery<MenuCategory[]>({ queryKey: MENU_CATEGORIES_QUERY_KEY });
-  const [selectedCategories, setSelectedCategories] = useAtom(selectedCategoryIdsAtom);
-  const menuCategoriesQuery = useQueryMenuCategoryList();
-  const categoryError = useAtomValue(categoryErrorAtom);
   const menuQuery = useQueryMenuList();
-  const setWidgetState = useSetAtom(setWidgetAtomState);
-  const showToast = useSetAtom(showToastAtom);
+
+  const [selectedCategories, setSelectedCategories] = useAtom(selectedCategoryIdsAtom);
+  const categoryError = useAtomValue(categoryErrorAtom);
   const setCategoryError = useSetAtom(setCategoryErrorAtom);
+  const setWidgetState = useSetAtom(setWidgetAtomState);
+
   const { showConfirmModal } = useConfirmModal();
+  const deleteCategoryMutation = useMutationDeleteMenuCategory();
 
   /* 비즈니스 로직 */
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -43,31 +44,20 @@ export default function DeleteCategoryForm() {
     if (!success) {
       const message = error?.issues[0].message;
       setCategoryError(message);
-      setWidgetState({ option: 'delete-menu-category' });
       return e.preventDefault();
     }
 
     const onConfirm = async () => {
-      // supabase 전달
-      try {
-        const filePath = menuQuery.data?.map((m) => (!m.img_url.includes('default') ? '' : STORE + m.img_url)) ?? [];
-        await deleteImageByFileName({ filePath });
+      const filePath =
+        menuQuery.data
+          ?.filter((m) => data.includes(m.menu_category.id))
+          .map((m) => m.img_url.split('qr-order-img')?.at(-1) ?? '')
+          .filter((url) => url && !url.includes('menu_default')) ?? [];
 
-        await deleteMenuCategory(data);
-
-        await menuCategoriesQuery.refetch();
-      } catch (e) {
-        console.error(e);
-        showToast('오류가 발생했습니다.');
-        return;
-      }
-
-      // 데이터 처리 상태 알림
-      showToast('삭제되었습니다.');
-
-      // 초기화
+      deleteCategoryMutation.mutate({ ids: data, filePath });
       setSelectedCategories([]);
     };
+
     const onCancle = () => {
       setWidgetState({ option: 'delete-menu-category' });
     };

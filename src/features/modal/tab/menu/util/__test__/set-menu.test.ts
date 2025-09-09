@@ -7,7 +7,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { buildMenuData, updateMenuData } from '../set-menu';
 
 // createImgPath 모킹
-vi.mock('@/utils/function/image-path', () => ({
+vi.mock('@/util/function/image-path', () => ({
   createImgPath: vi.fn(({ fileId }: { fileId: string }) => `mock-url/${fileId}`),
 }));
 

@@ -14,7 +14,7 @@ function App() {
       <LoadPage />
 
       {/* 리액트 쿼리 개발 도구 */}
-      <ReactQueryDevtools initialIsOpen={false} />
+      {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
     </QueryClientProvider>
   );
 }

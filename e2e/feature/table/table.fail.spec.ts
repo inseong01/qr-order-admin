@@ -49,7 +49,7 @@ test.describe('[실패] 좌석 관리', () => {
     await expect(page.getByText('오류가 발생했습니다.')).not.toBeVisible();
 
     // 8. 편집 모드 종료 후 스냅샷
-    await expect(page).toHaveScreenshot('init-table-tab.png');
+    await expect(page).toHaveScreenshot('before-create.png');
 
     // 9. 새로고침 이후 생성된 좌석 확인
     await page.reload({ waitUntil: 'domcontentloaded' });
@@ -94,7 +94,7 @@ test.describe('[실패] 좌석 관리', () => {
     await expect(page.getByText('오류가 발생했습니다.')).not.toBeVisible();
 
     // 10. 편집 모드 종료 후 스냅샷
-    await expect(page).toHaveScreenshot('init-table-tab.png');
+    await expect(page).toHaveScreenshot('click-edit-table-2.png');
 
     // 11. 새로고침 이후 생성된 좌석 확인
     await page.reload({ waitUntil: 'domcontentloaded' });
@@ -137,7 +137,7 @@ test.describe('[실패] 좌석 관리', () => {
     await expect(page.getByText('오류가 발생했습니다.')).not.toBeVisible();
 
     // 10. 편집 모드 종료 후 스냅샷
-    await expect(page).toHaveScreenshot('init-table-tab.png');
+    await expect(page).toHaveScreenshot('click-delete-table.png');
 
     // 11. 새로고침 이후 생성된 좌석 확인
     await page.reload({ waitUntil: 'domcontentloaded' });

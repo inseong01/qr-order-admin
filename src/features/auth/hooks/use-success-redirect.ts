@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useAtomValue } from 'jotai';
 import { useLocation, useNavigate } from 'react-router';
 
@@ -11,9 +11,11 @@ export default function useSuccessRedirect() {
   const authStatus = useAtomValue(authStatusAtom);
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
     if (authStatus !== 'success') return;
+    if (timeoutRef.current) return;
 
     let path = '';
     let replace = false;
@@ -42,11 +44,11 @@ export default function useSuccessRedirect() {
     }
 
     if (pathname === PATHS.ROOT.UPDATE.PASSWORD) {
-      setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         signOutUser();
       }, REDIRECT_DELAY);
     } else {
-      setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         navigate(path, { replace });
       }, REDIRECT_DELAY);
     }

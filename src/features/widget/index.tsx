@@ -1,12 +1,14 @@
 import { useAtomValue } from 'jotai';
 import { AnimatePresence, motion } from 'motion/react';
 
-import { footerAtom } from '../page/footer';
-import { MenuWidget } from './components/tab/menu';
-import { TableWidget } from './components/tab/table';
-import { WidgetIconButton } from './components/button';
-import { widgetAtom } from './store/atom';
 import styles from './widget.module.css';
+import { widgetAtom } from './store/atom';
+import { MenuWidget } from './components/tab/menu';
+import { WidgetIconButton } from './components/button';
+import { footerAtom } from '../page/footer/store/atom';
+import { lazy, Suspense } from 'react';
+
+const LazyTableWidget = lazy(() => import('./components/tab/table'));
 
 export default function Widget() {
   const tab = useAtomValue(footerAtom);
@@ -14,7 +16,7 @@ export default function Widget() {
 
   const components = {
     menu: MenuWidget,
-    table: TableWidget,
+    table: LazyTableWidget,
     order: null,
   };
   const WidgetComponent = components[tab];
@@ -34,7 +36,9 @@ export default function Widget() {
         <WidgetIconButton />
 
         {/* 위젯 목록 */}
-        <AnimatePresence>{isOpen ? isWidgetComponentOn && <WidgetComponent /> : null}</AnimatePresence>
+        <Suspense fallback={null}>
+          <AnimatePresence>{isOpen ? isWidgetComponentOn && <WidgetComponent /> : null}</AnimatePresence>
+        </Suspense>
       </motion.div>
     </>
   );

@@ -8,6 +8,9 @@
   justify-content: space-between;
 
   cursor: default;
+
+  font-family: 'NanumSquareNeo', sans-serif;
+  font-display: swap;
 }
 
 .notFound {

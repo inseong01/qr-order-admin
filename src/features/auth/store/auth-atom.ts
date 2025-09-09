@@ -1,11 +1,8 @@
 import { atom } from 'jotai';
 import { ZodIssue } from 'zod';
 import { Session } from '@supabase/supabase-js';
-import { atomWithStorage, createJSONStorage } from 'jotai/utils';
 
-import { clearZodErrorForField, mapZodFieldErrors } from '@/utils/function/input-error';
-
-import { CAPTCHA_TOKEN } from '../const';
+import { clearZodErrorForField, mapZodFieldErrors } from '@/util/function/input-error';
 
 /* 사용자 로그인 정보 */
 export const userSessionAtom = atom<Session | null>(null);
@@ -69,11 +66,7 @@ export const resetAllFormsAtom = atom(null, (_, set) => {
 });
 
 /* 캡챠 토큰 */
-const storage = createJSONStorage<string>(() => sessionStorage);
-const initToken = sessionStorage.getItem(CAPTCHA_TOKEN) ?? '';
-
-// 토큰
-export const captchaTokenAtom = atomWithStorage(CAPTCHA_TOKEN, initToken, storage);
+export const captchaTokenAtom = atom('');
 export const setCaptchaTokenAtom = atom(null, (_, set, token: string) => {
   set(captchaTokenAtom, token);
 });

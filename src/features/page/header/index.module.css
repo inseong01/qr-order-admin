@@ -1,5 +1,6 @@
 .header {
   width: 100%;
+  height: 79px;
 
   color: #b4b4b4;
   background-color: white;
@@ -23,30 +24,4 @@
   font-size: var(--fz-l);
 
   cursor: default;
-}
-
-.logoutBox {
-  height: 100%;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.logoutButton {
-  color: white;
-  font-size: var(--fz-s);
-  background-color: var(--sub-color);
-
-  border: none;
-  border-radius: 8px;
-
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-
-  padding: 8px 16px;
-}
-
-.logoutButton:hover {
-  background-color: var(--main-color);
 }

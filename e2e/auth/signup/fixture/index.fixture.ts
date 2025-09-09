@@ -6,10 +6,7 @@ import { TEST_ACCESS_TOKEN, TEST_ACCOUNT } from '../../common/const';
  * Supabase 회원가입 요청을 모킹하여 성공 응답을 반환합니다.
  */
 export async function mockSuccessSignup(page: Page) {
-  let isSupabaseCalled = false;
-
   await page.route('**/auth/v1/signup**', (route) => {
-    isSupabaseCalled = true;
     route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -25,10 +22,7 @@ export async function mockSuccessSignup(page: Page) {
  * Supabase 회원가입 요청을 모킹하여 실패 응답 (이미 가입된 사용자)을 반환합니다.
  */
 export async function mockFailSignup(page: Page) {
-  let isSupabaseCalled = false;
-
   await page.route('**/auth/v1/signup**', (route) => {
-    isSupabaseCalled = true;
     route.fulfill({
       status: 400,
       contentType: 'application/json',

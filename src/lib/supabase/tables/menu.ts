@@ -17,12 +17,12 @@ export type UpdateMenu = TablesUpdate<'menu'>;
  * 메뉴 목록을 가져오는 함수
  * @returns 메뉴 목록
  */
-export async function getMenuList(): Promise<Menu[]> {
+export async function getMenuList() {
   const { data, error } = await supabase.from('menu').select(`id, img_url, name, price, tag, menu_category (id,title)`);
 
   if (error) {
     error.message && console.error(error.message);
-    throw new Error(error.message);
+    throw error;
   }
 
   return data;
@@ -34,14 +34,16 @@ export async function getMenuList(): Promise<Menu[]> {
  * @returns
  */
 export const addMenu = async (newMenu: NewMenu) => {
-  const { error } = await supabase.from('menu').insert(newMenu);
+  const { data, error } = await supabase
+    .from('menu')
+    .insert(newMenu)
+    .select(`id, img_url, name, price, tag, menu_category (id,title)`);
 
   if (error) {
-    error.message && console.error(error.message);
-    throw new Error(error.message);
+    throw error;
   }
 
-  return;
+  return data;
 };
 
 /**
@@ -51,10 +53,14 @@ export const addMenu = async (newMenu: NewMenu) => {
  * @returns
  */
 export const updateMenu = async (id: string, updatedMenu: UpdateMenu) => {
-  const { error, data } = await supabase.from('menu').update(updatedMenu).eq('id', id).select();
+  const { data, error } = await supabase
+    .from('menu')
+    .update(updatedMenu)
+    .eq('id', id)
+    .select(`id, img_url, name, price, tag, menu_category (id,title)`);
 
   if (error) {
-    throw new Error(error.message);
+    throw error;
   }
 
   // 조건에 맞는 행이 없거나 RLS 정책에 의해 접근이 거부된 경우
@@ -63,7 +69,7 @@ export const updateMenu = async (id: string, updatedMenu: UpdateMenu) => {
     throw new Error('Unable to update the menu.');
   }
 
-  return;
+  return data;
 };
 
 /**
@@ -75,7 +81,7 @@ export const deleteMenu = async (id: string) => {
   const { error, data } = await supabase.from('menu').delete().eq('id', id).select();
 
   if (error) {
-    throw new Error(error.message);
+    throw error;
   }
 
   // 조건에 맞는 행이 없거나 RLS 정책에 의해 접근이 거부된 경우
@@ -84,19 +90,5 @@ export const deleteMenu = async (id: string) => {
     throw new Error('Unable to delete the menu.');
   }
 
-  return;
-};
-
-/**
- * 이미지를 스토리지에 업로드하는 함수
- * @param file - 업로드할 이미지 파일
- * @returns 업로드된 이미지 url
- */
-export const uploadImage = async (file: File) => {
-  const { data, error } = await supabase.storage.from('images').upload(`menu/${file.name}`, file);
-  if (error) {
-    error.message && console.error(error.message);
-    throw new Error(error.message);
-  }
-  return data.path;
+  return data;
 };

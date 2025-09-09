@@ -4,7 +4,7 @@ import LIGHT_ADD_LIST_ICON from '@/assets/icon/light-add-list.svg';
 import LIGHT_DELETE_ICON from '@/assets/icon/light-delete.svg';
 import LIGHT_EDIT_ICON from '@/assets/icon/light-edit.svg';
 
-import { useQueryMenuCategoryList } from '@/hooks/use-query/query';
+import { useQueryMenuCategoryList } from '@/hooks/use-query/menu-category/query';
 
 import { setWidgetAtomState } from '../../store/atom';
 import { DetectAnimation, ListBox } from '../motion';

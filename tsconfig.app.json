@@ -27,6 +27,5 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src", "auto", "e2e"],
-  "exclude": ["**/*.test.ts", "**/*.spec.ts", "**/*.fixture.ts", "__test__"]
+  "include": ["src", "src/lib/supabase/database.types.ts"]
 }

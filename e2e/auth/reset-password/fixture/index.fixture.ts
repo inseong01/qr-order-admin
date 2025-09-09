@@ -2,9 +2,7 @@ import { Page } from '@playwright/test';
 
 /** 비밀번호 찾기 성공 모킹 */
 export async function mockRecoveryPasswordSuccess(page: Page) {
-  let isSupabaseCalled = false;
   await page.route('**/auth/v1/recover**', (route) => {
-    isSupabaseCalled = true;
     route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -17,9 +15,7 @@ export async function mockRecoveryPasswordSuccess(page: Page) {
 
 /** 비밀번호 찾기 실패 모킹 */
 export async function mockRecoveryPasswordFail(page: Page) {
-  let isSupabaseCalled = false;
   await page.route('**/auth/v1/recover**', (route) => {
-    isSupabaseCalled = true;
     route.fulfill({
       status: 400,
       contentType: 'application/json',

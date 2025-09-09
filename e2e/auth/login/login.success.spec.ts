@@ -25,9 +25,7 @@ test.describe('[성공] 로그인', () => {
     const loginButton = page.getByText('입력하기', { exact: true });
 
     // 3. 잘못된 형식 입력
-    await idInput.click();
     await idInput.fill(TEST_ACCOUNT.WRONG.ID);
-    await pwdInput.click();
     await pwdInput.fill(TEST_ACCOUNT.WRONG.PASSWORD);
     await loginButton.click();
 
@@ -42,11 +40,9 @@ test.describe('[성공] 로그인', () => {
     await expect(submitFailButton).toBeVisible();
 
     // 5. 올바른 정보 입력 후 오류 사라짐 확인
-    await idInput.click();
     await idInput.fill(TEST_ACCOUNT.ID);
     await expect(idMsg).not.toBeVisible();
     await expect(submitFailButton).not.toBeVisible();
-    await pwdInput.click();
     await pwdInput.fill(TEST_ACCOUNT.PASSWORD);
     await expect(pwdMsg).not.toBeVisible();
 

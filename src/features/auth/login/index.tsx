@@ -1,12 +1,13 @@
+import { useNavigate } from 'react-router';
 import { useAtomValue, useSetAtom } from 'jotai';
 
 import { PATHS } from '@/constants/paths';
-import validate from '@/utils/function/validate';
+import validate from '@/util/function/validate';
 import { FormInputBox, FormInputCaption } from '@/components/ui/exception';
 
 import styles from './../common.module.css';
 import useAuthForm from '../hooks/use-auth-form';
-import AuthContainer from '../components/container';
+import CaptchaContainer from '../components/captcha';
 import useDisabledState from '../hooks/use-disabled';
 import { signInWithEmailAndPassword } from '../util/auth-supabase-api';
 import { authStatusAtom, captchaTokenAtom, errorFormAtom, loginFormAtom } from '../store/auth-atom';
@@ -19,6 +20,7 @@ export default function LoginPage() {
   const captchaToken = useAtomValue(captchaTokenAtom);
   const errorForm = useAtomValue(errorFormAtom);
   const setAuthStatus = useSetAtom(authStatusAtom);
+  const navigate = useNavigate();
   const { disabled, authStatus } = useDisabledState();
   const { formState, handleInputChange, handleSubmit } = useAuthForm({
     formAtom: loginFormAtom,
@@ -30,6 +32,8 @@ export default function LoginPage() {
       if (error) throw error;
 
       setAuthStatus('success');
+
+      await navigate(PATHS.ROOT.MAIN);
     },
   });
 
@@ -38,7 +42,7 @@ export default function LoginPage() {
   const pwdErrorMsg = errorForm.get('password') ?? '';
 
   return (
-    <AuthContainer>
+    <CaptchaContainer>
       {/* 상단 */}
       <AuthFormTitle text='로그인' />
 
@@ -83,6 +87,6 @@ export default function LoginPage() {
 
         <AuthNavLink text='비밀번호 찾기' to={PATHS.AUTH.FIND.PASSWORD} />
       </nav>
-    </AuthContainer>
+    </CaptchaContainer>
   );
 }

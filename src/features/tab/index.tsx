@@ -1,9 +1,12 @@
+import { lazy, Suspense } from 'react';
 import { useAtomValue } from 'jotai';
 
 import MenuTabView from './menu/view';
-import OrderTabView from './order/view';
-import TableTabView from './table/view';
-import { footerAtom } from '../page/footer';
+import LoadingSpinner from '../load/spinner';
+import { footerAtom } from '../page/footer/store/atom';
+
+const LazyTableTabView = lazy(() => import('./table/view'));
+const LazyOrderTabView = lazy(() => import('./order/view'));
 
 /**
  * `footerAtom`의 현재 상태를 기반으로
@@ -16,10 +19,14 @@ export default function TabViewContainer() {
 
   const Tabs = {
     menu: MenuTabView,
-    table: TableTabView,
-    order: OrderTabView,
+    table: LazyTableTabView,
+    order: LazyOrderTabView,
   };
   const TabComponent = Tabs[category];
 
-  return <TabComponent />;
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <TabComponent />
+    </Suspense>
+  );
 }

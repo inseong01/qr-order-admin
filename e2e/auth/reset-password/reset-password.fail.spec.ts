@@ -23,7 +23,7 @@ test.describe('[실패] 비밀번호 찾기', () => {
     // 2. 입력/버튼 비활성화 확인
     await expect(page.locator('input[name="id"]')).not.toBeEnabled();
     await expect(page.locator('button[type="submit"]')).not.toBeEnabled();
-    await expect(page.getByText('로그인', { exact: true })).not.toBeEnabled();
+    await expect(page.getByText('돌아가기', { exact: true })).not.toBeEnabled();
     await expect(page.locator('button[type="submit"]')).toHaveText('검증 실패');
   });
 

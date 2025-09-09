@@ -5,8 +5,8 @@
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
-import { CardObj } from '../generate-card';
 import { getElapsed } from '../get-elapsed';
+import { CardObj } from '../types';
 
 describe('getElapsed', () => {
   const baseStart = new Date('2025-08-14T12:00:00Z').getTime();
@@ -20,34 +20,34 @@ describe('getElapsed', () => {
     vi.useRealTimers();
   });
 
-  it('startAt이 없으면 elapsed -1 반환', () => {
+  it('startAt이 없으면 time -1 반환', () => {
     const header = {} as CardObj['header'];
-    expect(getElapsed(header)).toEqual({ state: 'error', type: '초', elapsed: -1 });
+    expect(getElapsed(header)).toEqual({ state: 'error', type: '초', time: -1 });
   });
 
   it('경과 시간이 59초면 초 단위(good)', () => {
     const header = { startAt: new Date(baseStart - 59_000).toISOString() } as CardObj['header'];
-    expect(getElapsed(header)).toEqual({ state: 'good', type: '초', elapsed: 59 });
+    expect(getElapsed(header)).toEqual({ state: 'good', type: '초', time: 59 });
   });
 
   it('경과 시간이 16분이면 분 단위(bad)', () => {
     const header = { startAt: new Date(baseStart - 16 * 60_000).toISOString() } as CardObj['header'];
-    expect(getElapsed(header)).toEqual({ state: 'bad', type: '분', elapsed: 16 });
+    expect(getElapsed(header)).toEqual({ state: 'bad', type: '분', time: 16 });
   });
 
   it('경과 시간이 10분이면 분 단위(good)', () => {
     const header = { startAt: new Date(baseStart - 10 * 60_000).toISOString() } as CardObj['header'];
-    expect(getElapsed(header)).toEqual({ state: 'good', type: '분', elapsed: 10 });
+    expect(getElapsed(header)).toEqual({ state: 'good', type: '분', time: 10 });
   });
 
   it('경과 시간이 5시간이면 시간 단위(bad)', () => {
     const header = { startAt: new Date(baseStart - 5 * 60 * 60_000).toISOString() } as CardObj['header'];
-    expect(getElapsed(header)).toEqual({ state: 'bad', type: '시간', elapsed: 5 });
+    expect(getElapsed(header)).toEqual({ state: 'bad', type: '시간', time: 5 });
   });
 
   it('경과 시간이 2일이면 일 단위(bad)', () => {
     const header = { startAt: new Date(baseStart - 2 * 24 * 60 * 60_000).toISOString() } as CardObj['header'];
-    expect(getElapsed(header)).toEqual({ state: 'bad', type: '일', elapsed: 2 });
+    expect(getElapsed(header)).toEqual({ state: 'bad', type: '일', time: 2 });
   });
 
   it('updatedAt이 있으면 해당 시점까지만 계산', () => {
@@ -55,6 +55,6 @@ describe('getElapsed', () => {
       startAt: new Date(baseStart - 10 * 60_000).toISOString(),
       updatedAt: new Date(baseStart - 5 * 60_000).toISOString(),
     } as CardObj['header'];
-    expect(getElapsed(header)).toEqual({ state: 'good', type: '분', elapsed: 5 });
+    expect(getElapsed(header)).toEqual({ state: 'good', type: '분', time: 5 });
   });
 });

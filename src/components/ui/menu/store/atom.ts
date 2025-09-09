@@ -2,7 +2,7 @@ import { atom } from 'jotai';
 
 import { Menu } from '@/lib/supabase/tables/menu';
 import { ZodIssue } from 'zod';
-import { clearZodErrorForField, mapZodFieldErrors } from '@/utils/function/input-error';
+import { clearZodErrorForField, mapZodFieldErrors } from '@/util/function/input-error';
 
 export const initMenu = {
   menu_category: {
@@ -16,11 +16,20 @@ export const initMenu = {
 };
 /* 메뉴 상태 관리 */
 export const menuAtom = atom<Menu>(initMenu);
-export const selectMenuAtom = atom(null, (_, set, menu: Menu) => {
+export const draftMenuAtom = atom<Menu>(initMenu);
+export const selectMenuAtom = atom(null, (get, set, menu: Menu) => {
+  const prevMenu = get(menuAtom);
+
+  const isSameId = prevMenu.id === menu.id;
+  const isSameCategory = prevMenu.menu_category.title === menu.menu_category.title;
+  if (isSameId && isSameCategory) return;
+
   set(menuAtom, menu);
+  set(draftMenuAtom, menu);
 });
 export const clearSelectedMenuAtom = atom(null, (_, set) => {
   set(menuAtom, initMenu);
+  set(draftMenuAtom, initMenu);
 });
 
 export type MenuFormInputs = {

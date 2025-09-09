@@ -1,12 +1,12 @@
 import { useAtomValue, useSetAtom } from 'jotai';
 
 import { PATHS } from '@/constants/paths';
-import validate from '@/utils/function/validate';
+import validate from '@/util/function/validate';
 import { FormInputBox, FormInputCaption } from '@/components/ui/exception';
 
 import styles from './../common.module.css';
 import useAuthForm from '../hooks/use-auth-form';
-import AuthContainer from '../components/container';
+import CaptchaContainer from '../components/captcha';
 
 import useDisabledState from '../hooks/use-disabled';
 import { requestPasswordResetEmail } from '../util/auth-supabase-api';
@@ -33,18 +33,11 @@ export default function FindPasswordPage() {
     },
   });
 
-  const description =
-    authStatus === 'error'
-      ? '검증 실패'
-      : !captchaToken
-        ? '확인 중...'
-        : authStatus === 'success'
-          ? '전송 성공'
-          : '입력하기';
+  const description = authStatus === 'error' ? '검증 실패' : !captchaToken ? '확인 중...' : '입력하기';
   const idErrorMsg = errorForm.get('id') ?? '';
 
   return (
-    <AuthContainer>
+    <CaptchaContainer>
       {/* 상단 */}
       <AuthFormTitle text='비밀번호 찾기' />
 
@@ -71,8 +64,8 @@ export default function FindPasswordPage() {
 
       {/* 하단 */}
       <nav className={styles.actions}>
-        <AuthNavLink text='로그인' to={PATHS.AUTH.LOGIN} />
+        <AuthNavLink text='돌아가기' to={PATHS.AUTH.LOGIN} />
       </nav>
-    </AuthContainer>
+    </CaptchaContainer>
   );
 }

@@ -1,6 +1,7 @@
-import { CardObj } from '@/features/tab/order/util/generate-card';
+import { useEffect, useState } from 'react';
 
 import styles from './index.module.css';
+import { CardObj } from '../../util/types';
 import { getElapsed } from '../../util/get-elapsed';
 
 type CardHeaderProps = {
@@ -9,7 +10,22 @@ type CardHeaderProps = {
 };
 
 export default function CardHeader({ header, isDone }: CardHeaderProps) {
-  const elapsedData = getElapsed(header);
+  const elapsedRes = getElapsed(header);
+  const [elapsedTime, setElapsedTime] = useState(elapsedRes.time);
+  const [elapsedType, setElapsedType] = useState(elapsedRes.type);
+  const [elapsedState, setElapsedState] = useState(elapsedRes.state);
+
+  useEffect(() => {
+    const tick = () => {
+      setElapsedTime(getElapsed(header).time);
+      setElapsedType(getElapsed(header).type);
+      setElapsedState(getElapsed(header).state);
+      setTimeout(tick, 1000);
+    };
+
+    tick();
+  }, []);
+
   const formattedTime = new Date(header.startAt).toLocaleTimeString('ko-KR', {
     hour12: false,
     hour: '2-digit',
@@ -24,9 +40,9 @@ export default function CardHeader({ header, isDone }: CardHeaderProps) {
 
         <div className={styles.right}>
           <div className={styles.table}>{formattedTime}</div>
-          <div className={styles.elapsed} data-state={elapsedData.state}>
-            {elapsedData.elapsed}
-            {elapsedData.type} 경과
+          <div className={styles.elapsed} data-state={elapsedState}>
+            {elapsedTime}
+            {elapsedType} 경과
           </div>
         </div>
       </div>

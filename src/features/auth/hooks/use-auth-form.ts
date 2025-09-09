@@ -11,7 +11,6 @@ import {
   clearAuthErrorFormAtom,
   setErrorFormAtom,
 } from '../store/auth-atom';
-import useSuccessRedirect from './use-success-redirect';
 import { AuthErrorHandler } from '../util/error-handler';
 import useResetAuthForm from './use-reset-form';
 
@@ -38,9 +37,6 @@ export default function useAuthForm<T>({ formAtom, validationSchema, onSubmit }:
 
   /** 폼 초기화 */
   useResetAuthForm();
-
-  /** 성공 리다이렉트 */
-  useSuccessRedirect();
 
   /** Supabase Auth 오류 처리기 */
   const errorHandler = new AuthErrorHandler(showToast, setErrorForm, captchaRefresh);

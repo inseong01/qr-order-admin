@@ -27,8 +27,7 @@ async function uploadImage({ file, fileId }: UploadImageByFileNameProps) {
   const { data, error } = await supabase.storage.from(BUCKET).upload(STORE + '/menu_' + fileId, file);
 
   if (error) {
-    error.message && console.error(error.message);
-    throw new Error(error.message);
+    throw error;
   }
 
   return data;
@@ -46,8 +45,7 @@ async function updateImage({ file, fileId }: UpdateImageByFileNameProps) {
   const { data, error } = await supabase.storage.from(BUCKET).update(STORE + '/menu_' + fileId, file);
 
   if (error) {
-    error.message && console.error(error.message);
-    throw new Error(error.message);
+    throw error;
   }
 
   return data;
@@ -57,6 +55,7 @@ type DeleteImageByFileNameProps = {
   filePath: string[];
 };
 
+// TODO: Storage Cascade 삭제 Edge Function 적용
 /**
  * Supabase 스토리지에서 하나 이상의 이미지 삭제 함수
  */
@@ -64,8 +63,7 @@ async function deleteImageByFileName({ filePath }: DeleteImageByFileNameProps) {
   const { data, error } = await supabase.storage.from(BUCKET).remove(filePath);
 
   if (error) {
-    error.message && console.error(error.message);
-    throw new Error(error.message);
+    throw error;
   }
 
   if (!data.length) {
