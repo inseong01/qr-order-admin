@@ -3,12 +3,14 @@ import { useSetAtom } from 'jotai';
 import { motion } from 'motion/react';
 
 import { Menu } from '@/lib/supabase/tables/menu';
+import { resetMenuImageFileAtom } from '@/features/modal/tab/menu/store/atom';
 import { setModalClickAtom, setTabModalAtomState } from '@/features/modal/tab/store/atom';
 
 import LIGHT_PLUS_ICON from '@/assets/icon/light-plus.svg';
 
 import styles from './index.module.css';
-import { initMenu, resetMenuErrorAtom, selectMenuAtom } from './store/atom';
+import { initMenu } from './const';
+import { resetMenuErrorAtom, selectMenuAtom } from './store/atom';
 
 /**
  * 메뉴 항목 버튼
@@ -18,6 +20,7 @@ export function ListMenu(props: Menu) {
   const setModalState = useSetAtom(setTabModalAtomState);
   const selectMenu = useSetAtom(selectMenuAtom);
   const resetMenuError = useSetAtom(resetMenuErrorAtom);
+  const resetMenuImage = useSetAtom(resetMenuImageFileAtom);
 
   const title = props.name;
   const price = props.price.toLocaleString();
@@ -27,6 +30,7 @@ export function ListMenu(props: Menu) {
     setModalState('menu-update');
     setModalClick(true);
     resetMenuError();
+    resetMenuImage();
   };
 
   return (
@@ -48,12 +52,14 @@ export function ListMenuAdd({ category }: { category: string }) {
   const setModalState = useSetAtom(setTabModalAtomState);
   const selectMenu = useSetAtom(selectMenuAtom);
   const resetMenuError = useSetAtom(resetMenuErrorAtom);
+  const resetMenuImage = useSetAtom(resetMenuImageFileAtom);
 
   const handleClick = () => {
-    selectMenu({ ...initMenu, menu_category: { title: category } });
+    selectMenu({ ...initMenu, menu_category: { title: category, id: '' } });
     setModalState('menu-create');
     setModalClick(true);
     resetMenuError();
+    resetMenuImage();
   };
 
   return (

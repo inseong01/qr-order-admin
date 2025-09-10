@@ -1,18 +1,16 @@
 import { ChangeEvent, FormEvent } from 'react';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
-import validate from '@/util/function/auth-validate';
+import validate from '@/util/function/menu-validate';
 
 import {
   clearMenuErrorFormAtom,
   draftMenuAtom,
-  initMenu,
-  MenuFormInputs,
-  menuImageFileAtom,
   resetMenuErrorAtom,
   setMenuErrorAtom,
-  setMenuImageFileAtom,
 } from '@/components/ui/menu/store/atom';
+import { initMenu } from '@/components/ui/menu/const';
+import { MenuFormInputs } from '@/components/ui/menu/types';
 
 import { useMutationAddMenu } from '@/hooks/use-query/menu/query';
 import { useMutationUploadImage } from '@/hooks/use-query/storage/query';
@@ -23,13 +21,17 @@ import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal
 import styles from './../index.module.css';
 import { buildMenuData } from '../util/set-menu';
 import { setModalClickAtom } from '../../store/atom';
+
+import { MAX_FILE_SIZE } from '../const';
 import { generateNumberId } from '../util/generate-id';
+import { imageFileAtom, setImageFileErrorAtom, setMenuImageFileAtom } from '../store/atom';
 import { MenuFormFields, MenuImageInput, MenuModalHeader } from '../components/common';
-import { MAX_FILE_SIZE } from '../types';
+import { FEATURE_MESSAGES } from '@/constants/message/feature';
+import supabase from '@/lib/supabase';
 
 export default function CreateMenuModal() {
   const [inputValue, setInputValue] = useAtom(draftMenuAtom);
-  const menuImage = useAtomValue(menuImageFileAtom);
+  const menuImage = useAtomValue(imageFileAtom);
   const setMenuError = useSetAtom(setMenuErrorAtom);
   const resetMenuError = useSetAtom(resetMenuErrorAtom);
   const setModalClick = useSetAtom(setModalClickAtom);
@@ -96,7 +98,7 @@ export default function CreateMenuModal() {
       if (name === 'title') {
         return {
           ...prev,
-          menu_category: { title: value },
+          menu_category: { title: value, id: '' },
         };
       }
       return { ...prev, [name]: value };
@@ -110,20 +112,40 @@ export default function CreateMenuModal() {
     setModalClick(false);
   };
 
+  const setImageFileError = useSetAtom(setImageFileErrorAtom);
+
   /** 이미지 파일 설정 */
-  const setImgFile = (e: ChangeEvent<HTMLInputElement>) => {
+  const setImgFile = async (e: ChangeEvent<HTMLInputElement>) => {
+    // const res = await fetch('/functions/hello-function', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({ name: '인성' }),
+    // });
+
+    // console.log(await res.json());
+
+    // const { data, error } = await supabase.functions.invoke('hello-function', {
+    //   body: { name: 'Functions' },
+    // });
+
     const file = e.target.files?.[0];
     if (!file) {
-      // TODO: 오류 출력 - 파일을 선택해주세요.
+      setMenuImage(undefined);
+      setImageFileError(FEATURE_MESSAGES.image.required);
       return;
     }
 
     if (file.size > MAX_FILE_SIZE) {
-      // TODO: 오류 출력 - 파일 크기가 제한을 초과했습니다.
+      const maxFileMB = MAX_FILE_SIZE / 1024;
+      setMenuImage(undefined);
+      setImageFileError(FEATURE_MESSAGES.image.sizeExceeded(maxFileMB));
       return;
     }
 
     setMenuImage(file);
+    setImageFileError('');
   };
 
   return (

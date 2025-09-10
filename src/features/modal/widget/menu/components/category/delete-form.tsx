@@ -12,7 +12,7 @@ import { useMutationDeleteMenuCategory } from '@/hooks/use-query/menu-category/q
 
 import { MenuCategory } from '@/lib/supabase/tables/menu-category';
 
-import validate from '@/util/function/auth-validate';
+import validate from '@/util/function/menu-validate';
 
 import { useConfirmModal } from '../../../../confirm/hook/use-confirm-modal';
 import { categoryErrorAtom, selectedCategoryIdsAtom, setCategoryErrorAtom } from '../../store/atom';

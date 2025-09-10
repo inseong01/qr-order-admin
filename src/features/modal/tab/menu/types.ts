@@ -1,6 +1,14 @@
-/**
- * Storage 총량 500MB
- *
- * - 섬네일 사진 200KB 제한
- */
-export const MAX_FILE_SIZE = 200 * 1024;
+import { Menu } from '@/lib/supabase/tables/menu';
+import { ChangeEvent } from 'react';
+
+export type MenuFormFieldsProps = {
+  inputValue: Menu;
+  onInputChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  categories: { id: string; title: string }[] | undefined;
+};
+
+export type MenuImageInputProps = {
+  mode: 'create' | 'update';
+  imageUrl?: string;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+};

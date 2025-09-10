@@ -14,4 +14,8 @@ export const FEATURE_MESSAGES = {
   order: {
     idRequired: '주문이 선택되지 않았습니다.',
   },
+  image: {
+    required: '파일을 선택해주세요.',
+    sizeExceeded: (maxSizeMB: number) => `${maxSizeMB}MB 이하로 업로드해주세요.`,
+  },
 } as const;

@@ -1,19 +1,16 @@
 import { ChangeEvent, FormEvent } from 'react';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
-import validate from '@/util/function/auth-validate';
+import validate from '@/util/function/menu-validate';
 
 import {
   clearMenuErrorFormAtom,
   draftMenuAtom,
-  initMenu,
-  MenuFormInputs,
-  menuImageFileAtom,
   resetMenuErrorAtom,
-  resetMenuImageFileAtom,
   setMenuErrorAtom,
-  setMenuImageFileAtom,
 } from '@/components/ui/menu/store/atom';
+import { initMenu } from '@/components/ui/menu/const';
+import { MenuFormInputs } from '@/components/ui/menu/types';
 
 import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
 
@@ -27,10 +24,11 @@ import styles from './../index.module.css';
 import { updateMenuData } from '../util/set-menu';
 import { setModalClickAtom } from '../../store/atom';
 import { MenuFormFields, MenuImageInput, MenuModalHeader } from '../components/common';
+import { imageFileAtom, resetMenuImageFileAtom, setMenuImageFileAtom } from '../store/atom';
 
 export default function UpdateMenuModal() {
   const [inputValue, setInputValue] = useAtom(draftMenuAtom);
-  const menuImageFile = useAtomValue(menuImageFileAtom);
+  const menuImageFile = useAtomValue(imageFileAtom);
   const setMenuError = useSetAtom(setMenuErrorAtom);
   const resetMenuError = useSetAtom(resetMenuErrorAtom);
   const setModalClick = useSetAtom(setModalClickAtom);
@@ -114,7 +112,7 @@ export default function UpdateMenuModal() {
       if (name === 'title') {
         return {
           ...prev,
-          menu_category: { title: value },
+          menu_category: { title: value, id: '' },
         };
       }
 

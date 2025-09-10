@@ -1,14 +1,20 @@
-import { ChangeEvent } from 'react';
 import { useAtomValue, useSetAtom } from 'jotai';
 
-import { Menu } from '@/lib/supabase/tables/menu';
 import LIGHT_PLUS_ICON from '@/assets/icon/light-plus.svg';
 import LIGHT_PICTURE_ICON from '@/assets/icon/light-picture-icon.svg';
+
 import { menuErrorFormAtom } from '@/components/ui/menu/store/atom';
 import { FormInputBox, FormInputCaption } from '@/components/ui/exception';
 
 import styles from './../index.module.css';
-import { imageLoadedStateAtom, ImageLoadedStateType, setImageLoadedAtom } from '../store/atom';
+import { MenuFormFieldsProps, MenuImageInputProps } from '../types';
+import {
+  imageFileAtom,
+  imageFileErrorAtom,
+  imageLoadedStateAtom,
+  ImageLoadedStateType,
+  setImageLoadedAtom,
+} from '../store/atom';
 
 type MenuModalHeaderProps = {
   title: string;
@@ -29,14 +35,10 @@ export function MenuModalHeader({ title, onClose }: MenuModalHeaderProps) {
   );
 }
 
-type MenuImageInputProps = {
-  mode: 'create' | 'update';
-  imageUrl?: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-};
-
 export function MenuImageInput({ mode, imageUrl = '', onChange }: MenuImageInputProps) {
+  const menuImage = useAtomValue(imageFileAtom);
   const imageLoadedState = useAtomValue(imageLoadedStateAtom);
+  const imageFileError = useAtomValue(imageFileErrorAtom);
   const setImageLoaded = useSetAtom(setImageLoadedAtom);
 
   const handleImgLoad = (state: ImageLoadedStateType) => {
@@ -48,7 +50,7 @@ export function MenuImageInput({ mode, imageUrl = '', onChange }: MenuImageInput
       <span className={styles.inputTitle}>{mode === 'create' ? '사진 첨부' : '사진 변경'}</span>
 
       <div className={styles.imgBox}>
-        {imageUrl ? (
+        {mode === 'update' ? (
           <>
             <img
               src={imageUrl}
@@ -57,9 +59,8 @@ export function MenuImageInput({ mode, imageUrl = '', onChange }: MenuImageInput
               onError={handleImgLoad('rejected')}
               hidden={imageLoadedState !== 'success'}
             />
-            {/* TODO: 파일 첨부 여부 표시 */}
-            {imageLoadedState === 'pending' && <p>이미지 불러오는 중...</p>}
-            {imageLoadedState === 'rejected' && <p>이미지를 불러오지 못했습니다.</p>}
+
+            {menuImage ? <AttachmentStatus attached /> : <ImageStatus state={imageLoadedState} />}
           </>
         ) : (
           <>
@@ -67,7 +68,7 @@ export function MenuImageInput({ mode, imageUrl = '', onChange }: MenuImageInput
               <img src={LIGHT_PICTURE_ICON} alt='사진 아이콘' />
             </div>
 
-            <span>사진을 첨부해주세요</span>
+            <AttachmentStatus attached={!!menuImage} />
           </>
         )}
       </div>
@@ -80,15 +81,21 @@ export function MenuImageInput({ mode, imageUrl = '', onChange }: MenuImageInput
         onChange={onChange}
         accept='image/png, image/jpeg, image/webp'
       />
+
+      <FormInputCaption hasError={Boolean(imageFileError)} text={imageFileError} />
     </label>
   );
 }
 
-type MenuFormFieldsProps = {
-  inputValue: Menu;
-  onInputChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
-  categories: { id: string; title: string }[] | undefined;
-};
+function ImageStatus({ state }: { state: 'pending' | 'success' | 'rejected' }) {
+  if (state === 'pending') return <p>이미지 불러오는 중...</p>;
+  if (state === 'rejected') return <p>이미지를 불러오지 못했습니다.</p>;
+  return null;
+}
+
+function AttachmentStatus({ attached }: { attached: boolean }) {
+  return <span>{attached ? '첨부되었습니다.' : '사진을 첨부해주세요'}</span>;
+}
 
 export function MenuFormFields({ inputValue, onInputChange, categories }: MenuFormFieldsProps) {
   const menuError = useAtomValue(menuErrorFormAtom);

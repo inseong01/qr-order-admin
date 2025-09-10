@@ -6,7 +6,7 @@ import { setWidgetAtomState } from '@/features/widget/store/atom';
 
 import { FormInputBox, FormInputCaption } from '@/components/ui/exception';
 
-import validate from '@/util/function/auth-validate';
+import validate from '@/util/function/menu-validate';
 
 import { useConfirmModal } from '../../../../confirm/hook/use-confirm-modal';
 import { categoryErrorAtom, categoryInputAtom, setCategoryErrorAtom } from '../../store/atom';
