@@ -13,15 +13,15 @@ type GenerateCardLayoutArrProps = {
   maxHeight: number;
 };
 
-// /**
-//  * @description 주문 데이터를 기반으로 영수증 카드 레이아웃을 동적으로 생성
-//  * 카드의 최대 높이를 고려하여, 내용이 넘칠 경우 여러 개의 카드로 분할
-//  *
-//  * @param orders - 전체 주문 목록
-//  * @param orderItems - 전체 주문 항목 목록
-//  * @param maxHeight - 카드의 최대 높이 (px)
-//  * @returns 생성된 카드 객체의 배열
-//  */
+/**
+ * 주문 데이터를 기반으로 영수증 카드 레이아웃을 동적으로 생성
+ * 카드의 최대 높이를 고려하여, 내용이 넘칠 경우 여러 개의 카드로 분할
+ *
+ * @param orders - 전체 주문 목록
+ * @param orderItems - 전체 주문 항목 목록
+ * @param maxHeight - 카드의 최대 높이 (px)
+ * @returns 생성된 카드 객체의 배열
+ */
 export function generateCardLayoutArr({ orders, orderItems, maxHeight }: GenerateCardLayoutArrProps) {
   // 주문 항목을 주문 ID 기준으로 그룹화하여 Map 생성
   const ordersMap = buildOrdersMap(orderItems);

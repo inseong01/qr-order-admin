@@ -46,7 +46,7 @@ export default function TableWidget() {
   const draftTables = useAtomValue(draftTablesAtom);
   const tableEditRect = useAtomValue(tableEditRectAtom);
   const tableEditText = useAtomValue(tableEditTextAtom);
-  const setTableRequestAlertStatus = useSetAtom(setRequestAlertAtom);
+  const setTableRequestAlert = useSetAtom(setRequestAlertAtom);
   const setTableEditMode = useSetAtom(setEditModeAtom);
   const selectSingleTable = useSetAtom(selectSingleTableAtom);
   const setEditState = useSetAtom(setEditStateAtom);
@@ -82,7 +82,7 @@ export default function TableWidget() {
 
     setTableEditMode('delete');
     setDraftTables(tablesQuery.data ?? []);
-    setTableRequestAlertStatus(false);
+    setTableRequestAlert(false);
     fadeBackgroundLayer(tableEditRect, true).play();
     fadeBackgroundLayer(tableEditText, true).play();
   }
@@ -111,7 +111,7 @@ export default function TableWidget() {
 
     setTableEditMode('update');
     setDraftTables(tablesQuery.data ?? []);
-    setTableRequestAlertStatus(false);
+    setTableRequestAlert(false);
     fadeBackgroundLayer(tableEditRect, true).play();
     fadeBackgroundLayer(tableEditText, true).play();
   }
@@ -146,7 +146,7 @@ export default function TableWidget() {
     const newTable = createNewTable(pseudoStageSize, tablesQuery.data ?? []);
     setDraftTables([...(tablesQuery.data ?? []), newTable]);
     selectSingleTable(newTable.id);
-    setTableRequestAlertStatus(false);
+    setTableRequestAlert(false);
     fadeBackgroundLayer(tableEditRect, true).play();
     fadeBackgroundLayer(tableEditText, true).play();
   }
@@ -160,6 +160,7 @@ export default function TableWidget() {
 
     if (editMode) {
       resetTableState();
+      setTableRequestAlert(true);
       fadeBackgroundLayer(tableEditRect, tableEditRect.attrs.opacity === 0).play();
       fadeBackgroundLayer(tableEditText, tableEditText.attrs.opacity === 0).play();
       return;

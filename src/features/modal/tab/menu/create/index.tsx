@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent } from 'react';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
-import validate from '@/util/function/validate';
+import validate from '@/util/function/auth-validate';
 
 import {
   clearMenuErrorFormAtom,

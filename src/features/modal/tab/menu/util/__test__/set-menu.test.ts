@@ -8,7 +8,7 @@ import { buildMenuData, updateMenuData } from '../set-menu';
 
 // createImgPath 모킹
 vi.mock('@/util/function/image-path', () => ({
-  createImgPath: vi.fn(({ fileId }: { fileId: string }) => `mock-url/${fileId}`),
+  createImgPath: vi.fn(({ fileId }: { fileId: string }) => (fileId ? `mock-url/${fileId}` : `mock-default-url`)),
 }));
 
 describe('buildMenuData', () => {
@@ -39,6 +39,8 @@ describe('buildMenuData', () => {
 });
 
 describe('updateMenuData', () => {
+  const imgFileId = 'file123';
+
   it('hasImg가 true면 새 이미지 URL로 업데이트', () => {
     const inputValue = {
       id: '1',
@@ -46,16 +48,15 @@ describe('updateMenuData', () => {
       price: '12000',
       tag: '추천',
       menu_category: { title: '카테고리1' },
-      img_url: 'old-url',
+      img_url: imgFileId,
     } as any;
 
     const menuCategories = [{ id: 'cat1', title: '카테고리1' }];
-    const fileId = 'file123';
     const hasImg = true;
 
     const result = updateMenuData({ inputValue, menuCategories, hasImg });
 
-    expect(result.img_url).toBe(`mock-url/${fileId}`);
+    expect(result.img_url).toBe(`mock-url/${imgFileId}`);
     expect(result.id).toBe('1');
     expect(result.category_id).toBe('cat1');
     expect(result.name).toBe('메뉴1');
@@ -70,7 +71,7 @@ describe('updateMenuData', () => {
       price: '12000',
       tag: '추천',
       menu_category: { title: '카테고리1' },
-      img_url: 'old-url',
+      img_url: imgFileId,
     } as any;
 
     const menuCategories = [{ id: 'cat1', title: '카테고리1' }];
@@ -78,8 +79,7 @@ describe('updateMenuData', () => {
 
     const result = updateMenuData({ inputValue, menuCategories, hasImg });
 
-    // 이미지 URL이 기존 값 유지
-    expect(result.img_url).toBe('old-url');
+    expect(result.img_url).toBe(imgFileId);
     expect(result.id).toBe('1');
     expect(result.category_id).toBe('cat1');
     expect(result.name).toBe('메뉴1');

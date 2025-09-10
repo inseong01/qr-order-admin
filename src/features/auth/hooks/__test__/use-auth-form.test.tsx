@@ -4,20 +4,29 @@
  */
 
 import z from 'zod';
-import * as router from 'react-router';
 import { atom, createStore } from 'jotai';
 import { ChangeEvent, ReactNode } from 'react';
 import { AuthError } from '@supabase/supabase-js';
 import { act, renderHook } from '@testing-library/react';
-import { beforeEach, describe, expect, it, Mock, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { TestProvider } from './components/atom-provider';
 import useAuthForm from '../use-auth-form';
 import * as redirectHook from '../use-success-redirect';
 import { authStatusAtom, resetAllFormsAtom } from '../../store/auth-atom';
+import { PATHS } from '@/constants/paths';
 
-// useParams 훅 모킹
-vi.spyOn(router, 'useParams').mockReturnValue({ '*': 'test' });
+// react-router 모킹
+const mockUseLocation = vi.fn().mockReturnValue({ pathname: PATHS.AUTH.LOGIN });
+const mockUseParams = vi.fn().mockReturnValue({ '*': 'test' });
+vi.mock('react-router', async (importActual) => {
+  const actual = await importActual<typeof import('react-router')>();
+  return {
+    ...actual,
+    useLocation: () => mockUseLocation(),
+    useParams: () => mockUseParams(),
+  };
+});
 
 // useSuccessRedirect 훅 모킹
 vi.spyOn(redirectHook, 'default').mockImplementation(() => {});
@@ -128,7 +137,7 @@ describe('useAuthForm', () => {
       expect(mockResetForms).toHaveBeenCalledTimes(1);
 
       act(() => {
-        (router.useParams as Mock).mockReturnValue({ '*': 'test2' });
+        mockUseLocation.mockReturnValue({ pathname: PATHS.AUTH.SIGNUP });
         rerender();
       });
 

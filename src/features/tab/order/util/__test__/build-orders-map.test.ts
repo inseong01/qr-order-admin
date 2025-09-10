@@ -13,7 +13,7 @@ describe('generate card function test', () => {
   describe('buildOrdersMap ', () => {
     it('전체 주문 order.id 기준 주문 수 일치 확인 ', () => {
       const orderMap = buildOrdersMap(mock_order_items);
-      expect(orderMap.values()).toHaveLength(5);
+      expect(orderMap.size).toBe(5);
     });
   });
 });

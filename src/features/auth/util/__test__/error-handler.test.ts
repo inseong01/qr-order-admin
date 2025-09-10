@@ -3,15 +3,17 @@
  * @description Zod 유효성 검사 오류, Supabase 인증 오류, 그리고 일반 오류 등
  *              다양한 유형의 에러를 올바르게 처리하는지 검증합니다.
  */
+import { AuthError } from '@supabase/supabase-js';
+import { ZodError, ZodIssue, ZodIssueCode } from 'zod';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { AuthErrorHandler } from '../error-handler';
-import { ZodError, ZodIssue, ZodIssueCode } from 'zod';
-import { AuthError } from '@supabase/supabase-js';
 
 /* Mock 함수 설정 */
 const mockShowMessage = vi.fn();
 const mockSetInputMessage = vi.fn();
 const mockCaptchaRefresh = vi.fn();
+
+vi.spyOn(console, 'error');
 
 /* AuthErrorHandler 클래스 테스트 */
 describe('AuthErrorHandler', () => {
@@ -71,7 +73,8 @@ describe('AuthErrorHandler', () => {
       const error = new Error(message);
       errorHandle.handle(error);
 
-      expect(mockShowMessage).toHaveBeenCalledWith(`알 수 없는 오류가 발생했습니다. (${error})`);
+      expect(mockShowMessage).toHaveBeenCalledWith(`알 수 없는 오류가 발생했습니다.`);
+      expect(console.error).toHaveBeenCalledWith(error);
       expect(mockCaptchaRefresh).not.toHaveBeenCalled();
       expect(mockSetInputMessage).not.toHaveBeenCalled();
     });
