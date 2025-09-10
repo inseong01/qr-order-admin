@@ -19,7 +19,7 @@ import {
   updateDraftTableAtom,
 } from '../../../store/table-edit-state';
 import { tableStageAtom } from '../../../store/table-state';
-import useOnMouseChangeCursor from '../../../hooks/use-change-cursor';
+import useOnMouseCursor from '../../../hooks/use-mouse-cursor';
 
 export default function TableLayer({ table, orders }: { table: Table; orders: OrderItem[] }) {
   const stage = useAtomValue(tableStageAtom);
@@ -38,7 +38,7 @@ export default function TableLayer({ table, orders }: { table: Table; orders: Or
   /* 원래 좌석 정보 임시 보관 */
   const [preTransformTable, setPreTransformTable] = useState<Table | null>(null);
   /* Konva.Group 커서 변환 */
-  const { changeDefaultCursor, changePointerCursor } = useOnMouseChangeCursor(stage, table.id);
+  const { setDefaultCursor, changeCursor } = useOnMouseCursor(stage, table.id);
 
   const shapeRef = useRef<Konva.Rect>(null);
   const groupRef = useRef<Konva.Group>(null);
@@ -95,6 +95,8 @@ export default function TableLayer({ table, orders }: { table: Table; orders: Or
 
   /* 좌석 선택 */
   function onClickSelectTable() {
+    if (!stage) return;
+
     if (editMode === 'create') {
       return;
     }
@@ -106,6 +108,7 @@ export default function TableLayer({ table, orders }: { table: Table; orders: Or
 
     if (editMode === 'update') {
       selectSingleTable(table.id);
+      stage.container().style.cursor = 'move';
       return;
     }
 
@@ -246,8 +249,8 @@ export default function TableLayer({ table, orders }: { table: Table; orders: Or
       onDragStart={handleTransformStart}
       onDragMove={restrictDragBounds}
       onDragEnd={handleDragEnd}
-      onMouseEnter={changePointerCursor}
-      onMouseLeave={changeDefaultCursor}
+      onMouseEnter={changeCursor}
+      onMouseLeave={setDefaultCursor}
     >
       <Rect
         ref={shapeRef}

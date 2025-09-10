@@ -7,7 +7,7 @@ import { Order } from '@/lib/supabase/tables/order';
 
 import { useMutationCompleteOrder } from '@/hooks/use-query/order/query';
 
-import validate from '@/util/function/validate';
+import validate from '@/util/function/auth-validate';
 
 import styles from './index.module.css';
 

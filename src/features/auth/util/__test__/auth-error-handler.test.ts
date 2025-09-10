@@ -4,7 +4,7 @@
  *              필요 시 캡챠를 새로고침하는지 검증합니다.
  */
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { authErrorHandler } from '../../util/auth-error-handler';
+import { authErrorHandler } from '../auth-error-handler';
 
 /* Mock 함수 설정 */
 const mockShowMessage = vi.fn();

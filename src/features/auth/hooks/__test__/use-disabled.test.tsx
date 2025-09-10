@@ -8,7 +8,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { cleanup, renderHook } from '@testing-library/react';
 
 import { TestProvider } from './components/atom-provider';
-import useDisabledState from '../../hooks/use-disabled';
+import useDisabledState from '../use-disabled';
 import { authStatusAtom, captchaTokenAtom } from '../../store/auth-atom';
 
 describe('useDisabledState', () => {
@@ -112,7 +112,7 @@ describe('useDisabledState', () => {
       expect(result.current).toEqual({ disabled: true, authStatus: 'success' });
     });
 
-    it("authStatus가 'error'일 때, 비활성화(true) 반환", () => {
+    it("authStatus가 'error'일 때, 활성화(false) 반환", () => {
       const initialValues = new Map<any, any>([
         [captchaTokenAtom, token],
         [authStatusAtom, 'error'],
@@ -121,7 +121,7 @@ describe('useDisabledState', () => {
         <TestProvider initialValues={initialValues}>{children}</TestProvider>
       );
       const { result } = renderHook(() => useDisabledState(), { wrapper });
-      expect(result.current).toEqual({ disabled: true, authStatus: 'error' });
+      expect(result.current).toEqual({ disabled: false, authStatus: 'error' });
     });
   });
 });

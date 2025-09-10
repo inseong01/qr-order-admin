@@ -11,12 +11,12 @@ import mock_order_items from '@/mock/order-item.test.json';
 describe('generate card 함수 테스트', () => {
   describe('findOrderStartAt', () => {
     it('첫 번째 주문 시작 시각 반환', () => {
-      const startAt = findOrderStartAt({ orders: mock_orders, orderId: mock_order_items[0].id });
+      const startAt = findOrderStartAt({ orders: mock_orders, orderId: mock_order_items[0].order.id });
       expect(startAt).toBe('2025-07-30T10:00:00.000Z');
     });
 
     it('두 번째 주문 시작 시각 반환', () => {
-      const startAt = findOrderStartAt({ orders: mock_orders, orderId: mock_order_items[1].id });
+      const startAt = findOrderStartAt({ orders: mock_orders, orderId: mock_order_items[1].order.id });
       expect(startAt).toBe('2025-07-30T10:10:00.000Z');
     });
   });

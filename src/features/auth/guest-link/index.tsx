@@ -2,7 +2,7 @@ import { useSetAtom } from 'jotai';
 import { useNavigate } from 'react-router';
 
 import { PATHS } from '@/constants/paths';
-import validate from '@/util/function/validate';
+import validate from '@/util/function/auth-validate';
 
 import styles from './index.module.css';
 import useAuthForm from '../hooks/use-auth-form';

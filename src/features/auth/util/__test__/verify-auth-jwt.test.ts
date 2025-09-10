@@ -7,7 +7,7 @@ import { AuthError, Session } from '@supabase/supabase-js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import supabase from '@/lib/supabase';
-import { verifyAuthJWT } from '../../util/verify-auth-jwt';
+import { verifyAuthJWT } from '../verify-auth-jwt';
 
 /* Supabase 클라이언트 모킹 */
 vi.mock('@/lib/supabase', () => {
@@ -54,10 +54,10 @@ describe('verifyAuthJWT', () => {
     // getSession이 유효한 세션을 반환하도록 설정
     mockSupabase.auth.getSession.mockResolvedValue({ data: { session: mockSession }, error: null });
 
-    const result = await verifyAuthJWT();
+    const { session } = await verifyAuthJWT();
 
     expect(mockSupabase.auth.getSession).toHaveBeenCalledTimes(1);
-    expect(result).toEqual(mockSession);
+    expect(session).toEqual(mockSession);
   });
 
   /* 2. 세션이 존재하지 않는 경우 (null) */
@@ -66,33 +66,29 @@ describe('verifyAuthJWT', () => {
     const result = await verifyAuthJWT();
 
     expect(mockSupabase.auth.getSession).toHaveBeenCalledTimes(1);
-    expect(result).toBeNull();
+    expect(result.session).toBeNull();
   });
 
   /* 3. getSession 호출 시 에러가 발생하는 경우 */
-  it('getSession 호출이 실패한 경우 null을 반환하고 에러를 로그 남김', async () => {
-    const mockError = new AuthError('Failed to verify JWT session');
-    mockSupabase.auth.getSession.mockResolvedValue({ data: { session: null }, error: mockError });
+  it('getSession 호출이 실패한 경우 오류를 던지고 로그 남김', async ({ expect }) => {
+    mockSupabase.auth.getSession.mockResolvedValue({
+      data: { session: null },
+      error: { message: 'Failed to verify JWT session' } as AuthError,
+    });
 
-    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-
-    const result = await verifyAuthJWT();
-
+    vi.spyOn(console, 'error');
+    await expect(verifyAuthJWT()).rejects.toThrowError();
     expect(mockSupabase.auth.getSession).toHaveBeenCalledTimes(1);
-    expect(consoleErrorSpy).toHaveBeenCalledWith('Failed to verify JWT session');
-    expect(result).toBeNull();
-
-    // 스파이 복원
-    consoleErrorSpy.mockRestore();
+    expect(console.error).toHaveBeenCalledWith('Failed to verify JWT session');
   });
 
   /* 4. 세션은 있지만 유효하지 않은 경우 */
   // - Supabase의 getSession은 만료된 세션에 대해 자동으로 null 반환,
   // - refresh 시도하므로, 여기서는 getSession이 null을 반환하는 케이스로 처리
   it('세션이 만료되었거나 유효하지 않은 경우 null 반환', async () => {
-    const result = await verifyAuthJWT();
+    const { session } = await verifyAuthJWT();
 
     expect(mockSupabase.auth.getSession).toHaveBeenCalledTimes(1);
-    expect(result).toBeNull();
+    expect(session).toBeNull();
   });
 });

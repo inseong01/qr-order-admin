@@ -7,18 +7,22 @@ import { ReactNode } from 'react';
 import { renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { PATHS } from '@/constants/paths';
+
 import { TestProvider } from './components/atom-provider';
+import useSuccessRedirect from '../use-success-redirect';
 import { REDIRECT_DELAY } from '../../const';
-import useSuccessRedirect from '../../hooks/use-success-redirect';
 import { authStatusAtom } from '../../store/auth-atom';
 
 // useNavigate 훅 모킹
 const mockUseNavigate = vi.fn();
-vi.mock('react-router', async () => {
-  const actual = await vi.importActual<typeof import('jotai')>('jotai');
+const mockUseLocation = vi.fn().mockReturnValue({ pathname: PATHS.AUTH.LOGIN });
+vi.mock('react-router', async (importActual) => {
+  const actual = await importActual<typeof import('react-router')>();
   return {
     ...actual,
     useNavigate: () => mockUseNavigate,
+    useLocation: () => mockUseLocation(),
   };
 });
 
@@ -43,8 +47,9 @@ describe('useSuccessRedirect 훅', () => {
       // REDIRECT_DELAY 만큼 시간 진행
       vi.advanceTimersByTime(REDIRECT_DELAY);
 
-      expect(mockUseNavigate).toHaveBeenCalledWith('/', { replace: true });
+      expect(mockUseLocation).toHaveBeenCalled();
       expect(mockUseNavigate).toHaveBeenCalledTimes(1);
+      expect(mockUseNavigate).toHaveBeenCalledWith('/', { replace: true });
     });
 
     it("authStatus가 'success'가 아닐 때, 페이지를 이동하지 않음", () => {
@@ -56,6 +61,7 @@ describe('useSuccessRedirect 훅', () => {
       renderHook(() => useSuccessRedirect(), { wrapper });
 
       expect(mockUseNavigate).not.toHaveBeenCalled();
+      expect(mockUseLocation).toHaveBeenCalled();
     });
 
     it('컴포넌트 언마운트 시, 타이머 정리하지 않음', () => {

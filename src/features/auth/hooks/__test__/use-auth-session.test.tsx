@@ -6,8 +6,18 @@
 import { Session } from '@supabase/supabase-js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, renderHook, waitFor } from '@testing-library/react';
+import { PATHS } from '@/constants/paths';
 
 const mockSession = { user: { id: '123' } } as unknown as Session;
+const mockUseLocation = vi.fn().mockReturnValue({ pathname: PATHS.AUTH.LOGIN });
+
+vi.mock('react-router', async (importActual) => {
+  const actual = await importActual<typeof import('react-router')>();
+  return {
+    ...actual,
+    useLocation: () => mockUseLocation(),
+  };
+});
 
 describe('useAuthSession', () => {
   beforeEach(() => {
@@ -18,7 +28,7 @@ describe('useAuthSession', () => {
   it('초기 세션이 유효할 경우, isLogin을 true로 설정', async () => {
     // JWT 유효성 검증 모킹
     vi.doMock('../../util/verify-auth-jwt', () => ({
-      verifyAuthJWT: vi.fn().mockResolvedValue(mockSession),
+      verifyAuthJWT: vi.fn().mockResolvedValue({ session: mockSession }),
     }));
 
     // Supabase 세션 조회 API 모킹
@@ -42,7 +52,7 @@ describe('useAuthSession', () => {
       },
     }));
 
-    const { default: useAuthSession } = await import('../../hooks/use-auth-session');
+    const { default: useAuthSession } = await import('../use-auth-session');
     const { result } = renderHook(() => useAuthSession());
 
     await waitFor(() => {
@@ -77,7 +87,7 @@ describe('useAuthSession', () => {
       },
     }));
 
-    const { default: useAuthSession } = await import('../../hooks/use-auth-session');
+    const { default: useAuthSession } = await import('../use-auth-session');
     const { result } = renderHook(() => useAuthSession());
 
     await waitFor(() => {
@@ -112,7 +122,7 @@ describe('useAuthSession', () => {
       },
     }));
 
-    const { default: useAuthSession } = await import('../../hooks/use-auth-session');
+    const { default: useAuthSession } = await import('../use-auth-session');
     const { result } = renderHook(() => useAuthSession());
 
     await waitFor(() => {
@@ -146,7 +156,7 @@ describe('useAuthSession', () => {
       },
     }));
 
-    const { default: useAuthSession } = await import('../../hooks/use-auth-session');
+    const { default: useAuthSession } = await import('../use-auth-session');
     const { result } = renderHook(() => useAuthSession());
 
     await act(async () => {
@@ -157,7 +167,7 @@ describe('useAuthSession', () => {
     expect(mockClearStorageKeys).toHaveBeenCalled();
   });
 
-  it('onAuthStateChange 이벤트가 SIGNED_IN일 경우, isLogin을 true로 설정', async () => {
+  it('onAuthStateChange 이벤트가 SIGNED_IN일 경우, isLogin을 false로 설정', async () => {
     const mockClearStorageKeys = vi.fn();
     // 스토리지 클리어 유틸 모킹
     vi.doMock('../../util/clear-storage-key', () => ({ clearStorageKeys: mockClearStorageKeys }));
@@ -183,14 +193,14 @@ describe('useAuthSession', () => {
       },
     }));
 
-    const { default: useAuthSession } = await import('../../hooks/use-auth-session');
+    const { default: useAuthSession } = await import('../use-auth-session');
     const { result } = renderHook(() => useAuthSession());
 
     await act(async () => {
       savedCallback('SIGNED_IN', null);
     });
 
-    expect(result.current.isLogin).toBe(true);
+    expect(result.current.isLogin).toBe(false);
     expect(mockClearStorageKeys).toHaveBeenCalledTimes(1);
   });
 });
