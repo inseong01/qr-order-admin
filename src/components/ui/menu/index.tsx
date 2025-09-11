@@ -3,13 +3,13 @@ import { useSetAtom } from 'jotai';
 import { motion } from 'motion/react';
 
 import { Menu } from '@/lib/supabase/tables/menu';
-import { resetMenuImageFileAtom } from '@/features/modal/tab/menu/store/atom';
+import { resetMenuImageFileAtom, setImageLoadedAtom } from '@/features/modal/tab/menu/store/atom';
 import { setModalClickAtom, setTabModalAtomState } from '@/features/modal/tab/store/atom';
 
 import LIGHT_PLUS_ICON from '@/assets/icon/light-plus.svg';
 
-import styles from './index.module.css';
 import { initMenu } from './const';
+import styles from './index.module.css';
 import { resetMenuErrorAtom, selectMenuAtom } from './store/atom';
 
 /**
@@ -21,6 +21,7 @@ export function ListMenu(props: Menu) {
   const selectMenu = useSetAtom(selectMenuAtom);
   const resetMenuError = useSetAtom(resetMenuErrorAtom);
   const resetMenuImage = useSetAtom(resetMenuImageFileAtom);
+  const setImageLoaded = useSetAtom(setImageLoadedAtom);
 
   const title = props.name;
   const price = props.price.toLocaleString();
@@ -31,6 +32,7 @@ export function ListMenu(props: Menu) {
     setModalClick(true);
     resetMenuError();
     resetMenuImage();
+    setImageLoaded('pending');
   };
 
   return (

@@ -9,7 +9,6 @@ import {
   UpdateMenuCategory,
   updateMenuCategory,
 } from '@/lib/supabase/tables/menu-category';
-import { deleteImageByFileName } from '@/lib/supabase/storage/store';
 
 import { showToastAtom } from '@/features/alert/toast/store/atom';
 
@@ -73,12 +72,8 @@ export function useMutationDeleteMenuCategory() {
   const showToast = useSetAtom(showToastAtom);
 
   const mutation = useMutation({
-    mutationFn: ({ ids }: { ids: string[]; filePath: string[] }) => deleteMenuCategory(ids),
-    async onSuccess(_, { filePath }) {
-      // TODO: Storage Cascade 삭제 Edge Function 적용 또는 직접 카테고리 별 삭제 구현
-      if (filePath.length > 0) {
-        await deleteImageByFileName({ filePath });
-      }
+    mutationFn: ({ ids }: { ids: string[] }) => deleteMenuCategory(ids),
+    async onSuccess() {
       await queryClient.invalidateQueries({ queryKey: menuCategoryQueryOptions.queryKey });
       await queryClient.invalidateQueries({ queryKey: menuListQueryOptions.queryKey });
       showToast('삭제되었습니다.');

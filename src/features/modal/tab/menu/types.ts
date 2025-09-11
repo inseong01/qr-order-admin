@@ -1,5 +1,7 @@
-import { Menu } from '@/lib/supabase/tables/menu';
 import { ChangeEvent } from 'react';
+
+import { Menu } from '@/lib/supabase/tables/menu';
+import { MenuCategory } from '@/lib/supabase/tables/menu-category';
 
 export type MenuFormFieldsProps = {
   inputValue: Menu;
@@ -11,4 +13,16 @@ export type MenuImageInputProps = {
   mode: 'create' | 'update';
   imageUrl?: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+};
+
+export type BuildMenuDataProps = {
+  inputValue: Menu;
+  menuCategories?: MenuCategory[];
+  menuImageFile?: File;
+};
+
+export type UpdateMenuDataProps = {
+  inputValue: Menu;
+  menuCategories?: MenuCategory[];
+  menuImageFile?: File;
 };

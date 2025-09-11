@@ -82,6 +82,10 @@
   gap: 5px;
 }
 
+.imgBox img {
+  object-fit: contain;
+}
+
 .iconBox {
   width: 15px;
   height: 15px;

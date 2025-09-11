@@ -15,13 +15,6 @@ export default defineConfig(({ command }) => {
     },
     server: {
       host: true,
-      proxy: {
-        '/functions': {
-          target: 'https://onofrsiptqngmwfzenlr.supabase.co',
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/functions/, '/functions/v1'),
-        },
-      },
     },
     test: {
       environment: 'jsdom',

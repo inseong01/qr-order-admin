@@ -1,19 +1,13 @@
-import { Menu } from '@/lib/supabase/tables/menu';
-import { MenuCategory } from '@/lib/supabase/tables/menu-category';
-import { createImgPath } from '@/util/function/image-path';
 import { generateNumberId } from './generate-id';
+import { BuildMenuDataProps, UpdateMenuDataProps } from '../types';
 
-type BuildMenuDataProps = {
-  inputValue: Menu;
-  menuCategories?: MenuCategory[];
-  fileId: string;
-};
-
-export function buildMenuData({ inputValue, menuCategories, fileId }: BuildMenuDataProps) {
-  const img_url = createImgPath({ fileId });
+export function buildMenuData({ inputValue, menuCategories, menuImageFile }: BuildMenuDataProps) {
+  const newId = generateNumberId();
+  const extension = menuImageFile?.name.split('.').pop()?.toLowerCase();
+  const filename = menuImageFile ? `${newId}.${extension}` : 'menu_default.jpg';
 
   return {
-    img_url,
+    img_url: filename,
     category_id: menuCategories?.find((c) => c.title === inputValue.menu_category.title)?.id,
     name: inputValue.name,
     price: Number(inputValue.price),
@@ -21,21 +15,24 @@ export function buildMenuData({ inputValue, menuCategories, fileId }: BuildMenuD
   };
 }
 
-type UpdateMenuDataProps = {
-  inputValue: Menu;
-  menuCategories?: MenuCategory[];
-  hasImg: boolean;
-};
+export function updateMenuData({ inputValue, menuCategories, menuImageFile }: UpdateMenuDataProps) {
+  if (!menuImageFile) {
+    return {
+      img_url: inputValue.img_url,
+      id: inputValue.id,
+      category_id: menuCategories?.find((c) => c.title === inputValue.menu_category.title)?.id,
+      name: inputValue.name,
+      price: Number(inputValue.price),
+      tag: inputValue.tag,
+    };
+  }
 
-export function updateMenuData({ inputValue, menuCategories, hasImg }: UpdateMenuDataProps) {
-  const newImgFileId = generateNumberId();
-
-  const imgFileId = inputValue.img_url.split('menu_').at(-1) ?? '';
-  const fileId = imgFileId === 'default' ? newImgFileId : imgFileId;
-  const img_url = hasImg ? createImgPath({ fileId }) : inputValue.img_url;
+  const newId = generateNumberId();
+  const extension = menuImageFile.name.split('.').pop()?.toLowerCase();
+  const newFilename = `${newId}.${extension}`;
 
   return {
-    img_url,
+    img_url: newFilename,
     id: inputValue.id,
     category_id: menuCategories?.find((c) => c.title === inputValue.menu_category.title)?.id,
     name: inputValue.name,

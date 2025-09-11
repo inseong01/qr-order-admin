@@ -3,6 +3,8 @@ import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
 import validate from '@/util/function/menu-validate';
 
+import { FEATURE_MESSAGES } from '@/constants/message/feature';
+
 import {
   clearMenuErrorFormAtom,
   draftMenuAtom,
@@ -22,12 +24,12 @@ import styles from './../index.module.css';
 import { buildMenuData } from '../util/set-menu';
 import { setModalClickAtom } from '../../store/atom';
 
+import { MenuFormFields } from '../components/modal-form';
+import { MenuModalHeader } from '../components/modal-header';
+import { MenuImageInput } from '../components/modal-image';
+
 import { MAX_FILE_SIZE } from '../const';
-import { generateNumberId } from '../util/generate-id';
 import { imageFileAtom, setImageFileErrorAtom, setMenuImageFileAtom } from '../store/atom';
-import { MenuFormFields, MenuImageInput, MenuModalHeader } from '../components/common';
-import { FEATURE_MESSAGES } from '@/constants/message/feature';
-import supabase from '@/lib/supabase';
 
 export default function CreateMenuModal() {
   const [inputValue, setInputValue] = useAtom(draftMenuAtom);
@@ -48,10 +50,8 @@ export default function CreateMenuModal() {
     const title = '메뉴를 추가하겠습니까?';
 
     // 메뉴 데이터 가공
-    const newId = generateNumberId();
-    const fileId = menuImage ? newId : '';
     const menuCategories = menuCategoriesQuery.data;
-    const menuData = buildMenuData({ fileId, inputValue, menuCategories });
+    const menuData = buildMenuData({ menuImageFile: menuImage, inputValue, menuCategories });
 
     // 메뉴 데이터 검증
     const { success, error } = await validate.createMenuValue(menuData);
@@ -65,7 +65,7 @@ export default function CreateMenuModal() {
       // 이미지 스토리지 삽입
       try {
         if (menuImage) {
-          await mutationUploadImage.mutateAsync({ file: menuImage, fileId });
+          await mutationUploadImage.mutateAsync({ file: menuImage, filename: menuData.img_url });
         }
       } catch (err) {
         return e.preventDefault();
@@ -116,20 +116,6 @@ export default function CreateMenuModal() {
 
   /** 이미지 파일 설정 */
   const setImgFile = async (e: ChangeEvent<HTMLInputElement>) => {
-    // const res = await fetch('/functions/hello-function', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({ name: '인성' }),
-    // });
-
-    // console.log(await res.json());
-
-    // const { data, error } = await supabase.functions.invoke('hello-function', {
-    //   body: { name: 'Functions' },
-    // });
-
     const file = e.target.files?.[0];
     if (!file) {
       setMenuImage(undefined);
