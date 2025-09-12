@@ -3,16 +3,11 @@
  * @description 신규 메뉴 생성(buildMenuData) 및 기존 메뉴 수정(updateMenuData) 시
  *              데이터가 올바른 형식으로 가공되는지 검증합니다.
  */
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { buildMenuData, updateMenuData } from '../set-menu';
 
-// createImgPath 모킹
-vi.mock('@/util/function/image-path', () => ({
-  createImgPath: vi.fn(({ fileId }: { fileId: string }) => (fileId ? `mock-url/${fileId}` : `mock-default-url`)),
-}));
-
 describe('buildMenuData', () => {
-  it('메뉴 데이터를 buildMenuData 형식 변환', () => {
+  it('첨부한 이미지가 없는 경우 기본 이미지 파일명으로 메뉴 데이터 변환', () => {
     const inputValue = {
       id: '1',
       name: '메뉴1',
@@ -20,17 +15,37 @@ describe('buildMenuData', () => {
       tag: '추천',
       menu_category: { title: '카테고리1' },
     } as any;
-
     const menuCategories = [
       { id: 'cat1', title: '카테고리1' },
       { id: 'cat2', title: '카테고리2' },
     ];
+    const result = buildMenuData({ inputValue, menuCategories });
 
-    const fileId = 'file123';
+    expect(result.img_url).toMatch('menu_default.jpg');
+    expect(result.category_id).toBe('cat1');
+    expect(result.name).toBe('메뉴1');
+    expect(result.price).toBe(12000);
+    expect(result.tag).toBe('추천');
+  });
 
-    const result = buildMenuData({ inputValue, menuCategories, fileId });
+  it('첨부한 이미지가 있는 경우 난수 파일명으로 메뉴 데이터 형식 변환', () => {
+    const inputValue = {
+      id: '1',
+      name: '메뉴1',
+      price: '12000',
+      tag: '추천',
+      menu_category: { title: '카테고리1' },
+    } as any;
+    const menuCategories = [
+      { id: 'cat1', title: '카테고리1' },
+      { id: 'cat2', title: '카테고리2' },
+    ];
+    const filename = 'file123.png';
+    const blob = new Blob([], { type: 'image/png' });
+    const mockMenuImageFile = new File([blob], filename, { type: 'image/png' });
+    const result = buildMenuData({ inputValue, menuCategories, menuImageFile: mockMenuImageFile });
 
-    expect(result.img_url).toBe(`mock-url/${fileId}`);
+    expect(result.img_url).toMatch(/^\d{10}\.(jpg|png|webp)$/);
     expect(result.category_id).toBe('cat1');
     expect(result.name).toBe('메뉴1');
     expect(result.price).toBe(12000);
@@ -39,24 +54,24 @@ describe('buildMenuData', () => {
 });
 
 describe('updateMenuData', () => {
-  const imgFileId = 'file123';
+  const filename = 'file123.png';
 
-  it('hasImg가 true면 새 이미지 URL로 업데이트', () => {
+  it('첨부한 이미지가 있는 경우 난수 파일명으로 메뉴 데이터 반환', () => {
     const inputValue = {
       id: '1',
       name: '메뉴1',
       price: '12000',
       tag: '추천',
       menu_category: { title: '카테고리1' },
-      img_url: imgFileId,
+      img_url: filename,
     } as any;
 
     const menuCategories = [{ id: 'cat1', title: '카테고리1' }];
-    const hasImg = true;
+    const blob = new Blob([], { type: 'image/png' });
+    const mockMenuImageFile = new File([blob], 'test.png', { type: 'image/png' });
+    const result = updateMenuData({ inputValue, menuCategories, menuImageFile: mockMenuImageFile });
 
-    const result = updateMenuData({ inputValue, menuCategories, hasImg });
-
-    expect(result.img_url).toBe(`mock-url/${imgFileId}`);
+    expect(result.img_url).toMatch(/^\d{10}\.(jpg|png|webp)$/);
     expect(result.id).toBe('1');
     expect(result.category_id).toBe('cat1');
     expect(result.name).toBe('메뉴1');
@@ -64,22 +79,19 @@ describe('updateMenuData', () => {
     expect(result.tag).toBe('추천');
   });
 
-  it('hasImg가 false면 기존 이미지 URL 유지', () => {
+  it('첨부한 이미지가 없는 경우 기존 이미지 파일명 유지', () => {
     const inputValue = {
       id: '1',
       name: '메뉴1',
       price: '12000',
       tag: '추천',
       menu_category: { title: '카테고리1' },
-      img_url: imgFileId,
+      img_url: filename,
     } as any;
-
     const menuCategories = [{ id: 'cat1', title: '카테고리1' }];
-    const hasImg = false;
+    const result = updateMenuData({ inputValue, menuCategories });
 
-    const result = updateMenuData({ inputValue, menuCategories, hasImg });
-
-    expect(result.img_url).toBe(imgFileId);
+    expect(result.img_url).toBe(filename);
     expect(result.id).toBe('1');
     expect(result.category_id).toBe('cat1');
     expect(result.name).toBe('메뉴1');

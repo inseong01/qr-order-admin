@@ -8,6 +8,7 @@ import {
   menuTabAPITest_S3,
   menuTabAPITest_S4,
   menuTabAPITest_S5,
+  menuTabAPITest_S6,
 } from './fixtures/index.success.fixture';
 
 /**
@@ -195,5 +196,29 @@ test.describe('[성공] 메뉴 관리', () => {
     // 7. 카테고리 삭제 확인
     await expect(page.getByText(mockMenus[0].menu_category.title)).not.toBeVisible();
     await expect(page.getByText(mockMenus[0].name)).not.toBeVisible();
+  });
+
+  /**
+   * [성공] 메뉴 카테고리 삭제 - 메뉴와 카테고리 삭제 정상 반영
+   * - 사용자 조작, DELETE 오류 모킹, 토스트 알림 확인
+   */
+  menuTabAPITest_S6('메뉴 카테고리 삭제 - 이미지 API 오류 발생 무시', async ({ page }) => {
+    // 1. 위젯 열기 → 분류 삭제 클릭
+    await page.getByText('열기').click();
+    await page.getByText('분류 삭제').click();
+
+    // 2. 삭제할 카테고리 선택
+    await expect(page.getByRole('dialog').getByText('분류 삭제')).toBeVisible(); // 모달 등장 확인
+    await page.getByRole('dialog').getByText(newCategory.title).click();
+
+    // 3. '삭제하기' 클릭
+    await page.getByText('삭제하기').click();
+
+    // 4. 확인 모달 '예' 클릭
+    await expect(page.getByText('예')).toBeVisible();
+    await page.getByText('예').click();
+
+    // 5. 성공 토스트 알림 확인
+    await expect(page.getByText('삭제되었습니다.', { exact: false })).toBeVisible();
   });
 });

@@ -9,7 +9,7 @@ import {
   deleteMenuCategorySuccess,
   updateMenuCategorySuccess,
 } from './menu_category.fixture';
-import { deleteImageSuccess } from './storage.fixture';
+import { deleteImageFail, deleteImageSuccess } from './storage.fixture';
 
 /**
  * 성공 시나리오 - 신규 메뉴 카테고리 및 메뉴 항목 추가
@@ -114,6 +114,28 @@ export const menuTabAPITest_S5 = base.extend({
 
     await deleteMenuCategorySuccess(page);
     await deleteImageSuccess(page);
+
+    await use(page);
+  },
+});
+
+/**
+ * 성공 시나리오 - 이미지 API 오류 반환 경우 메뉴 카테고리 삭제
+ */
+export const menuTabAPITest_S6 = base.extend({
+  context: async ({ browser }, use) => {
+    const context = await createAuthContext(browser);
+    await use(context);
+    await context.close();
+  },
+  page: async ({ context }, use) => {
+    const page = await context.newPage();
+
+    await tableTabAPISuccess(page);
+    await orderTabAPISuccess(page);
+
+    await deleteMenuSuccess(page);
+    await deleteImageFail(page);
 
     await use(page);
   },

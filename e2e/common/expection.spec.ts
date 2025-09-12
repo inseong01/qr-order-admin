@@ -69,55 +69,6 @@ test.describe('[예외/경계] 예외 및 경계 값 테스트', () => {
     });
 
     /**
-     * [경계] 메뉴 분류 추가 - 영문 입력 시 유효성 메시지 표시
-     */
-    exceptionAPITest_S2('메뉴 분류 추가 - 영문 입력 시 유효성 메시지', async ({ page }) => {
-      // 1. 모달 열기 및 분류 추가 버튼 클릭
-      await page.getByText('열기').click();
-      await expect(page.getByText('분류 추가')).toBeVisible();
-      await page.getByText('분류 추가').click();
-
-      // 2. 공백 입력 후 확인
-      await page.locator('input[name="title"]').fill(' ');
-      await page.getByText('추가하기').click();
-
-      // 3. 영문 입력 후 확인
-      await page.locator('input[name="title"]').fill('test category');
-      await page.getByText('추가하기').click();
-
-      // 4. 유효성 메시지 검증
-      await expect(page.getByText('한글만 입력 가능합니다.')).toBeVisible();
-      await expect(page.locator('input[name="title"]')).toHaveValue('test category');
-    });
-
-    /**
-     * [경계] 메뉴 분류 수정 - 미선택 및 영문 입력 시 유효성 메시지 표시
-     */
-    exceptionAPITest_S2('메뉴 분류 수정 - 미선택 및 영문 입력 시 유효성 메시지', async ({ page }) => {
-      // 1. 모달 열기 및 분류 수정 버튼 클릭
-      await page.getByText('열기').click();
-      await expect(page.getByText('분류 수정')).toBeVisible();
-      await page.getByText('분류 수정').click();
-
-      // 2. 선택 없음 상태에서 '수정하기' 클릭
-      await page.getByText('수정하기').click();
-      await expect(page.getByText('분류를 선택해주세요.')).toBeVisible();
-
-      // 3. 체크 후 분류명 미입력 확인
-      await page.locator('input[name="check"]').click();
-      await page.getByText('수정하기').click();
-      await expect(page.getByText('분류명을 입력해주세요.')).toBeVisible();
-
-      // 4. 영문 입력 후 확인
-      await page.locator('input[name="title"]').fill('test category');
-      await page.getByText('수정하기').click({ delay: 200 });
-
-      // 5. 유효성 메시지 검증
-      await expect(page.getByText('한글만 입력 가능합니다.')).toBeVisible();
-      await expect(page.locator('input[name="title"]')).toHaveValue('test category');
-    });
-
-    /**
      * [경계] 메뉴 분류 삭제 - 미선택 시 유효성 메시지 표시
      */
     exceptionAPITest_S2('메뉴 분류 삭제 - 미선택 시 유효성 메시지', async ({ page }) => {

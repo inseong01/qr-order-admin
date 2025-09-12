@@ -7,7 +7,6 @@ import {
   menuTabAPITest_F5,
   menuTabAPITest_F6,
   menuTabAPITest_F7,
-  menuTabAPITest_F8,
 } from './fixtures/index.fail.fixture';
 import { generateFakeImage, mockMenu, newCategory, newMenu, TEST_PAGE_URL, updatedCategory } from './const';
 
@@ -129,34 +128,10 @@ test.describe('[실패] 메뉴 관리', () => {
   });
 
   /**
-   * [실패] 메뉴 카테고리 삭제 요청 시 API 오류 발생 - 오류 토스트 알림 노출
-   * - 사용자 조작, DELETE 오류 모킹, 토스트 알림 확인
-   */
-  menuTabAPITest_F5('카테고리 삭제 실패 - API 오류 및 토스트 알림', async ({ page }) => {
-    // 1. 위젯 열기 → 분류 삭제 클릭
-    await page.getByText('열기').click();
-    await page.getByText('분류 삭제').click();
-
-    // 2. 삭제할 카테고리 선택
-    await expect(page.getByRole('dialog').getByText('분류 삭제')).toBeVisible(); // 모달 등장 확인
-    await page.getByRole('dialog').getByText(newCategory.title).click();
-
-    // 3. '삭제하기' 클릭
-    await page.getByText('삭제하기').click();
-
-    // 4. 확인 모달 '예' 클릭
-    await expect(page.getByText('예')).toBeVisible();
-    await page.getByText('예').click();
-
-    // 5. 오류 토스트 알림 확인
-    await expect(page.getByText('오류가 발생했습니다.', { exact: false })).toBeVisible();
-  });
-
-  /**
    * [실패] 메뉴 항목 생성 시 사진 업로드 API 오류 발생 - 이미지 처리 오류 토스트 알림 노출
    * - 입력, 파일 첨부, POST 오류 모킹, 토스트 알림 확인
    */
-  menuTabAPITest_F6('메뉴 생성 실패 - 이미지 업로드 오류 및 토스트 알림', async ({ page }) => {
+  menuTabAPITest_F5('메뉴 생성 실패 - 이미지 업로드 오류 및 토스트 알림', async ({ page }) => {
     // 1. 메뉴 추가 버튼 클릭
     await page.getByText('메뉴 추가').click();
 
@@ -183,7 +158,7 @@ test.describe('[실패] 메뉴 관리', () => {
    * [실패] 메뉴 항목 수정 시 사진 업로드 API 오류 발생 - 이미지 처리 오류 토스트 알림 노출
    * - 입력, 파일 첨부, PUT 오류 모킹, 토스트 알림 확인
    */
-  menuTabAPITest_F7('메뉴 수정 실패 - 이미지 업로드 오류 및 토스트 알림', async ({ page }) => {
+  menuTabAPITest_F6('메뉴 수정 실패 - 이미지 업로드 오류 및 토스트 알림', async ({ page }) => {
     // 1. 수정할 메뉴 클릭
     await page.getByText(newMenu.name).click();
 
@@ -203,14 +178,14 @@ test.describe('[실패] 메뉴 관리', () => {
     await page.getByText('예').click();
 
     // 6. 오류 토스트 알림 확인
-    await expect(page.getByText('이미지 수정 과정에서 오류가 발생했습니다.', { exact: false })).toBeVisible();
+    await expect(page.getByText('이미지 처리 과정에서 오류가 발생했습니다.', { exact: false })).toBeVisible();
   });
 
   /**
    * [실패] 메뉴 항목 삭제 시 사진 삭제 API 오류 발생 - 이미지 처리 오류 토스트 알림 노출
    * - 사용자 조작, DELETE 오류 모킹, 토스트 알림 확인
    */
-  menuTabAPITest_F8('메뉴 삭제 실패 - 이미지 삭제 오류 및 토스트 알림', async ({ page }) => {
+  menuTabAPITest_F7('메뉴 삭제 실패 - 이미지 삭제 오류 및 토스트 알림', async ({ page }) => {
     // 1. 삭제할 메뉴 클릭
     await page.getByText(newMenu.name).click();
 
@@ -222,6 +197,6 @@ test.describe('[실패] 메뉴 관리', () => {
     await page.getByText('예').click();
 
     // 4. 오류 토스트 알림 확인
-    await expect(page.getByText('이미지 삭제 과정에서 오류가 발생했습니다.', { exact: false })).toBeVisible();
+    await expect(page.getByText('이미지 처리 과정에서 오류가 발생했습니다.', { exact: false })).toBeVisible();
   });
 });

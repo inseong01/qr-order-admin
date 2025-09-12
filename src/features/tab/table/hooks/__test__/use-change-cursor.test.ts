@@ -5,7 +5,7 @@
  */
 import Konva from 'konva';
 import { useAtomValue } from 'jotai';
-import { act, renderHook } from '@testing-library/react';
+import { renderHook } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
 
 import useOnMouseCursor from '../use-mouse-cursor';

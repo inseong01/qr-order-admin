@@ -1,18 +1,18 @@
 import { ChangeEvent, FormEvent } from 'react';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
-import validate from '@/util/function/auth-validate';
+import validate from '@/util/function/menu-validate';
+
+import { FEATURE_MESSAGES } from '@/constants/message/feature';
 
 import {
   clearMenuErrorFormAtom,
+  clearSelectedMenuAtom,
   draftMenuAtom,
-  initMenu,
-  MenuFormInputs,
-  menuImageFileAtom,
   resetMenuErrorAtom,
   setMenuErrorAtom,
-  setMenuImageFileAtom,
 } from '@/components/ui/menu/store/atom';
+import { MenuFormInputs } from '@/components/ui/menu/types';
 
 import { useMutationAddMenu } from '@/hooks/use-query/menu/query';
 import { useMutationUploadImage } from '@/hooks/use-query/storage/query';
@@ -23,17 +23,22 @@ import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal
 import styles from './../index.module.css';
 import { buildMenuData } from '../util/set-menu';
 import { setModalClickAtom } from '../../store/atom';
-import { generateNumberId } from '../util/generate-id';
-import { MenuFormFields, MenuImageInput, MenuModalHeader } from '../components/common';
-import { MAX_FILE_SIZE } from '../types';
+
+import { MenuFormFields } from '../components/form';
+import { MenuModalHeader } from '../components/header';
+import { MenuImageInput } from '../components/image';
+
+import { MAX_FILE_SIZE } from '../const';
+import { imageFileAtom, setImageFileErrorAtom, setMenuImageFileAtom } from '../store/atom';
 
 export default function CreateMenuModal() {
   const [inputValue, setInputValue] = useAtom(draftMenuAtom);
-  const menuImage = useAtomValue(menuImageFileAtom);
+  const menuImage = useAtomValue(imageFileAtom);
   const setMenuError = useSetAtom(setMenuErrorAtom);
   const resetMenuError = useSetAtom(resetMenuErrorAtom);
   const setModalClick = useSetAtom(setModalClickAtom);
   const setMenuImage = useSetAtom(setMenuImageFileAtom);
+  const clearSelectedMenu = useSetAtom(clearSelectedMenuAtom);
 
   const { showConfirmModal } = useConfirmModal();
   const menuCategoriesQuery = useQueryMenuCategoryList();
@@ -46,10 +51,8 @@ export default function CreateMenuModal() {
     const title = '메뉴를 추가하겠습니까?';
 
     // 메뉴 데이터 가공
-    const newId = generateNumberId();
-    const fileId = menuImage ? newId : '';
     const menuCategories = menuCategoriesQuery.data;
-    const menuData = buildMenuData({ fileId, inputValue, menuCategories });
+    const menuData = buildMenuData({ menuImageFile: menuImage, inputValue, menuCategories });
 
     // 메뉴 데이터 검증
     const { success, error } = await validate.createMenuValue(menuData);
@@ -63,7 +66,7 @@ export default function CreateMenuModal() {
       // 이미지 스토리지 삽입
       try {
         if (menuImage) {
-          await mutationUploadImage.mutateAsync({ file: menuImage, fileId });
+          await mutationUploadImage.mutateAsync({ file: menuImage, filename: menuData.img_url });
         }
       } catch (err) {
         return e.preventDefault();
@@ -78,7 +81,7 @@ export default function CreateMenuModal() {
 
       // 초기화
       setModalClick(false);
-      setInputValue(initMenu);
+      clearSelectedMenu();
       resetMenuError();
     };
 
@@ -96,7 +99,7 @@ export default function CreateMenuModal() {
       if (name === 'title') {
         return {
           ...prev,
-          menu_category: { title: value },
+          menu_category: { title: value, id: '' },
         };
       }
       return { ...prev, [name]: value };
@@ -110,20 +113,26 @@ export default function CreateMenuModal() {
     setModalClick(false);
   };
 
+  const setImageFileError = useSetAtom(setImageFileErrorAtom);
+
   /** 이미지 파일 설정 */
   const setImgFile = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) {
-      // TODO: 오류 출력 - 파일을 선택해주세요.
+      setMenuImage(undefined);
+      setImageFileError(FEATURE_MESSAGES.image.required);
       return;
     }
 
     if (file.size > MAX_FILE_SIZE) {
-      // TODO: 오류 출력 - 파일 크기가 제한을 초과했습니다.
+      const maxFileMB = MAX_FILE_SIZE / 1024;
+      setMenuImage(undefined);
+      setImageFileError(FEATURE_MESSAGES.image.sizeExceeded(maxFileMB));
       return;
     }
 
     setMenuImage(file);
+    setImageFileError('');
   };
 
   return (

@@ -1,48 +1,50 @@
 import { ChangeEvent, FormEvent } from 'react';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
-import validate from '@/util/function/auth-validate';
+import { STORE } from '@/lib/supabase/storage/const';
+
+import validate from '@/util/function/menu-validate';
 
 import {
   clearMenuErrorFormAtom,
+  clearSelectedMenuAtom,
   draftMenuAtom,
-  initMenu,
-  MenuFormInputs,
-  menuImageFileAtom,
   resetMenuErrorAtom,
-  resetMenuImageFileAtom,
   setMenuErrorAtom,
-  setMenuImageFileAtom,
 } from '@/components/ui/menu/store/atom';
+import { MenuFormInputs } from '@/components/ui/menu/types';
 
 import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
 
 import { useQueryMenuCategoryList } from '@/hooks/use-query/menu-category/query';
 import { useMutationDeleteMenu, useMutationUpdateMenu } from '@/hooks/use-query/menu/query';
-import { useMutationDeleteImage, useMutationUpdateImage } from '@/hooks/use-query/storage/query';
+import { useMutationDeleteImage, useMutationUploadImage } from '@/hooks/use-query/storage/query';
 
-import { STORE } from '@/lib/supabase/storage/store';
+import { MenuFormFields } from '../components/form';
+import { MenuModalHeader } from '../components/header';
+import { MenuImageInput } from '../components/image';
 
 import styles from './../index.module.css';
 import { updateMenuData } from '../util/set-menu';
 import { setModalClickAtom } from '../../store/atom';
-import { MenuFormFields, MenuImageInput, MenuModalHeader } from '../components/common';
+import { imageFileAtom, resetMenuImageFileAtom, setMenuImageFileAtom } from '../store/atom';
 
 export default function UpdateMenuModal() {
   const [inputValue, setInputValue] = useAtom(draftMenuAtom);
-  const menuImageFile = useAtomValue(menuImageFileAtom);
+  const menuImageFile = useAtomValue(imageFileAtom);
   const setMenuError = useSetAtom(setMenuErrorAtom);
   const resetMenuError = useSetAtom(resetMenuErrorAtom);
   const setModalClick = useSetAtom(setModalClickAtom);
   const setMenuImage = useSetAtom(setMenuImageFileAtom);
   const resetMenuImage = useSetAtom(resetMenuImageFileAtom);
+  const clearSelectedMenu = useSetAtom(clearSelectedMenuAtom);
 
   const { showConfirmModal } = useConfirmModal();
   const menuCategoriesQuery = useQueryMenuCategoryList();
-  const mutationUpdateImage = useMutationUpdateImage();
-  const mutationDeleteImage = useMutationDeleteImage();
+  const mutationDeleteImage = useMutationDeleteImage(true);
   const mutationUpdateMenu = useMutationUpdateMenu();
   const mutationDeleteMenu = useMutationDeleteMenu();
+  const mutationUploadImage = useMutationUploadImage();
 
   /* 비즈니스 로직 */
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -52,9 +54,10 @@ export default function UpdateMenuModal() {
     const title = submitType === 'update' ? '메뉴를 수정하겠습니까?' : '메뉴를 삭제하겠습니끼?';
 
     // 메뉴 데이터 가공
-    const hasImg = !!menuImageFile;
     const menuCategories = menuCategoriesQuery.data;
-    const menuData = updateMenuData({ inputValue, menuCategories, hasImg });
+    const menuData = updateMenuData({ inputValue, menuCategories, menuImageFile });
+
+    if (!menuData) return;
 
     // 값 검증
     if (submitType === 'update') {
@@ -68,15 +71,14 @@ export default function UpdateMenuModal() {
     // 제출
     const onConfirm = async () => {
       // 이미지 스토리지 업데이트
-      const fileId = inputValue.img_url.split('menu_').at(-1) ?? '';
+      const filename = menuData.img_url;
       try {
         if (submitType === 'update' && menuImageFile) {
-          await mutationUpdateImage.mutateAsync({ file: menuImageFile, fileId });
-        }
-
-        if (submitType === 'delete' && fileId !== 'default') {
-          const filePath = [STORE + `/menu_${fileId}`];
-          await mutationDeleteImage.mutateAsync({ filePath });
+          const prevFilename = inputValue.img_url;
+          await mutationDeleteImage.mutateAsync({ filenames: [`${STORE}/${prevFilename}`] });
+          await mutationUploadImage.mutateAsync({ file: menuImageFile, filename });
+        } else if (submitType === 'delete' && !filename.includes('menu_default')) {
+          await mutationDeleteImage.mutateAsync({ filenames: [`${STORE}/${filename}`] });
         }
       } catch (err) {
         return e.preventDefault();
@@ -95,7 +97,7 @@ export default function UpdateMenuModal() {
 
       // 초기화
       setModalClick(false);
-      setInputValue(initMenu);
+      clearSelectedMenu();
       resetMenuImage();
       resetMenuError();
     };
@@ -114,7 +116,7 @@ export default function UpdateMenuModal() {
       if (name === 'title') {
         return {
           ...prev,
-          menu_category: { title: value },
+          menu_category: { title: value, id: '' },
         };
       }
 

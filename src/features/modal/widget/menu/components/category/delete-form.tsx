@@ -8,14 +8,16 @@ import { FormInputBox, FormInputCaption } from '@/components/ui/exception';
 
 import { useQueryMenuList } from '@/hooks/use-query/menu/query';
 import { MENU_CATEGORIES_QUERY_KEY } from '@/hooks/use-query/query-key';
+import { useMutationDeleteImage } from '@/hooks/use-query/storage/query';
 import { useMutationDeleteMenuCategory } from '@/hooks/use-query/menu-category/query';
 
 import { MenuCategory } from '@/lib/supabase/tables/menu-category';
 
-import validate from '@/util/function/auth-validate';
+import validate from '@/util/function/menu-validate';
 
 import { useConfirmModal } from '../../../../confirm/hook/use-confirm-modal';
 import { categoryErrorAtom, selectedCategoryIdsAtom, setCategoryErrorAtom } from '../../store/atom';
+import { extractValidImageIds } from '../../util/extract-valid-iImage-ids';
 import { SubmitFormBox, SubmitInfoBox, TitleBox } from '../common';
 import SubmitButton from '../button/button';
 import styles from './delete-form.module.css';
@@ -34,6 +36,7 @@ export default function DeleteCategoryForm() {
 
   const { showConfirmModal } = useConfirmModal();
   const deleteCategoryMutation = useMutationDeleteMenuCategory();
+  const mutationDeleteImage = useMutationDeleteImage(false);
 
   /* 비즈니스 로직 */
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -48,13 +51,17 @@ export default function DeleteCategoryForm() {
     }
 
     const onConfirm = async () => {
-      const filePath =
-        menuQuery.data
-          ?.filter((m) => data.includes(m.menu_category.id))
-          .map((m) => m.img_url.split('qr-order-img')?.at(-1) ?? '')
-          .filter((url) => url && !url.includes('menu_default')) ?? [];
+      deleteCategoryMutation.mutate({ ids: data });
 
-      deleteCategoryMutation.mutate({ ids: data, filePath });
+      try {
+        const filenames = extractValidImageIds(menuQuery.data ?? [], data);
+        if (filenames.length > 0) {
+          await mutationDeleteImage.mutateAsync({ filenames });
+        }
+      } catch {
+        return e.preventDefault();
+      }
+
       setSelectedCategories([]);
     };
 
