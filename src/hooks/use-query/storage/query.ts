@@ -5,6 +5,7 @@ import { deleteImageByFileName, uploadImage } from '@/lib/supabase/storage/store
 import { showToastAtom } from '@/features/alert/toast/store/atom';
 
 import { MENU_LIST_QUERY_KEY } from '../query-key';
+import { FEATURE_MESSAGES } from '@/constants/message/feature';
 
 /**
  * 이미지를 업로드하는 쿼리
@@ -21,7 +22,7 @@ export function useMutationUploadImage() {
     },
     onError(error) {
       console.error(error.message);
-      showToast('이미지 업로드 과정에서 오류가 발생했습니다.');
+      showToast(FEATURE_MESSAGES.image.upload);
     },
   });
 
@@ -47,7 +48,7 @@ export function useMutationDeleteImage(showAlert: boolean) {
 
       if (!showAlert) return;
 
-      showToast('이미지 처리 과정에서 오류가 발생했습니다.');
+      showToast(FEATURE_MESSAGES.image.processing);
     },
   });
 

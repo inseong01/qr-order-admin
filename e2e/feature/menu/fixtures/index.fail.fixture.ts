@@ -101,31 +101,9 @@ export const menuTabAPITest_F4 = base.extend({
 });
 
 /**
- * 실패 시나리오 - 메뉴 카테고리 삭제 오류
- */
-export const menuTabAPITest_F5 = base.extend({
-  context: async ({ browser }, use) => {
-    const context = await createAuthContext(browser);
-    await use(context);
-    await context.close();
-  },
-  page: async ({ context }, use) => {
-    const page = await context.newPage();
-
-    await tableTabAPISuccess(page);
-    await orderTabAPISuccess(page);
-
-    await deleteMenuSuccess(page);
-    await deleteImageFail(page);
-
-    await use(page);
-  },
-});
-
-/**
  * 실패 시나리오 - 메뉴 항목 생성 시 사진 업로드 오류
  */
-export const menuTabAPITest_F6 = base.extend({
+export const menuTabAPITest_F5 = base.extend({
   context: async ({ browser }, use) => {
     const context = await createAuthContext(browser);
     await use(context);
@@ -148,7 +126,7 @@ export const menuTabAPITest_F6 = base.extend({
 /**
  * 실패 시나리오 - 메뉴 항목 수정 시 사진 업로드 오류
  */
-export const menuTabAPITest_F7 = base.extend({
+export const menuTabAPITest_F6 = base.extend({
   context: async ({ browser }, use) => {
     const context = await createAuthContext(browser);
     await use(context);
@@ -170,7 +148,7 @@ export const menuTabAPITest_F7 = base.extend({
 /**
  * 실패 시나리오 - 메뉴 항목 삭제 시 사진 삭제 오류
  */
-export const menuTabAPITest_F8 = base.extend({
+export const menuTabAPITest_F7 = base.extend({
   context: async ({ browser }, use) => {
     const context = await createAuthContext(browser);
     await use(context);

@@ -7,11 +7,11 @@ import { FEATURE_MESSAGES } from '@/constants/message/feature';
 
 import {
   clearMenuErrorFormAtom,
+  clearSelectedMenuAtom,
   draftMenuAtom,
   resetMenuErrorAtom,
   setMenuErrorAtom,
 } from '@/components/ui/menu/store/atom';
-import { initMenu } from '@/components/ui/menu/const';
 import { MenuFormInputs } from '@/components/ui/menu/types';
 
 import { useMutationAddMenu } from '@/hooks/use-query/menu/query';
@@ -24,9 +24,9 @@ import styles from './../index.module.css';
 import { buildMenuData } from '../util/set-menu';
 import { setModalClickAtom } from '../../store/atom';
 
-import { MenuFormFields } from '../components/modal-form';
-import { MenuModalHeader } from '../components/modal-header';
-import { MenuImageInput } from '../components/modal-image';
+import { MenuFormFields } from '../components/form';
+import { MenuModalHeader } from '../components/header';
+import { MenuImageInput } from '../components/image';
 
 import { MAX_FILE_SIZE } from '../const';
 import { imageFileAtom, setImageFileErrorAtom, setMenuImageFileAtom } from '../store/atom';
@@ -38,6 +38,7 @@ export default function CreateMenuModal() {
   const resetMenuError = useSetAtom(resetMenuErrorAtom);
   const setModalClick = useSetAtom(setModalClickAtom);
   const setMenuImage = useSetAtom(setMenuImageFileAtom);
+  const clearSelectedMenu = useSetAtom(clearSelectedMenuAtom);
 
   const { showConfirmModal } = useConfirmModal();
   const menuCategoriesQuery = useQueryMenuCategoryList();
@@ -80,7 +81,7 @@ export default function CreateMenuModal() {
 
       // 초기화
       setModalClick(false);
-      setInputValue(initMenu);
+      clearSelectedMenu();
       resetMenuError();
     };
 
@@ -115,7 +116,7 @@ export default function CreateMenuModal() {
   const setImageFileError = useSetAtom(setImageFileErrorAtom);
 
   /** 이미지 파일 설정 */
-  const setImgFile = async (e: ChangeEvent<HTMLInputElement>) => {
+  const setImgFile = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) {
       setMenuImage(undefined);

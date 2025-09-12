@@ -3,7 +3,8 @@ import { useSetAtom } from 'jotai';
 import { motion } from 'motion/react';
 
 import { Menu } from '@/lib/supabase/tables/menu';
-import { resetMenuImageFileAtom, setImageLoadedAtom } from '@/features/modal/tab/menu/store/atom';
+
+import { resetMenuImageFileAtom } from '@/features/modal/tab/menu/store/atom';
 import { setModalClickAtom, setTabModalAtomState } from '@/features/modal/tab/store/atom';
 
 import LIGHT_PLUS_ICON from '@/assets/icon/light-plus.svg';
@@ -20,8 +21,7 @@ export function ListMenu(props: Menu) {
   const setModalState = useSetAtom(setTabModalAtomState);
   const selectMenu = useSetAtom(selectMenuAtom);
   const resetMenuError = useSetAtom(resetMenuErrorAtom);
-  const resetMenuImage = useSetAtom(resetMenuImageFileAtom);
-  const setImageLoaded = useSetAtom(setImageLoadedAtom);
+  const resetMenuImageFile = useSetAtom(resetMenuImageFileAtom);
 
   const title = props.name;
   const price = props.price.toLocaleString();
@@ -31,8 +31,7 @@ export function ListMenu(props: Menu) {
     setModalState('menu-update');
     setModalClick(true);
     resetMenuError();
-    resetMenuImage();
-    setImageLoaded('pending');
+    resetMenuImageFile();
   };
 
   return (
@@ -49,19 +48,19 @@ export function ListMenu(props: Menu) {
 /**
  * 메뉴 추가 버튼
  */
-export function ListMenuAdd({ category }: { category: string }) {
+export function ListMenuAdd({ category }: { category: Menu['menu_category'] }) {
   const setModalClick = useSetAtom(setModalClickAtom);
   const setModalState = useSetAtom(setTabModalAtomState);
   const selectMenu = useSetAtom(selectMenuAtom);
   const resetMenuError = useSetAtom(resetMenuErrorAtom);
-  const resetMenuImage = useSetAtom(resetMenuImageFileAtom);
+  const resetMenuImageFile = useSetAtom(resetMenuImageFileAtom);
 
   const handleClick = () => {
-    selectMenu({ ...initMenu, menu_category: { title: category, id: '' } });
+    selectMenu({ ...initMenu, menu_category: { title: category.title, id: category.id } });
     setModalState('menu-create');
     setModalClick(true);
     resetMenuError();
-    resetMenuImage();
+    resetMenuImageFile();
   };
 
   return (

@@ -1,5 +1,5 @@
 import LIGHT_PLUS_ICON from '@/assets/icon/light-plus.svg';
-import styles from './../index.module.css';
+import styles from './index.module.css';
 
 type MenuModalHeaderProps = {
   title: string;

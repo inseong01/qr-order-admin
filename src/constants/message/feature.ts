@@ -17,5 +17,7 @@ export const FEATURE_MESSAGES = {
   image: {
     required: '파일을 선택해주세요.',
     sizeExceeded: (maxSizeMB: number) => `${maxSizeMB}MB 이하로 업로드해주세요.`,
+    upload: '이미지 업로드 과정에서 오류가 발생했습니다.',
+    processing: '이미지 처리 과정에서 오류가 발생했습니다.',
   },
 } as const;

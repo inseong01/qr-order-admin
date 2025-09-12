@@ -1,0 +1,28 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.inputTitle {
+  font-size: var(--fz-r);
+  min-width: 100px;
+  text-align: start;
+}
+
+.priceBox {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.options {
+  font-size: var(--fz-s);
+}
+
+.priceBox input[data-invalid='true'],
+.inputTitle ~ input[data-invalid='true'],
+.inputTitle ~ select[data-invalid='true'] {
+  outline: none;
+  border-color: var(--error-color);
+}

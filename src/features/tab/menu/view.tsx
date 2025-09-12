@@ -55,7 +55,7 @@ function DataComponent({ data }: DataComponentProps) {
           {/* 목록 */}
           <motion.div layout={'position'} className={styles.menuRow}>
             {/* 추가 버튼 */}
-            <ListMenuAdd category={category.title} />
+            <ListMenuAdd category={category} />
 
             {/* 메뉴 */}
             {menuGroupByCategory[category.title]?.map((m: Menu, idx: number) => (

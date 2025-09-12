@@ -4,6 +4,8 @@ import { ZodIssue } from 'zod';
 import { Menu } from '@/lib/supabase/tables/menu';
 import { clearZodErrorForField, mapZodFieldErrors } from '@/util/function/input-error';
 
+import { setImageLoadedAtom } from '@/features/modal/tab/menu/store/atom';
+
 import { initMenu } from '../const';
 import { MenuErrorFormKeys, MenuFormInputs } from '../types';
 
@@ -19,6 +21,7 @@ export const selectMenuAtom = atom(null, (get, set, menu: Menu) => {
 
   set(menuAtom, menu);
   set(draftMenuAtom, menu);
+  set(setImageLoadedAtom, 'pending');
 });
 export const clearSelectedMenuAtom = atom(null, (_, set) => {
   set(menuAtom, initMenu);

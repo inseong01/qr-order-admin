@@ -26,3 +26,12 @@ export type UpdateMenuDataProps = {
   menuCategories?: MenuCategory[];
   menuImageFile?: File;
 };
+
+export type UpdateImageInputProps = {
+  imageUrl: string;
+  menuImage?: File;
+};
+
+export type CreateImageInputProps = {
+  menuImage?: File;
+};

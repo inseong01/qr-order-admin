@@ -7,11 +7,11 @@ import validate from '@/util/function/menu-validate';
 
 import {
   clearMenuErrorFormAtom,
+  clearSelectedMenuAtom,
   draftMenuAtom,
   resetMenuErrorAtom,
   setMenuErrorAtom,
 } from '@/components/ui/menu/store/atom';
-import { initMenu } from '@/components/ui/menu/const';
 import { MenuFormInputs } from '@/components/ui/menu/types';
 
 import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
@@ -20,9 +20,9 @@ import { useQueryMenuCategoryList } from '@/hooks/use-query/menu-category/query'
 import { useMutationDeleteMenu, useMutationUpdateMenu } from '@/hooks/use-query/menu/query';
 import { useMutationDeleteImage, useMutationUploadImage } from '@/hooks/use-query/storage/query';
 
-import { MenuFormFields } from '../components/modal-form';
-import { MenuModalHeader } from '../components/modal-header';
-import { MenuImageInput } from '../components/modal-image';
+import { MenuFormFields } from '../components/form';
+import { MenuModalHeader } from '../components/header';
+import { MenuImageInput } from '../components/image';
 
 import styles from './../index.module.css';
 import { updateMenuData } from '../util/set-menu';
@@ -37,6 +37,7 @@ export default function UpdateMenuModal() {
   const setModalClick = useSetAtom(setModalClickAtom);
   const setMenuImage = useSetAtom(setMenuImageFileAtom);
   const resetMenuImage = useSetAtom(resetMenuImageFileAtom);
+  const clearSelectedMenu = useSetAtom(clearSelectedMenuAtom);
 
   const { showConfirmModal } = useConfirmModal();
   const menuCategoriesQuery = useQueryMenuCategoryList();
@@ -96,7 +97,7 @@ export default function UpdateMenuModal() {
 
       // 초기화
       setModalClick(false);
-      setInputValue(initMenu);
+      clearSelectedMenu();
       resetMenuImage();
       resetMenuError();
     };

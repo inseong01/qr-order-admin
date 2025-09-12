@@ -3,8 +3,8 @@ import { useAtomValue } from 'jotai';
 import { menuErrorFormAtom } from '@/components/ui/menu/store/atom';
 import { FormInputBox, FormInputCaption } from '@/components/ui/exception';
 
-import styles from './../index.module.css';
-import { MenuFormFieldsProps } from '../types';
+import styles from './index.module.css';
+import { MenuFormFieldsProps } from '../../types';
 
 export function MenuFormFields({ inputValue, onInputChange, categories }: MenuFormFieldsProps) {
   const menuError = useAtomValue(menuErrorFormAtom);
