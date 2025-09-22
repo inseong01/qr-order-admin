@@ -6,6 +6,7 @@ import { setWidgetAtomState } from '@/features/widget/store/atom';
 
 import { FormInputBox, FormInputCaption } from '@/components/ui/exception';
 
+import useUserRole from '@/hooks/user/use-user-role';
 import { MENU_CATEGORIES_QUERY_KEY } from '@/hooks/use-query/query-key';
 import { useMutationUpdateMenuCategory } from '@/hooks/use-query/menu-category/query';
 
@@ -31,6 +32,8 @@ export default function UpdateCategoryForm() {
   const setCategoryError = useSetAtom(setCategoryErrorAtom);
 
   const { showConfirmModal } = useConfirmModal();
+  const { checkAccessByRole } = useUserRole();
+
   const mutationUpdateMenuCategory = useMutationUpdateMenuCategory();
 
   /* 비즈니스 로직 */
@@ -47,6 +50,7 @@ export default function UpdateCategoryForm() {
     }
 
     const onConfirm = async () => {
+      if (checkAccessByRole()) return e.preventDefault();
       mutationUpdateMenuCategory.mutate(data);
       setSelectedCategories([]);
     };

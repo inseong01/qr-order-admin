@@ -18,6 +18,7 @@ import { useMutationAddMenu } from '@/hooks/use-query/menu/query';
 import { useMutationUploadImage } from '@/hooks/use-query/storage/query';
 import { useQueryMenuCategoryList } from '@/hooks/use-query/menu-category/query';
 
+import useUserRole from '@/hooks/user/use-user-role';
 import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
 
 import styles from './../index.module.css';
@@ -41,6 +42,7 @@ export default function CreateMenuModal() {
   const clearSelectedMenu = useSetAtom(clearSelectedMenuAtom);
 
   const { showConfirmModal } = useConfirmModal();
+  const { checkAccessByRole } = useUserRole();
   const menuCategoriesQuery = useQueryMenuCategoryList();
   const mutationUploadImage = useMutationUploadImage();
   const mutationAddMenu = useMutationAddMenu();
@@ -63,6 +65,9 @@ export default function CreateMenuModal() {
 
     // 제출
     const onConfirm = async () => {
+      // 접근 제한
+      if (checkAccessByRole()) return e.preventDefault();
+
       // 이미지 스토리지 삽입
       try {
         if (menuImage) {

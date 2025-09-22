@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from 'motion/react';
 
 import LIGHT_CLOSE_ICON from '@/assets/icon/light-close-icon.svg';
 
+import useUserRole from '@/hooks/user/use-user-role';
 import { useMutationUpdateRequest } from '@/hooks/use-query/request/query';
 
 import { RequestItem } from '@/lib/supabase/tables/request-item';
@@ -43,11 +44,15 @@ export function MessagePreview({ request }: MessageCountPannelProps) {
   const requestTable = request[0].request?.table.number;
   const summary = request.map(formatRequestText).join(', ') ?? '';
 
+  const { checkAccessByRole } = useUserRole();
+
   const mutationUpdateRequest = useMutationUpdateRequest();
 
   /* 좌석 요청 읽음 처리 */
   async function readRequest() {
     if (!requestId) return;
+    if (checkAccessByRole()) return;
+
     mutationUpdateRequest.mutate({ id: requestId });
   }
 

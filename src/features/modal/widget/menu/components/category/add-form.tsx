@@ -1,5 +1,6 @@
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 
+import useUserRole from '@/hooks/user/use-user-role';
 import { useMutationAddMenuCategory } from '@/hooks/use-query/menu-category/query';
 
 import { setWidgetAtomState } from '@/features/widget/store/atom';
@@ -24,6 +25,8 @@ export default function AddCategoryForm() {
   const setCategoryError = useSetAtom(setCategoryErrorAtom);
 
   const { showConfirmModal } = useConfirmModal();
+  const { checkAccessByRole } = useUserRole();
+
   const mutationAddMenuCategory = useMutationAddMenuCategory();
 
   /* 비즈니스 로직 */
@@ -39,6 +42,7 @@ export default function AddCategoryForm() {
     }
 
     const onConfirm = async () => {
+      if (checkAccessByRole()) return e.preventDefault();
       mutationAddMenuCategory.mutate({ title: data });
       setInputValue('');
     };

@@ -6,6 +6,7 @@ import { setWidgetAtomState } from '@/features/widget/store/atom';
 
 import { FormInputBox, FormInputCaption } from '@/components/ui/exception';
 
+import useUserRole from '@/hooks/user/use-user-role';
 import { useQueryMenuList } from '@/hooks/use-query/menu/query';
 import { MENU_CATEGORIES_QUERY_KEY } from '@/hooks/use-query/query-key';
 import { useMutationDeleteImage } from '@/hooks/use-query/storage/query';
@@ -35,6 +36,8 @@ export default function DeleteCategoryForm() {
   const setWidgetState = useSetAtom(setWidgetAtomState);
 
   const { showConfirmModal } = useConfirmModal();
+  const { checkAccessByRole } = useUserRole();
+
   const deleteCategoryMutation = useMutationDeleteMenuCategory();
   const mutationDeleteImage = useMutationDeleteImage(false);
 
@@ -51,6 +54,7 @@ export default function DeleteCategoryForm() {
     }
 
     const onConfirm = async () => {
+      if (checkAccessByRole()) return e.preventDefault();
       deleteCategoryMutation.mutate({ ids: data });
 
       try {

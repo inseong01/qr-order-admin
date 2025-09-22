@@ -5,6 +5,7 @@ import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal
 
 import { Order } from '@/lib/supabase/tables/order';
 
+import useUserRole from '@/hooks/user/use-user-role';
 import { useMutationCompleteOrder } from '@/hooks/use-query/order/query';
 
 import validate from '@/util/function/menu-validate';
@@ -21,12 +22,16 @@ export default function CardButton({ orderId, type, inavtive = false }: CardButt
   const showToast = useSetAtom(showToastAtom);
 
   const { showConfirmModal } = useConfirmModal();
+  const { checkAccessByRole } = useUserRole();
+
   const mutationCompleteOrder = useMutationCompleteOrder();
 
   /* 비즈니스 로직 */
   function onClickUpdateListState() {
     const title = type === 'complete' ? '주문이 완료되었습니까?' : '주문을 삭제하겠습니까?';
     const onConfirm = async () => {
+      if (checkAccessByRole()) return;
+
       const { success, error } = await validate.orderIdValue(orderId); // 값 검증
       if (!success) {
         const message = error?.issues[0].message;

@@ -16,6 +16,7 @@ import { MenuFormInputs } from '@/components/ui/menu/types';
 
 import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
 
+import useUserRole from '@/hooks/user/use-user-role';
 import { useQueryMenuCategoryList } from '@/hooks/use-query/menu-category/query';
 import { useMutationDeleteMenu, useMutationUpdateMenu } from '@/hooks/use-query/menu/query';
 import { useMutationDeleteImage, useMutationUploadImage } from '@/hooks/use-query/storage/query';
@@ -40,6 +41,8 @@ export default function UpdateMenuModal() {
   const clearSelectedMenu = useSetAtom(clearSelectedMenuAtom);
 
   const { showConfirmModal } = useConfirmModal();
+  const { checkAccessByRole } = useUserRole();
+
   const menuCategoriesQuery = useQueryMenuCategoryList();
   const mutationDeleteImage = useMutationDeleteImage(true);
   const mutationUpdateMenu = useMutationUpdateMenu();
@@ -70,6 +73,9 @@ export default function UpdateMenuModal() {
 
     // 제출
     const onConfirm = async () => {
+      // 접근 제한
+      if (checkAccessByRole()) return e.preventDefault();
+
       // 이미지 스토리지 업데이트
       const filename = menuData.img_url;
       try {
