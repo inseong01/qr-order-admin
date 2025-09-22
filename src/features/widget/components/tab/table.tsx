@@ -27,6 +27,7 @@ import LIGHT_ADD_LIST_ICON from '@/assets/icon/light-add-list.svg';
 
 import { tableEditRectAtom, tableEditTextAtom } from '@/features/tab/table/store/table-state';
 
+import useUserRole from '@/hooks/user/use-user-role';
 import { useMutationDeleteTable, useMutationUpsertTable, useQueryTableList } from '@/hooks/use-query/table/query';
 
 import styles from './tab.module.css';
@@ -55,6 +56,8 @@ export default function TableWidget() {
   const showToast = useSetAtom(showToastAtom);
 
   const { showConfirmModal } = useConfirmModal();
+  const { checkAccessByRole } = useUserRole();
+
   const mutationDeleteTable = useMutationDeleteTable();
   const mutationUpsertTable = useMutationUpsertTable();
 
@@ -68,6 +71,8 @@ export default function TableWidget() {
     if (editMode === 'delete' && !!tableIds.length) {
       const title = '테이블을 삭제할까요?';
       const onConfirm = async () => {
+        if (checkAccessByRole()) return;
+
         try {
           await mutationDeleteTable.mutateAsync({ ids: tableIds });
           resetTableState();
@@ -97,6 +102,8 @@ export default function TableWidget() {
     if (editMode === 'update' && !!draftTables.length) {
       const title = '테이블을 수정할까요?';
       const onConfirm = async () => {
+        if (checkAccessByRole()) return;
+
         try {
           await mutationUpsertTable.mutateAsync({ updatedTables: draftTables, editMode });
           resetTableState();
@@ -126,6 +133,8 @@ export default function TableWidget() {
     if (editMode === 'create') {
       const title = '테이블을 추가할까요?';
       const onConfirm = async () => {
+        if (checkAccessByRole()) return;
+
         try {
           await mutationUpsertTable.mutateAsync({ updatedTables: draftTables, editMode });
           resetTableState();

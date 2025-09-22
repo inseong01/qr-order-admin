@@ -25,6 +25,7 @@ export default function SignUpPage() {
       // 회원가입
       const { error } = await signUpNewUser(formData.id, formData.password, captchaToken, {
         signup_origin: 'qr_order_admin',
+        role: 'viewer',
       });
 
       if (error) throw error;
