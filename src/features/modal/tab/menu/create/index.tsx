@@ -9,10 +9,12 @@ import {
   clearMenuErrorFormAtom,
   clearSelectedMenuAtom,
   draftMenuAtom,
+  menuErrorFormAtom,
   resetMenuErrorAtom,
   setMenuErrorAtom,
 } from '@/components/ui/menu/store/atom';
 import { MenuFormInputs } from '@/components/ui/menu/types';
+import { FormInputCaption } from '@/components/ui/exception';
 
 import { useMutationAddMenu } from '@/hooks/use-query/menu/query';
 import { useMutationUploadImage } from '@/hooks/use-query/storage/query';
@@ -101,7 +103,7 @@ export default function CreateMenuModal() {
     const value = e.target.value;
 
     setInputValue((prev) => {
-      if (name === 'title') {
+      if (name === 'category') {
         return {
           ...prev,
           menu_category: { title: value, id: '' },
@@ -140,6 +142,9 @@ export default function CreateMenuModal() {
     setImageFileError('');
   };
 
+  const menuError = useAtomValue(menuErrorFormAtom);
+  const idErrorMsg = menuError.get('id') ?? '';
+
   return (
     <form className={styles.menuModal} onSubmit={handleSubmit}>
       <div className={styles.wrap}>
@@ -153,10 +158,14 @@ export default function CreateMenuModal() {
         <MenuFormFields inputValue={inputValue} categories={menuCategoriesQuery.data} onInputChange={getInputValue} />
       </div>
 
-      <div className={styles.submitBox}>
-        <button type='submit' className={styles.submit} style={{ backgroundColor: '#4caff8' }}>
-          추가하기
-        </button>
+      <div className={styles.btnBox}>
+        <FormInputCaption hasError={Boolean(idErrorMsg)} text={idErrorMsg} />
+
+        <div className={styles.submitBox}>
+          <button type='submit' className={styles.submit} style={{ backgroundColor: '#4caff8' }}>
+            추가하기
+          </button>
+        </div>
       </div>
     </form>
   );

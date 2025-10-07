@@ -49,7 +49,7 @@ function createMenuValue(data: NewMenu) {
 /** 메뉴 수정 데이터 검증 */
 function updateMenuValue(data: UpdateMenu) {
   const updatedMenuSchema = z.object({
-    id: z.string().nonempty({ message: '메뉴 아이디는 포함되어야 합니다.' }),
+    id: z.string().nonempty({ message: FEATURE_MESSAGES.menu.idRequired }),
     category_id: z.string().nonempty({ message: FEATURE_MESSAGES.menu.categoryRequired }),
     name: z.string().nonempty({ message: FEATURE_MESSAGES.menu.nameRequired }),
     price: z.number().nonnegative({ message: FEATURE_MESSAGES.menu.priceInvalid }),

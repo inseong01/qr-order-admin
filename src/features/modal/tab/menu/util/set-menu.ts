@@ -7,9 +7,9 @@ export function buildMenuData({ inputValue, menuCategories, menuImageFile }: Bui
   const filename = menuImageFile ? `${newId}.${extension}` : 'menu_default.jpg';
 
   return {
-    img_url: filename,
-    category_id: menuCategories?.find((c) => c.title === inputValue.menu_category.title)?.id,
     name: inputValue.name,
+    img_url: filename,
+    category_id: menuCategories?.find((c) => c.title === inputValue.menu_category.title)?.id.toString(),
     price: Number(inputValue.price),
     tag: inputValue.tag,
   };
@@ -18,10 +18,10 @@ export function buildMenuData({ inputValue, menuCategories, menuImageFile }: Bui
 export function updateMenuData({ inputValue, menuCategories, menuImageFile }: UpdateMenuDataProps) {
   if (!menuImageFile) {
     return {
-      img_url: inputValue.img_url,
       id: inputValue.id,
-      category_id: menuCategories?.find((c) => c.title === inputValue.menu_category.title)?.id,
       name: inputValue.name,
+      img_url: inputValue.img_url,
+      category_id: menuCategories?.find((c) => c.title === inputValue.menu_category.title)?.id.toString(),
       price: Number(inputValue.price),
       tag: inputValue.tag,
     };
@@ -32,10 +32,10 @@ export function updateMenuData({ inputValue, menuCategories, menuImageFile }: Up
   const newFilename = `${newId}.${extension}`;
 
   return {
-    img_url: newFilename,
     id: inputValue.id,
-    category_id: menuCategories?.find((c) => c.title === inputValue.menu_category.title)?.id,
     name: inputValue.name,
+    img_url: newFilename,
+    category_id: menuCategories?.find((c) => c.title === inputValue.menu_category.title)?.id.toString(),
     price: Number(inputValue.price),
     tag: inputValue.tag,
   };
