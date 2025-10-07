@@ -9,10 +9,12 @@ import {
   clearMenuErrorFormAtom,
   clearSelectedMenuAtom,
   draftMenuAtom,
+  menuErrorFormAtom,
   resetMenuErrorAtom,
   setMenuErrorAtom,
 } from '@/components/ui/menu/store/atom';
 import { MenuFormInputs } from '@/components/ui/menu/types';
+import { FormInputCaption } from '@/components/ui/exception';
 
 import { useConfirmModal } from '@/features/modal/confirm/hook/use-confirm-modal';
 
@@ -60,7 +62,7 @@ export default function UpdateMenuModal() {
     const menuCategories = menuCategoriesQuery.data;
     const menuData = updateMenuData({ inputValue, menuCategories, menuImageFile });
 
-    if (!menuData) return;
+    if (!menuData) return e.preventDefault();
 
     // 값 검증
     if (submitType === 'update') {
@@ -119,7 +121,7 @@ export default function UpdateMenuModal() {
     const value = e.target.value;
 
     setInputValue((prev) => {
-      if (name === 'title') {
+      if (name === 'category_id') {
         return {
           ...prev,
           menu_category: { title: value, id: '' },
@@ -145,6 +147,9 @@ export default function UpdateMenuModal() {
     }
   };
 
+  const menuError = useAtomValue(menuErrorFormAtom);
+  const idErrorMsg = menuError.get('id') ?? '';
+
   return (
     <form className={styles.menuModal} onSubmit={handleSubmit}>
       <div className={styles.wrap}>
@@ -158,14 +163,18 @@ export default function UpdateMenuModal() {
         <MenuFormFields inputValue={inputValue} categories={menuCategoriesQuery.data} onInputChange={getInputValue} />
       </div>
 
-      <div className={styles.submitBox}>
-        <button type='submit' name='delete' className={styles.submit} style={{ backgroundColor: '#da2b2e' }}>
-          삭제하기
-        </button>
+      <div className={styles.btnBox}>
+        <FormInputCaption hasError={Boolean(idErrorMsg)} text={idErrorMsg} />
 
-        <button type='submit' name='update' className={styles.submit} style={{ backgroundColor: '#4caff8' }}>
-          수정하기
-        </button>
+        <div className={styles.submitBox}>
+          <button type='submit' name='delete' className={styles.submit} style={{ backgroundColor: '#da2b2e' }}>
+            삭제하기
+          </button>
+
+          <button type='submit' name='update' className={styles.submit} style={{ backgroundColor: '#4caff8' }}>
+            수정하기
+          </button>
+        </div>
       </div>
     </form>
   );

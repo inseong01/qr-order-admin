@@ -9,7 +9,7 @@ import { MenuFormFieldsProps } from '../../types';
 export function MenuFormFields({ inputValue, onInputChange, categories }: MenuFormFieldsProps) {
   const menuError = useAtomValue(menuErrorFormAtom);
   const nameErrorMsg = menuError.get('name') ?? '';
-  const titleErrorMsg = menuError.get('title') ?? '';
+  const titleErrorMsg = menuError.get('category_id') ?? '';
   const priceErrorMsg = menuError.get('price') ?? '';
   const tagErrorMsg = menuError.get('tag') ?? '';
 
@@ -34,13 +34,13 @@ export function MenuFormFields({ inputValue, onInputChange, categories }: MenuFo
       </FormInputBox>
 
       {/* 분류 */}
-      <FormInputBox htmlFor='category'>
+      <FormInputBox htmlFor='category_id'>
         <span className={styles.inputTitle}>분류</span>
 
         <select
           className={styles.options}
-          id='category'
-          name='title'
+          id='category_id'
+          name='category_id'
           onChange={onInputChange}
           value={inputValue.menu_category.title}
           aria-invalid={Boolean(titleErrorMsg)}
