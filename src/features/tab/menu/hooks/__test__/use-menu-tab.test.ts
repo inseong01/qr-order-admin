@@ -30,7 +30,7 @@ const mockMenuList: Menu[] = [
     id: '1',
     name: '아메리카노',
     price: 3000,
-    menu_category: { id: '101', title: '커피' },
+    menu_category: { id: 101, title: '커피' },
     img_url: 'default_img',
     tag: '기본',
   },
@@ -38,7 +38,7 @@ const mockMenuList: Menu[] = [
     id: '2',
     name: '카페라떼',
     price: 3500,
-    menu_category: { id: '101', title: '커피' },
+    menu_category: { id: 101, title: '커피' },
     img_url: 'default_img',
     tag: '기본',
   },
@@ -46,15 +46,15 @@ const mockMenuList: Menu[] = [
     id: '3',
     name: '레몬에이드',
     price: 4000,
-    menu_category: { id: '102', title: '에이드' },
+    menu_category: { id: 102, title: '에이드' },
     img_url: 'default_img',
     tag: '기본',
   },
 ];
 
 const mockMenuCategories: MenuCategory[] = [
-  { id: '101', title: '커피' },
-  { id: '102', title: '에이드' },
+  { id: 101, title: '커피' },
+  { id: 102, title: '에이드' },
 ];
 
 describe('useMenuTab', () => {
@@ -124,7 +124,7 @@ describe('useMenuTab', () => {
           id: '1',
           name: '아메리카노',
           price: 3000,
-          menu_category: { id: '101', title: '커피' },
+          menu_category: { id: 101, title: '커피' },
           img_url: 'default_img',
           tag: '기본',
         },
@@ -132,7 +132,7 @@ describe('useMenuTab', () => {
           id: '2',
           name: '카페라떼',
           price: 3500,
-          menu_category: { id: '101', title: '커피' },
+          menu_category: { id: 101, title: '커피' },
           img_url: 'default_img',
           tag: '기본',
         },
@@ -142,7 +142,7 @@ describe('useMenuTab', () => {
           id: '3',
           name: '레몬에이드',
           price: 4000,
-          menu_category: { id: '102', title: '에이드' },
+          menu_category: { id: 102, title: '에이드' },
           img_url: 'default_img',
           tag: '기본',
         },

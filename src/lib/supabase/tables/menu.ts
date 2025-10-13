@@ -1,9 +1,11 @@
+import { MenuGroupByCategory } from '@/features/tab/menu/types';
+
 import supabase from '..';
 import { TablesInsert, TablesUpdate } from '../database.types';
 
 // menu table type
 export type Menu = {
-  menu_category: { id: string; title: string };
+  menu_category: MenuGroupByCategory;
   id: string;
   img_url: string;
   name: string;

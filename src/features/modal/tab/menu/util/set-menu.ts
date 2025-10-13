@@ -9,7 +9,7 @@ export function buildMenuData({ inputValue, menuCategories, menuImageFile }: Bui
   return {
     name: inputValue.name,
     img_url: filename,
-    category_id: menuCategories?.find((c) => c.title === inputValue.menu_category.title)?.id.toString(),
+    category_id: menuCategories?.find((c) => c.title === inputValue.menu_category.title)?.id,
     price: Number(inputValue.price),
     tag: inputValue.tag,
   };
@@ -21,7 +21,7 @@ export function updateMenuData({ inputValue, menuCategories, menuImageFile }: Up
       id: inputValue.id,
       name: inputValue.name,
       img_url: inputValue.img_url,
-      category_id: menuCategories?.find((c) => c.title === inputValue.menu_category.title)?.id.toString(),
+      category_id: menuCategories?.find((c) => c.title === inputValue.menu_category.title)?.id,
       price: Number(inputValue.price),
       tag: inputValue.tag,
     };
@@ -35,7 +35,7 @@ export function updateMenuData({ inputValue, menuCategories, menuImageFile }: Up
     id: inputValue.id,
     name: inputValue.name,
     img_url: newFilename,
-    category_id: menuCategories?.find((c) => c.title === inputValue.menu_category.title)?.id.toString(),
+    category_id: menuCategories?.find((c) => c.title === inputValue.menu_category.title)?.id,
     price: Number(inputValue.price),
     tag: inputValue.tag,
   };

@@ -40,7 +40,7 @@ describe('useUserRole', () => {
     it("사용자 역할이 'admin'일 때, false를 반환해야 한다", () => {
       mockUseAtomValue.mockImplementation((atom) => {
         if (atom === userSessionAtom) {
-          return { user: { user_metadata: { role: 'admin' } } };
+          return { user: { user_metadata: { user_role: 'admin' } } };
         }
         return null;
       });
@@ -56,7 +56,7 @@ describe('useUserRole', () => {
     it("사용자 역할이 'guest'일 때, 접근 거부 메시지를 표시하고 true를 반환해야 한다", () => {
       mockUseAtomValue.mockImplementation((atom) => {
         if (atom === userSessionAtom) {
-          return { user: { user_metadata: { role: 'guest' } } };
+          return { user: { user_metadata: { user_role: 'guest' } } };
         }
         return null;
       });
@@ -72,7 +72,7 @@ describe('useUserRole', () => {
     it("사용자 역할이 'viewer'일 때, 접근 거부 메시지를 표시하고 true를 반환해야 한다", () => {
       mockUseAtomValue.mockImplementation((atom) => {
         if (atom === userSessionAtom) {
-          return { user: { user_metadata: { role: 'viewer' } } };
+          return { user: { user_metadata: { user_role: 'viewer' } } };
         }
         return null;
       });

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { MenuCategory } from '@/lib/supabase/tables/menu-category';
+import { UpdateMenuCategory } from '@/lib/supabase/tables/menu-category';
 import { NewMenu, UpdateMenu } from '@/lib/supabase/tables/menu';
 
 import { FEATURE_MESSAGES } from '@/constants/message/feature';
@@ -8,16 +8,15 @@ import { FEATURE_MESSAGES } from '@/constants/message/feature';
 /** 메뉴 카테고리 생성 데이터 검증 */
 function createCategoryValue(value: string) {
   const categorySchema = z.string().nonempty({ message: FEATURE_MESSAGES.category.required });
-
   return categorySchema.safeParseAsync(value);
 }
 
 /** 메뉴 카테고리 수정 데이터 검증 */
-function updateCategoryValue(data: MenuCategory[]) {
+function updateCategoryValue(data: UpdateMenuCategory[]) {
   const categorySchema = z
     .array(
       z.object({
-        id: z.string().nonempty({ message: FEATURE_MESSAGES.category.select }),
+        id: z.number({ message: FEATURE_MESSAGES.category.select }),
         title: z.string().nonempty({ message: FEATURE_MESSAGES.category.required }),
       })
     )
@@ -27,8 +26,8 @@ function updateCategoryValue(data: MenuCategory[]) {
 }
 
 /** 메뉴 카테고리 삭제 데이터 검증 */
-function deleteCategoryValue(id: string[]) {
-  const categorySchema = z.array(z.string()).nonempty({ message: FEATURE_MESSAGES.category.select });
+function deleteCategoryValue(id: number[]) {
+  const categorySchema = z.array(z.number()).nonempty({ message: FEATURE_MESSAGES.category.select });
 
   return categorySchema.safeParseAsync(id);
 }
@@ -36,7 +35,7 @@ function deleteCategoryValue(id: string[]) {
 /** 메뉴 생성 데이터 검증 */
 function createMenuValue(data: NewMenu) {
   const newMenuSchema = z.object({
-    category_id: z.string().nonempty({ message: FEATURE_MESSAGES.menu.categoryRequired }),
+    category_id: z.number({ message: FEATURE_MESSAGES.menu.categoryRequired }),
     name: z.string().nonempty({ message: FEATURE_MESSAGES.menu.nameRequired }),
     price: z.number().nonnegative({ message: FEATURE_MESSAGES.menu.priceInvalid }),
     tag: z.string().nonempty({ message: FEATURE_MESSAGES.menu.tagRequired }),
@@ -50,7 +49,7 @@ function createMenuValue(data: NewMenu) {
 function updateMenuValue(data: UpdateMenu) {
   const updatedMenuSchema = z.object({
     id: z.string().nonempty({ message: FEATURE_MESSAGES.menu.idRequired }),
-    category_id: z.string().nonempty({ message: FEATURE_MESSAGES.menu.categoryRequired }),
+    category_id: z.number({ message: FEATURE_MESSAGES.menu.categoryRequired }),
     name: z.string().nonempty({ message: FEATURE_MESSAGES.menu.nameRequired }),
     price: z.number().nonnegative({ message: FEATURE_MESSAGES.menu.priceInvalid }),
     tag: z.string().nonempty({ message: FEATURE_MESSAGES.menu.tagRequired }),
@@ -63,7 +62,6 @@ function updateMenuValue(data: UpdateMenu) {
 /** 주문 아이디 데이터 검증 */
 function orderIdValue(id: string) {
   const orderIdSchema = z.string().nonempty({ message: FEATURE_MESSAGES.order.idRequired });
-
   return orderIdSchema.safeParseAsync(id);
 }
 

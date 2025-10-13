@@ -72,7 +72,7 @@ export function useMutationDeleteMenuCategory() {
   const showToast = useSetAtom(showToastAtom);
 
   const mutation = useMutation({
-    mutationFn: ({ ids }: { ids: string[] }) => deleteMenuCategory(ids),
+    mutationFn: ({ ids }: { ids: number[] }) => deleteMenuCategory(ids),
     async onSuccess() {
       await queryClient.invalidateQueries({ queryKey: menuCategoryQueryOptions.queryKey });
       await queryClient.invalidateQueries({ queryKey: menuListQueryOptions.queryKey });

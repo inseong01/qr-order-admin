@@ -16,13 +16,13 @@ describe('buildMenuData', () => {
       menu_category: { title: '카테고리1' },
     } as any;
     const menuCategories = [
-      { id: 'cat1', title: '카테고리1' },
-      { id: 'cat2', title: '카테고리2' },
+      { id: 1, title: '카테고리1' },
+      { id: 2, title: '카테고리2' },
     ];
     const result = buildMenuData({ inputValue, menuCategories });
 
     expect(result.img_url).toMatch('menu_default.jpg');
-    expect(result.category_id).toBe('cat1');
+    expect(result.category_id).toBe(1);
     expect(result.name).toBe('메뉴1');
     expect(result.price).toBe(12000);
     expect(result.tag).toBe('추천');
@@ -37,8 +37,8 @@ describe('buildMenuData', () => {
       menu_category: { title: '카테고리1' },
     } as any;
     const menuCategories = [
-      { id: 'cat1', title: '카테고리1' },
-      { id: 'cat2', title: '카테고리2' },
+      { id: 1, title: '카테고리1' },
+      { id: 2, title: '카테고리2' },
     ];
     const filename = 'file123.png';
     const blob = new Blob([], { type: 'image/png' });
@@ -46,7 +46,7 @@ describe('buildMenuData', () => {
     const result = buildMenuData({ inputValue, menuCategories, menuImageFile: mockMenuImageFile });
 
     expect(result.img_url).toMatch(/^\d{10}\.(jpg|png|webp)$/);
-    expect(result.category_id).toBe('cat1');
+    expect(result.category_id).toBe(1);
     expect(result.name).toBe('메뉴1');
     expect(result.price).toBe(12000);
     expect(result.tag).toBe('추천');
@@ -66,14 +66,14 @@ describe('updateMenuData', () => {
       img_url: filename,
     } as any;
 
-    const menuCategories = [{ id: 'cat1', title: '카테고리1' }];
+    const menuCategories = [{ id: 1, title: '카테고리1' }];
     const blob = new Blob([], { type: 'image/png' });
     const mockMenuImageFile = new File([blob], 'test.png', { type: 'image/png' });
     const result = updateMenuData({ inputValue, menuCategories, menuImageFile: mockMenuImageFile });
 
     expect(result.img_url).toMatch(/^\d{10}\.(jpg|png|webp)$/);
     expect(result.id).toBe('1');
-    expect(result.category_id).toBe('cat1');
+    expect(result.category_id).toBe(1);
     expect(result.name).toBe('메뉴1');
     expect(result.price).toBe(12000);
     expect(result.tag).toBe('추천');
@@ -88,12 +88,12 @@ describe('updateMenuData', () => {
       menu_category: { title: '카테고리1' },
       img_url: filename,
     } as any;
-    const menuCategories = [{ id: 'cat1', title: '카테고리1' }];
+    const menuCategories = [{ id: 1, title: '카테고리1' }];
     const result = updateMenuData({ inputValue, menuCategories });
 
     expect(result.img_url).toBe(filename);
     expect(result.id).toBe('1');
-    expect(result.category_id).toBe('cat1');
+    expect(result.category_id).toBe(1);
     expect(result.name).toBe('메뉴1');
     expect(result.price).toBe(12000);
     expect(result.tag).toBe('추천');
