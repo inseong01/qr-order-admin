@@ -11,7 +11,11 @@ export type UpdateMenuCategory = TablesUpdate<'menu_category'>;
  * @returns 메뉴 카테고리 목록
  */
 export async function getMenuCategory(): Promise<MenuCategory[]> {
-  const { data, error } = await supabase.from('menu_category').select('*').order('id', { ascending: true });
+  const { data, error } = await supabase
+    .from('menu_category')
+    .select('*')
+    .order('id', { ascending: true })
+    .neq('title', '전체메뉴');
 
   if (error) {
     error.message && console.error(error.message);
@@ -56,7 +60,7 @@ export const updateMenuCategory = async (updatedMenuCategories: UpdateMenuCatego
  * @param id - 삭제할 메뉴 카테고리 id 배열
  * @returns
  */
-export const deleteMenuCategory = async (id: string[]) => {
+export const deleteMenuCategory = async (id: number[]) => {
   const { error, data } = await supabase.from('menu_category').delete().in('id', id).select();
 
   if (error) {

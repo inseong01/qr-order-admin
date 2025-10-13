@@ -8,7 +8,7 @@ describe('extractValidImageIds', () => {
     const querydata: Menu[] = [
       {
         id: 'menu-001',
-        menu_category: { id: 'cat-001', title: '버거' },
+        menu_category: { id: 1, title: '버거' },
         img_url: `burger.png`,
         name: '햄버거',
         price: 5000,
@@ -16,7 +16,7 @@ describe('extractValidImageIds', () => {
       },
       {
         id: 'menu-002',
-        menu_category: { id: 'cat-002', title: '피자' },
+        menu_category: { id: 2, title: '피자' },
         img_url: `pizza.png`,
         name: '불고기 피자',
         price: 12000,
@@ -24,7 +24,7 @@ describe('extractValidImageIds', () => {
       },
     ];
 
-    const result = extractValidImageIds(querydata, ['cat-001', 'cat-002']);
+    const result = extractValidImageIds(querydata, [1, 2]);
     expect(result).toEqual(['store_2/burger.png', 'store_2/pizza.png']);
   });
 
@@ -32,7 +32,7 @@ describe('extractValidImageIds', () => {
     const querydata: Menu[] = [
       {
         id: 'menu-003',
-        menu_category: { id: 'cat-001', title: '버거' },
+        menu_category: { id: 1, title: '버거' },
         img_url: `menu_default`,
         name: '기본이미지',
         price: 0,
@@ -40,7 +40,7 @@ describe('extractValidImageIds', () => {
       },
     ];
 
-    const result = extractValidImageIds(querydata, ['cat-001']);
+    const result = extractValidImageIds(querydata, [1]);
     expect(result).toEqual([]);
   });
 
@@ -48,7 +48,7 @@ describe('extractValidImageIds', () => {
     const querydata: Menu[] = [
       {
         id: 'menu-004',
-        menu_category: { id: 'cat-001', title: '버거' },
+        menu_category: { id: 1, title: '버거' },
         img_url: `hotdog.png`,
         name: '핫도그',
         price: 3000,
@@ -56,12 +56,12 @@ describe('extractValidImageIds', () => {
       },
     ];
 
-    const result = extractValidImageIds(querydata, ['cat-999']);
+    const result = extractValidImageIds(querydata, [999]);
     expect(result).toEqual([]);
   });
 
   it('querydata가 undefined일 경우 빈 배열을 반환한다', () => {
-    const result = extractValidImageIds(undefined as unknown as Menu[], ['cat-001']);
+    const result = extractValidImageIds(undefined as unknown as Menu[], [1]);
     expect(result).toEqual([]);
   });
 });

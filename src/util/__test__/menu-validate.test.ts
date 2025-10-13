@@ -25,20 +25,20 @@ describe('menu-validation 모듈', () => {
 
   describe('updateCategoryValue', () => {
     it('올바른 배열 입력 시, 성공 반환', async () => {
-      const data = [{ id: '1', title: '한글&카테고리' }];
+      const data = [{ id: 1, title: '한글&카테고리' }];
       const result = await validate.updateCategoryValue(data);
       expect(result.success).toBe(true);
     });
 
     it('id 누락 시, 오류 반환', async () => {
-      const data = [{ id: '', title: '카테고리' }];
+      const data = [{ id: undefined, title: '카테고리' }];
       const result = await validate.updateCategoryValue(data);
       expect(result.success).toBe(false);
       expect(result.error?.issues[0].message).toBe(FEATURE_MESSAGES.category.select);
     });
 
     it('title 누락 시, 오류 반환', async () => {
-      const data = [{ id: '1', title: '' }];
+      const data = [{ id: 1, title: '' }];
       const result = await validate.updateCategoryValue(data);
       expect(result.success).toBe(false);
       expect(result.error?.issues[0].message).toBe(FEATURE_MESSAGES.category.required);
@@ -47,7 +47,7 @@ describe('menu-validation 모듈', () => {
 
   describe('deleteCategoryValue', () => {
     it('올바른 배열 입력 시, 성공 반환', async () => {
-      const result = await validate.deleteCategoryValue(['1', '2']);
+      const result = await validate.deleteCategoryValue([1, 2]);
       expect(result.success).toBe(true);
     });
 
@@ -62,7 +62,7 @@ describe('menu-validation 모듈', () => {
   describe('createMenuValue', () => {
     it('올바른 데이터 입력 시, 성공 반환', async () => {
       const data = {
-        category_id: '1',
+        category_id: 1,
         name: '메뉴명',
         price: 1000,
         tag: '추천',
@@ -74,7 +74,7 @@ describe('menu-validation 모듈', () => {
 
     it('가격 음수 입력 시, 오류 반환', async () => {
       const data = {
-        category_id: '1',
+        category_id: 1,
         name: '메뉴명',
         price: -1000,
         tag: '추천',
@@ -86,7 +86,7 @@ describe('menu-validation 모듈', () => {
 
     it('분류 미선택 시, 오류 반환', async () => {
       const data = {
-        category_id: '',
+        category_id: undefined,
         name: '메뉴명',
         price: 1000,
         tag: '추천',
@@ -98,7 +98,7 @@ describe('menu-validation 모듈', () => {
 
     it('이름 미입력 시, 오류 반환', async () => {
       const data = {
-        category_id: '1',
+        category_id: 1,
         name: '',
         price: 1000,
         tag: '추천',
@@ -110,7 +110,7 @@ describe('menu-validation 모듈', () => {
 
     it('태그 미선택 시, 오류 반환', async () => {
       const data = {
-        category_id: '1',
+        category_id: 1,
         name: '메뉴명',
         price: 1000,
         tag: '',
@@ -125,7 +125,7 @@ describe('menu-validation 모듈', () => {
     it('올바른 데이터 입력 시, 성공 반환', async () => {
       const data = {
         id: '1',
-        category_id: '1',
+        category_id: 1,
         name: '메뉴명',
         price: 1000,
         tag: '추천',
@@ -138,7 +138,7 @@ describe('menu-validation 모듈', () => {
     it('id 누락 시, 오류 반환', async () => {
       const data = {
         id: '',
-        category_id: '1',
+        category_id: 1,
         name: '메뉴명',
         price: 1000,
         tag: '추천',

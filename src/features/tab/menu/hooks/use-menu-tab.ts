@@ -1,7 +1,7 @@
 import { useQueryMenuList } from '@/hooks/use-query/menu/query';
 import { useQueryMenuCategoryList } from '@/hooks/use-query/menu-category/query';
 
-import { MenuCategories, MenuGroupByCategory } from '../types';
+import { MenuGroupByCategory } from '../types';
 
 /**
  * 메뉴/분류 목록 쿼리 반환 훅
@@ -12,7 +12,7 @@ export function useMenuTab() {
 
   /* menu group by category */
   const menuGroupByCategory: MenuGroupByCategory = {};
-  const menuCategories: MenuCategories = menuCategoriesQuery.data ?? [];
+  const menuCategories = menuCategoriesQuery.data ?? [];
   menuListQuery.data?.forEach((m) => {
     const category = m.menu_category.title;
     menuGroupByCategory[category] = menuGroupByCategory[category] ? [...menuGroupByCategory[category], m] : [m];

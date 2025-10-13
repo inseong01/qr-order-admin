@@ -12,7 +12,7 @@ export type Database = {
     Tables: {
       menu: {
         Row: {
-          category_id: string;
+          category_id: number;
           id: string;
           img_url: string;
           name: string;
@@ -20,7 +20,7 @@ export type Database = {
           tag: string;
         };
         Insert: {
-          category_id?: string;
+          category_id?: number;
           id?: string;
           img_url?: string;
           name?: string;
@@ -28,7 +28,7 @@ export type Database = {
           tag?: string;
         };
         Update: {
-          category_id?: string;
+          category_id?: number;
           id?: string;
           img_url?: string;
           name?: string;
@@ -47,15 +47,15 @@ export type Database = {
       };
       menu_category: {
         Row: {
-          id: string;
+          id: number;
           title: string;
         };
         Insert: {
-          id?: string;
+          id?: number;
           title?: string;
         };
         Update: {
-          id?: string;
+          id?: number;
           title?: string;
         };
         Relationships: [];

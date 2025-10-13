@@ -101,12 +101,12 @@ export default function UpdateCategoryForm() {
       <SubmitInfoBox>
         {categories.data?.map(({ id, title }) => (
           <li key={id} className={styles.info}>
-            <label htmlFor={id} className={styles.top}>
+            <label htmlFor={String(id)} className={styles.top}>
               <span>{title}</span>
 
               <input
                 type='checkbox'
-                id={id}
+                id={String(id)}
                 name='check'
                 className={styles.check}
                 checked={Object.hasOwn(selectedCategories, id)}
@@ -117,7 +117,7 @@ export default function UpdateCategoryForm() {
             {Object.hasOwn(selectedCategories, id) && (
               <input
                 type='text'
-                id={id}
+                id={String(id)}
                 name='title'
                 placeholder='분류명을 작성해주세요.'
                 className={styles.bottom}

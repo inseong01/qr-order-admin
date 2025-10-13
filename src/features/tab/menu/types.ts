@@ -1,6 +1,6 @@
-export type MenuGroupByCategory = { [key: string]: any };
+import { MenuCategory } from '@/lib/supabase/tables/menu-category';
 
-export type MenuCategories = { id: string; title: string }[];
+export type MenuGroupByCategory = { [key: string]: any };
 
 export type DataWrapperProps = {
   data: DataComponentProps['data'];
@@ -10,7 +10,7 @@ export type DataWrapperProps = {
 export type DataComponentProps = {
   data: {
     menuGroupByCategory: MenuGroupByCategory;
-    menuCategories: MenuCategories;
+    menuCategories: MenuCategory[];
     isExist: boolean;
   };
 };

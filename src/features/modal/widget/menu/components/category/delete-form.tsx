@@ -83,9 +83,9 @@ export default function DeleteCategoryForm() {
     const { id, checked } = e.target;
     setSelectedCategories((prev) => {
       if (checked) {
-        return [...prev, id];
+        return [...prev, Number(id)];
       } else {
-        return selectedCategories.filter((c) => c !== id);
+        return selectedCategories.filter((c) => c !== Number(id));
       }
     });
     setCategoryError('');
@@ -100,12 +100,12 @@ export default function DeleteCategoryForm() {
       <SubmitInfoBox>
         {categories.data?.map(({ id, title }) => (
           <li key={id} className={styles.info}>
-            <label htmlFor={id} className={styles.left}>
+            <label htmlFor={String(id)} className={styles.left}>
               <span>{title}</span>
 
               <input
                 type='checkbox'
-                id={id}
+                id={String(id)}
                 name='check'
                 className={styles.check}
                 checked={selectedCategories.includes(id)}

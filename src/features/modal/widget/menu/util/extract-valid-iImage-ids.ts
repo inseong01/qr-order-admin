@@ -8,7 +8,7 @@ import { Menu } from '@/lib/supabase/tables/menu';
  * @param selectedData  선택된 카테고리 ID 배열
  * @returns             조건에 맞는 메뉴들의 이미지 URL 배열 (없으면 빈 배열)
  */
-export function extractValidImageIds(querydata: Menu[], selectedData: string[]) {
+export function extractValidImageIds(querydata: Menu[], selectedData: number[]) {
   return (
     querydata
       ?.filter((m) => selectedData.includes(m.menu_category.id) && !m.img_url.includes('menu_default'))

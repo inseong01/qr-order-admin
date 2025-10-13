@@ -6,7 +6,7 @@ import { MenuCategory } from '@/lib/supabase/tables/menu-category';
 export type MenuFormFieldsProps = {
   inputValue: Menu;
   onInputChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
-  categories: { id: string; title: string }[] | undefined;
+  categories: MenuCategory[] | undefined;
 };
 
 export type MenuImageInputProps = {

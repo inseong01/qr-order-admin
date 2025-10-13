@@ -96,7 +96,7 @@ describe('Auth Supabase API', () => {
       const result = await signInAnonymously(testCaptcha);
 
       expect(mockSupabase.auth.signInAnonymously).toHaveBeenCalledWith({
-        options: { captchaToken: testCaptcha, data: { signup_origin: 'qr_order_admin' } },
+        options: { captchaToken: testCaptcha, data: { signup_origin: 'qr_order_admin', user_role: 'guest' } },
       });
       expect(result).toEqual(mockResponse);
     });

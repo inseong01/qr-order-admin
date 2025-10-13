@@ -7,7 +7,7 @@ export const categoryInputAtom = atom('');
 export const selectedCategoriesAtom = atom<Record<string, any>>({}); // 선택된 분류의 ID, title 저장
 
 // 분류 삭제 폼 상태 관리
-export const selectedCategoryIdsAtom = atom<string[]>([]); // 선택된 분류 ID저장
+export const selectedCategoryIdsAtom = atom<number[]>([]); // 선택된 분류 ID저장
 
 // 분류 상태 초기화
 export const resetCategoriesAtom = atom(null, (_, set) => {
