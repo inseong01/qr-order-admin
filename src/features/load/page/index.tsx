@@ -23,7 +23,7 @@ export default function LoadPage() {
   const detectViewportMode = useSetAtom(detectViewportModeAtom);
 
   /**
-   * Supabase DB Reatime 구독
+   * Supabase DB Realtime 구독
    */
   useQueryClientTable(REALTIME_POSTGRES_CHANGES_LISTEN_EVENT.ALL);
 

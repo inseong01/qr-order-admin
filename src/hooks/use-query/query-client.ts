@@ -4,7 +4,7 @@ import { REALTIME_LISTEN_TYPES, REALTIME_POSTGRES_CHANGES_LISTEN_EVENT } from '@
 
 import supabase from '@/lib/supabase';
 
-import { allOrderListQueryOptions, requestListQueryOptions, tableListQueryOptions } from './query-options';
+import { allOrderListQueryOptions, orderItemsQueryOptions, requestListQueryOptions } from './query-options';
 
 export type DataStatus = 'pending' | 'fulfilled' | 'rejected';
 
@@ -29,7 +29,7 @@ export function useQueryClientTable(method: REALTIME_POSTGRES_CHANGES_LISTEN_EVE
         },
         () => {
           queryClient.invalidateQueries(allOrderListQueryOptions);
-          queryClient.invalidateQueries(tableListQueryOptions);
+          queryClient.invalidateQueries(orderItemsQueryOptions);
         }
       )
       .on(
